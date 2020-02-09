@@ -34,23 +34,43 @@ namespace SpaceEngineers
             //This makes the program automatically run every 10 ticks.
 }
 public void Main()
-        {
-            //ok
-            double elev;
-            var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
-            myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-            Echo(elev.ToString());
-            var thrUp = GridTerminalSystem.GetBlockWithName("thrUp") as IMyThrust;
-            double minAlt = 20;
+{
+    //ok
+    double elev;
+    var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
+    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    Echo(elev.ToString());
+    var thrUp = GridTerminalSystem.GetBlockWithName("thrUp") as IMyThrust;
+    double minAlt = 20;
+    /*
+    if (elev < minAlt)
+    {
+    thrUp.ThrustOverridePercentage += 0.2f;
+    }
+    else
+    {
+    thrUp.ThrustOverridePercentage -= 0.2f;
+    }*/
+    var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    foreach(var c in cs)
+    {
+        Echo(c.CustomName + " " + c.GridThrustDirection);
+        //Vector3I upVect = new 
+        if (c.GridThrustDirection.Y == -1) { 
+            Echo("hello");
             if (elev < minAlt)
             {
-                thrUp.ThrustOverridePercentage += 0.2f;
+                c.ThrustOverridePercentage += 0.2f;
             }
             else
             {
-                thrUp.ThrustOverridePercentage -= 0.2f;
+                c.ThrustOverridePercentage -= 0.2f;
             }
         }
+    }
+                
+}
 
         public void Save()
         {
@@ -68,4 +88,4 @@ public void Main()
 #if DEBUG
     }
 }
-#endif
+#endifD
