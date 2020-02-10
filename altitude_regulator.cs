@@ -28,7 +28,7 @@ namespace SpaceEngineers
 
 //PID constants
 double K_p = 1;
-double T_i = 1;
+double T_i = 0;
 double T_d = 0;
 
 /*
@@ -51,6 +51,9 @@ double u_t = 0;
 
 new List<double> i_t_list_points = new List<double>();
 double i_t_num_points = 10;
+
+//previous value of e(t)
+double d_t_m_1 = 0;
 public Program()
 {
             // The constructor, called only once every session and
@@ -89,6 +92,14 @@ public void Main()
     i_t = i_t / 10;
     Echo("i_t:" + i_t.ToString());
 
+    //derivative
+    //TODO: figure the time delta
+    var dts = Runtime.TimeSinceLastRun.TotalSeconds;
+    Echo("dts:" + dts.ToString());
+    d_t = (d_t_m_1 - e_t) / dts;
+    d_t_m_1 = e_t;
+    Echo("d_t:" + d_t.ToString());
+
 
     //TODO:need update for i and d
     u_t = K_p * e_t + T_i * i_t + T_d * d_t;
@@ -113,8 +124,6 @@ public void Main()
             c.ThrustOverridePercentage -= Convert.ToSingle(u_t);
         }
         */
-        
-
     }
                 
 }
