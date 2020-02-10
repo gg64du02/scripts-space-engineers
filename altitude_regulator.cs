@@ -21,11 +21,34 @@ namespace SpaceEngineers
     public sealed class Program : MyGridProgram
     {
 #endif
-        //=======================================================================
-        //////////////////////////BEGIN//////////////////////////////////////////
-        //=======================================================================
+//=======================================================================
+//////////////////////////BEGIN//////////////////////////////////////////
+//=======================================================================
 
-        public Program()
+
+//PID constants
+double K_p = 1;
+double T_i = 1;
+double T_d = 0;
+
+/*
+ * r(t) = define the altitude you want
+ * e(t) = r(t) - y(t) // error
+ * y(t) = the altitude
+ * p(t) = proportionnal
+ * i(t) = integral
+ * d(t) = derivative
+ * u(t) = p + i + d 
+ * */
+
+double r_t = 20;
+double e_t = 0;
+double y_t = 0;
+double p_t = 0;
+double i_t = 0;
+double d_t = 0;
+double u_t = 0;
+public Program()
 {
             // The constructor, called only once every session and
             // always before any other method is called. Use it to
@@ -35,28 +58,6 @@ namespace SpaceEngineers
 }
 public void Main()
 {
-    //PID constants
-    double K_p = 1;
-    double T_i = 0;
-    double T_d = 0;
-
-    /*
-     * r(t) = define the altitude you want
-     * e(t) = r(t) - y(t) // error
-     * y(t) = the altitude
-     * p(t) = proportionnal
-     * i(t) = integral
-     * d(t) = derivative
-     * u(t) = p + i + d 
-     * */
-
-    double r_t = 20;
-    double e_t = 0;
-    double y_t = 0;
-    double p_t = 0;
-    double i_t = 0;
-    double d_t = 0;
-    double u_t = 0;
 
     double elev;
     var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
@@ -65,6 +66,10 @@ public void Main()
     Echo("y_t:" + y_t.ToString());
 
     e_t = r_t - y_t;
+
+    //integral
+    i_t += e_t;
+    Echo("i_t:" + i_t.ToString());
 
     //TODO:need update for i and d
     u_t = K_p * e_t + T_i * i_t + T_d * d_t;
@@ -75,19 +80,19 @@ public void Main()
     GridTerminalSystem.GetBlocksOfType(cs);
     foreach (var c in cs)
     {
-        Echo(c.CustomName + " " + c.GridThrustDirection);
+        //Echo(c.CustomName + " " + c.GridThrustDirection);
         //Vector3I upVect = new 
         if (c.GridThrustDirection.Y == -1)
         {
             //c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
             c.ThrustOverridePercentage += Convert.ToSingle(u_t);
         }
-        /*
+        
         if (c.GridThrustDirection.Y == 1)
         {
-            c.ThrustOverridePercentage -= u_t;
+            c.ThrustOverridePercentage -= Convert.ToSingle(u_t);
         }
-        */
+        
 
     }
                 
