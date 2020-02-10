@@ -63,8 +63,6 @@ public void Main()
             {
                 //c.ThrustOverridePercentage += 0.05f;
                 //c.ThrustOverridePercentage += System.Convert.ToDouble((1 / (Math.Abs(minAlt - elev))));
-                //Echo(" " + Math.Abs(minAlt-elev));
-                //Echo(" " + (1 / (Math.Abs(minAlt - elev))));
                 //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
                 c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
             }
@@ -72,7 +70,6 @@ public void Main()
             else
             {
                 //c.ThrustOverridePercentage -= 0.05f;
-                //c.ThrustOverridePercentage += (1 / (Math.Abs(minAlt - elev)));
                 //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
                 //c.ThrustOverridePercentage -= Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2);
                 c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
@@ -84,16 +81,15 @@ public void Main()
             Echo("hello");
             if (elev < minAlt)
             {
-                //   c.ThrustOverridePercentage -= 0.05f;
-
+                //c.ThrustOverridePercentage -= 0.05f;
                 //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
                 c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
             }
             else
             {
-                //  c.ThrustOverridePercentage += 0.05f;
+                //c.ThrustOverridePercentage += 0.05f;
                 //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
-                c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
+                c.ThrustOverridePercentage += 0.0000001f*Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
             }
             
         }
@@ -118,4 +114,4 @@ public void Main()
 #if DEBUG
     }
 }
-#endifD
+#endif
