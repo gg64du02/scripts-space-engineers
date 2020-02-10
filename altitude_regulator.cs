@@ -35,65 +35,60 @@ namespace SpaceEngineers
 }
 public void Main()
 {
-    //ok
+    //PID constants
+    double K_p = 1;
+    double T_i = 0;
+    double T_d = 0;
+
+    /*
+     * r(t) = define the altitude you want
+     * e(t) = r(t) - y(t) // error
+     * y(t) = the altitude
+     * p(t) = proportionnal
+     * i(t) = integral
+     * d(t) = derivative
+     * u(t) = p + i + d 
+     * */
+
+    double r_t = 20;
+    double e_t = 0;
+    double y_t = 0;
+    double p_t = 0;
+    double i_t = 0;
+    double d_t = 0;
+    double u_t = 0;
+
     double elev;
     var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-    Echo(elev.ToString());
-    var thrUp = GridTerminalSystem.GetBlockWithName("thrUp") as IMyThrust;
-    double minAlt = 20;
-    /*
-    if (elev < minAlt)
-    {
-    thrUp.ThrustOverridePercentage += 0.2f;
-    }
-    else
-    {
-    thrUp.ThrustOverridePercentage -= 0.2f;
-    }*/
+    y_t = elev;
+    Echo("y_t:" + y_t.ToString());
+
+    e_t = r_t - y_t;
+
+    //TODO:need update for i and d
+    u_t = K_p * e_t + T_i * i_t + T_d * d_t;
+    Echo("u_t:" + u_t.ToString());
+
+    //applying what the pid processed
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
-    foreach(var c in cs)
+    foreach (var c in cs)
     {
         Echo(c.CustomName + " " + c.GridThrustDirection);
         //Vector3I upVect = new 
-        if (c.GridThrustDirection.Y == -1) { 
-            Echo("hello");
-            if (elev < minAlt)
-            {
-                //c.ThrustOverridePercentage += 0.05f;
-                //c.ThrustOverridePercentage += System.Convert.ToDouble((1 / (Math.Abs(minAlt - elev))));
-                //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
-                c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
-            }
-            
-            else
-            {
-                //c.ThrustOverridePercentage -= 0.05f;
-                //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
-                //c.ThrustOverridePercentage -= Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2);
-                c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
-            }
+        if (c.GridThrustDirection.Y == -1)
+        {
+            //c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
+            c.ThrustOverridePercentage += Convert.ToSingle(u_t);
         }
-        
+        /*
         if (c.GridThrustDirection.Y == 1)
         {
-            Echo("hello");
-            if (elev < minAlt)
-            {
-                //c.ThrustOverridePercentage -= 0.05f;
-                //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
-                c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
-            }
-            else
-            {
-                //c.ThrustOverridePercentage += 0.05f;
-                //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
-                c.ThrustOverridePercentage += 0.0000001f*Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
-            }
-            
+            c.ThrustOverridePercentage -= u_t;
         }
-        
+        */
+
     }
                 
 }
