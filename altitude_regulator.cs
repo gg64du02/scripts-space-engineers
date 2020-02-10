@@ -61,13 +61,43 @@ public void Main()
             Echo("hello");
             if (elev < minAlt)
             {
-                c.ThrustOverridePercentage += 0.2f;
+                //c.ThrustOverridePercentage += 0.05f;
+                //c.ThrustOverridePercentage += System.Convert.ToDouble((1 / (Math.Abs(minAlt - elev))));
+                //Echo(" " + Math.Abs(minAlt-elev));
+                //Echo(" " + (1 / (Math.Abs(minAlt - elev))));
+                //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
+                c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
+            }
+            
+            else
+            {
+                //c.ThrustOverridePercentage -= 0.05f;
+                //c.ThrustOverridePercentage += (1 / (Math.Abs(minAlt - elev)));
+                //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
+                //c.ThrustOverridePercentage -= Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2);
+                c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
+            }
+        }
+        
+        if (c.GridThrustDirection.Y == 1)
+        {
+            Echo("hello");
+            if (elev < minAlt)
+            {
+                //   c.ThrustOverridePercentage -= 0.05f;
+
+                //c.ThrustOverridePercentage -= (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
+                c.ThrustOverridePercentage -= Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
             }
             else
             {
-                c.ThrustOverridePercentage -= 0.2f;
+                //  c.ThrustOverridePercentage += 0.05f;
+                //c.ThrustOverridePercentage += (1 / (Convert.ToSingle(Math.Abs(minAlt - elev))));
+                c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)), 2));
             }
+            
         }
+        
     }
                 
 }
