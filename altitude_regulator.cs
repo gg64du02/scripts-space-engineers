@@ -48,6 +48,9 @@ double p_t = 0;
 double i_t = 0;
 double d_t = 0;
 double u_t = 0;
+
+new List<double> i_t_list_points = new List<double>();
+double i_t_num_points = 10;
 public Program()
 {
             // The constructor, called only once every session and
@@ -67,9 +70,25 @@ public void Main()
 
     e_t = r_t - y_t;
 
-    //integral
-    i_t += e_t;
+    //integral 
+    //first approach from 0 to now (bad results, assume the settings would never change)
+    //i_t += e_t;
+    if (i_t_list_points.Count < i_t_num_points) {
+        i_t_list_points.Add(e_t);
+    }
+    else
+    {
+        i_t_list_points.RemoveAt(0);
+        i_t_list_points.Add(e_t);
+    }
+    i_t = 0;
+    foreach (var it in i_t_list_points)
+    {
+        i_t += it;
+    }
+    i_t = i_t / 10;
     Echo("i_t:" + i_t.ToString());
+
 
     //TODO:need update for i and d
     u_t = K_p * e_t + T_i * i_t + T_d * d_t;
@@ -87,11 +106,13 @@ public void Main()
             //c.ThrustOverridePercentage += Convert.ToSingle(Math.Pow(Convert.ToSingle(Math.Abs(minAlt - elev)),2)); 
             c.ThrustOverridePercentage += Convert.ToSingle(u_t);
         }
-        
+        /*
+        //disabled by default, prone to ship crashes !!!
         if (c.GridThrustDirection.Y == 1)
         {
             c.ThrustOverridePercentage -= Convert.ToSingle(u_t);
         }
+        */
         
 
     }
