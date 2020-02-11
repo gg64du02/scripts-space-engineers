@@ -68,8 +68,11 @@ public void Main()
     double elev;
     var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+
+    Echo("myCurrentCockpit.RotationIndicator:" + myCurrentCockpit.RotationIndicator);
     var currentVelocity = myCurrentCockpit.GetShipVelocities();
-    Echo("currentVelocity.LinearVelocity:"+currentVelocity.LinearVelocity);
+    Echo("currentVelocity.LinearVelocity:" + currentVelocity.LinearVelocity);
+    Echo("myCurrentCockpit.Orientation:" + myCurrentCockpit.Orientation);
     //var currentVelocityString = currentVelocity.ToString();
     //Echo("myCurrentCockpit currentVelocity:" + currentVelocityString);
 
@@ -92,17 +95,25 @@ public void Main()
     foreach(var gyro in gyros)
     {
 
+        var roll = 0;
+        var yaw = 0;
+        var pitch = 0;
+
+        
         Echo(" " + gyro.Roll + " " + gyro.Pitch + " " + gyro.Yaw);
         //range of those is -2pi +2pi
         
         if (elev > 500)
         {
-            gyro.GyroOverride = true; 
-            gyro.Yaw += 0.0001f * Convert.ToSingle(currentVelocity.LinearVelocity.Y);
+            
+            gyro.GyroOverride = true;
+            /*
+            gyro.Yaw += 0.001f * Convert.ToSingle(currentVelocity.LinearVelocity.Y);
             if (gyro.Yaw > 0.1f)
                 gyro.Yaw = 0.1f;
             if (gyro.Yaw < -0.1f)
                 gyro.Yaw = -0.1f;
+                */
             /*
             //gyro.Roll += 0.0001f * Convert.ToSingle(currentVelocity.LinearVelocity.X);
             //gyro.Pitch += 0.0001f * Convert.ToSingle(currentVelocity.LinearVelocity.Y);
@@ -110,11 +121,18 @@ public void Main()
                 gyro.Yaw = 0.1f;
                 */
 
-            gyro.Pitch += 0.0001f * Convert.ToSingle(currentVelocity.LinearVelocity.X);
-            if (gyro.Pitch > 0.1f)
-                gyro.Pitch = 0.1f;
-            if (gyro.Pitch < -0.1f)
-                gyro.Pitch = -0.1f;
+            var maxOuput = .2f;
+            gyro.Pitch += 0.001f * Convert.ToSingle(currentVelocity.LinearVelocity.X);
+            if (gyro.Pitch > maxOuput)
+                gyro.Pitch = maxOuput;
+            if (gyro.Pitch < -maxOuput)
+                gyro.Pitch = -maxOuput;
+
+            gyro.Roll += 0.001f * Convert.ToSingle(currentVelocity.LinearVelocity.Y);
+            if (gyro.Roll > maxOuput)
+                gyro.Roll = maxOuput;
+            if (gyro.Roll < -maxOuput)
+                gyro.Roll = -maxOuput;
         }
         else
         {
