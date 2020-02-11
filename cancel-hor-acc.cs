@@ -76,8 +76,8 @@ public void Main()
     //debugString += "\n" + "myCurrentCockpit.Orientation:\n" + myCurrentCockpit.Orientation;
 
     //devrive acceleration
-    d_a_x = (prev_a_x - a_x) / dts;
-    d_a_y = (prev_a_y - a_y) / dts;
+    var d_a_x = (prev_a_x - a_x) / dts;
+    var d_a_y = (prev_a_y - a_y) / dts;
     debugString += "\n" + "d_a_x,d_a_y:\n" + d_a_x + "," + d_a_y;
 
     //storing current acc for next loop
@@ -95,8 +95,26 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
 
+        if (Math.Abs(d_a_x) > 0.1)
+        {
+            gyro.GyroOverride = true;
+            if (d_a_x> 0.1f)
+            {
+                gyro.Pitch += .01f;
+            }
+            else
+            {
+                gyro.Pitch -= .01f;
+            }
+        }
 
-
+        //maxing out
+        if (Math.Abs(gyro.Pitch) > .1f)
+        {
+            if(gyro.Pitch > .1f)
+                gyro.Pitch = .1f;
+            gyro.Pitch = -.1f;
+        }
     }
 
 
