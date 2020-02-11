@@ -126,6 +126,42 @@ public void Main()
                 }
                 else
                 {
+                    //we want to cancel the speed so we need the acc be the oppsosite sign of the speed
+                    //tldr: sign(acc) must be !sign(speed)
+                    if(a_x>0)
+                    {
+                        if(currentVelocity.LinearVelocity.X>0)
+                        {
+                            gyro.Yaw = 1f;
+                        }
+                    }
+                    if (a_x < 0)
+                    {
+                        if (currentVelocity.LinearVelocity.X < 0)
+                        {
+                            gyro.Yaw = -1f;
+                        }
+                    }
+
+
+
+                    if (a_y > 0)
+                    {
+                        if (currentVelocity.LinearVelocity.Y > 0)
+                        {
+                            gyro.Yaw = -1f;
+                        }
+                    }
+                    if (a_y < 0)
+                    {
+                        if (currentVelocity.LinearVelocity.Y < 0)
+                        {
+                            gyro.Yaw = 1f;
+                        }
+                    }
+
+
+                    /*
                     if(Math.Abs(a_x)+1f> Math.Abs(a_y))
                     {
                         gyro.GyroOverride = true;
@@ -162,7 +198,7 @@ public void Main()
                             gyro.Pitch = -gyro.Pitch;
                         }
                     }
-                    
+                    */
                 }
 
             }
