@@ -70,15 +70,15 @@ public void Main()
 
 
     debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
-    debugString += "\n" + "currentVelocity.LinearVelocity:\n" + currentVelocity.LinearVelocity;
-    debugString += "\n" + "a_x,a_y:\n" + a_x + "," + a_y;
+    debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n"+ currentVelocity.LinearVelocity.Y;
+    debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
     //useless
     //debugString += "\n" + "myCurrentCockpit.Orientation:\n" + myCurrentCockpit.Orientation;
 
     //devrive acceleration
     var d_a_x = (prev_a_x - a_x) / dts;
     var d_a_y = (prev_a_y - a_y) / dts;
-    debugString += "\n" + "d_a_x,d_a_y:\n" + d_a_x + "," + d_a_y;
+    debugString += "\n" + "d_a_x,d_a_y:\n" + d_a_x + ",\n" + d_a_y;
 
     //storing current acc for next loop
     prev_a_x = a_x;
@@ -95,18 +95,51 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
 
-        if (Math.Abs(d_a_x) > 0.1)
+        if (Math.Abs(a_x) > 1)
         {
             gyro.GyroOverride = true;
-            if (d_a_x> 0.1f)
+            if (a_x > 1f)
             {
-                gyro.Pitch += .01f;
+                if (d_a_x == 0)
+                {
+                    gyro.Pitch += .01f;
+                }
+                else
+                {
+                    if (d_a_x > 0)
+                    {
+                        gyro.Pitch += .01f;
+                    }
+                    else
+                    {
+                        gyro.Pitch -= .01f;
+                    }
+                }
             }
             else
             {
-                gyro.Pitch -= .01f;
+                if (d_a_x == 0)
+                {
+                    gyro.Pitch -= .01f;
+                }
+                else
+                {
+                    if (d_a_x > 0)
+                    {
+                        gyro.Pitch -= .01f;
+                    }
+                    else
+                    {
+                        gyro.Pitch += .01f;
+                    }
+                }
             }
         }
+        else
+        {
+            gyro.Pitch = 0f;
+            gyro.GyroOverride = false;
+        }       
 
         //maxing out
         if (Math.Abs(gyro.Pitch) > .1f)
@@ -115,6 +148,8 @@ public void Main()
                 gyro.Pitch = .1f;
             gyro.Pitch = -.1f;
         }
+
+        debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
     }
 
 
