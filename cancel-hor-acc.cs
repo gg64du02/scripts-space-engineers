@@ -42,6 +42,20 @@ public Program()
     // initialize your script.
     Runtime.UpdateFrequency = UpdateFrequency.Update1;
     //This makes the program automatically run every 10 ticks.
+
+    //Reset all gyros
+
+
+    var gyros = new List<IMyGyro>();
+    GridTerminalSystem.GetBlocksOfType(gyros);
+    foreach (var gyro in gyros)
+    {
+        gyro.GyroOverride = true;
+        gyro.Pitch = 0f;
+        gyro.Roll = 0f;
+        gyro.Yaw = 0f;
+        gyro.GyroOverride = false;
+    }
 }
 public void Main()
 {
@@ -95,6 +109,72 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
 
+        double threshold = .2f;
+        if(Math.Abs(a_x) > threshold)
+        {
+            if (Math.Abs(a_y) > threshold)
+            {
+                if (d_a_x == 0)
+                {
+                    if (d_a_y == 0)
+                    {
+                        gyro.GyroOverride = true;
+                        gyro.Pitch = .1f;
+                        //gyro.Roll = .1f;
+                    }
+                }
+                else
+                {
+                    if(a_x<0)
+                    {
+                        if (d_a_x > 0)
+                        {
+                            //using the gyro the wrong way
+                        }
+                        else
+                        {
+                            gyro.Pitch = -gyro.Pitch;
+                        }
+                    }
+                    else
+                    {
+                        if (d_a_x < 0)
+                        {
+                            //using the gyro the wrong way
+                        }
+                        else
+                        {
+                            gyro.Pitch = -gyro.Pitch;
+                        }
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            gyro.Pitch = 0f;
+            gyro.Roll = 0f;
+            gyro.GyroOverride = false;
+        }
+
+        //maxing out
+        if (Math.Abs(gyro.Pitch) > .1f)
+        {
+            if (gyro.Pitch > .1f)
+                gyro.Pitch = .1f;
+            gyro.Pitch = -.1f;
+        }
+        if (Math.Abs(gyro.Roll) > .1f)
+        {
+            if (gyro.Roll > .1f)
+                gyro.Roll = .1f;
+            gyro.Roll = -.1f;
+        }
+
+        debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
+
+        /*
         if (Math.Abs(a_x) > 1)
         {
             gyro.GyroOverride = true;
@@ -154,8 +234,9 @@ public void Main()
                 gyro.Pitch = .1f;
             gyro.Pitch = -.1f;
         }
-        
+
         debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
+        */
     }
 
 
