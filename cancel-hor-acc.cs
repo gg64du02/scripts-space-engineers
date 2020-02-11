@@ -84,7 +84,7 @@ public void Main()
     prev_a_x = a_x;
     prev_a_y = a_y;
 
-
+    
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
     foreach (var gyro in gyros)
@@ -102,7 +102,10 @@ public void Main()
             {
                 if (d_a_x == 0)
                 {
-                    gyro.Pitch += .01f;
+                    if (gyro.Pitch != 0f)
+                    {
+                        gyro.Pitch += .01f;
+                    }
                 }
                 else
                 {
@@ -120,7 +123,10 @@ public void Main()
             {
                 if (d_a_x == 0)
                 {
-                    gyro.Pitch -= .01f;
+                    if (gyro.Pitch != 0f)
+                    {
+                        gyro.Pitch -= .01f;
+                    }
                 }
                 else
                 {
@@ -140,7 +146,7 @@ public void Main()
             gyro.Pitch = 0f;
             gyro.GyroOverride = false;
         }       
-
+        
         //maxing out
         if (Math.Abs(gyro.Pitch) > .1f)
         {
@@ -148,7 +154,7 @@ public void Main()
                 gyro.Pitch = .1f;
             gyro.Pitch = -.1f;
         }
-
+        
         debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
     }
 
