@@ -56,6 +56,8 @@ double d_varphi_t_2 = 0;
 new List<double> average_angle_add = new List<double>();
 double average_angle_add_num_points = 10;
 
+double yaw_integration = 0;
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -235,8 +237,12 @@ public void Main()
         GridTerminalSystem.GetBlocksOfType(gyros);
         foreach (var gyro in gyros)
         {
-            if (Math.Abs(angles_average) > Math.PI / 2)
-            {
+            yaw_integration += gyro.Yaw*dts;
+            debugString += "\nyaw_integration: " + yaw_integration;
+
+            if (Math.Abs(angles_average) > yaw_integration / 2)
+                //if (Math.Abs(angles_average) > Math.PI / 2)
+                {
                 gyro.GyroOverride = true;
                 if (angles_average > 0)
                 {
