@@ -118,7 +118,7 @@ public void Main()
                 {
                     if (d_a_y == 0)
                     {
-                        gyro.GyroOverride = true;
+                        //gyro.GyroOverride = true;
                         //.1f pitch brakes (pitch backward)
                         //gyro.Pitch = .1f;
                         //.1f yaw goes right (normal to gravity)
@@ -145,8 +145,10 @@ public void Main()
                         }
                     }
 
+                    double a_angle = Math.Atan(d_a_x / a_y);
 
-                    
+                    debugString += "\n" + "a_angle:" + a_angle;
+
                     if (a_y > 0)
                     {
                         if (currentVelocity.LinearVelocity.Y > 0)
@@ -162,12 +164,20 @@ public void Main()
                         }
                     }
 
+                    double v_angle = Math.Atan(currentVelocity.LinearVelocity.X/currentVelocity.LinearVelocity.Y);
+                    debugString += "\n" + "v_angle:" + a_angle;
+
+                    double result = a_angle + v_angle;
+
                     if (turnMeAround == true)
                     {
                         gyro.GyroOverride = true;
                         if (gyro.Pitch == 0)
                             gyro.Pitch = .1f;
-                        gyro.Yaw = 1f;
+                        if(result>0)
+                            gyro.Yaw = 1f;
+                        else
+                            gyro.Yaw = -1f;
                     }
                     else
                     {
@@ -175,7 +185,6 @@ public void Main()
                         gyro.Yaw = 0;
                         gyro.GyroOverride = false;
                     }
-
 
                 }
 
