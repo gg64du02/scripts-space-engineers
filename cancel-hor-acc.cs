@@ -192,15 +192,40 @@ public void Main()
 
         //debugString += "\nsqrt_d_angle_theta_varphi_t: " + sqrt_d_angle_theta_varphi_t;
         //debugString += "\nsqrt_d_angle_theta_varphi_t_2: " + sqrt_d_angle_theta_varphi_t_2;
-        debugString += "\ns_d_a_t_p_t  : " + sqrt_d_angle_theta_varphi_t;
+        debugString += "\ns_d_a_t_p_t__: " + sqrt_d_angle_theta_varphi_t;
         debugString += "\ns_d_a_t_p_t_2: " + sqrt_d_angle_theta_varphi_t_2;
-
-        //TODO code here
-
 
         prev_d_r_t = d_r_t;
         prev_d_theta_t = d_theta_t;
         prev_d_varphi_t = d_varphi_t;
+
+        //we are trying to get those apposite ways
+        double angle_add = sqrt_d_angle_theta_varphi_t_2 + sqrt_d_angle_theta_varphi_t;
+
+        //threshold at 1rad
+        if (Math.Abs(angle_add) > 1)
+        {
+            //activating the gyros
+            var gyros = new List<IMyGyro>();
+            GridTerminalSystem.GetBlocksOfType(gyros);
+            foreach (var gyro in gyros)
+            {
+                gyro.GyroOverride = true;
+
+            }
+            //TODO code here
+        }
+        else
+        {
+            //releasing the gyros
+            var gyros = new List<IMyGyro>();
+            GridTerminalSystem.GetBlocksOfType(gyros);
+            foreach (var gyro in gyros)
+            {
+                gyro.GyroOverride = false;
+            }
+        }
+
 
 
         /*
