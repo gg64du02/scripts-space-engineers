@@ -124,6 +124,8 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
         
+        //TODO: figure out polar coordinates (current xyz pos versus planet center xyz)
+
         double threshold = .02f;
         if(Math.Abs(a_x) > threshold)
         {
@@ -161,6 +163,21 @@ public void Main()
                 if (a_y < 0)
                 {
                     if (currentVelocity.LinearVelocity.Y < 0)
+                    {
+                        turnMeAround = true;
+                    }
+                }
+
+                if (a_z > 0)
+                {
+                    if (currentVelocity.LinearVelocity.Z > 0)
+                    {
+                        turnMeAround = true;
+                    }
+                }
+                if (a_z < 0)
+                {
+                    if (currentVelocity.LinearVelocity.Z < 0)
                     {
                         turnMeAround = true;
                     }
@@ -225,6 +242,7 @@ public void Main()
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
+    textPanel.FontSize = 1.58f;
     textPanel.WriteText(debugString, false);
     //deprecated
     //textPanel.WritePublicText("debugString", false);
