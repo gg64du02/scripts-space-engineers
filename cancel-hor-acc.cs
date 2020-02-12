@@ -113,6 +113,30 @@ public void Main()
     prev_a_y = a_y;
     prev_a_z = a_z;
 
+    //TODO: figure out polar coordinates (current xyz pos versus planet center xyz)
+    //https://en.wikipedia.org/wiki/Spherical_coordinate_system
+    //(r,theta,phi)
+    /*
+    r &= \sqrt{ x ^ 2 + y ^ 2 + z ^ 2}, \\
+    \varphi &= \arctan \frac{ y}{ x}, \\
+    \theta &= \arccos\frac{ z} {\sqrt{ x ^ 2 + y ^ 2 + z ^ 2} } 
+    = \arccos\frac{ z}{ r}
+    =\arctan\frac{\sqrt{ x ^ 2 + y ^ 2} } { z}.
+    */
+    var myCurPos = myCurrentCockpit.GetPosition();
+    var r = Math.Sqrt((myCurPos.X) * (myCurPos.X)
+        + (myCurPos.Y) * (myCurPos.Y)
+        + (myCurPos.Z) * (myCurPos.Z));
+
+    debugString += "\nr:\n" + Math.Round((r), 2).ToString();
+
+    var theta = Atan2(Math.Sqrt((myCurPos.X) * (myCurPos.X)
+        + (myCurPos.Y) * (myCurPos.Y)),z);
+
+    debugString += "\ntheta:\n" + Math.Round((theta), 2).ToString();
+
+
+
 
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
@@ -123,8 +147,6 @@ public void Main()
         //Y foward backward pitch
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
-        
-        //TODO: figure out polar coordinates (current xyz pos versus planet center xyz)
 
         double threshold = .02f;
         if(Math.Abs(a_x) > threshold)
@@ -242,7 +264,8 @@ public void Main()
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
-    textPanel.FontSize = 1.58f;
+    //textPanel.FontSize = 1.58f;
+    textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
     //deprecated
     //textPanel.WritePublicText("debugString", false);
