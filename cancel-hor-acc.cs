@@ -89,8 +89,10 @@ public void Main()
 
 
     //debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
-    debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n"+ currentVelocity.LinearVelocity.Y;
-    debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
+    //debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n" + currentVelocity.LinearVelocity.Y;
+    debugString += "\n" + " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
+    //debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
+    debugString += "\na_x,a_y,a_z:\n" + Math.Round((a_x), 2).ToString() + "," + Math.Round((a_y), 2).ToString()+ "," + Math.Round((a_z), 2).ToString();
     var grav = myCurrentCockpit.GetTotalGravity();
 
     //debugString += "\n" + "grav:\n" + grav;
@@ -218,7 +220,6 @@ public void Main()
         //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
 
     }
-
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
