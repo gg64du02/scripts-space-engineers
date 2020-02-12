@@ -27,12 +27,15 @@ namespace SpaceEngineers
 
 double prev_v_x = 0;
 double prev_v_y = 0;
+double prev_v_z = 0;
 
 double a_x = 0;
 double a_y = 0;
+double a_z = 0;
 
 double prev_a_x = 0;
 double prev_a_y = 0;
+double prev_a_z = 0;
 
 
 public Program()
@@ -77,28 +80,36 @@ public void Main()
     //figuring out the acc for hor axis
     a_x = (prev_v_x - currentVelocity.LinearVelocity.X) / dts;
     a_y = (prev_v_y - currentVelocity.LinearVelocity.Y) / dts;
+    a_z = (prev_v_z - currentVelocity.LinearVelocity.Z) / dts;
 
     //storing current speeds for next loop
     prev_v_x = currentVelocity.LinearVelocity.X;
     prev_v_y = currentVelocity.LinearVelocity.Y;
+    prev_v_z = currentVelocity.LinearVelocity.Z;
 
 
     //debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
     debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n"+ currentVelocity.LinearVelocity.Y;
     debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
+    var grav = myCurrentCockpit.GetTotalGravity();
+
+    //debugString += "\n" + "grav:\n" + grav;
+    debugString += "\n" + "grav:\n" + grav.X + ",\n" + grav.Y + ",\n" + grav.Z;
     //useless
     //debugString += "\n" + "myCurrentCockpit.Orientation:\n" + myCurrentCockpit.Orientation;
 
     //devrive acceleration
     var d_a_x = (prev_a_x - a_x) / dts;
     var d_a_y = (prev_a_y - a_y) / dts;
+    var d_a_z = (prev_a_z - a_z) / dts;
     debugString += "\n" + "d_a_x,d_a_y:\n" + d_a_x + ",\n" + d_a_y;
 
     //storing current acc for next loop
     prev_a_x = a_x;
     prev_a_y = a_y;
+    prev_a_z = a_z;
 
-    
+
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
     foreach (var gyro in gyros)
@@ -133,8 +144,7 @@ public void Main()
                     }
                 }
 
-                double a_angle = Math.Atan(d_a_x / a_y);
-
+                double a_angle = Math.Atan2(d_a_x , a_y);
                 debugString += "\n" + "a_angle:" + a_angle;
 
                 if (a_y > 0)
@@ -152,7 +162,7 @@ public void Main()
                     }
                 }
 
-                double v_angle = Math.Atan(currentVelocity.LinearVelocity.X/currentVelocity.LinearVelocity.Y);
+                double v_angle = Math.Atan2(currentVelocity.LinearVelocity.X,currentVelocity.LinearVelocity.Y);
                 //debugString += "\n" + "v_angle:" + a_angle;
 
                 double result = a_angle + v_angle;
