@@ -205,6 +205,37 @@ public void Main()
 
         debugString += "\nangle_add: " + angle_add;
         //note: around angle_add:+-pi use roll to cancel the ground vel
+
+
+        /*
+        //activating the gyros
+        var gyros = new List<IMyGyro>();
+        GridTerminalSystem.GetBlocksOfType(gyros);
+        foreach (var gyro in gyros)
+        {
+            if (0.9f < Math.Abs(angle_add / Math.PI))
+                if (Math.Abs(angle_add / Math.PI) < 1.1f)
+                {
+                    gyro.GyroOverride = true;
+                    if(angle_add>0)
+                        gyro.Roll = .1f;
+                    else
+                        gyro.Roll = -.1f;
+                    debugString += "\nlol<<: ";
+                }
+                else
+                {
+                    gyro.GyroOverride = false;
+                    gyro.Roll = 0f;
+                }
+            else
+            {
+                gyro.GyroOverride = false;
+                gyro.Roll = 0f;
+            }
+        }
+        */
+
         /*
         //threshold at 1rad
         if (Math.Abs(angle_add) > 1)
@@ -238,37 +269,6 @@ public void Main()
             }
         }
         */
-
-
-        /*
-        //gyro
-        //X slide right left roll
-        //Y foward backward pitch
-        //Z turn left right yaw
-        //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
-        var gyros = new List<IMyGyro>();
-        GridTerminalSystem.GetBlocksOfType(gyros);
-        foreach (var gyro in gyros)
-        {
-            gyro.GyroOverride = true;
-            gyro.GyroOverride = false;
-            //Math.Atan2(d_a_y , d_a_x);
-            //maxing out
-            if (Math.Abs(gyro.Pitch) > .1f)
-            {
-                if (gyro.Pitch > .1f)
-                    gyro.Pitch = .1f;
-                gyro.Pitch = -.1f;
-            }
-            if (Math.Abs(gyro.Roll) > .1f)
-            {
-                if (gyro.Roll > .1f)
-                    gyro.Roll = .1f;
-                gyro.Roll = -.1f;
-            }
-        }
-        */
-
 
         //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
 
