@@ -128,16 +128,21 @@ public void Main()
         + (myCurPos.Y) * (myCurPos.Y)
         + (myCurPos.Z) * (myCurPos.Z));
 
-    debugString += "\nr:\n" + Math.Round((r), 2).ToString();
+    //debugString += "\nr: " + Math.Round((r), 2).ToString();
+    debugString += "\nr: " + r;
 
     var theta = Math.Atan2(Math.Sqrt((myCurPos.X) * (myCurPos.X)
         + (myCurPos.Y) * (myCurPos.Y)), myCurPos.Z);
 
-    debugString += "\ntheta:\n" + Math.Round((theta), 2).ToString();
+   //debugString += "\ntheta: " + Math.Round((theta), 2).ToString();
+    debugString += "\ntheta: " + theta;
 
-    var varphi = Math.Atan2(myCurPos.Y / myCurPos.X);
+    var varphi = Math.Atan2(myCurPos.Y , myCurPos.X);
 
-    debugString += "\nvarphi:\n" + Math.Round((varphi), 2).ToString();
+    //debugString += "\nvarphi: " + Math.Round((varphi), 2).ToString();
+    debugString += "\nvarphi: " + varphi;
+
+    //TODO: figure out (d theta / dt) and (d varphi / dt) to allow control on ROLL and PITCH?
 
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
