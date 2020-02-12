@@ -172,6 +172,7 @@ public void Main()
 
                     if (turnMeAround == true)
                     {
+                        /*
                         gyro.GyroOverride = true;
                         gyro.Yaw = Convert.ToSingle(result) * 4f;
                         /*
