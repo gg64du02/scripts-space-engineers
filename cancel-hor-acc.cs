@@ -96,7 +96,8 @@ public void Main()
     var grav = myCurrentCockpit.GetTotalGravity();
 
     //debugString += "\n" + "grav:\n" + grav;
-    debugString += "\n" + "grav:\n" + grav.X + ",\n" + grav.Y + ",\n" + grav.Z;
+    //debugString += "\n" + "grav:\n" + grav.X + ",\n" + grav.Y + ",\n" + grav.Z;
+    debugString += "\ngrav.X,Y,Z:\n" + Math.Round((grav.X), 2).ToString() + "," + Math.Round((grav.Y), 2).ToString() + "," + Math.Round((grav.Z), 2).ToString();
     //useless
     //debugString += "\n" + "myCurrentCockpit.Orientation:\n" + myCurrentCockpit.Orientation;
 
@@ -104,7 +105,8 @@ public void Main()
     var d_a_x = (prev_a_x - a_x) / dts;
     var d_a_y = (prev_a_y - a_y) / dts;
     var d_a_z = (prev_a_z - a_z) / dts;
-    debugString += "\n" + "d_a_x,d_a_y:\n" + d_a_x + ",\n" + d_a_y;
+    //debugString += "\n" + "d_a_x,d_a_y,d_a_z:\n" + d_a_x + ",\n" + d_a_y+ ",\n" + d_a_z;
+    debugString += "\nd_a_x,d_a_y,d_a_z:\n" + Math.Round((d_a_x), 2).ToString() + "," + Math.Round((d_a_y), 2).ToString() + "," + Math.Round((d_a_z), 2).ToString();
 
     //storing current acc for next loop
     prev_a_x = a_x;
