@@ -154,11 +154,11 @@ public void Main()
     d_r_t = (prev_r - r) / dts;
     d_theta_t = (prev_theta - theta) / dts;
     d_varphi_t = (prev_varphi - varphi) / dts;
-
+    /*
     debugString += "\nd_r_t: " + d_r_t;
     debugString += "\nd_theta_t: " + d_theta_t;
     debugString += "\nd_varphi_t: " + d_varphi_t;
-
+    */
     //storing the values for the next loop
     prev_r = r;
     prev_theta = theta;
@@ -168,131 +168,43 @@ public void Main()
     double sqrt_d_theta_varphi_t = Math.Sqrt(d_theta_t * d_theta_t + d_varphi_t * d_varphi_t);
     double sqrt_d_angle_theta_varphi_t = Math.Atan2(d_theta_t, d_varphi_t);
 
+    double ground_speed_ms = sqrt_d_theta_varphi_t * (r-elev);
+    debugString += "\nground_speed_ms: " + ground_speed_ms;
 
-
-
-    var gyros = new List<IMyGyro>();
-    GridTerminalSystem.GetBlocksOfType(gyros);
-    foreach (var gyro in gyros)
+    if (sqrt_d_theta_varphi_t > 0)
     {
+
+        //TODO code here
+
+        /*
         //gyro
         //X slide right left roll
         //Y foward backward pitch
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
-
-
-        /*
-        double threshold = .02f;
-        if(Math.Abs(a_x) > threshold)
+        var gyros = new List<IMyGyro>();
+        GridTerminalSystem.GetBlocksOfType(gyros);
+        foreach (var gyro in gyros)
         {
-            if (Math.Abs(a_y) > threshold)
-            {
-                //we want to cancel the speed so we need the acc be the oppsosite sign of the speed
-                //tldr: sign(acc) must be !sign(speed)
-                bool turnMeAround = false;
-
-                if(a_x>0)
-                {
-                    if(currentVelocity.LinearVelocity.X>0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-                if (a_x < 0)
-                {
-                    if (currentVelocity.LinearVelocity.X < 0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-
-                double a_angle = Math.Atan2(d_a_y , d_a_x);
-                //debugString += "\n" + "a_angle:" + a_angle;
-
-                if (a_y > 0)
-                {
-                    if (currentVelocity.LinearVelocity.Y > 0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-                if (a_y < 0)
-                {
-                    if (currentVelocity.LinearVelocity.Y < 0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-
-                if (a_z > 0)
-                {
-                    if (currentVelocity.LinearVelocity.Z > 0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-                if (a_z < 0)
-                {
-                    if (currentVelocity.LinearVelocity.Z < 0)
-                    {
-                        turnMeAround = true;
-                    }
-                }
-
-                double v_angle = Math.Atan2(currentVelocity.LinearVelocity.Y,currentVelocity.LinearVelocity.X);
-                //debugString += "\n" + "v_angle:" + a_angle;
-
-                double result = a_angle + v_angle;
-                //debugString += "\n" + "result:" + result;
-
-                if (turnMeAround == true)
-                {
-                    
-                    gyro.GyroOverride = true;
-                    gyro.Yaw = Convert.ToSingle(result) * 4f;
-                    
-                    if (gyro.Pitch == 0)
-                        gyro.Pitch = .2f;
-                    if (result > 0)
-                    {
-                        //gyro.Yaw = 1f;
-                        gyro.Yaw = Convert.ToSingle(result) * 4f;
-                    }
-                    else
-                    {
-                        //gyro.Yaw = -1f;
-                        gyro.Yaw = -Convert.ToSingle(result) * 4f;
-                    }
-                }
-                else
-                {
-                    gyro.Pitch = 0f;
-                    gyro.Yaw = 0;
-                    gyro.GyroOverride = false;
-                }
-            }
-        }
-        else
-        {
-            gyro.Pitch = 0f;
+            gyro.GyroOverride = true;
             gyro.GyroOverride = false;
+            //Math.Atan2(d_a_y , d_a_x);
+            //maxing out
+            if (Math.Abs(gyro.Pitch) > .1f)
+            {
+                if (gyro.Pitch > .1f)
+                    gyro.Pitch = .1f;
+                gyro.Pitch = -.1f;
+            }
+            if (Math.Abs(gyro.Roll) > .1f)
+            {
+                if (gyro.Roll > .1f)
+                    gyro.Roll = .1f;
+                gyro.Roll = -.1f;
+            }
         }
         */
 
-        //maxing out
-        if (Math.Abs(gyro.Pitch) > .1f)
-        {
-            if (gyro.Pitch > .1f)
-                gyro.Pitch = .1f;
-            gyro.Pitch = -.1f;
-        }
-        if (Math.Abs(gyro.Roll) > .1f)
-        {
-            if (gyro.Roll > .1f)
-                gyro.Roll = .1f;
-            gyro.Roll = -.1f;
-        }
 
         //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
 
