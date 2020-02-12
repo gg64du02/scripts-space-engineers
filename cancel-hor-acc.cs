@@ -58,7 +58,7 @@ public Program()
     // The constructor, called only once every session and
     // always before any other method is called. Use it to
     // initialize your script.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
     //This makes the program automatically run every 10 ticks.
 
     //Reset all gyros
@@ -201,7 +201,10 @@ public void Main()
 
         //we are trying to get those apposite ways
         double angle_add = sqrt_d_angle_theta_varphi_t_2 + sqrt_d_angle_theta_varphi_t;
+        //]-pi;+pi[+]-pi;+pi[ = ]-2pi;2pi[
 
+        debugString += "\nangle_add: " + angle_add;
+        /*
         //threshold at 1rad
         if (Math.Abs(angle_add) > 1)
         {
@@ -211,7 +214,15 @@ public void Main()
             foreach (var gyro in gyros)
             {
                 gyro.GyroOverride = true;
-
+                gyro.Pitch = .1f;
+                if (angle_add > 0)
+                {
+                    gyro.Roll = .1f;
+                }
+                else
+                {
+                    gyro.Roll = -.1f;
+                }
             }
             //TODO code here
         }
@@ -225,7 +236,7 @@ public void Main()
                 gyro.GyroOverride = false;
             }
         }
-
+        */
 
 
         /*
@@ -264,7 +275,7 @@ public void Main()
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
-    textPanel.FontSize = 1.58f;
+    textPanel.FontSize = 1.3f;
     //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
     //deprecated
