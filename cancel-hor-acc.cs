@@ -45,6 +45,14 @@ double d_r_t = 0;
 double d_theta_t = 0;
 double d_varphi_t = 0;
 
+double prev_d_r_t = 0;
+double prev_d_theta_t = 0;
+double prev_d_varphi_t = 0;
+
+double d_r_t_2 = 0;
+double d_theta_t_2 = 0;
+double d_varphi_t_2 = 0;
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -174,7 +182,26 @@ public void Main()
     if (sqrt_d_theta_varphi_t > 0)
     {
 
+        d_r_t_2 = (prev_d_r_t - d_r_t) / dts;
+        d_theta_t_2 = (prev_d_theta_t - d_theta_t) / dts;
+        d_varphi_t_2 = (prev_d_varphi_t - d_varphi_t) / dts;
+
+        //figuring out the surface acc and angle
+        double sqrt_d_theta_varphi_t_2 = Math.Sqrt(d_theta_t_2 * d_theta_t_2 + d_varphi_t_2 * d_varphi_t_2);
+        double sqrt_d_angle_theta_varphi_t_2 = Math.Atan2(d_theta_t_2, d_varphi_t_2);
+
+        //debugString += "\nsqrt_d_angle_theta_varphi_t: " + sqrt_d_angle_theta_varphi_t;
+        //debugString += "\nsqrt_d_angle_theta_varphi_t_2: " + sqrt_d_angle_theta_varphi_t_2;
+        debugString += "\ns_d_a_t_p_t  : " + sqrt_d_angle_theta_varphi_t;
+        debugString += "\ns_d_a_t_p_t_2: " + sqrt_d_angle_theta_varphi_t_2;
+
         //TODO code here
+
+
+        prev_d_r_t = d_r_t;
+        prev_d_theta_t = d_theta_t;
+        prev_d_varphi_t = d_varphi_t;
+
 
         /*
         //gyro
