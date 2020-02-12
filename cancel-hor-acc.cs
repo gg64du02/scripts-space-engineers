@@ -53,12 +53,15 @@ double d_r_t_2 = 0;
 double d_theta_t_2 = 0;
 double d_varphi_t_2 = 0;
 
+new List<double> average_angle_add = new List<double>();
+double average_angle_add_num_points = 10;
+
 public Program()
 {
     // The constructor, called only once every session and
     // always before any other method is called. Use it to
     // initialize your script.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
     //This makes the program automatically run every 10 ticks.
 
     //Reset all gyros
@@ -203,9 +206,56 @@ public void Main()
         double angle_add = sqrt_d_angle_theta_varphi_t_2 + sqrt_d_angle_theta_varphi_t;
         //]-pi;+pi[+]-pi;+pi[ = ]-2pi;2pi[
 
-        debugString += "\nangle_add: " + angle_add;
+        //debugString += "\nangle_add: " + angle_add;
         //note: around angle_add:+-pi use roll to cancel the ground vel
 
+        if (average_angle_add.Count < average_angle_add_num_points)
+        {
+            average_angle_add.Add(angle_add);
+        }
+        else
+        {
+            average_angle_add.RemoveAt(0);
+            average_angle_add.Add(angle_add);
+        }
+        double angles = 0;
+        foreach (var angle in average_angle_add)
+        {
+            angles += angle;
+        }
+        double angles_average = angles / 10;
+        //Echo("angles_average:" + angles_average.ToString());
+        debugString += "\nangles_average: " + angles_average;
+
+        //yaw left will decrease sqrt_d_angle_theta_varphi_t
+        //use: sqrt_d_angle_theta_varphi_t;
+
+        //activating the gyros
+        var gyros = new List<IMyGyro>();
+        GridTerminalSystem.GetBlocksOfType(gyros);
+        foreach (var gyro in gyros)
+        {
+            if (Math.Abs(angles_average) > Math.PI / 2)
+            {
+                gyro.GyroOverride = true;
+                if (angles_average > 0)
+                {
+                    gyro.Yaw = 1f;
+                    gyro.Pitch = .1f;
+                }
+                else
+                {
+                    gyro.Yaw = -1f;
+                    gyro.Pitch = .1f;
+                }
+            }
+            else
+            {
+                gyro.Yaw = 0f;
+                gyro.Pitch = 0f;
+                gyro.GyroOverride = false;
+            }
+        }
 
         /*
         //activating the gyros
@@ -213,11 +263,11 @@ public void Main()
         GridTerminalSystem.GetBlocksOfType(gyros);
         foreach (var gyro in gyros)
         {
-            if (0.9f < Math.Abs(angle_add / Math.PI))
-                if (Math.Abs(angle_add / Math.PI) < 1.1f)
+            if (0.9f < Math.Abs(sqrt_d_angle_theta_varphi_t / Math.PI))
+                if (Math.Abs(sqrt_d_angle_theta_varphi_t / Math.PI) < 1.1f)
                 {
                     gyro.GyroOverride = true;
-                    if(angle_add>0)
+                    if(sqrt_d_angle_theta_varphi_t > 0)
                         gyro.Roll = .1f;
                     else
                         gyro.Roll = -.1f;
