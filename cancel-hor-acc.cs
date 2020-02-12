@@ -199,7 +199,7 @@ public void Main()
                 }
 
                 double a_angle = Math.Atan2(d_a_y , d_a_x);
-                debugString += "\n" + "a_angle:" + a_angle;
+                //debugString += "\n" + "a_angle:" + a_angle;
 
                 if (a_y > 0)
                 {
@@ -235,14 +235,14 @@ public void Main()
                 //debugString += "\n" + "v_angle:" + a_angle;
 
                 double result = a_angle + v_angle;
-                debugString += "\n" + "result:" + result;
+                //debugString += "\n" + "result:" + result;
 
                 if (turnMeAround == true)
                 {
-                    /*
+                    
                     gyro.GyroOverride = true;
                     gyro.Yaw = Convert.ToSingle(result) * 4f;
-                    /*
+                    
                     if (gyro.Pitch == 0)
                         gyro.Pitch = .2f;
                     if (result > 0)
@@ -254,7 +254,7 @@ public void Main()
                     {
                         //gyro.Yaw = -1f;
                         gyro.Yaw = -Convert.ToSingle(result) * 4f;
-                    }*/
+                    }
                 }
                 else
                 {
