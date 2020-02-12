@@ -114,90 +114,75 @@ public void Main()
         {
             if (Math.Abs(a_y) > threshold)
             {
-                if (d_a_x == 0)
+                //we want to cancel the speed so we need the acc be the oppsosite sign of the speed
+                //tldr: sign(acc) must be !sign(speed)
+                bool turnMeAround = false;
+
+                if(a_x>0)
                 {
-                    if (d_a_y == 0)
+                    if(currentVelocity.LinearVelocity.X>0)
                     {
-                        //gyro.GyroOverride = true;
-                        //.1f pitch brakes (pitch backward)
-                        //gyro.Pitch = .1f;
-                        //.1f yaw goes right (normal to gravity)
+                        turnMeAround = true;
                     }
                 }
-                else
+                if (a_x < 0)
                 {
-                    //we want to cancel the speed so we need the acc be the oppsosite sign of the speed
-                    //tldr: sign(acc) must be !sign(speed)
-                    bool turnMeAround = false;
-
-                    if(a_x>0)
+                    if (currentVelocity.LinearVelocity.X < 0)
                     {
-                        if(currentVelocity.LinearVelocity.X>0)
-                        {
-                            turnMeAround = true;
-                        }
+                        turnMeAround = true;
                     }
-                    if (a_x < 0)
+                }
+
+                double a_angle = Math.Atan(d_a_x / a_y);
+
+                debugString += "\n" + "a_angle:" + a_angle;
+
+                if (a_y > 0)
+                {
+                    if (currentVelocity.LinearVelocity.Y > 0)
                     {
-                        if (currentVelocity.LinearVelocity.X < 0)
-                        {
-                            turnMeAround = true;
-                        }
+                        turnMeAround = true;
                     }
-
-                    double a_angle = Math.Atan(d_a_x / a_y);
-
-                    debugString += "\n" + "a_angle:" + a_angle;
-
-                    if (a_y > 0)
+                }
+                if (a_y < 0)
+                {
+                    if (currentVelocity.LinearVelocity.Y < 0)
                     {
-                        if (currentVelocity.LinearVelocity.Y > 0)
-                        {
-                            turnMeAround = true;
-                        }
+                        turnMeAround = true;
                     }
-                    if (a_y < 0)
+                }
+
+                double v_angle = Math.Atan(currentVelocity.LinearVelocity.X/currentVelocity.LinearVelocity.Y);
+                //debugString += "\n" + "v_angle:" + a_angle;
+
+                double result = a_angle + v_angle;
+                debugString += "\n" + "result:" + result;
+
+                if (turnMeAround == true)
+                {
+                    /*
+                    gyro.GyroOverride = true;
+                    gyro.Yaw = Convert.ToSingle(result) * 4f;
+                    /*
+                    if (gyro.Pitch == 0)
+                        gyro.Pitch = .2f;
+                    if (result > 0)
                     {
-                        if (currentVelocity.LinearVelocity.Y < 0)
-                        {
-                            turnMeAround = true;
-                        }
-                    }
-
-                    double v_angle = Math.Atan(currentVelocity.LinearVelocity.X/currentVelocity.LinearVelocity.Y);
-                    //debugString += "\n" + "v_angle:" + a_angle;
-
-                    double result = a_angle + v_angle;
-                    debugString += "\n" + "result:" + result;
-
-                    if (turnMeAround == true)
-                    {
-                        /*
-                        gyro.GyroOverride = true;
+                        //gyro.Yaw = 1f;
                         gyro.Yaw = Convert.ToSingle(result) * 4f;
-                        /*
-                        if (gyro.Pitch == 0)
-                            gyro.Pitch = .2f;
-                        if (result > 0)
-                        {
-                            //gyro.Yaw = 1f;
-                            gyro.Yaw = Convert.ToSingle(result) * 4f;
-                        }
-                        else
-                        {
-                            //gyro.Yaw = -1f;
-                            gyro.Yaw = -Convert.ToSingle(result) * 4f;
-                        }*/
                     }
                     else
                     {
-                        gyro.Pitch = 0f;
-                        gyro.Yaw = 0;
-                        gyro.GyroOverride = false;
-                    }
-
+                        //gyro.Yaw = -1f;
+                        gyro.Yaw = -Convert.ToSingle(result) * 4f;
+                    }*/
                 }
-
+                else
+                {
+                    gyro.Pitch = 0f;
+                    gyro.Yaw = 0;
+                    gyro.GyroOverride = false;
+                }
             }
         }
         else
