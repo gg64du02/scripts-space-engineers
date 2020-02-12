@@ -130,13 +130,14 @@ public void Main()
 
     debugString += "\nr:\n" + Math.Round((r), 2).ToString();
 
-    var theta = Atan2(Math.Sqrt((myCurPos.X) * (myCurPos.X)
-        + (myCurPos.Y) * (myCurPos.Y)),z);
+    var theta = Math.Atan2(Math.Sqrt((myCurPos.X) * (myCurPos.X)
+        + (myCurPos.Y) * (myCurPos.Y)), myCurPos.Z);
 
     debugString += "\ntheta:\n" + Math.Round((theta), 2).ToString();
 
+    var varphi = Math.Atan2(myCurPos.Y / myCurPos.X);
 
-
+    debugString += "\nvarphi:\n" + Math.Round((varphi), 2).ToString();
 
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
@@ -172,7 +173,7 @@ public void Main()
                     }
                 }
 
-                double a_angle = Math.Atan2(d_a_x , a_y);
+                double a_angle = Math.Atan2(d_a_y , d_a_x);
                 debugString += "\n" + "a_angle:" + a_angle;
 
                 if (a_y > 0)
@@ -205,7 +206,7 @@ public void Main()
                     }
                 }
 
-                double v_angle = Math.Atan2(currentVelocity.LinearVelocity.X,currentVelocity.LinearVelocity.Y);
+                double v_angle = Math.Atan2(currentVelocity.LinearVelocity.Y,currentVelocity.LinearVelocity.X);
                 //debugString += "\n" + "v_angle:" + a_angle;
 
                 double result = a_angle + v_angle;
