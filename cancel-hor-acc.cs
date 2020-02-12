@@ -109,7 +109,7 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
         
-        double threshold = .2f;
+        double threshold = .02f;
         if(Math.Abs(a_x) > threshold)
         {
             if (Math.Abs(a_y) > threshold)
@@ -120,7 +120,7 @@ public void Main()
                     {
                         gyro.GyroOverride = true;
                         //.1f pitch brakes (pitch backward)
-                        gyro.Pitch = .1f;
+                        //gyro.Pitch = .1f;
                         //.1f yaw goes right (normal to gravity)
                     }
                 }
@@ -128,77 +128,55 @@ public void Main()
                 {
                     //we want to cancel the speed so we need the acc be the oppsosite sign of the speed
                     //tldr: sign(acc) must be !sign(speed)
+                    bool turnMeAround = false;
+
                     if(a_x>0)
                     {
                         if(currentVelocity.LinearVelocity.X>0)
                         {
-                            gyro.Yaw = 1f;
+                            turnMeAround = true;
                         }
                     }
                     if (a_x < 0)
                     {
                         if (currentVelocity.LinearVelocity.X < 0)
                         {
-                            gyro.Yaw = -1f;
+                            turnMeAround = true;
                         }
                     }
 
 
-
+                    
                     if (a_y > 0)
                     {
                         if (currentVelocity.LinearVelocity.Y > 0)
                         {
-                            gyro.Yaw = -1f;
+                            turnMeAround = true;
                         }
                     }
                     if (a_y < 0)
                     {
                         if (currentVelocity.LinearVelocity.Y < 0)
                         {
-                            gyro.Yaw = 1f;
+                            turnMeAround = true;
                         }
                     }
 
-
-                    /*
-                    if(Math.Abs(a_x)+1f> Math.Abs(a_y))
+                    if (turnMeAround == true)
                     {
                         gyro.GyroOverride = true;
+                        if (gyro.Pitch == 0)
+                            gyro.Pitch = .1f;
                         gyro.Yaw = 1f;
                     }
                     else
                     {
-                        gyro.GyroOverride = true;
-                        gyro.Yaw = 0f;
+                        gyro.Pitch = 0f;
+                        gyro.Yaw = 0;
+                        gyro.GyroOverride = false;
                     }
 
-                        
-                    if(a_x<0)
-                    {
-                        if (d_a_x > 0)
-                        {
-                            //using the gyro the wrong way
-                        }
-                        else
-                        {
-                            gyro.GyroOverride = true;
-                            gyro.Pitch = -gyro.Pitch;
-                        }
-                    }
-                    else
-                    {
-                        if (d_a_x < 0)
-                        {
-                            //using the gyro the wrong way
-                        }
-                        else
-                        {
-                            gyro.GyroOverride = true;
-                            gyro.Pitch = -gyro.Pitch;
-                        }
-                    }
-                    */
+
                 }
 
             }
@@ -225,72 +203,7 @@ public void Main()
 
         debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
 
-        /*
-        if (Math.Abs(a_x) > 1)
-        {
-            gyro.GyroOverride = true;
-            if (a_x > 1f)
-            {
-                if (d_a_x == 0)
-                {
-                    if (gyro.Pitch != 0f)
-                    {
-                        gyro.Pitch += .01f;
-                    }
-                }
-                else
-                {
-                    if (d_a_x > 0)
-                    {
-                        gyro.Pitch -= .01f;
-                    }
-                    else
-                    {
-                        gyro.Pitch += .01f;
-                    }
-                }
-            }
-            else
-            {
-                if (d_a_x == 0)
-                {
-                    if (gyro.Pitch != 0f)
-                    {
-                        gyro.Pitch -= .01f;
-                    }
-                }
-                else
-                {
-                    if (d_a_x > 0)
-                    {
-                        gyro.Pitch += .01f;
-                    }
-                    else
-                    {
-                        gyro.Pitch -= .01f;
-                    }
-                }
-            }
-        }
-        else
-        {
-            gyro.Pitch = 0f;
-            gyro.GyroOverride = false;
-        }       
-        
-        //maxing out
-        if (Math.Abs(gyro.Pitch) > .1f)
-        {
-            if(gyro.Pitch > .1f)
-                gyro.Pitch = .1f;
-            gyro.Pitch = -.1f;
-        }
-
-        debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
-        */
-        
     }
-
 
 
     //lcd display
