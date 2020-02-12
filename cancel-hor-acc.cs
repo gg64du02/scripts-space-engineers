@@ -204,6 +204,7 @@ public void Main()
         //]-pi;+pi[+]-pi;+pi[ = ]-2pi;2pi[
 
         debugString += "\nangle_add: " + angle_add;
+        //note: around angle_add:+-pi use roll to cancel the ground vel
         /*
         //threshold at 1rad
         if (Math.Abs(angle_add) > 1)
