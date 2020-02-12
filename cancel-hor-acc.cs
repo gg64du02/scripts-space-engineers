@@ -37,6 +37,13 @@ double prev_a_x = 0;
 double prev_a_y = 0;
 double prev_a_z = 0;
 
+double prev_r = 0;
+double prev_theta = 0;
+double prev_varphi = 0;
+
+double d_r_t = 0;
+double d_theta_t = 0;
+double d_varphi_t = 0;
 
 public Program()
 {
@@ -92,12 +99,12 @@ public void Main()
     //debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n" + currentVelocity.LinearVelocity.Y;
     debugString += "\n" + " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
     //debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
-    debugString += "\na_x,a_y,a_z:\n" + Math.Round((a_x), 2).ToString() + "," + Math.Round((a_y), 2).ToString()+ "," + Math.Round((a_z), 2).ToString();
+    debugString += "\na_x,a_y,a_z:" + Math.Round((a_x), 2).ToString() + "," + Math.Round((a_y), 2).ToString()+ "," + Math.Round((a_z), 2).ToString();
     var grav = myCurrentCockpit.GetTotalGravity();
 
     //debugString += "\n" + "grav:\n" + grav;
     //debugString += "\n" + "grav:\n" + grav.X + ",\n" + grav.Y + ",\n" + grav.Z;
-    debugString += "\ngrav.X,Y,Z:\n" + Math.Round((grav.X), 2).ToString() + "," + Math.Round((grav.Y), 2).ToString() + "," + Math.Round((grav.Z), 2).ToString();
+    debugString += "\ngrav.X,Y,Z:" + Math.Round((grav.X), 2).ToString() + "," + Math.Round((grav.Y), 2).ToString() + "," + Math.Round((grav.Z), 2).ToString();
     //useless
     //debugString += "\n" + "myCurrentCockpit.Orientation:\n" + myCurrentCockpit.Orientation;
 
@@ -106,7 +113,7 @@ public void Main()
     var d_a_y = (prev_a_y - a_y) / dts;
     var d_a_z = (prev_a_z - a_z) / dts;
     //debugString += "\n" + "d_a_x,d_a_y,d_a_z:\n" + d_a_x + ",\n" + d_a_y+ ",\n" + d_a_z;
-    debugString += "\nd_a_x,d_a_y,d_a_z:\n" + Math.Round((d_a_x), 2).ToString() + "," + Math.Round((d_a_y), 2).ToString() + "," + Math.Round((d_a_z), 2).ToString();
+    debugString += "\nd_a_x,d_a_y,d_a_z:" + Math.Round((d_a_x), 2).ToString() + "," + Math.Round((d_a_y), 2).ToString() + "," + Math.Round((d_a_z), 2).ToString();
 
     //storing current acc for next loop
     prev_a_x = a_x;
@@ -143,6 +150,19 @@ public void Main()
     debugString += "\nvarphi: " + varphi;
 
     //TODO: figure out (d theta / dt) and (d varphi / dt) to allow control on ROLL and PITCH?
+
+    d_r_t = (prev_r - r) / dts;
+    d_theta_t = (prev_theta - theta) / dts;
+    d_varphi_t = (prev_varphi - varphi) / dts;
+
+    debugString += "\nd_r_t: " + d_r_t;
+    debugString += "\nd_theta_t: " + d_theta_t;
+    debugString += "\nd_varphi_t: " + d_varphi_t;
+
+    //storing the values for the next loop
+    prev_r = r;
+    prev_theta = theta;
+    prev_varphi = varphi;
 
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
