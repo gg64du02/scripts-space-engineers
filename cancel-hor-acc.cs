@@ -83,7 +83,7 @@ public void Main()
     prev_v_y = currentVelocity.LinearVelocity.Y;
 
 
-    debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
+    //debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
     debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n"+ currentVelocity.LinearVelocity.Y;
     debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
     //useless
@@ -165,19 +165,28 @@ public void Main()
                     }
 
                     double v_angle = Math.Atan(currentVelocity.LinearVelocity.X/currentVelocity.LinearVelocity.Y);
-                    debugString += "\n" + "v_angle:" + a_angle;
+                    //debugString += "\n" + "v_angle:" + a_angle;
 
                     double result = a_angle + v_angle;
+                    debugString += "\n" + "result:" + result;
 
                     if (turnMeAround == true)
                     {
                         gyro.GyroOverride = true;
+                        gyro.Yaw = Convert.ToSingle(result) * 4f;
+                        /*
                         if (gyro.Pitch == 0)
-                            gyro.Pitch = .1f;
-                        if(result>0)
-                            gyro.Yaw = 1f;
+                            gyro.Pitch = .2f;
+                        if (result > 0)
+                        {
+                            //gyro.Yaw = 1f;
+                            gyro.Yaw = Convert.ToSingle(result) * 4f;
+                        }
                         else
-                            gyro.Yaw = -1f;
+                        {
+                            //gyro.Yaw = -1f;
+                            gyro.Yaw = -Convert.ToSingle(result) * 4f;
+                        }*/
                     }
                     else
                     {
@@ -210,7 +219,7 @@ public void Main()
             gyro.Roll = -.1f;
         }
 
-        debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
+        //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
 
     }
 
