@@ -97,7 +97,7 @@ public void Main()
 
     //debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
     //debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n" + currentVelocity.LinearVelocity.Y;
-    debugString += "\n" + " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
+    debugString += " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
     //debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
     debugString += "\na_x,a_y,a_z:" + Math.Round((a_x), 2).ToString() + "," + Math.Round((a_y), 2).ToString()+ "," + Math.Round((a_z), 2).ToString();
     var grav = myCurrentCockpit.GetTotalGravity();
@@ -164,6 +164,13 @@ public void Main()
     prev_theta = theta;
     prev_varphi = varphi;
 
+    //figuring out the surface vel and angle
+    double sqrt_d_theta_varphi_t = Math.Sqrt(d_theta_t * d_theta_t + d_varphi_t * d_varphi_t);
+    double sqrt_d_angle_theta_varphi_t = Math.Atan2(d_theta_t, d_varphi_t);
+
+
+
+
     var gyros = new List<IMyGyro>();
     GridTerminalSystem.GetBlocksOfType(gyros);
     foreach (var gyro in gyros)
@@ -174,6 +181,8 @@ public void Main()
         //Z turn left right yaw
         //MAKE SURE THAT ALL GYROS ALL PLACE IN THE SAME DIRECTION
 
+
+        /*
         double threshold = .02f;
         if(Math.Abs(a_x) > threshold)
         {
@@ -269,6 +278,7 @@ public void Main()
             gyro.Pitch = 0f;
             gyro.GyroOverride = false;
         }
+        */
 
         //maxing out
         if (Math.Abs(gyro.Pitch) > .1f)
@@ -290,8 +300,8 @@ public void Main()
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
-    //textPanel.FontSize = 1.58f;
-    textPanel.FontSize = 1f;
+    textPanel.FontSize = 1.58f;
+    //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
     //deprecated
     //textPanel.WritePublicText("debugString", false);
