@@ -36,8 +36,8 @@ namespace SpaceEngineers
  * u(t) = p + i + d 
  * */
 
-PIDController altRegulator = new PIDController(0.06f, 0f, .01f);
-double wantedAltitude = 2000;
+PIDController altRegulator = new PIDController(1f, 0f, 0f);
+double wantedAltitude = 20;
 public Program()
 {
     // The constructor, called only once every session and
@@ -71,10 +71,19 @@ public void Main()
     //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
 
-    //altRegulator.Control();
+    //applying what the pid processed
+    var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    foreach (var c in cs)
+    {
+        if (c.GridThrustDirection.Y == -1)
+        {
+            c.ThrustOverridePercentage = 0.01f* Convert.ToSingle(dir);
+        }
+    }
 
 
-}
+    }
 
 public void Save()
 {
