@@ -38,6 +38,7 @@ namespace SpaceEngineers
 
 PIDController altRegulator = new PIDController(1f, 0f, 0f);
 double wantedAltitude = 20;
+double g_constant = 9.8f;
 public Program()
 {
     // The constructor, called only once every session and
@@ -64,25 +65,44 @@ public void Main()
 
     Echo("elev:" + elev);
     //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
-    var physMass_n = myCurrentCockpit.CalculateShipMass().PhysicalMass;
-    debugString += "\n" + "physMass_n:\n" + physMass_n;
-    debugString += "\n"+"dir:\n" + dir;
+    var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    debugString += "\n" + "physMass_kg:" + physMass_kg;
+    debugString += "\n"+"dir:" + dir;
 
     //figuring out the available thrust
     //IMyThrust.MaxEffectiveThrust
+    //IMyThrust.CurrentThrust
     double maxEffectiveThrust = 0;
     double currentThrust = 0;
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
-    foreach (var c in cs){ maxEffectiveThrust += c.MaxEffectiveThrust; currentThrust += c.CurrentThrust; }
-    //IMyThrust.CurrentThrust
+    foreach (var c in cs){ 
+        maxEffectiveThrust += c.MaxEffectiveThrust; currentThrust += c.CurrentThrust;
+    }
+    debugString += "\n" + "currentThrust:" + currentThrust;
 
+    double a_z = currentThrust - physMass_kg;
+    debugString += "\n" + "currentThrust:" + currentThrust;
+    debugString += "\n" + "physMass_kg:" + physMass_kg;
+
+    double physMass_N = physMass_kg * g_constant;
+    debugString += "\n" + "physMass_N:" + physMass_N;
+
+    /*
+    BaseMass Gets the base mass of the ship.
+    TotalMass Gets the total mass of the ship, including cargo.
+    PhysicalMass Gets the physical mass of the ship, which accounts for inventory multiplier.
+    */
+
+    var totalMass = myCurrentCockpit.CalculateShipMass().TotalMass;
+    debugString += "\n" + "totalMass:\n" + totalMass;
 
     //TODO code here
+    debugString += "\n" + "a_z:\n" + a_z;
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
-    textPanel.FontSize = 1.3f;
+    textPanel.FontSize = 1f;
     //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
 
