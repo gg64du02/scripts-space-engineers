@@ -59,11 +59,26 @@ public void Main()
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
     //public double Control(double error, double timeStep)
+    //todo change this
     double dir = altRegulator.Control(altitudeError, dts);
 
     Echo("elev:" + elev);
+    //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
+    var physMass_n = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    debugString += "\n" + "physMass_n:\n" + physMass_n;
+    debugString += "\n"+"dir:\n" + dir;
 
-    debugString += "dir:\n" + dir;
+    //figuring out the available thrust
+    //IMyThrust.MaxEffectiveThrust
+    double maxEffectiveThrust = 0;
+    double currentThrust = 0;
+    var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    foreach (var c in cs){ maxEffectiveThrust += c.MaxEffectiveThrust; currentThrust += c.CurrentThrust; }
+    //IMyThrust.CurrentThrust
+
+
+    //TODO code here
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
@@ -71,6 +86,7 @@ public void Main()
     //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
 
+    /*
     //applying what the pid processed
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
@@ -81,7 +97,7 @@ public void Main()
             c.ThrustOverridePercentage = 0.01f* Convert.ToSingle(dir);
         }
     }
-
+    */
 
     }
 
