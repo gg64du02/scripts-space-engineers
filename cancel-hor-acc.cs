@@ -88,7 +88,7 @@ public void Main()
     var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
-    Echo("myCurrentCockpit.RotationIndicator:" + myCurrentCockpit.RotationIndicator);
+    //Echo("myCurrentCockpit.RotationIndicator:" + myCurrentCockpit.RotationIndicator);
     var currentVelocity = myCurrentCockpit.GetShipVelocities();
     Echo("currentVelocity.LinearVelocity:" + currentVelocity.LinearVelocity);
     //useless
@@ -110,8 +110,7 @@ public void Main()
 
     //debugString += "\n" + "myCurrentCockpit.RotationIndicator:\n" + myCurrentCockpit.RotationIndicator;
     //debugString += "\n" + " currentVelocity.LinearVelocity.X\n currentVelocity.LinearVelocity.Y:\n" + currentVelocity.LinearVelocity.X + "\n" + currentVelocity.LinearVelocity.Y;
-    debugString += " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
-    //debugString += "\n" + "a_x,a_y:\n" + a_x + ",\n" + a_y;
+    //debugString += " currentVelocity.LinearVelocity.X,Y,Z:\n" + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.X), 2).ToString() + "," + Math.Round((currentVelocity.LinearVelocity.Z), 2).ToString() + ",";
     debugString += "\na_x,a_y,a_z:" + Math.Round((a_x), 2).ToString() + "," + Math.Round((a_y), 2).ToString()+ "," + Math.Round((a_z), 2).ToString();
     var grav = myCurrentCockpit.GetTotalGravity();
 
@@ -164,6 +163,7 @@ public void Main()
 
     //TODO: figure out (d theta / dt) and (d varphi / dt) to allow control on ROLL and PITCH?
 
+    //=============1ST ORDER=======================
     d_r_t = (prev_r - r) / dts;
     d_theta_t = (prev_theta - theta) / dts;
     d_varphi_t = (prev_varphi - varphi) / dts;
@@ -184,151 +184,66 @@ public void Main()
     double ground_speed_ms = sqrt_d_theta_varphi_t * (r-elev);
     debugString += "\nground_speed_ms: " + ground_speed_ms;
 
-    if (sqrt_d_theta_varphi_t > 0)
+
+    //=============2ND ORDER=======================
+    d_r_t_2 = (prev_d_r_t - d_r_t) / dts;
+    d_theta_t_2 = (prev_d_theta_t - d_theta_t) / dts;
+    d_varphi_t_2 = (prev_d_varphi_t - d_varphi_t) / dts;
+
+    //figuring out the surface acc and angle
+    double sqrt_d_theta_varphi_t_2 = Math.Sqrt(d_theta_t_2 * d_theta_t_2 + d_varphi_t_2 * d_varphi_t_2);
+    double sqrt_d_angle_theta_varphi_t_2 = Math.Atan2(d_theta_t_2, d_varphi_t_2);
+
+    //debugString += "\nsqrt_d_angle_theta_varphi_t: " + sqrt_d_angle_theta_varphi_t;
+    //debugString += "\nsqrt_d_angle_theta_varphi_t_2: " + sqrt_d_angle_theta_varphi_t_2;
+    debugString += "\ns_d_a_t_p_t__: " + sqrt_d_angle_theta_varphi_t;
+    debugString += "\ns_d_a_t_p_t_2: " + sqrt_d_angle_theta_varphi_t_2;
+
+    prev_d_r_t = d_r_t;
+    prev_d_theta_t = d_theta_t;
+    prev_d_varphi_t = d_varphi_t;
+
+    //we are trying to get those apposite ways
+    double angle_add = sqrt_d_angle_theta_varphi_t_2 + sqrt_d_angle_theta_varphi_t;
+    //]-pi;+pi[+]-pi;+pi[ = ]-2pi;2pi[
+
+    //debugString += "\nangle_add: " + angle_add;
+    //note: around angle_add:+-pi use roll to cancel the ground vel
+
+    if (average_angle_add.Count < average_angle_add_num_points)
     {
-
-        d_r_t_2 = (prev_d_r_t - d_r_t) / dts;
-        d_theta_t_2 = (prev_d_theta_t - d_theta_t) / dts;
-        d_varphi_t_2 = (prev_d_varphi_t - d_varphi_t) / dts;
-
-        //figuring out the surface acc and angle
-        double sqrt_d_theta_varphi_t_2 = Math.Sqrt(d_theta_t_2 * d_theta_t_2 + d_varphi_t_2 * d_varphi_t_2);
-        double sqrt_d_angle_theta_varphi_t_2 = Math.Atan2(d_theta_t_2, d_varphi_t_2);
-
-        //debugString += "\nsqrt_d_angle_theta_varphi_t: " + sqrt_d_angle_theta_varphi_t;
-        //debugString += "\nsqrt_d_angle_theta_varphi_t_2: " + sqrt_d_angle_theta_varphi_t_2;
-        debugString += "\ns_d_a_t_p_t__: " + sqrt_d_angle_theta_varphi_t;
-        debugString += "\ns_d_a_t_p_t_2: " + sqrt_d_angle_theta_varphi_t_2;
-
-        prev_d_r_t = d_r_t;
-        prev_d_theta_t = d_theta_t;
-        prev_d_varphi_t = d_varphi_t;
-
-        //we are trying to get those apposite ways
-        double angle_add = sqrt_d_angle_theta_varphi_t_2 + sqrt_d_angle_theta_varphi_t;
-        //]-pi;+pi[+]-pi;+pi[ = ]-2pi;2pi[
-
-        //debugString += "\nangle_add: " + angle_add;
-        //note: around angle_add:+-pi use roll to cancel the ground vel
-
-        if (average_angle_add.Count < average_angle_add_num_points)
-        {
-            average_angle_add.Add(angle_add);
-        }
-        else
-        {
-            average_angle_add.RemoveAt(0);
-            average_angle_add.Add(angle_add);
-        }
-        double angles = 0;
-        foreach (var angle in average_angle_add)
-        {
-            angles += angle;
-        }
-        double angles_average = angles / 10;
-        //Echo("angles_average:" + angles_average.ToString());
-        debugString += "\nangles_average: " + angles_average;
-
-        //yaw left will decrease sqrt_d_angle_theta_varphi_t
-        //use: sqrt_d_angle_theta_varphi_t;
-
-        //activating the gyros
-        var gyros = new List<IMyGyro>();
-        GridTerminalSystem.GetBlocksOfType(gyros);
-        foreach (var gyro in gyros)
-        {
-            yaw_integration += gyro.Yaw*dts;
-            debugString += "\nyaw_integration: " + yaw_integration;
-
-            if (Math.Abs(angles_average) > yaw_integration / 2)
-                //if (Math.Abs(angles_average) > Math.PI / 2)
-                {
-                gyro.GyroOverride = true;
-                if (angles_average > 0)
-                {
-                    gyro.Yaw = 1f;
-                    gyro.Pitch = .1f;
-                }
-                else
-                {
-                    gyro.Yaw = -1f;
-                    gyro.Pitch = .1f;
-                }
-            }
-            else
-            {
-                gyro.Yaw = 0f;
-                gyro.Pitch = 0f;
-                gyro.GyroOverride = false;
-            }
-        }
-
-        /*
-        //activating the gyros
-        var gyros = new List<IMyGyro>();
-        GridTerminalSystem.GetBlocksOfType(gyros);
-        foreach (var gyro in gyros)
-        {
-            if (0.9f < Math.Abs(sqrt_d_angle_theta_varphi_t / Math.PI))
-                if (Math.Abs(sqrt_d_angle_theta_varphi_t / Math.PI) < 1.1f)
-                {
-                    gyro.GyroOverride = true;
-                    if(sqrt_d_angle_theta_varphi_t > 0)
-                        gyro.Roll = .1f;
-                    else
-                        gyro.Roll = -.1f;
-                    debugString += "\nlol<<: ";
-                }
-                else
-                {
-                    gyro.GyroOverride = false;
-                    gyro.Roll = 0f;
-                }
-            else
-            {
-                gyro.GyroOverride = false;
-                gyro.Roll = 0f;
-            }
-        }
-        */
-
-        /*
-        //threshold at 1rad
-        if (Math.Abs(angle_add) > 1)
-        {
-            //activating the gyros
-            var gyros = new List<IMyGyro>();
-            GridTerminalSystem.GetBlocksOfType(gyros);
-            foreach (var gyro in gyros)
-            {
-                gyro.GyroOverride = true;
-                gyro.Pitch = .1f;
-                if (angle_add > 0)
-                {
-                    gyro.Roll = .1f;
-                }
-                else
-                {
-                    gyro.Roll = -.1f;
-                }
-            }
-            //TODO code here
-        }
-        else
-        {
-            //releasing the gyros
-            var gyros = new List<IMyGyro>();
-            GridTerminalSystem.GetBlocksOfType(gyros);
-            foreach (var gyro in gyros)
-            {
-                gyro.GyroOverride = false;
-            }
-        }
-        */
-
-        //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
-
+        average_angle_add.Add(angle_add);
     }
+    else
+    {
+        average_angle_add.RemoveAt(0);
+        average_angle_add.Add(angle_add);
+    }
+    double angles = 0;
+    foreach (var angle in average_angle_add)
+    {
+        angles += angle;
+    }
+    double angles_average = angles / 10;
+    //Echo("angles_average:" + angles_average.ToString());
+    debugString += "\nangles_average: " + angles_average;
+
+    //yaw left will decrease sqrt_d_angle_theta_varphi_t
+    //use: sqrt_d_angle_theta_varphi_t;
+
+    if (sqrt_d_angle_theta_varphi_t < 0)
+    {
+        debugString += "\nturn the ship (yaw right) " + Math.Round((sqrt_d_angle_theta_varphi_t * 180 / Math.PI), 2).ToString()+"°";
+    }
+    else
+    {
+        debugString += "\nturn the ship (yaw left):" + Math.Round((sqrt_d_angle_theta_varphi_t * 180 / Math.PI), 2).ToString()+"°";
+    }
+
+    //debugString += "\nangles_average:" + Math.Round((angles_average * 180 / Math.PI), 2).ToString();
+
+    //debugString += "\n" + "gyro.Pitch:\n" + gyro.Pitch;
+
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
