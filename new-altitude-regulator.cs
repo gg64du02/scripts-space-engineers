@@ -146,8 +146,8 @@ public void Main()
             //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
             //debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
 
-            //MaxEffectiveThrust / MaxThrust
-            
+            //c.MaxThrust / c.MaxEffectiveThrust is needed because you need to the thrusters efficiency
+            //MaxEffectiveThrust is the current max thrust / MaxThrust is the max thrust at sea level
             c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N  * c.MaxThrust  / c.MaxEffectiveThrust);
             debugString += "\n" + "0.25f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + 0.25f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
