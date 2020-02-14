@@ -71,18 +71,17 @@ public void Main()
 
     //figuring out the available thrust
     //IMyThrust.MaxEffectiveThrust
-    //IMyThrust.CurrentThrust
-    double maxEffectiveThrust = 0;
-    double currentThrust = 0;
+    //IMyThrust.CurrentThrust_N
+    double maxEffectiveThrust_N = 0;
+    double currentThrust_N = 0;
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
-    foreach (var c in cs){ 
-        maxEffectiveThrust += c.MaxEffectiveThrust; currentThrust += c.CurrentThrust;
+    foreach (var c in cs){
+        maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
     }
-    debugString += "\n" + "currentThrust:" + currentThrust;
+    debugString += "\n" + "currentThrust_N:" + currentThrust_N;
 
-    double a_z = currentThrust - physMass_kg;
-    debugString += "\n" + "currentThrust:" + currentThrust;
+    double a_z = currentThrust_N - physMass_kg;
     debugString += "\n" + "physMass_kg:" + physMass_kg;
 
     double physMass_N = physMass_kg * g_constant;
@@ -90,19 +89,22 @@ public void Main()
 
     /*
     BaseMass Gets the base mass of the ship.
-    TotalMass Gets the total mass of the ship, including cargo.
+    totalMass Gets the total mass of the ship, including cargo.
     PhysicalMass Gets the physical mass of the ship, which accounts for inventory multiplier.
     */
 
-    var totalMass = myCurrentCockpit.CalculateShipMass().TotalMass;
-    debugString += "\n" + "totalMass:\n" + totalMass;
+    var totalMass_kg = myCurrentCockpit.CalculateShipMass().TotalMass;
+    debugString += "\n" + "totalMass_kg:" + totalMass_kg;
+
+    var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N ;
+    debugString += "\n" + "thr_to_weight_ratio:" + thr_to_weight_ratio;
 
     //TODO code here
-    debugString += "\n" + "a_z:\n" + a_z;
+    debugString += "\n" + "a_z:" + a_z;
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
-    textPanel.FontSize = 1f;
+    //textPanel.FontSize = 1.2f;
     //textPanel.FontSize = 1f;
     textPanel.WriteText(debugString, false);
 
