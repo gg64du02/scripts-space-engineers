@@ -142,29 +142,19 @@ public void Main()
     {
         if (c.GridThrustDirection.Y == -1)
         {
-            //c.ThrustOverridePercentage = 0.01f * Convert.ToSingle(dir);
-            //c.ThrustOverride = Convert.ToSingle(physMass_N + a_z_ms_2 * physMass_kg);
-            //debugString += "\n" + "0.25f * currentThrust_N:" + 0.25f * currentThrust_N;
-            //c.ThrustOverride = Convert.ToSingle(2f*(2-Math.Cos()));
-
-            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N * 1.01f);
-            //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N * 1.01f;
-
             //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N);
             //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
+            //debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
 
-            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N + a_z_ms_2 * physMass_kg);
-            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + a_z_ms_2 * physMass_kg);
-
-            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
-            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
-
-            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N );
-            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
-
-            c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N);
-            debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
+            //MaxEffectiveThrust / MaxThrust
+            
+            c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N  * c.MaxThrust  / c.MaxEffectiveThrust);
+            debugString += "\n" + "0.25f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + 0.25f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
+            /*
+            debugString += "\n" + "c.MaxEffectiveThrust:" + c.MaxEffectiveThrust;
+            debugString += "\n" + "c.MaxThrust:" + c.MaxThrust;
+            */
         }
     }
 
