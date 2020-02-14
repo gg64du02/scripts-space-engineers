@@ -67,13 +67,12 @@ public void Main()
 
     //public double Control(double error, double timeStep)
     //todo change this
-    double dir = altRegulator.Control(altitudeError, dts);
+    //double dir = altRegulator.Control(altitudeError, dts);
 
     Echo("elev:" + elev);
     //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
     var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += " " + "physMass_kg:" + physMass_kg;
-    debugString += "\n"+"dir:" + dir;
 
     //figuring out the available thrust
     //IMyThrust.MaxEffectiveThrust
@@ -85,6 +84,7 @@ public void Main()
     foreach (var c in cs){
         maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
     }
+    debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
     debugString += "\n" + "currentThrust_N:" + currentThrust_N;
 
     debugString += "\n" + "physMass_kg:" + physMass_kg;
@@ -111,6 +111,7 @@ public void Main()
     debugString += "\n" + "a_z_ms_2:" + a_z_ms_2;
 
     alt = elev;
+    debugString += "\n" + "dts:" + dts;
 
     //errorDerivative = (error - lastError) / timeStep;
     alt_speed_ms_1 = (alt - last_alt) / dts;
@@ -122,6 +123,50 @@ public void Main()
     last_alt = alt;
     last_alt_speed_ms_1 = alt_speed_ms_1;
     //TODO code here
+
+    //public double Control(double error, double timeStep)
+    // double speedError = 0;
+    double speedError = alt_speed_ms_1 - 0;
+    double controlSpeed = altRegulator.Control(speedError, dts);
+
+    debugString += "\n" + "controlSpeed:" + controlSpeed;
+
+    var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    debugString += "\n" + "massOfShip:" + massOfShip;
+
+
+    //applying what the pid processed
+    //var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    foreach (var c in cs)
+    {
+        if (c.GridThrustDirection.Y == -1)
+        {
+            //c.ThrustOverridePercentage = 0.01f * Convert.ToSingle(dir);
+            //c.ThrustOverride = Convert.ToSingle(physMass_N + a_z_ms_2 * physMass_kg);
+            //debugString += "\n" + "0.25f * currentThrust_N:" + 0.25f * currentThrust_N;
+            //c.ThrustOverride = Convert.ToSingle(2f*(2-Math.Cos()));
+
+            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N * 1.01f);
+            //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N * 1.01f;
+
+            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N);
+            //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
+
+            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N + a_z_ms_2 * physMass_kg);
+            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + a_z_ms_2 * physMass_kg);
+
+            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
+            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
+
+            //debugString += "\n" + "0.25f * physMass_N:" + Convert.ToSingle(0.25f * physMass_N );
+            //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N + controlSpeed * physMass_kg / dts);
+
+            c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N);
+            debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
+            debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
+        }
+    }
 
 
     //lcd display
