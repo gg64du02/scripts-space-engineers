@@ -39,6 +39,12 @@ namespace SpaceEngineers
 PIDController altRegulator = new PIDController(1f, 0f, 0f);
 double wantedAltitude = 20;
 double g_constant = 9.8f;
+double alt = 0f;
+double last_alt = 0f;
+double alt_speed_ms_1 = 0f;
+double last_alt_speed_ms_1 = 0f;
+double alt_acc_ms_2 = 0f;
+double last_alt_acc_ms_2 = 0f;
 public Program()
 {
     // The constructor, called only once every session and
@@ -66,7 +72,7 @@ public void Main()
     Echo("elev:" + elev);
     //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
     var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
-    debugString += "\n" + "physMass_kg:" + physMass_kg;
+    debugString += " " + "physMass_kg:" + physMass_kg;
     debugString += "\n"+"dir:" + dir;
 
     //figuring out the available thrust
@@ -81,7 +87,6 @@ public void Main()
     }
     debugString += "\n" + "currentThrust_N:" + currentThrust_N;
 
-    double a_z = currentThrust_N - physMass_kg;
     debugString += "\n" + "physMass_kg:" + physMass_kg;
 
     double physMass_N = physMass_kg * g_constant;
@@ -99,8 +104,25 @@ public void Main()
     var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N ;
     debugString += "\n" + "thr_to_weight_ratio:" + thr_to_weight_ratio;
 
+    double thrustLeft_N = currentThrust_N - physMass_N;
+    debugString += "\n" + "thrustLeft_N:" + thrustLeft_N;
+
+    double a_z_ms_2 = thrustLeft_N / physMass_kg;
+    debugString += "\n" + "a_z_ms_2:" + a_z_ms_2;
+
+    alt = elev;
+
+    //errorDerivative = (error - lastError) / timeStep;
+    alt_speed_ms_1 = (alt - last_alt) / dts;
+    debugString += "\n" + "alt_speed_ms_1:" + alt_speed_ms_1;
+
+    alt_acc_ms_2 = (alt_speed_ms_1 - last_alt_speed_ms_1) / dts;
+    debugString += "\n" + "alt_acc_ms_2:" + alt_acc_ms_2;
+
+    last_alt = alt;
+    last_alt_speed_ms_1 = alt_speed_ms_1;
     //TODO code here
-    debugString += "\n" + "a_z:" + a_z;
+
 
     //lcd display
     var textPanel = GridTerminalSystem.GetBlockWithName("textPanel") as IMyTextPanel;
