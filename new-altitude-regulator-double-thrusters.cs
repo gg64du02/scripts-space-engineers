@@ -36,8 +36,10 @@ namespace SpaceEngineers
  * u(t) = p + i + d 
  * */
 
-PIDController altRegulator = new PIDController(0.06f, 0f, 0.01f);
-double wantedAltitude = 50;
+//PIDController altRegulator = new PIDController(0.06f, 0f, 0.01f);
+//PIDController altRegulator = new PIDController(0.06f, .01f, 0.00f);
+PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
+double wantedAltitude = 20f;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -163,9 +165,12 @@ public void Main()
     foreach (var c in cs)
     {
         //Echo("c.GridThrustDirection:"+ c.GridThrustDirection);
-        c.ThrustOverride = Convert.ToSingle(.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control * 100);
-        debugString += "\n" + "1f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + (.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control * 100);
-        debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
+        double temp_thr_n = .5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
+        c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+        //that will balance the f_mass and f_thusters
+        //c.ThrustOverride = Convert.ToSingle(.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control * 100);
+        //debugString += "\n" + "1f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + (.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control / physMass_kg);
+        //debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
         if (c.GridThrustDirection.Y == -1)
         {
             /*
