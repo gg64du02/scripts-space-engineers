@@ -199,6 +199,17 @@ public void Main()
     }
 
 
+    
+    List<IMyRadioAntenna> listRadioAntenna = new List<IMyRadioAntenna>();
+    GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listRadioAntenna);
+
+    if (listRadioAntenna == null)
+    { Echo("no IMyRadioAntenna available");  }
+    else
+    { listRadioAntenna[0].HudText = "altitude is:" + elev.ToString(); }
+    
+
+    //IMyTerminalBlock.CustomName and IMyCubeGrid.CustomName are what you want
 
 }
 
