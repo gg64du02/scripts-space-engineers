@@ -36,8 +36,8 @@ namespace SpaceEngineers
  * u(t) = p + i + d 
  * */
 
-PIDController altRegulator = new PIDController(1f, 0f, 0f);
-double wantedAltitude = 20;
+PIDController altRegulator = new PIDController(0.06f, 0f, 0.01f);
+double wantedAltitude = 50;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -90,6 +90,7 @@ public void Main()
     //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
     var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += " " + "physMass_kg:" + physMass_kg;
+    debugString += "\n" + "elev:" + elev;
 
     //figuring out the available thrust
     //IMyThrust.MaxEffectiveThrust
@@ -151,14 +152,23 @@ public void Main()
     var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
 
+    var control = altRegulator.Control(altitudeError, dts);
+    debugString += "\n" + "control:" + control;
 
     //applying what the pid processed
     //var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
+    Echo(cs.ToString());
+
     foreach (var c in cs)
     {
+        //Echo("c.GridThrustDirection:"+ c.GridThrustDirection);
+        c.ThrustOverride = Convert.ToSingle(.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control * 100);
+        debugString += "\n" + "1f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + (.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control * 100);
+        debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
         if (c.GridThrustDirection.Y == -1)
         {
+            /*
             //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N);
             //debugString += "\n" + "0.25f * physMass_N:" + 0.25f * physMass_N;
             //debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
@@ -166,9 +176,10 @@ public void Main()
             //c.MaxThrust / c.MaxEffectiveThrust is needed because you need to the thrusters efficiency
             //MaxEffectiveThrust is the current max thrust / MaxThrust is the max thrust at sea level
             //c.ThrustOverride = Convert.ToSingle(0.25f * physMass_N * c.MaxThrust / c.MaxEffectiveTQhrust);
-            c.ThrustOverride = Convert.ToSingle(.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust);
-            debugString += "\n" + "1f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + .5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
+            c.ThrustOverride = Convert.ToSingle(.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control*100);
+            debugString += "\n" + "1f * physMass_N  * c.MaxEffectiveThrust / c.MaxThrust\n:" + (.5f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + control *100);
             debugString += "\n" + "c.ThrustOverride:" + c.ThrustOverride;
+            */
         }
     }
 
