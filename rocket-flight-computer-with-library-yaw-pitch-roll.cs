@@ -36,12 +36,51 @@ public void Main(string argument, UpdateType updateSource)
         return;
     }
 
-    if (argument != null && argument.ToLower().Equals("stabilize_on"))
-    {
+    /*
+    BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
+    bool stalizableRoll = true;
+    bool stalizablePitch = true;
+    bool stalizableYaw = false;
+
+    // PID values in case you want to ajust them, but you should not need to do it
+    const double pidP = 0.06f;
+    const double pidI = 0.0f;
+    const double pidD = 0.01f;
+
+    FightStabilizator fightStabilizator = new FightStabilizator(flightIndicators, controller, pidP, pidI, pidD, basicLibrary);
+
+    // optional : set desired angles
+    fightStabilizator.pitchDesiredAngle = 0f;
+    fightStabilizator.yawDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = 0f;
+
+    // reset before each new stabilization (for example after stopping stabilization and when you want to start a new one). DO NOT call it during stabilization
+    fightStabilizator.Reset();
+
+    // call this next line at each run
+    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+
+    // release gyros when you stop stabilization
+    fightStabilizator.Release();
+    */
+
+    /*
+    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+    fightStabilizator.Reset();
+    flightIndicators.Compute();
+    fightStabilizator.Stabilize(true, true, stalizableYaw);
+    */
+
+
+
+    //if (argument != null && argument.ToLower().Equals("stabilize_on"))
+    if (argument != null && argument.ToLower().Equals("on"))
+        {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
     }
-    else if (argument != null && argument.ToLower().Equals("stabilize_off"))
+    //else if (argument != null && argument.ToLower().Equals("stabilize_off"))
+    else if (argument != null && argument.ToLower().Equals("off"))
     {
         flightIndicatorsFlightMode = FlightMode.STANDY;
         fightStabilizator.Release();
@@ -60,6 +99,7 @@ public void Main(string argument, UpdateType updateSource)
         lcdHelper.AppendMessageBuffer(fightStabilizator.DisplayText());
     }
     lcdHelper.DisplayMessageBuffer(flightIndicatorsLcdDisplay);
+    
 }
 
 public class FlightIndicators
@@ -438,7 +478,7 @@ bool TryInit()
         }
         if (flightIndicatorsLcdDisplay.Count == 0)
         {
-            return false;
+            //return false;
         }
 
     }
