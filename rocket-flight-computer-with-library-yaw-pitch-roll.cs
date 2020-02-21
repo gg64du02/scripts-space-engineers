@@ -12,15 +12,42 @@ enum FlightMode { STABILIZATION, STANDY };
 FlightMode flightIndicatorsFlightMode = FlightMode.STANDY;
 List<IMyTextPanel> flightIndicatorsLcdDisplay = new List<IMyTextPanel>();
 IMyShipController flightIndicatorsShipController = null;
-
+/*
+//default constant
 const double pidP = 0.06f;
 const double pidI = 0.0f;
 const double pidD = 0.01f;
+*/
+/*
+const double pidP = 0.06f;
+const double pidI = 0.0f;
+const double pidD = 0.0f;
+*/
+
+
+const double pidP = 0.06f;
+const double pidI = 0.00f;
+const double pidD = 0.01f;
+
 
 BasicLibrary basicLibrary;
 LCDHelper lcdHelper;
 FlightIndicators flightIndicators;
 FightStabilizator fightStabilizator;
+
+
+
+
+
+PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
+double wantedAltitude = 10f;
+double g_constant = 9.8f;
+double alt = 0f;
+double last_alt = 0f;
+double alt_speed_ms_1 = 0f;
+double last_alt_speed_ms_1 = 0f;
+double alt_acc_ms_2 = 0f;
+double last_alt_acc_ms_2 = 0f;
 
 public Program()
 {
@@ -74,6 +101,11 @@ public void Main(string argument, UpdateType updateSource)
 
 
     //if (argument != null && argument.ToLower().Equals("stabilize_on"))
+    /*
+    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+    fightStabilizator.Reset();
+    */
+    
     if (argument != null && argument.ToLower().Equals("on"))
         {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
@@ -85,6 +117,7 @@ public void Main(string argument, UpdateType updateSource)
         flightIndicatorsFlightMode = FlightMode.STANDY;
         fightStabilizator.Release();
     }
+    
 
     flightIndicators.Compute();
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
@@ -99,7 +132,132 @@ public void Main(string argument, UpdateType updateSource)
         lcdHelper.AppendMessageBuffer(fightStabilizator.DisplayText());
     }
     lcdHelper.DisplayMessageBuffer(flightIndicatorsLcdDisplay);
-    
+
+
+    var debugString = "";
+
+    double elev;
+    /*
+    var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
+    var listShipController = new List<IMyShipController>();
+    if (listShipController == null)
+    { Echo("nope"); return; }
+    var myCurrentCockpit = listShipController[0];
+    */
+    //var listRemoteController = new List<IMyRemoteControl>();
+    //IMyRemoteControl
+
+    List<IMyShipController> listRemoteController = new List<IMyShipController>();
+    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemoteController);
+
+    if (listRemoteController == null)
+    { Echo("no IMyShipController available"); return; }
+
+    var myCurrentCockpit = listRemoteController[0];
+
+    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+
+    double altitudeError = wantedAltitude - elev;
+
+    /*
+    if (altitudeError > 5)
+    {
+        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+        fightStabilizator.Reset();
+    }
+    else
+    {
+        flightIndicatorsFlightMode = FlightMode.STANDY;
+        fightStabilizator.Release();
+    }
+    */
+
+    double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+
+    //public double Control(double error, double timeStep)
+    //todo change this
+    //double dir = altRegulator.Control(altitudeError, dts);
+
+    Echo("elev:" + elev);
+    //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
+    var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    debugString += " " + "physMass_kg:" + physMass_kg;
+    debugString += "\n" + "elev:" + elev;
+
+    //figuring out the available thrust
+    //IMyThrust.MaxEffectiveThrust
+    //IMyThrust.CurrentThrust_N
+    double maxEffectiveThrust_N = 0;
+    double currentThrust_N = 0;
+    var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    foreach (var c in cs)
+    {
+        maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+    }
+    debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
+    debugString += "\n" + "currentThrust_N:" + currentThrust_N;
+
+    debugString += "\n" + "physMass_kg:" + physMass_kg;
+
+    double physMass_N = physMass_kg * g_constant;
+    debugString += "\n" + "physMass_N:" + physMass_N;
+
+
+    //BaseMass Gets the base mass of the ship.
+    //totalMass Gets the total mass of the ship, including cargo.
+    //PhysicalMass Gets the physical mass of the ship, which accounts for inventory multiplier.
+
+
+    var totalMass_kg = myCurrentCockpit.CalculateShipMass().TotalMass;
+    debugString += "\n" + "totalMass_kg:" + totalMass_kg;
+
+    var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
+    debugString += "\n" + "thr_to_weight_ratio:" + thr_to_weight_ratio;
+
+    double thrustLeft_N = currentThrust_N - physMass_N;
+    debugString += "\n" + "thrustLeft_N:" + thrustLeft_N;
+
+    double a_z_ms_2 = thrustLeft_N / physMass_kg;
+    debugString += "\n" + "a_z_ms_2:" + a_z_ms_2;
+
+    alt = elev;
+    debugString += "\n" + "dts:" + dts;
+
+    //errorDerivative = (error - lastError) / timeStep;
+    alt_speed_ms_1 = (alt - last_alt) / dts;
+    debugString += "\n" + "alt_speed_ms_1:" + alt_speed_ms_1;
+
+    alt_acc_ms_2 = (alt_speed_ms_1 - last_alt_speed_ms_1) / dts;
+    debugString += "\n" + "alt_acc_ms_2:" + alt_acc_ms_2;
+
+    last_alt = alt;
+    last_alt_speed_ms_1 = alt_speed_ms_1;
+    //TODO code here
+
+    //public double Control(double error, double timeStep)
+    // double speedError = 0;
+    double speedError = alt_speed_ms_1 - 0;
+    double controlSpeed = altRegulator.Control(speedError, dts);
+
+    debugString += "\n" + "controlSpeed:" + controlSpeed;
+
+    var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    debugString += "\n" + "massOfShip:" + massOfShip;
+
+    var control = altRegulator.Control(altitudeError, dts);
+    debugString += "\n" + "control:" + control;
+
+    //applying what the pid processed
+    //var cs = new List<IMyThrust>();
+    GridTerminalSystem.GetBlocksOfType(cs);
+    Echo(cs.ToString());
+
+    foreach (var c in cs)
+    {
+        double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
+        c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+    }
 }
 
 public class FlightIndicators
@@ -165,10 +323,10 @@ public class FlightIndicators
         }
         // Roll
         Roll = VectorHelper.VectorAngleBetween(shipLeftVector, planetRelativeLeftVector) * rad2deg * Math.Sign(shipLeftVector.Dot(gravityVector));
-        if (Roll > 90 || Roll < -90)
+        /*if (Roll > 90 || Roll < -90)
         {
             Roll = 180 - Roll;
-        }
+        }*/
         // Pitch
         Pitch = VectorHelper.VectorAngleBetween(shipForwardVector, gravityVector) * rad2deg; //angle from nose direction to gravity 
         Pitch -= 90; // value computed is 90 degrees if pitch = 0
@@ -206,6 +364,8 @@ public class FlightIndicators
         BasicLibrary.AppendFormattedNewLine(stringBuilder, "Roll         {0}°", Math.Round(Roll, 2));
         BasicLibrary.AppendFormattedNewLine(stringBuilder, "Yaw        {0}°", Math.Round(Yaw, 2));
         BasicLibrary.AppendFormattedNewLine(stringBuilder, "Elevation {0} m", Math.Round(Elevation, 0));
+
+        Echo("|Pitch " + Math.Round(Pitch, 2) + "\n|Roll " + Math.Round(Roll, 2) + "\n|Yaw " + Math.Round(Yaw, 2));
 
         return stringBuilder.ToString();
     }
@@ -418,6 +578,7 @@ public class FightStabilizator
     void ApplyGyroOverride(double pitch_speed, double yaw_speed, double roll_speed, List<IMyGyro> gyro_list, IMyTerminalBlock reference)
     {
         var rotationVec = new Vector3D(-pitch_speed, yaw_speed, roll_speed); //because keen does some weird stuff with signs
+        //var rotationVec = new Vector3D(pitch_speed, yaw_speed, roll_speed); //because keen does some weird stuff with signs
         var shipMatrix = reference.WorldMatrix;
         var relativeRotationVec = Vector3D.TransformNormal(rotationVec, shipMatrix);
         foreach (var thisGyro in gyro_list)
@@ -526,6 +687,13 @@ bool TryInit()
     if (fightStabilizator == null)
     {
         fightStabilizator = new FightStabilizator(flightIndicators, flightIndicatorsShipController, pidP, pidI, pidD, basicLibrary);
+        /*
+        //testing
+        // optional : set desired angles
+        fightStabilizator.pitchDesiredAngle = 0f;
+        fightStabilizator.yawDesiredAngle = 0f;
+        fightStabilizator.rollDesiredAngle = 30f;
+        */
     }
 
     return true;
