@@ -46,7 +46,7 @@ MButton::
 	temps:=50
 	
 	;en permanence
-	While(test<2){
+	While(test<200){
 		;delay in ms
 		;Sleep, 200
 		;Sleep, 10
@@ -68,36 +68,36 @@ MButton::
 		
 		clipboard =   ; Empty the clipboard.
 		
-		sleep 200
+		sleep %temps%
 
 		;1650*895
 		MouseClick, X1, 1650 , 895 , 1, 0
-		sleep 200
+		sleep %temps%
 		Click, down
-		sleep 200
+		sleep %temps%
 		Click, up
 		;MouseClick, X1, Xpos_center + 350 , Ypos_center - 200 , 1, 0
 		
-		sleep 200
+		sleep %temps%
 		
 		send {Down down}
-		sleep 200
+		sleep %temps%
 		send {Down up}
-		sleep 200
+		sleep %temps%
 		
 		send {Up down}
-		sleep 200
+		sleep %temps%
 		send {Up up}
-		sleep 200
+		sleep %temps%
 		send {Up down}
-		sleep 200
+		sleep %temps%
 		send {Up up}
-		sleep 200
+		sleep %temps%
 		
 		send {Down down}
-		sleep 200
+		sleep %temps%
 		send {Down up}
-		sleep 200
+		sleep %temps%
 		
 		
 	}
