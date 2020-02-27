@@ -43,6 +43,8 @@ MButton::
 
 	test := 0
 	
+	temps:=50
+	
 	;en permanence
 	While(test<2){
 		;delay in ms
@@ -76,6 +78,20 @@ MButton::
 		Click, up
 		;MouseClick, X1, Xpos_center + 350 , Ypos_center - 200 , 1, 0
 		
+		sleep 200
+		
+		send {Down down}
+		sleep 200
+		send {Down up}
+		sleep 200
+		
+		send {Up down}
+		sleep 200
+		send {Up up}
+		sleep 200
+		send {Up down}
+		sleep 200
+		send {Up up}
 		sleep 200
 		
 		send {Down down}
