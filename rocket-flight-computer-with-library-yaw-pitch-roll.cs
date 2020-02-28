@@ -110,6 +110,10 @@ public void Main(string argument, UpdateType updateSource)
         {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
+        // optional : set desired angles
+        fightStabilizator.pitchDesiredAngle = .5f;
+        fightStabilizator.yawDesiredAngle = 0f;
+        fightStabilizator.rollDesiredAngle = 0f;
     }
     //else if (argument != null && argument.ToLower().Equals("stabilize_off"))
     else if (argument != null && argument.ToLower().Equals("off"))
@@ -123,6 +127,7 @@ public void Main(string argument, UpdateType updateSource)
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
     {
         fightStabilizator.Stabilize(true, true, stalizableYaw);
+        //just do one axis gyro axis maximum if stuck
     }
 
     lcdHelper.ClearMessageBuffer();
