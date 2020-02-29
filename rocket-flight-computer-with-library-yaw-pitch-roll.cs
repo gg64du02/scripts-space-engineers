@@ -110,6 +110,9 @@ public void Main(string argument, UpdateType updateSource)
     var targetGpsString = "";
     Echo("targetGpsString:" + targetGpsString);
     var vec3Dtarget = new Vector3D(2, 2, 2);
+    var myWaypointInfo = new MyWaypointInfo("lol", 0, 0, 0);
+    MyWaypointInfo.TryParse("GPS:1:52140.2134259274:-25957.0095536878:11669.525609199:", out myWaypointInfo);
+    vec3Dtarget = myWaypointInfo.Coords;
 
     var myPos = Me.GetPosition();
     Echo("myPos:" + myPos);
