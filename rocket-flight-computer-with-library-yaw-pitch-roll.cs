@@ -105,7 +105,23 @@ public void Main(string argument, UpdateType updateSource)
     flightIndicatorsFlightMode = FlightMode.STABILIZATION;
     fightStabilizator.Reset();
     */
-    
+    //note:
+    //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
+    var targetGpsString = "";
+    Echo("targetGpsString:" + targetGpsString);
+    var vec3Dtarget = new Vector3D(2, 2, 2);
+
+    var myPos = Me.GetPosition();
+    Echo("myPos:" + myPos);
+
+    var vec3DtoTarget = new Vector3D(0,0,0);
+    var tmpVec = new Vector3D(0, 0, 0);
+    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
+    vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
+
+    Echo("vec3DtoTarget:" + vec3DtoTarget);
+
+
     if (argument != null && argument.ToLower().Equals("on"))
         {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
