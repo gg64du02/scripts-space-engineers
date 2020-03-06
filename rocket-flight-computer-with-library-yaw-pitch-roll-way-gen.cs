@@ -49,6 +49,12 @@ double last_alt_speed_ms_1 = 0f;
 double alt_acc_ms_2 = 0f;
 double last_alt_acc_ms_2 = 0f;
 
+System.DateTime lastTime = System.DateTime.UtcNow;
+System.DateTime lastRunTs = System.DateTime.UtcNow;
+
+bool firstMainLoop = true;
+
+
 public Program()
 {
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
@@ -105,6 +111,64 @@ public void Main(string argument, UpdateType updateSource)
     flightIndicatorsFlightMode = FlightMode.STABILIZATION;
     fightStabilizator.Reset();
     */
+
+    //USE aaa_needs_testing bp
+
+    System.DateTime now = System.DateTime.UtcNow;
+    Echo("now:" + now);
+    
+    var deltaTime = (float)(now - lastTime).Milliseconds / 1000f;
+    Echo("deltaTime = now - lastTime:" + deltaTime);
+    
+    lastTime = now;
+
+    Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
+
+    DateTime d = new DateTime(1970, 01, 01);
+    var temp = d.Ticks; // == 621355968000000000
+
+    Echo("temp:" + temp);
+
+    var temp2 = now.Ticks;
+
+    Echo("temp2:" + temp2);
+
+    Echo("temp2/10**6:" + (temp2 / 1000000f));
+
+    DateTime dt1970 = new DateTime(1970, 1, 1);
+    DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
+    TimeSpan span = current - dt1970;
+    Echo("span:"+span.TotalMilliseconds.ToString());
+
+
+    //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
+    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
+    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 2f > 1f)
+    if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
+        {
+        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+        fightStabilizator.Reset();
+        // optional : set desired angles
+        fightStabilizator.pitchDesiredAngle = -fightStabilizator.pitchDesiredAngle;
+        fightStabilizator.yawDesiredAngle = 0f;
+        fightStabilizator.rollDesiredAngle = 0f;
+        lastRunTs = System.DateTime.UtcNow;
+    }
+
+    if(firstMainLoop == true)
+    {
+        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+        fightStabilizator.Reset();
+        // optional : set desired angles
+        fightStabilizator.pitchDesiredAngle = 10f;
+        fightStabilizator.yawDesiredAngle = 0f;
+        fightStabilizator.rollDesiredAngle = 0f;
+        lastRunTs = System.DateTime.UtcNow;
+        firstMainLoop = false;
+    }
+    
+
+
     //note:
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     var targetGpsString = "";
@@ -130,9 +194,10 @@ public void Main(string argument, UpdateType updateSource)
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
         // optional : set desired angles
-        fightStabilizator.pitchDesiredAngle = .5f;
+        fightStabilizator.pitchDesiredAngle = 10f;
         fightStabilizator.yawDesiredAngle = 0f;
         fightStabilizator.rollDesiredAngle = 0f;
+        lastRunTs = System.DateTime.UtcNow;
     }
     //else if (argument != null && argument.ToLower().Equals("stabilize_off"))
     else if (argument != null && argument.ToLower().Equals("off"))
@@ -717,6 +782,7 @@ bool TryInit()
         fightStabilizator.pitchDesiredAngle = 0f;
         fightStabilizator.yawDesiredAngle = 0f;
         fightStabilizator.rollDesiredAngle = 30f;
+        /*
         */
     }
 
