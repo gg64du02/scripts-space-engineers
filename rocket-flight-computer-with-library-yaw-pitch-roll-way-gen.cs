@@ -140,6 +140,61 @@ public void Main(string argument, UpdateType updateSource)
     TimeSpan span = current - dt1970;
     Echo("span:"+span.TotalMilliseconds.ToString());
 
+    List<IMyShipController> listRemoteController = new List<IMyShipController>();
+    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemoteController);
+
+    if (listRemoteController == null)
+    { Echo("no IMyShipController available"); return; }
+    //ship controlller GetTotalGravity()
+    IMyShipController myCurrentCockpit = listRemoteController[0];
+    Vector3D totalGravityVect3D = myCurrentCockpit.GetTotalGravity();
+    MyBlockOrientation cockpitOrientation = myCurrentCockpit.Orientation;
+    var leftCockpitOrientation = cockpitOrientation.Left;
+    Echo("leftCockpitOrientation:" + leftCockpitOrientation);
+
+    //getting vectors to help with angles proposals
+    Vector3D shipLeftVector = myCurrentCockpit.WorldMatrix.Left;
+    Vector3D shipDownVector = myCurrentCockpit.WorldMatrix.Down;
+    Echo("shipLeftVector:" + shipLeftVector);
+    Echo("shipDownVector:" + shipDownVector);
+
+    //Getting the ship/pb postion
+    Vector3D myPos = Me.GetPosition();
+    Echo("myPos:\n" + myPos);
+
+    //note:
+    //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
+    //var targetGpsString = "";
+    //Echo("targetGpsString:" + targetGpsString);
+    Vector3D vec3Dtarget = new Vector3D(2, 2, 2);
+    MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
+    MyWaypointInfo.TryParse("GPS:/// #3:53583.46:-26618.22:11989.46:", out myWaypointInfoTarget);
+    vec3Dtarget = myWaypointInfoTarget.Coords;
+
+    //generate vector pointing to the target
+    Vector3D tmpVec = new Vector3D(0, 0, 0);
+    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
+    Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
+    Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
+    Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
+
+
+
+    /*
+    // roll pitch yaw
+    Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
+    Vector3D shipLeftVector = shipController.WorldMatrix.Left;
+    Vector3D shipDownVector = shipController.WorldMatrix.Down;
+    Vector3D gravityVector = shipController.GetNaturalGravity();
+    Vector3D planetRelativeLeftVector = shipForwardVector.Cross(gravityVector);
+    */
+
+
+    double elev;
+    
+    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    double altitudeError = wantedAltitude - elev;
+
 
     //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
     //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
@@ -168,23 +223,6 @@ public void Main(string argument, UpdateType updateSource)
     }
     
 
-
-    //note:
-    //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
-    var targetGpsString = "";
-    Echo("targetGpsString:" + targetGpsString);
-    var vec3Dtarget = new Vector3D(2, 2, 2);
-    var myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #3:53583.46:-26618.22:11989.46:", out myWaypointInfoTarget);
-    vec3Dtarget = myWaypointInfoTarget.Coords;
-
-    var myPos = Me.GetPosition();
-    Echo("myPos:\n" + myPos);
-
-    var vec3DtoTarget = new Vector3D(0,0,0);
-    var tmpVec = new Vector3D(0, 0, 0);
-    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
-    vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
 
     Echo("vec3DtoTarget:\n" + vec3DtoTarget);
 
@@ -227,8 +265,6 @@ public void Main(string argument, UpdateType updateSource)
 
 
     var debugString = "";
-
-    double elev;
     /*
     var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
     var listShipController = new List<IMyShipController>();
@@ -238,18 +274,6 @@ public void Main(string argument, UpdateType updateSource)
     */
     //var listRemoteController = new List<IMyRemoteControl>();
     //IMyRemoteControl
-
-    List<IMyShipController> listRemoteController = new List<IMyShipController>();
-    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemoteController);
-
-    if (listRemoteController == null)
-    { Echo("no IMyShipController available"); return; }
-
-    var myCurrentCockpit = listRemoteController[0];
-
-    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-
-    double altitudeError = wantedAltitude - elev;
 
     /*
     if (altitudeError > 5)
