@@ -174,19 +174,22 @@ public void Main(string argument, UpdateType updateSource)
     var targetGpsString = "";
     Echo("targetGpsString:" + targetGpsString);
     var vec3Dtarget = new Vector3D(2, 2, 2);
-    var myWaypointInfo = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:1:52140.2134259274:-25957.0095536878:11669.525609199:", out myWaypointInfo);
-    vec3Dtarget = myWaypointInfo.Coords;
+    var myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
+    MyWaypointInfo.TryParse("GPS:/// #3:53583.46:-26618.22:11989.46:", out myWaypointInfoTarget);
+    vec3Dtarget = myWaypointInfoTarget.Coords;
 
     var myPos = Me.GetPosition();
-    Echo("myPos:" + myPos);
+    Echo("myPos:\n" + myPos);
 
     var vec3DtoTarget = new Vector3D(0,0,0);
     var tmpVec = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref vec3Dtarget, out tmpVec);
     vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
 
-    Echo("vec3DtoTarget:" + vec3DtoTarget);
+    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
+
+    var posInterpolation = Vector3D.Add(myPos / 2, vec3Dtarget / 2);
+    Echo("posInterpolation:\n" + posInterpolation);
 
 
     if (argument != null && argument.ToLower().Equals("on"))
