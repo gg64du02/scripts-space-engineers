@@ -184,6 +184,17 @@ public void Main(string argument, UpdateType updateSource)
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 10f);
+    fightStabilizator.yawDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = 0f;
+
+    List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
+    GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
+
+    listAntenna[0].HudText = "" + Convert.ToSingle(-pitchFowardOrBackward * 10f);
+
+
+    /*
     if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
     {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
@@ -194,7 +205,7 @@ public void Main(string argument, UpdateType updateSource)
         fightStabilizator.rollDesiredAngle = 0f;
         lastRunTs = System.DateTime.UtcNow;
     }
-
+    */
 
 
     /*
