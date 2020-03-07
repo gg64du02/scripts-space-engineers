@@ -153,8 +153,10 @@ public void Main(string argument, UpdateType updateSource)
     Echo("leftCockpitOrientation:" + leftCockpitOrientation);
 
     //getting vectors to help with angles proposals
+    Vector3D shipForwardVector = myCurrentCockpit.WorldMatrix.Forward;
     Vector3D shipLeftVector = myCurrentCockpit.WorldMatrix.Left;
     Vector3D shipDownVector = myCurrentCockpit.WorldMatrix.Down;
+    Echo("shipForwardVector:" + shipForwardVector);
     Echo("shipLeftVector:" + shipLeftVector);
     Echo("shipDownVector:" + shipDownVector);
 
@@ -168,7 +170,7 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("targetGpsString:" + targetGpsString);
     Vector3D vec3Dtarget = new Vector3D(2, 2, 2);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #3:53583.46:-26618.22:11989.46:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     vec3Dtarget = myWaypointInfoTarget.Coords;
 
     //generate vector pointing to the target
@@ -178,7 +180,30 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
     Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
 
+    double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorPitchCalcedSetting));
+    //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
+    Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
+    if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
+    {
+        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+        fightStabilizator.Reset();
+        // optional : set desired angles
+        fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward *10f);
+        fightStabilizator.yawDesiredAngle = 0f;
+        fightStabilizator.rollDesiredAngle = 0f;
+        lastRunTs = System.DateTime.UtcNow;
+    }
+
+
+
+    /*
+    const double rad2deg = 180 / Math.PI;
+    // Pitch
+    double Pitch = VectorHelper.VectorAngleBetween(shipForwardVector, totalGravityVect3D) * rad2deg;
+    //angle 
+    Echo("\n\nPitch:\n" + Pitch);
+    */
 
     /*
     // roll pitch yaw
@@ -199,6 +224,7 @@ public void Main(string argument, UpdateType updateSource)
     //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
     //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
     //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 2f > 1f)
+    /*
     if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
         {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
@@ -209,13 +235,15 @@ public void Main(string argument, UpdateType updateSource)
         fightStabilizator.rollDesiredAngle = 0f;
         lastRunTs = System.DateTime.UtcNow;
     }
+    */
 
     if(firstMainLoop == true)
     {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
         // optional : set desired angles
-        fightStabilizator.pitchDesiredAngle = 10f;
+        //fightStabilizator.pitchDesiredAngle = 10f;
+        fightStabilizator.pitchDesiredAngle = 0f;
         fightStabilizator.yawDesiredAngle = 0f;
         fightStabilizator.rollDesiredAngle = 0f;
         lastRunTs = System.DateTime.UtcNow;
