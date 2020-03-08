@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 15f;
+double wantedAltitude = 100f;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -217,20 +217,31 @@ public void Main(string argument, UpdateType updateSource)
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
     */
+    double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 30f);
+    finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
+    double finalYawSetting = Convert.ToSingle(0f);
+    finalYawSetting = MyMath.Clamp(Convert.ToSingle(finalYawSetting), -30f, 30f);
+    double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 30f);
+    finalRollSetting = MyMath.Clamp(Convert.ToSingle(finalRollSetting), -30f, 30f);
 
+    //+ pitch go foward
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
+    fightStabilizator.yawDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
+
+    /*
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 30f);
     //fightStabilizator.yawDesiredAngle = Convert.ToSingle(-yawCWOrAntiCW * 180f);
     fightStabilizator.yawDesiredAngle = 0f;
-    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
-    fightStabilizator.rollDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(rollLeftOrRight * 30f);
     //fightStabilizator.rollDesiredAngle = 0f;
+    //fightStabilizator.rollDesiredAngle = 0f;
+    */
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f);
-    //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nroll:" + Convert.ToSingle(-rollLeftOrRight * 30f);
-    //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nyaw:" + Convert.ToSingle(-yawCWOrAntiCW * 180f);
+    listAntenna[0].HudText = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
 
     Me.CubeGrid.CustomName = "Deed pole enacted I am now called Griddy";
 
