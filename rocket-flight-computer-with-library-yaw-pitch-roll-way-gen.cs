@@ -190,7 +190,7 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
     Echo("\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
-    //todo
+    //todo:
     //math pitch
     Echo("\n=====================================");
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
@@ -202,12 +202,22 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
+    //todo fix the sign, right now it can not change
+
+    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting,shipDownVector)<0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
+    //todo
+    double rollLeftOrRight = vectorRollCalcedSetting.Length();
+    double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+    Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+
+    /*
     double pitchFowardOrBackward = vectorPitchCalcedSetting.Length();
     //todo
     double rollLeftOrRight = vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+    */
 
     /*
     double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
@@ -217,7 +227,7 @@ public void Main(string argument, UpdateType updateSource)
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
     */
-    double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 30f);
+    double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
     double finalYawSetting = Convert.ToSingle(0f);
     finalYawSetting = MyMath.Clamp(Convert.ToSingle(finalYawSetting), -30f, 30f);
