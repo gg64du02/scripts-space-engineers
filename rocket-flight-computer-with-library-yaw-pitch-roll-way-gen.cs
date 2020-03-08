@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 100f;
+double wantedAltitude = 1000f;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
