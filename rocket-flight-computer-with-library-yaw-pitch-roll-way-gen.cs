@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 25f;
+double wantedAltitude = 15f;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -190,12 +190,30 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
     Echo("\n\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
-
-
+    //todo
+    /*
     //generate vector pointing to the target
     Vector3D tmpVec = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref vec3Dtarget, out tmpVec);
     Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
+    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
+    */
+    //math pitch
+    Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
+    Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
+    //math roll to be checked
+    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
+    Echo("\n\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
+    //math yaw
+    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
+    Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
+
+    /*
+    //generate vector pointing to the target
+    Vector3D tmpVec = new Vector3D(0, 0, 0);
+    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
+    Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
+    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
     //math pitch
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
     Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
@@ -205,12 +223,12 @@ public void Main(string argument, UpdateType updateSource)
     //math yaw
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipForwardVector, vec3DtoTarget);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
+    */
 
-
-    double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorPitchCalcedSetting));
+    double pitchFowardOrBackward =100f* Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
     //todo
-    double rollLeftOrRight = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorRollCalcedSetting));
-    double yawCWOrAntiCW = Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
+    double rollLeftOrRight = 100f * Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorRollCalcedSetting));
+    double yawCWOrAntiCW = 100f * Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -298,9 +316,6 @@ public void Main(string argument, UpdateType updateSource)
         firstMainLoop = false;
     }
     
-
-
-    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
 
     var posInterpolation = Vector3D.Add(myPos / 2, vec3Dtarget / 2);
     Echo("posInterpolation:\n" + posInterpolation);
@@ -450,7 +465,7 @@ public void Main(string argument, UpdateType updateSource)
         double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
         c.ThrustOverride = Convert.ToSingle(temp_thr_n);
         //debug:disabled the thruster
-        c.ThrustOverride = Convert.ToSingle(0f);
+        //c.ThrustOverride = Convert.ToSingle(0f);
     }
 }
 
