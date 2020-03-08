@@ -202,12 +202,12 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-    //todo fix the sign, right now it can not change
 
     double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting,shipDownVector)<0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
-    //todo
-    double rollLeftOrRight = vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+    //todo fix the sign, right now it can not change
+    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+    //todo ing
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
     /*
@@ -231,7 +231,7 @@ public void Main(string argument, UpdateType updateSource)
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
     double finalYawSetting = Convert.ToSingle(0f);
     finalYawSetting = MyMath.Clamp(Convert.ToSingle(finalYawSetting), -30f, 30f);
-    double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 30f);
+    double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 3000f);
     finalRollSetting = MyMath.Clamp(Convert.ToSingle(finalRollSetting), -30f, 30f);
 
     //+ pitch go foward
@@ -253,7 +253,7 @@ public void Main(string argument, UpdateType updateSource)
 
     listAntenna[0].HudText = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
 
-    Me.CubeGrid.CustomName = "Deed pole enacted I am now called Griddy";
+    Me.CubeGrid.CustomName = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
 
     /*
     // roll pitch yaw
