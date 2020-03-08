@@ -184,42 +184,43 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vec3DtargetNegate;
     Vector3D.Negate(ref vec3Dtarget, out vec3DtargetNegate);
     Vector3D targetGravityVectorNormalized = Vector3D.Normalize(Vector3D.Add(vec3DtargetNegate, earthLikeCenter));
-    Echo("\n\ntargetGravityVectorNormalized:\n" + targetGravityVectorNormalized);
+    Echo("\ntargetGravityVectorNormalized:\n" + targetGravityVectorNormalized);
 
     //totalGravityVect3Dnormalized cross targetGravityVectorNormalized
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
-    Echo("\n\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
+    Echo("\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
     //todo
     //math pitch
+    Echo("\n=====================================");
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
-    Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
+    Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
     //math roll to be checked
     Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
-    Echo("\n\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
+    Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
     //math yaw
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
-    double pitchFowardOrBackward =100f* Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
+    double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
     //todo
-    double rollLeftOrRight = 100f * Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorRollCalcedSetting));
-    double yawCWOrAntiCW = 100f * Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
+    double rollLeftOrRight = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorRollCalcedSetting));
+    double yawCWOrAntiCW = Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
-    Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+    Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 30f);
     //fightStabilizator.yawDesiredAngle = Convert.ToSingle(-yawCWOrAntiCW * 180f);
     fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
-    //fightStabilizator.rollDesiredAngle = 0f;
+    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
+    fightStabilizator.rollDesiredAngle = 0f;
     //fightStabilizator.rollDesiredAngle = 0f;
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f);
+    listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f);
     //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nroll:" + Convert.ToSingle(-rollLeftOrRight * 30f);
     //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nyaw:" + Convert.ToSingle(-yawCWOrAntiCW * 180f);
 
