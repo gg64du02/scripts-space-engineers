@@ -149,8 +149,8 @@ public void Main(string argument, UpdateType updateSource)
     IMyShipController myCurrentCockpit = listRemoteController[0];
     Vector3D totalGravityVect3D = myCurrentCockpit.GetTotalGravity();
     Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
-    Vector3D totalGravityVect3Dnormalize = Vector3D.Normalize(totalGravityVect3D);
-    Echo("\n\ntotalGravityVect3Dnormalize:\n" + totalGravityVect3Dnormalize);
+    Vector3D totalGravityVect3Dnormalized = Vector3D.Normalize(totalGravityVect3D);
+    Echo("\n\ntotalGravityVect3Dnormalized:\n" + totalGravityVect3Dnormalized);
     MyBlockOrientation cockpitOrientation = myCurrentCockpit.Orientation;
     var leftCockpitOrientation = cockpitOrientation.Left;
     Echo("leftCockpitOrientation:" + leftCockpitOrientation);
@@ -179,12 +179,17 @@ public void Main(string argument, UpdateType updateSource)
     //x,y,z coords
     Vector3D vec3Dtarget = myWaypointInfoTarget.Coords;
 
-    //todo
+    //targetGravityVectorNormalized
     Vector3D earthLikeCenter = new Vector3D(0,0,0);
     Vector3D vec3DtargetNegate;
     Vector3D.Negate(ref vec3Dtarget, out vec3DtargetNegate);
     Vector3D targetGravityVectorNormalized = Vector3D.Normalize(Vector3D.Add(vec3DtargetNegate, earthLikeCenter));
     Echo("\n\ntargetGravityVectorNormalized:\n" + targetGravityVectorNormalized);
+
+    //totalGravityVect3Dnormalized cross targetGravityVectorNormalized
+    Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
+    Echo("\n\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
+
 
 
     //generate vector pointing to the target
