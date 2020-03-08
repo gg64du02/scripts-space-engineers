@@ -191,13 +191,6 @@ public void Main(string argument, UpdateType updateSource)
     Echo("\n\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
     //todo
-    /*
-    //generate vector pointing to the target
-    Vector3D tmpVec = new Vector3D(0, 0, 0);
-    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
-    Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
-    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
-    */
     //math pitch
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
@@ -208,22 +201,6 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-    /*
-    //generate vector pointing to the target
-    Vector3D tmpVec = new Vector3D(0, 0, 0);
-    Vector3D.Negate(ref vec3Dtarget, out tmpVec);
-    Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
-    Echo("vec3DtoTarget:\n" + vec3DtoTarget);
-    //math pitch
-    Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
-    Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll to be checked
-    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, vec3DtoTarget);
-    Echo("\n\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
-    //math yaw
-    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipForwardVector, vec3DtoTarget);
-    Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
-    */
 
     double pitchFowardOrBackward =100f* Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
     //todo
@@ -235,8 +212,8 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 30f);
     //fightStabilizator.yawDesiredAngle = Convert.ToSingle(-yawCWOrAntiCW * 180f);
     fightStabilizator.yawDesiredAngle = 0f;
-    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
-    fightStabilizator.rollDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
+    //fightStabilizator.rollDesiredAngle = 0f;
     //fightStabilizator.rollDesiredAngle = 0f;
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
@@ -247,29 +224,6 @@ public void Main(string argument, UpdateType updateSource)
     //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nyaw:" + Convert.ToSingle(-yawCWOrAntiCW * 180f);
 
     Me.CubeGrid.CustomName = "Deed pole enacted I am now called Griddy";
-
-
-    /*
-    if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
-    {
-        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-        fightStabilizator.Reset();
-        // optional : set desired angles
-        fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward *10f);
-        fightStabilizator.yawDesiredAngle = 0f;
-        fightStabilizator.rollDesiredAngle = 0f;
-        lastRunTs = System.DateTime.UtcNow;
-    }
-    */
-
-
-    /*
-    const double rad2deg = 180 / Math.PI;
-    // Pitch
-    double Pitch = VectorHelper.VectorAngleBetween(shipForwardVector, totalGravityVect3D) * rad2deg;
-    //angle 
-    Echo("\n\nPitch:\n" + Pitch);
-    */
 
     /*
     // roll pitch yaw
