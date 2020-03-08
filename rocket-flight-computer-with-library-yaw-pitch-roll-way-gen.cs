@@ -148,6 +148,9 @@ public void Main(string argument, UpdateType updateSource)
     //ship controlller GetTotalGravity()
     IMyShipController myCurrentCockpit = listRemoteController[0];
     Vector3D totalGravityVect3D = myCurrentCockpit.GetTotalGravity();
+    Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
+    Vector3D totalGravityVect3Dnormalize = Vector3D.Normalize(totalGravityVect3D);
+    Echo("\n\ntotalGravityVect3Dnormalize:\n" + totalGravityVect3Dnormalize);
     MyBlockOrientation cockpitOrientation = myCurrentCockpit.Orientation;
     var leftCockpitOrientation = cockpitOrientation.Left;
     Echo("leftCockpitOrientation:" + leftCockpitOrientation);
@@ -168,14 +171,21 @@ public void Main(string argument, UpdateType updateSource)
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
-    Vector3D vec3Dtarget = new Vector3D(2, 2, 2);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
 
+    //x,y,z coords
+    Vector3D vec3Dtarget = myWaypointInfoTarget.Coords;
 
-    vec3Dtarget = myWaypointInfoTarget.Coords;
+    //todo
+    Vector3D earthLikeCenter = new Vector3D(0,0,0);
+    Vector3D vec3DtargetNegate;
+    Vector3D.Negate(ref vec3Dtarget, out vec3DtargetNegate);
+    Vector3D targetGravityVectorNormalized = Vector3D.Normalize(Vector3D.Add(vec3DtargetNegate, earthLikeCenter));
+    Echo("\n\ntargetGravityVectorNormalized:\n" + targetGravityVectorNormalized);
+
 
     //generate vector pointing to the target
     Vector3D tmpVec = new Vector3D(0, 0, 0);
@@ -434,6 +444,8 @@ public void Main(string argument, UpdateType updateSource)
     {
         double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
         c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+        //debug:disabled the thruster
+        c.ThrustOverride = Convert.ToSingle(0f);
     }
 }
 
