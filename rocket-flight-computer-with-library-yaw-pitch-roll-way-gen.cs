@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 10f;
+double wantedAltitude = 25f;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -171,6 +171,10 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vec3Dtarget = new Vector3D(2, 2, 2);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
+
+
     vec3Dtarget = myWaypointInfoTarget.Coords;
 
     //generate vector pointing to the target
@@ -180,27 +184,34 @@ public void Main(string argument, UpdateType updateSource)
     //math pitch
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
     Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll
+    //math roll to be checked
     Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, vec3DtoTarget);
     Echo("\n\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
-    
+    //math yaw
+    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipForwardVector, vec3DtoTarget);
+    Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
+
 
     double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorPitchCalcedSetting));
     //todo
     double rollLeftOrRight = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorRollCalcedSetting));
+    double yawCWOrAntiCW = Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 10f);
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 30f);
+    //fightStabilizator.yawDesiredAngle = Convert.ToSingle(-yawCWOrAntiCW * 180f);
     fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 10f);
+    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 30f);
+    fightStabilizator.rollDesiredAngle = 0f;
     //fightStabilizator.rollDesiredAngle = 0f;
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    //listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 10f);
-    listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 10f) + "\nroll:" + Convert.ToSingle(-rollLeftOrRight * 10f );
+    listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f);
+    //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nroll:" + Convert.ToSingle(-rollLeftOrRight * 30f);
+    //listAntenna[0].HudText = "\npitch:" + Convert.ToSingle(-pitchFowardOrBackward * 30f) + "\nyaw:" + Convert.ToSingle(-yawCWOrAntiCW * 180f);
 
     Me.CubeGrid.CustomName = "Deed pole enacted I am now called Griddy";
 
