@@ -177,21 +177,32 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D tmpVec = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref vec3Dtarget, out tmpVec);
     Vector3D vec3DtoTarget = Vector3D.Add(myPos, tmpVec);
+    //math pitch
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector,vec3DtoTarget);
     Echo("\n\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
+    //math roll
+    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, vec3DtoTarget);
+    Echo("\n\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
+    
 
     double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorPitchCalcedSetting));
+    //todo
+    double rollLeftOrRight = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorRollCalcedSetting));
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\n\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 10f);
     fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = 0f;
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(-rollLeftOrRight * 10f);
+    //fightStabilizator.rollDesiredAngle = 0f;
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "" + Convert.ToSingle(-pitchFowardOrBackward * 10f);
+    //listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 10f);
+    listAntenna[0].HudText = "pitch:" + Convert.ToSingle(-pitchFowardOrBackward * 10f) + "\nroll:" + Convert.ToSingle(-rollLeftOrRight * 10f );
+
+    Me.CubeGrid.CustomName = "Deed pole enacted I am now called Griddy";
 
 
     /*
