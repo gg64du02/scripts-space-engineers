@@ -172,12 +172,15 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
+
 
     //x,y,z coords
     Vector3D vec3Dtarget = myWaypointInfoTarget.Coords;
+
 
     //targetGravityVectorNormalized
     Vector3D earthLikeCenter = new Vector3D(0,0,0);
@@ -185,6 +188,11 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D.Negate(ref vec3Dtarget, out vec3DtargetNegate);
     Vector3D targetGravityVectorNormalized = Vector3D.Normalize(Vector3D.Add(vec3DtargetNegate, earthLikeCenter));
     Echo("\ntargetGravityVectorNormalized:\n" + targetGravityVectorNormalized);
+
+    //distance to target TODO
+    Vector3D VectToTarget = Vector3D.Add(vec3DtargetNegate, myPos);
+    double distToTarget = VectToTarget.Length();
+    Echo("\ndistToTarget:"+ distToTarget);
 
     //totalGravityVect3Dnormalized cross targetGravityVectorNormalized
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
@@ -253,7 +261,7 @@ public void Main(string argument, UpdateType updateSource)
 
     listAntenna[0].HudText = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
 
-    Me.CubeGrid.CustomName = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
+    Me.CubeGrid.CustomName = "distToTarget:\n"+ distToTarget+"\npitch:" + finalPitchSetting + "|roll:" + finalRollSetting;
 
     /*
     // roll pitch yaw
