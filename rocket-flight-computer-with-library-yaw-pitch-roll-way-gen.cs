@@ -172,10 +172,10 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
-    MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
 
 
     //x,y,z coords
@@ -235,6 +235,40 @@ public void Main(string argument, UpdateType updateSource)
     //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
     */
+    MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
+    Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
+    Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
+    /*
+    if (distToTarget < 3000)
+    {
+        if (linearSpeedsShip.Length() > 10)
+        {
+            //todo:
+            //math pitch
+            Echo("\n=====================================");
+             vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+            Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
+            //math roll to be checked
+             vectorRollCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
+            Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
+            //math yaw
+             vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
+            Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
+
+
+             pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+             yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+            //todo fix the sign, right now it can not change
+             rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+            //todo ing
+            Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+        }
+        //pitchFowardOrBackward = Vector3D.Dot(shipForwardVector,);
+        //yawCWOrAntiCW
+        //rollLeftOrRight
+    }
+    */
+
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
     double finalYawSetting = Convert.ToSingle(0f);
@@ -259,9 +293,10 @@ public void Main(string argument, UpdateType updateSource)
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "\npitch:" + finalPitchSetting + "\nroll:" + finalRollSetting;
+    //Math.Round((a_y), 2).ToString()
+    listAntenna[0].HudText = "speed:"+ Math.Round((linearSpeedsShip.Length()),2) + "distToTarget:" + Math.Round((distToTarget),2) + "\npitch:" + Math.Round((finalPitchSetting),2) + "roll:" + Math.Round((finalRollSetting),2);
 
-    Me.CubeGrid.CustomName = "distToTarget:\n"+ distToTarget+"\npitch:" + finalPitchSetting + "|roll:" + finalRollSetting;
+    Me.CubeGrid.CustomName = "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     /*
     // roll pitch yaw
