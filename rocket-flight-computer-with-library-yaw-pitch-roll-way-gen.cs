@@ -41,6 +41,7 @@ FightStabilizator fightStabilizator;
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1000f;
+bool lol = true;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -219,32 +220,37 @@ public void Main(string argument, UpdateType updateSource)
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
 
+    double elev;
+
+    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    double altitudeError = wantedAltitude - elev;
+
 
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
-    
-    if (distToTarget < 3000)
+
+    if (distToTarget < 2000)
     {
         if (linearSpeedsShip.Length() > 10)
         {
             //todo:
             //math pitch
             Echo("\n=====================================");
-             vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
+            vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
             Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
             //math roll to be checked
-             vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+            vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
             Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
             //math yaw
-             vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
+            vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
-             pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
-             yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+            yawCWOrAntiCW = vectorYawCalcedSetting.Length();
             //todo fix the sign, right now it can not change
-             rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             //todo ing
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -252,8 +258,70 @@ public void Main(string argument, UpdateType updateSource)
             yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
         }
+        if (elev < 50)
+        {
+            altitudeError = -1;
+        }
+        if (elev < 5)
+        {
+            //thuster
+            List<IMyThrust> listIMyThrust = new List<IMyThrust>();
+            GridTerminalSystem.GetBlocksOfType<IMyThrust>(listIMyThrust);
+            //antenna
+            List<IMyRadioAntenna> listIMyRadioAntenna = new List<IMyRadioAntenna>();
+            GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listIMyRadioAntenna);
+            //gyro
+            List<IMyGyro> listIMyGyro = new List<IMyGyro>();
+            GridTerminalSystem.GetBlocksOfType<IMyGyro>(listIMyGyro);
+            //general:
+            List<IMyFunctionalBlock> listIMyFunctionalBlock = new List<IMyFunctionalBlock>();
+            GridTerminalSystem.GetBlocksOfType(listIMyFunctionalBlock);
+            //disabling everything but the PB
+            foreach(var l in listIMyFunctionalBlock)
+            {
+                if(!(l is IMyBatteryBlock))
+                {
+                    if (!(l is IMyProgrammableBlock))
+                    {
+                        l.Enabled = false;
+                    }
+                }
+            }
+            //disabling the PB
+            foreach (var l in listIMyFunctionalBlock)
+            {
+                if (l is IMyProgrammableBlock)
+                {
+                    l.Enabled = false;
+                }
+            }
+        }
+        if (distToTarget<1500)
+        {
+            if(distToTarget > 100)
+            {
+                altitudeError = -5;
+            }
+            else
+            {
+                altitudeError = -3;
+            }
+        }
     }
 
+    /*
+    if (argument != null)
+    {
+        //wantedAltitude = Double.Parse(argument);
+        //Double.TryParse(argument,out wantedAltitude);
+        wantedAltitude = Convert.ToSingle(500f);
+        if(lol == true)
+        {
+            altRegulator.Reset();
+            lol = false;
+        }
+    }
+    */
 
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
@@ -269,12 +337,6 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
 
 
-    double elev;
-
-    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-    double altitudeError = wantedAltitude - elev;
-
-
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
@@ -282,24 +344,26 @@ public void Main(string argument, UpdateType updateSource)
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev),0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
+    
+    
 
-    //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
-    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
-    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 2f > 1f)
-    /*
-    if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
-        {
-        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-        fightStabilizator.Reset();
-        // optional : set desired angles
-        fightStabilizator.pitchDesiredAngle = -fightStabilizator.pitchDesiredAngle;
-        fightStabilizator.yawDesiredAngle = 0f;
-        fightStabilizator.rollDesiredAngle = 0f;
-        lastRunTs = System.DateTime.UtcNow;
-    }
-    */
+        //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
+        //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
+        //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 2f > 1f)
+        /*
+        if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
+            {
+            flightIndicatorsFlightMode = FlightMode.STABILIZATION;
+            fightStabilizator.Reset();
+            // optional : set desired angles
+            fightStabilizator.pitchDesiredAngle = -fightStabilizator.pitchDesiredAngle;
+            fightStabilizator.yawDesiredAngle = 0f;
+            fightStabilizator.rollDesiredAngle = 0f;
+            lastRunTs = System.DateTime.UtcNow;
+        }
+        */
 
-    if(firstMainLoop == true)
+        if (firstMainLoop == true)
     {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
