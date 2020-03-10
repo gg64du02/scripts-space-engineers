@@ -238,7 +238,7 @@ public void Main(string argument, UpdateType updateSource)
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
-    /*
+    
     if (distToTarget < 3000)
     {
         if (linearSpeedsShip.Length() > 10)
@@ -246,20 +246,20 @@ public void Main(string argument, UpdateType updateSource)
             //todo:
             //math pitch
             Echo("\n=====================================");
-             vectorPitchCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+             vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
             Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
             //math roll to be checked
-             vectorRollCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
+             vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
             Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
             //math yaw
              vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
-             pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+             pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
              yawCWOrAntiCW = vectorYawCalcedSetting.Length();
             //todo fix the sign, right now it can not change
-             rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+             rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             //todo ing
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
         }
@@ -267,7 +267,7 @@ public void Main(string argument, UpdateType updateSource)
         //yawCWOrAntiCW
         //rollLeftOrRight
     }
-    */
+    
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
