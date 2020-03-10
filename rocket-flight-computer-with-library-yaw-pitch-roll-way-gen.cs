@@ -218,23 +218,8 @@ public void Main(string argument, UpdateType updateSource)
     //todo ing
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
-    /*
-    double pitchFowardOrBackward = vectorPitchCalcedSetting.Length();
-    //todo
-    double rollLeftOrRight = vectorRollCalcedSetting.Length();
-    double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
-    //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
-    Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-    */
 
-    /*
-    double pitchFowardOrBackward = Vector3D.Dot(Vector3D.Normalize(shipLeftVector), Vector3D.Normalize(vectorPitchCalcedSetting));
-    //todo
-    double rollLeftOrRight = Vector3D.Dot(Vector3D.Normalize(shipForwardVector), Vector3D.Normalize(vectorRollCalcedSetting));
-    double yawCWOrAntiCW = Vector3D.Dot(Vector3D.Normalize(shipDownVector), Vector3D.Normalize(vectorYawCalcedSetting));
-    //double pitchFowardOrBackward = Vector3D.Dot(shipForwardVector, vectorPitchCalcedSetting);
-    Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-    */
+
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
@@ -268,7 +253,8 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
         }
     }
-    
+
+
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
@@ -283,28 +269,18 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
 
 
+    double elev;
+
+    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    double altitudeError = wantedAltitude - elev;
+
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
+    listAntenna[0].HudText = "elev:"+ Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
-    Me.CubeGrid.CustomName = "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-
-    /*
-    // roll pitch yaw
-    Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
-    Vector3D shipLeftVector = shipController.WorldMatrix.Left;
-    Vector3D shipDownVector = shipController.WorldMatrix.Down;
-    Vector3D gravityVector = shipController.GetNaturalGravity();
-    Vector3D planetRelativeLeftVector = shipForwardVector.Cross(gravityVector);
-    */
-
-
-    double elev;
-    
-    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-    double altitudeError = wantedAltitude - elev;
+    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev),0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
 
     //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
