@@ -262,6 +262,10 @@ public void Main(string argument, UpdateType updateSource)
              rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             //todo ing
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+
+            pitchFowardOrBackward *= 0.01f;
+            yawCWOrAntiCW *= 0.01f;
+            rollLeftOrRight *= 0.01f;
         }
         //pitchFowardOrBackward = Vector3D.Dot(shipForwardVector,);
         //yawCWOrAntiCW
@@ -281,19 +285,11 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.yawDesiredAngle = 0f;
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
 
-    /*
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-pitchFowardOrBackward * 30f);
-    //fightStabilizator.yawDesiredAngle = Convert.ToSingle(-yawCWOrAntiCW * 180f);
-    fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(rollLeftOrRight * 30f);
-    //fightStabilizator.rollDesiredAngle = 0f;
-    //fightStabilizator.rollDesiredAngle = 0f;
-    */
+
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    //Math.Round((a_y), 2).ToString()
     listAntenna[0].HudText = "speed:"+ Math.Round((linearSpeedsShip.Length()),2) + "distToTarget:" + Math.Round((distToTarget),2) + "\npitch:" + Math.Round((finalPitchSetting),2) + "roll:" + Math.Round((finalRollSetting),2);
 
     Me.CubeGrid.CustomName = "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
