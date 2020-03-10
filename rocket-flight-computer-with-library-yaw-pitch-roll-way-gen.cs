@@ -267,9 +267,6 @@ public void Main(string argument, UpdateType updateSource)
             yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
         }
-        //pitchFowardOrBackward = Vector3D.Dot(shipForwardVector,);
-        //yawCWOrAntiCW
-        //rollLeftOrRight
     }
     
 
@@ -290,9 +287,9 @@ public void Main(string argument, UpdateType updateSource)
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    listAntenna[0].HudText = "speed:"+ Math.Round((linearSpeedsShip.Length()),2) + "distToTarget:" + Math.Round((distToTarget),2) + "\npitch:" + Math.Round((finalPitchSetting),2) + "roll:" + Math.Round((finalRollSetting),2);
+    listAntenna[0].HudText = "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
-    Me.CubeGrid.CustomName = "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
+    Me.CubeGrid.CustomName = "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     /*
     // roll pitch yaw
