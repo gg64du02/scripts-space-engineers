@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 1500f;
+double wantedAltitude = 1000;
 bool altSettingChanged = false;
 bool u1000 = true;
 bool u400 = true;
@@ -213,7 +213,7 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipLeftVector) <0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
+    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) <0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
     double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector ) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
@@ -279,8 +279,8 @@ public void Main(string argument, UpdateType updateSource)
 
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizablePitch = false;
-    bool stalizableRoll = true;
+    bool stalizablePitch = true;
+    bool stalizableRoll = false;
     bool stalizableYaw = false;
 
 
