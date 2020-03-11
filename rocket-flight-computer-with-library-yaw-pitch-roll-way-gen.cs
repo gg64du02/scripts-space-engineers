@@ -205,7 +205,7 @@ public void Main(string argument, UpdateType updateSource)
     Echo("\n=====================================");
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll
+    //math roll : + clock wise | - anti clock wise 
     Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
     //math yaw
@@ -227,7 +227,7 @@ public void Main(string argument, UpdateType updateSource)
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
-    
+
     /*
     if (distToTarget < 3 * wantedAltitude)
     {
@@ -239,27 +239,30 @@ public void Main(string argument, UpdateType updateSource)
             vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
             Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
             //math roll to be checked
-            vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
+            //vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
+            vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
             Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
             //math yaw
-            vectorYawCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+            //vectorYawCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+            vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
-            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
             rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-            
-            pitchFowardOrBackward *= 0.01f;
-            yawCWOrAntiCW *= 0.01f;
-            rollLeftOrRight *= 0.01f;
-            
         }
     }
     */
-    
-    if(altSettingChanged == true)
+
+    /*
+    pitchFowardOrBackward *= 0.01f;
+    yawCWOrAntiCW *= 0.01f;
+    rollLeftOrRight *= 0.01f;
+    */
+
+    if (altSettingChanged == true)
     {
         altSettingChanged = false;
         //altRegulator.Reset();
