@@ -232,11 +232,12 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
-    /*
+    
     if (distToTarget < 3 * wantedAltitude)
     {
         if (linearSpeedsShip.Length() > 10)
         {
+        
             //todo:
             //math pitch
             Echo("\n=====================================");
@@ -251,14 +252,18 @@ public void Main(string argument, UpdateType updateSource)
             vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-
-            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+        
+            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
             rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
-            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
+            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
+
+            pitchFowardOrBackward *= 0.01f;
+            yawCWOrAntiCW *= 0.01f;
+            rollLeftOrRight *= 0.01f;
+
         }
     }
-    */
 
     /*
     pitchFowardOrBackward *= 0.01f;
