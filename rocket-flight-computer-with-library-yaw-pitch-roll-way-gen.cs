@@ -207,14 +207,14 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
     //math roll : + clock wise | - clock wise 
-    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
+    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
     //math yaw
-    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
+    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting,shipDownVector)<0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) < 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipLeftVector) <0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
+    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector ) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
