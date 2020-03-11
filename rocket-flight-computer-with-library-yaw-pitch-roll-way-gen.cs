@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 500f;
+double wantedAltitude = 1500f;
 bool altSettingChanged = false;
 bool u1000 = true;
 bool u400 = true;
@@ -203,9 +203,10 @@ public void Main(string argument, UpdateType updateSource)
 
     //math pitch
     Echo("\n=====================================");
+    //TODO:Check all axis one by one and then the signs.
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll : + clock wise | - anti clock wise 
+    //math roll : + clock wise | - clock wise 
     Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
     //math yaw
@@ -213,7 +214,7 @@ public void Main(string argument, UpdateType updateSource)
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
     double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting,shipDownVector)<0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) < 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -278,7 +279,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizablePitch = true;
+    bool stalizablePitch = false;
     bool stalizableRoll = true;
     bool stalizableYaw = false;
 
