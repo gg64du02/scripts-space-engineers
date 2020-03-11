@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 1000f;
+double wantedAltitude = 500f;
 bool altSettingChanged = false;
 bool u1000 = true;
 bool u400 = true;
@@ -219,7 +219,7 @@ public void Main(string argument, UpdateType updateSource)
     //wt?
     double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     //todo fix the sign, right now it can not change
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) < 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     //todo ing
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -233,7 +233,7 @@ public void Main(string argument, UpdateType updateSource)
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
-
+    
     if (distToTarget < 2000)
     {
         if (linearSpeedsShip.Length() > 10)
@@ -244,17 +244,18 @@ public void Main(string argument, UpdateType updateSource)
             vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
             Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
             //math roll to be checked
-            vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
+            vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
             //math yaw
-            vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
+            vectorYawCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
             pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
-            yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+            //yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
             //todo fix the sign, right now it can not change
-            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             //todo ing
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -263,10 +264,6 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
         }
         /*
-        if (elev < 50)
-        {
-            altitudeError = -1;
-        }*/
         if (elev < 5)
         {
             //thuster
@@ -306,32 +303,15 @@ public void Main(string argument, UpdateType updateSource)
             if(distToTarget > 1000)
             {
                 altitudeError = -5;
-                /*
-                wantedAltitude = 500;
-                altSettingChanged = true;
-                if (u1000 == true)
-                {
-                    altRegulator.Reset();
-                    u1000 = false;
-                }
-                */
             }
             if (distToTarget > 400)
             {
                 altitudeError = -3;
-                /*
-                wantedAltitude = 100;
-                altSettingChanged = true;
-                if (u400 == true)
-                {
-                    altRegulator.Reset();
-                    u400 = false;
-                }
-                */
             }
         }
+        */
     }
-
+    
     if(altSettingChanged == true)
     {
         altSettingChanged = false;
@@ -363,9 +343,9 @@ public void Main(string argument, UpdateType updateSource)
 
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizableRoll = false;
+    bool stalizableRoll = true;
     bool stalizablePitch = true;
-    bool stalizableYaw = true;
+    bool stalizableYaw = false;
 
 
     // call this next line at each run
