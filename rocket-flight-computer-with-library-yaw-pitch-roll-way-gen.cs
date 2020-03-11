@@ -175,10 +175,12 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
+
 
 
     //x,y,z coords
@@ -280,7 +282,7 @@ public void Main(string argument, UpdateType updateSource)
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
     bool stalizablePitch = true;
-    bool stalizableRoll = false;
+    bool stalizableRoll = true;
     bool stalizableYaw = false;
 
 
