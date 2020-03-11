@@ -500,14 +500,6 @@ public void Main(string argument, UpdateType updateSource)
 
     last_alt = alt;
     last_alt_speed_ms_1 = alt_speed_ms_1;
-    //TODO code here
-
-    //public double Control(double error, double timeStep)
-    // double speedError = 0;
-    double speedError = alt_speed_ms_1 - 0;
-    double controlSpeed = altRegulator.Control(speedError, dts);
-
-    debugString += "\n" + "controlSpeed:" + controlSpeed;
 
     var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
