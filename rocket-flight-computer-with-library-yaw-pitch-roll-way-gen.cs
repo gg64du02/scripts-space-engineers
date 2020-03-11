@@ -234,7 +234,7 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
     
-    if (distToTarget < 2000)
+    if (distToTarget < 3 * wantedAltitude)
     {
         if (linearSpeedsShip.Length() > 10)
         {
@@ -251,11 +251,11 @@ public void Main(string argument, UpdateType updateSource)
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
 
-            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
             //yawCWOrAntiCW = vectorYawCalcedSetting.Length();
-            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
+            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
             //todo fix the sign, right now it can not change
-            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             //todo ing
             Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
