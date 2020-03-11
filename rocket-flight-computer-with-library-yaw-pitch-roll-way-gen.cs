@@ -233,7 +233,7 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
 
-    if (distToTarget < 3 * wantedAltitude)
+    if (distToTarget < 2000)
     {
         if (linearSpeedsShip.Length() > 10)
         {
@@ -263,13 +263,45 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
 
         }
-        if (distToTarget < 2.5f * wantedAltitude)
-        {
-            altitudeError = -3;
-        }
-        if (elev < 100)
+        if (elev < 50)
         {
             altitudeError = -1;
+        }
+        if (elev < 5)
+        {
+            //general:
+            List<IMyFunctionalBlock> listIMyFunctionalBlock = new List<IMyFunctionalBlock>();
+            GridTerminalSystem.GetBlocksOfType(listIMyFunctionalBlock);
+            //disabling everything but the PB
+            foreach (var l in listIMyFunctionalBlock)
+            {
+                if (!(l is IMyBatteryBlock))
+                {
+                    if (!(l is IMyProgrammableBlock))
+                    {
+                        l.Enabled = false;
+                    }
+                }
+            }
+            //disabling the PB
+            foreach (var l in listIMyFunctionalBlock)
+            {
+                if (l is IMyProgrammableBlock)
+                {
+                    l.Enabled = false;
+                }
+            }
+        }
+        if (distToTarget < 1500)
+        {
+            if (distToTarget > 100)
+            {
+                altitudeError = -5;
+            }
+            else
+            {
+                altitudeError = -3;
+            }
         }
     }
 
