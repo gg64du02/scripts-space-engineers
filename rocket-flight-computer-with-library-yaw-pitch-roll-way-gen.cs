@@ -119,10 +119,10 @@ public void Main(string argument, UpdateType updateSource)
 
     System.DateTime now = System.DateTime.UtcNow;
     Echo("now:" + now);
-    
+
     var deltaTime = (float)(now - lastTime).Milliseconds / 1000f;
     Echo("deltaTime = now - lastTime:" + deltaTime);
-    
+
     lastTime = now;
 
     Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
@@ -141,7 +141,7 @@ public void Main(string argument, UpdateType updateSource)
     DateTime dt1970 = new DateTime(1970, 1, 1);
     DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
     TimeSpan span = current - dt1970;
-    Echo("span:"+span.TotalMilliseconds.ToString());
+    Echo("span:" + span.TotalMilliseconds.ToString());
 
     List<IMyShipController> listRemoteController = new List<IMyShipController>();
     GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemoteController);
@@ -188,7 +188,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     //targetGravityVectorNormalized
-    Vector3D earthLikeCenter = new Vector3D(0,0,0);
+    Vector3D earthLikeCenter = new Vector3D(0, 0, 0);
     Vector3D vec3DtargetNegate;
     Vector3D.Negate(ref vec3Dtarget, out vec3DtargetNegate);
     Vector3D targetGravityVectorNormalized = Vector3D.Normalize(Vector3D.Add(vec3DtargetNegate, earthLikeCenter));
@@ -197,7 +197,7 @@ public void Main(string argument, UpdateType updateSource)
     //distance to target TODO
     Vector3D VectToTarget = Vector3D.Add(vec3DtargetNegate, myPos);
     double distToTarget = VectToTarget.Length();
-    Echo("\ndistToTarget:"+ distToTarget);
+    Echo("\ndistToTarget:" + distToTarget);
 
     //totalGravityVect3Dnormalized cross targetGravityVectorNormalized
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
@@ -216,8 +216,8 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) <0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector ) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
+    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
+    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
 
@@ -232,12 +232,12 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
-    
+
     if (distToTarget < 3 * wantedAltitude)
     {
         if (linearSpeedsShip.Length() > 10)
         {
-        
+
             //todo:
             //math pitch
             Echo("\n=====================================");
@@ -252,7 +252,7 @@ public void Main(string argument, UpdateType updateSource)
             vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
             Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
 
-        
+
             pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
             rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
             yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
@@ -262,6 +262,14 @@ public void Main(string argument, UpdateType updateSource)
             yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
 
+        }
+        if (distToTarget < 2.5f * wantedAltitude)
+        {
+            altitudeError = -3;
+        }
+        if (elev < 100)
+        {
+            altitudeError = -1;
         }
     }
 
@@ -340,14 +348,14 @@ public void Main(string argument, UpdateType updateSource)
         lastRunTs = System.DateTime.UtcNow;
         firstMainLoop = false;
     }
-    
+
 
     var posInterpolation = Vector3D.Add(myPos / 2, vec3Dtarget / 2);
     Echo("posInterpolation:\n" + posInterpolation);
 
 
     if (argument != null && argument.ToLower().Equals("on"))
-        {
+    {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
         // optional : set desired angles
@@ -362,7 +370,7 @@ public void Main(string argument, UpdateType updateSource)
         flightIndicatorsFlightMode = FlightMode.STANDY;
         fightStabilizator.Release();
     }
-    
+
 
     flightIndicators.Compute();
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
