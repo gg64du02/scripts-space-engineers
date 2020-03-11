@@ -41,7 +41,9 @@ FightStabilizator fightStabilizator;
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1000f;
-bool lol = true;
+bool altSettingChanged = false;
+bool u1000 = true;
+bool u400 = true;
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -221,9 +223,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     double elev;
-
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-    double altitudeError = wantedAltitude - elev;
 
 
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
@@ -258,10 +258,11 @@ public void Main(string argument, UpdateType updateSource)
             yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
         }
+        /*
         if (elev < 50)
         {
             altitudeError = -1;
-        }
+        }*/
         if (elev < 5)
         {
             //thuster
@@ -298,16 +299,41 @@ public void Main(string argument, UpdateType updateSource)
         }
         if (distToTarget<1500)
         {
-            if(distToTarget > 100)
+            if(distToTarget > 1000)
             {
                 altitudeError = -5;
+                /*
+                wantedAltitude = 500;
+                altSettingChanged = true;
+                if (u1000 == true)
+                {
+                    altRegulator.Reset();
+                    u1000 = false;
+                }
+                */
             }
-            else
+            if (distToTarget > 400)
             {
                 altitudeError = -3;
+                /*
+                wantedAltitude = 100;
+                altSettingChanged = true;
+                if (u400 == true)
+                {
+                    altRegulator.Reset();
+                    u400 = false;
+                }
+                */
             }
         }
     }
+
+    if(altSettingChanged == true)
+    {
+        altSettingChanged = false;
+        //altRegulator.Reset();
+    }
+
 
     /*
     if (argument != null)
@@ -322,7 +348,8 @@ public void Main(string argument, UpdateType updateSource)
         }
     }
     */
-
+    //change the wantedAltitude BEFORE THIS LINE
+    double altitudeError = wantedAltitude - elev;
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
