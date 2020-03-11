@@ -206,6 +206,7 @@ public void Main(string argument, UpdateType updateSource)
     //math pitch
     Echo("\n=====================================");
     //TODO:Check all axis one by one and then the signs.
+    //CHECKED: long range roll and pitch length and sign changes are ok
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
     //math roll : + clock wise | - clock wise 
