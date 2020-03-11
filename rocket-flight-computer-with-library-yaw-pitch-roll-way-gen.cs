@@ -215,7 +215,9 @@ public void Main(string argument, UpdateType updateSource)
 
 
     double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting,shipDownVector)<0) ? -vectorPitchCalcedSetting.Length(): vectorPitchCalcedSetting.Length();
-    double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+    //double yawCWOrAntiCW = vectorYawCalcedSetting.Length();
+    //wt?
+    double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
     //todo fix the sign, right now it can not change
     double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
     //todo ing
@@ -224,6 +226,8 @@ public void Main(string argument, UpdateType updateSource)
 
     double elev;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    //change the wantedAltitude BEFORE THIS LINE
+    double altitudeError = wantedAltitude - elev;
 
 
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
@@ -348,19 +352,29 @@ public void Main(string argument, UpdateType updateSource)
         }
     }
     */
-    //change the wantedAltitude BEFORE THIS LINE
-    double altitudeError = wantedAltitude - elev;
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
-    double finalYawSetting = Convert.ToSingle(0f);
+    //double finalYawSetting = Convert.ToSingle(0f);
+    double finalYawSetting = Convert.ToSingle(-yawCWOrAntiCW * 3000f);
     finalYawSetting = MyMath.Clamp(Convert.ToSingle(finalYawSetting), -30f, 30f);
     double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 3000f);
     finalRollSetting = MyMath.Clamp(Convert.ToSingle(finalRollSetting), -30f, 30f);
 
+
+    BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
+    bool stalizableRoll = false;
+    bool stalizablePitch = true;
+    bool stalizableYaw = true;
+
+
+    // call this next line at each run
+    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+
     //+ pitch go foward
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
-    fightStabilizator.yawDesiredAngle = 0f;
+    //fightStabilizator.yawDesiredAngle = 0f;
+    fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
 
 
