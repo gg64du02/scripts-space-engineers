@@ -41,6 +41,7 @@ FightStabilizator fightStabilizator;
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1000;
+double altitudeError = 0f;
 bool altSettingChanged = false;
 bool u1000 = true;
 bool u400 = true;
@@ -224,9 +225,9 @@ public void Main(string argument, UpdateType updateSource)
 
     double elev;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
-    //change the wantedAltitude BEFORE THIS LINE
-    double altitudeError = wantedAltitude - elev;
 
+    //change the wantedAltitude BEFORE THIS LINE
+    altitudeError = wantedAltitude - elev;
 
     MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
@@ -292,18 +293,34 @@ public void Main(string argument, UpdateType updateSource)
                 }
             }
         }
+        
         if (distToTarget < 1500)
         {
+            wantedAltitude = 500;
+            /*
             if (distToTarget > 100)
             {
                 altitudeError = -5;
             }
             else
             {
-                altitudeError = -3;
+                altitudeError = 0;
             }
+            
+            if (u1000 == true)
+            {
+                u1000 = false;
+                wantedAltitude = 500;
+                altRegulator.Reset();
+            }
+            */
         }
     }
+
+    /*
+    bool u1000 = true;
+    bool u400 = true;
+    */
 
     /*
     pitchFowardOrBackward *= 0.01f;
@@ -343,15 +360,16 @@ public void Main(string argument, UpdateType updateSource)
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
-    /*
+    
     listAntenna[0].HudText = "elev:"+ Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev),0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-    */
-
+    
+    /*
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
+    */
 
     //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
     //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
