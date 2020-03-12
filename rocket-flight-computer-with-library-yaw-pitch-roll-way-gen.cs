@@ -264,10 +264,6 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
 
         }
-        if (elev < 50)
-        {
-            altitudeError = -1;
-        }
         if (elev < 5)
         {
             //general:
@@ -296,24 +292,13 @@ public void Main(string argument, UpdateType updateSource)
         
         if (distToTarget < 1500)
         {
-            wantedAltitude = 500;
-            /*
-            if (distToTarget > 100)
+            double tmpWantedAltitude = 100;
+            //issue once the reset for the PID
+            if (wantedAltitude != tmpWantedAltitude)
             {
-                altitudeError = -5;
-            }
-            else
-            {
-                altitudeError = 0;
-            }
-            
-            if (u1000 == true)
-            {
-                u1000 = false;
-                wantedAltitude = 500;
+                wantedAltitude = 100;
                 altRegulator.Reset();
             }
-            */
         }
     }
 
