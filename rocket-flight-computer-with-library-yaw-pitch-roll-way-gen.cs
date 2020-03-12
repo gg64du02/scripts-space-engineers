@@ -43,8 +43,8 @@ PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1000;
 double altitudeError = 0f;
 bool altSettingChanged = false;
-bool u1000 = true;
-bool u400 = true;
+Vector3D shipAcceleration = new Vector3D(0, 0, 0);
+Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -303,11 +303,6 @@ public void Main(string argument, UpdateType updateSource)
     }
 
     /*
-    bool u1000 = true;
-    bool u400 = true;
-    */
-
-    /*
     pitchFowardOrBackward *= 0.01f;
     yawCWOrAntiCW *= 0.01f;
     rollLeftOrRight *= 0.01f;
@@ -448,6 +443,12 @@ public void Main(string argument, UpdateType updateSource)
     */
 
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+
+    shipAcceleration = Vector3D.Add(Vector3D.Negate(linearSpeedsShip), prevLinearSpeedsShip) / dts;
+
+    prevLinearSpeedsShip = linearSpeedsShip;
+
+    Echo("shipAcceleration:"+ shipAcceleration);
 
     //public double Control(double error, double timeStep)
     //todo change this
