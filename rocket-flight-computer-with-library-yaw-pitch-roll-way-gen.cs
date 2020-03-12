@@ -45,6 +45,7 @@ double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
+PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.01f);
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -264,6 +265,7 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
 
         }
+        /*
         if (elev < 5)
         {
             //general:
@@ -300,6 +302,7 @@ public void Main(string argument, UpdateType updateSource)
                 altRegulator.Reset();
             }
         }
+        */
     }
 
     /*
@@ -514,6 +517,12 @@ public void Main(string argument, UpdateType updateSource)
     debugString += "\n" + "massOfShip:" + massOfShip;
 
     var control = altRegulator.Control(altitudeError, dts);
+    /*
+    double downwardSpeedAlt = Vector3D.Dot(totalGravityVect3Dnormalized,linearSpeedsShip);
+    Vector3D downwardSpeedAltVector3D = linearSpeedsShip.Dot(totalGravityVect3D) / totalGravityVect3D.LengthSquared() * totalGravityVect3D;
+    double downwardSpeedAltError = 10- downwardSpeedAltVector3D.Length();
+    var control = downwardSpeedAltRegulator.Control(downwardSpeedAltError, dts);
+    */
     debugString += "\n" + "control:" + control;
 
     //applying what the pid processed
