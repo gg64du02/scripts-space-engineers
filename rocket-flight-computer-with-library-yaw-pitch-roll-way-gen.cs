@@ -237,34 +237,46 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
+    Vector3D first3D = Vector3D.Cross(totalGravityVect3Dnormalized, shipForwardVector);
+    //first3D is going to be Left or -Left
+    //it will be perpendicular to the gravity vector
+    Vector3D second3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, first3D));
+    //second3D is going to be Forward or -Forward
+    //it will be perpendicular to the gravity vector
+    Vector3D LeftPorMNormalized = first3D;
+    Vector3D FowardPorMNormalized = second3D;
 
+    double abscisseYaw = Vector3D.Dot(FowardPorMNormalized, VectToTarget);
+    double ordonneYaw = Vector3D.Dot(LeftPorMNormalized, VectToTarget);
+
+    yawCWOrAntiCW = 360 - 180 / Math.PI * Math.Atan2(ordonneYaw, abscisseYaw);
+    if (yawCWOrAntiCW > 360)
+    {
+        yawCWOrAntiCW -= 360;
+    }
+    
     if (distToTarget < 1500)
     {
         if (linearSpeedsShip.Length() > 1)
         {
-            Vector3D first3D = Vector3D.Cross(totalGravityVect3Dnormalized, shipForwardVector);
-            //first3D is going to be Left or -Left
-            //it will be perpendicular to the gravity vector
-            Vector3D second3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, first3D));
-            //second3D is going to be Forward or -Forward
-            //it will be perpendicular to the gravity vector
-            Vector3D LeftPorMNormalized = first3D;
-            Vector3D FowardPorMNormalized = second3D;
-            //Vector3D third3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, second3D));
             pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
             rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
 
+            //debug
             double surfaceSpeed = Math.Sqrt(pitchFowardOrBackward * pitchFowardOrBackward + rollLeftOrRight * rollLeftOrRight);
 
             pitchFowardOrBackward *= 0.01f;
-            yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
+            //yaw setting can't put the rocket upside down
+
 
             Echo("\n=====================================");
             Echo("\n" + "pitchFowardOrBackward:\n" + pitchFowardOrBackward);
             Echo("\n" + "rollLeftOrRight:\n" + rollLeftOrRight);
+
+    
         }
-        /*
+        
         if (elev < 5)
         {
             //general:
@@ -301,9 +313,9 @@ public void Main(string argument, UpdateType updateSource)
                 altRegulator.Reset();
             }
         }
-        */
+        
     }
-
+    
     if (altSettingChanged == true)
     {
         altSettingChanged = false;
@@ -314,14 +326,13 @@ public void Main(string argument, UpdateType updateSource)
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
     double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 3000f);
     finalRollSetting = MyMath.Clamp(Convert.ToSingle(finalRollSetting), -30f, 30f);
-    double finalYawSetting = Convert.ToSingle(-yawCWOrAntiCW * 3000f);
-    finalYawSetting = MyMath.Clamp(Convert.ToSingle(finalYawSetting), -30f, 30f);
+    double finalYawSetting = Convert.ToSingle(yawCWOrAntiCW);
 
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
     bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
+    bool stalizableRoll = false;
+    bool stalizableYaw = true;
 
 
     // call this next line at each run
@@ -336,6 +347,15 @@ public void Main(string argument, UpdateType updateSource)
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
+    
+    //debug yaw
+    listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
+    Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
+    /*
+    //debug yaw
+    listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2)+ "abscisseYaw:"+ Math.Round((abscisseYaw),2) + "ordonneYaw:" + Math.Round((ordonneYaw),2);
+    Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
+    /*
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
