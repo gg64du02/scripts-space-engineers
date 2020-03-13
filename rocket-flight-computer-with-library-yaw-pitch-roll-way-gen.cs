@@ -240,38 +240,29 @@ public void Main(string argument, UpdateType updateSource)
 
     if (distToTarget < 1500)
     {
-        if (linearSpeedsShip.Length() > 20)
+        if (linearSpeedsShip.Length() > 1)
         {
+            Vector3D first3D = Vector3D.Cross(totalGravityVect3Dnormalized, shipForwardVector);
+            //first3D is going to be Left or -Left
+            //it will be perpendicular to the gravity vector
+            Vector3D second3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, first3D));
+            //second3D is going to be Forward or -Forward
+            //it will be perpendicular to the gravity vector
+            Vector3D LeftPorMNormalized = first3D;
+            Vector3D FowardPorMNormalized = second3D;
+            //Vector3D third3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, second3D));
+            pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
+            rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
 
-            //todo:
-            //math pitch
-            Echo("\n=====================================");
-            vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, linearSpeedsShipNormalized);
-            Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-            //math roll to be checked
-            //vectorRollCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
-            vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
-            Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
-            //math yaw
-            //vectorYawCalcedSetting = Vector3D.Cross(shipLeftVector, linearSpeedsShipNormalized);
-            vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, linearSpeedsShipNormalized);
-            Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
+            double surfaceSpeed = Math.Sqrt(pitchFowardOrBackward * pitchFowardOrBackward + rollLeftOrRight * rollLeftOrRight);
 
-
-            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) + pitchTmp > 0) ? -(vectorPitchCalcedSetting.Length()+ pitchTmp) : (vectorPitchCalcedSetting.Length()+ pitchTmp);
-            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) + rollTmp > 0) ? -(vectorRollCalcedSetting.Length()+ rollTmp) : (vectorRollCalcedSetting.Length()+ rollTmp);
-            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
-            /*
-            pitchFowardOrBackward = (Vector3D.Dot(linearSpeedsShipNormalized, shipForwardVector) > 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
-            rollLeftOrRight = (Vector3D.Dot(linearSpeedsShipNormalized, shipLeftVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
-            yawCWOrAntiCW = (Vector3D.Dot(linearSpeedsShipNormalized, shipDownVector) > 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length();
-            */
-            Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-            /*
             pitchFowardOrBackward *= 0.01f;
             yawCWOrAntiCW *= 0.01f;
             rollLeftOrRight *= 0.01f;
-            */
+
+            Echo("\n=====================================");
+            Echo("\n" + "pitchFowardOrBackward:\n" + pitchFowardOrBackward);
+            Echo("\n" + "rollLeftOrRight:\n" + rollLeftOrRight);
         }
         /*
         if (elev < 5)
@@ -312,17 +303,12 @@ public void Main(string argument, UpdateType updateSource)
         }
         */
     }
-    /*
-    pitchFowardOrBackward = 0f;
-    yawCWOrAntiCW = 0f;
-    rollLeftOrRight = 0f;
-    */
+
     if (altSettingChanged == true)
     {
         altSettingChanged = false;
         //altRegulator.Reset();
     }
-
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
@@ -349,11 +335,16 @@ public void Main(string argument, UpdateType updateSource)
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
-    
+
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
     /*
+     * 
+    listAntenna[0].HudText = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
+
+    Me.CubeGrid.CustomName = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
+     * 
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
