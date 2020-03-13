@@ -276,7 +276,7 @@ public void Main(string argument, UpdateType updateSource)
 
     
         }
-        
+        /*
         if (elev < 5)
         {
             //general:
@@ -313,7 +313,7 @@ public void Main(string argument, UpdateType updateSource)
                 altRegulator.Reset();
             }
         }
-        
+        */
     }
     
     if (altSettingChanged == true)
@@ -331,8 +331,8 @@ public void Main(string argument, UpdateType updateSource)
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
     bool stalizablePitch = true;
-    bool stalizableRoll = false;
-    bool stalizableYaw = true;
+    bool stalizableRoll = true;
+    bool stalizableYaw = false;
 
 
     // call this next line at each run
