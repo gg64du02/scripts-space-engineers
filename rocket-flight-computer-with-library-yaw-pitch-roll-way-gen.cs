@@ -517,12 +517,12 @@ public void Main(string argument, UpdateType updateSource)
     /*
     double downwardSpeedAlt = Vector3D.Dot(totalGravityVect3Dnormalized,linearSpeedsShip);
     Vector3D downwardSpeedAltVector3D = linearSpeedsShip.Dot(totalGravityVect3D) / totalGravityVect3D.LengthSquared() * totalGravityVect3D;
-    double downwardSpeedAltError = 10- downwardSpeedAltVector3D.Length();
+    double downwardSpeedAltError = -10- downwardSpeedAltVector3D.Length();
     
     var control = downwardSpeedAltRegulator.Control(downwardSpeedAltError, dts);
 
-    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+downwardSpeedAltError;
-    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+downwardSpeedAltError;
+    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+ Math.Round((downwardSpeedAltError), 2) + "control:"+ Math.Round((control),2);
+    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "downwardSpeedAltError:" + Math.Round((downwardSpeedAltError), 2) + "control:" + Math.Round((control), 2);
     */
 
     debugString += "\n" + "control:" + control;
