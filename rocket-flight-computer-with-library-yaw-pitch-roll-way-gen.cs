@@ -304,13 +304,11 @@ public void Main(string argument, UpdateType updateSource)
         }
         */
     }
-
     /*
-    pitchFowardOrBackward *= 0.01f;
-    yawCWOrAntiCW *= 0.01f;
-    rollLeftOrRight *= 0.01f;
+    pitchFowardOrBackward = 0f;
+    yawCWOrAntiCW = 0f;
+    rollLeftOrRight = 0f;
     */
-
     if (altSettingChanged == true)
     {
         altSettingChanged = false;
@@ -344,10 +342,9 @@ public void Main(string argument, UpdateType updateSource)
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
     
-    listAntenna[0].HudText = "elev:"+ Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
+    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
-    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev),0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-    
+    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
     /*
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
@@ -515,14 +512,19 @@ public void Main(string argument, UpdateType updateSource)
 
     var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
-
+    
     var control = altRegulator.Control(altitudeError, dts);
     /*
     double downwardSpeedAlt = Vector3D.Dot(totalGravityVect3Dnormalized,linearSpeedsShip);
     Vector3D downwardSpeedAltVector3D = linearSpeedsShip.Dot(totalGravityVect3D) / totalGravityVect3D.LengthSquared() * totalGravityVect3D;
     double downwardSpeedAltError = 10- downwardSpeedAltVector3D.Length();
+    
     var control = downwardSpeedAltRegulator.Control(downwardSpeedAltError, dts);
+
+    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+downwardSpeedAltError;
+    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+downwardSpeedAltError;
     */
+
     debugString += "\n" + "control:" + control;
 
     //applying what the pid processed
