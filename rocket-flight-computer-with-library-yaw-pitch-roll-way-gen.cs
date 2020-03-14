@@ -237,41 +237,30 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
+
     Vector3D first3D = Vector3D.Cross(totalGravityVect3Dnormalized, shipForwardVector);
     //first3D is going to be Left or -Left
     //it will be perpendicular to the gravity vector
     Vector3D second3D = Vector3D.Normalize(Vector3D.Cross(totalGravityVect3Dnormalized, first3D));
     //second3D is going to be Forward or -Forward
     //it will be perpendicular to the gravity vector
+    //Those vectors are used for the pitch and roll control to cancel speed
     Vector3D LeftPorMNormalized = first3D;
     Vector3D FowardPorMNormalized = second3D;
 
-    double abscisseYaw = Vector3D.Dot(FowardPorMNormalized, VectToTarget);
-    double ordonneYaw = Vector3D.Dot(LeftPorMNormalized, VectToTarget);
-
-    yawCWOrAntiCW = 360 - 180 / Math.PI * Math.Atan2(ordonneYaw, abscisseYaw);
-    //yawCWOrAntiCW = 360 - 180 / Math.PI * Math.Atan2( abscisseYaw, ordonneYaw);
-    if (yawCWOrAntiCW > 360)
-    {
-        yawCWOrAntiCW -= 360;
-    }
 
     //find angle from abs north to projected forward vector measured clockwise  
     //yawCWOrAntiCW = VectorHelper.VectorAngleBetween(forwardProjPlaneVector, relativeNorthVector) * rad2deg;
 
+    //Comply with the library (and mainly from it)========================
     const double rad2deg = 180 / Math.PI;
     // thanks whip for those vectors
      Vector3D absoluteNorthPlanetWorldsVector = new Vector3D(0, -1, 0);
      Vector3D absoluteNorthNotPlanetWorldsVector = new Vector3D(0.342063708833718, -0.704407897782847, -0.621934025954579);
 
+    //from gg
     IMyShipController shipController = listRemoteController[0];
 
-    // roll pitch yaw
-    /*
-    Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
-    Vector3D shipLeftVector = shipController.WorldMatrix.Left;
-    Vector3D shipDownVector = shipController.WorldMatrix.Down;
-    */
     Vector3D gravityVector = shipController.GetNaturalGravity();
     Vector3D planetRelativeLeftVector = shipForwardVector.Cross(gravityVector);
 
@@ -280,16 +269,7 @@ public void Main(string argument, UpdateType updateSource)
 
     Vector3D relativeEastVector = gravityVector.Cross(absoluteNorthVector);
     Vector3D relativeNorthVector = relativeEastVector.Cross(gravityVector);
-    /*
-    Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
-    Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
 
-    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(VectToTarget, relativeNorthVector) * rad2deg;
-    if (shipForwardVector.Dot(relativeEastVector) < 0)
-    {
-        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                                                                          
-    }
-    */
     shipForwardVector = VectToTarget;
     Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
     Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
@@ -299,6 +279,7 @@ public void Main(string argument, UpdateType updateSource)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                                                                          
     }
+    //End of the part from the library (and mainly from it)========================
 
     bool stalizablePitch = true;
     bool stalizableRoll = false;
@@ -407,18 +388,20 @@ public void Main(string argument, UpdateType updateSource)
 
     
     //debug yaw
+    /*
     listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
     Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
-    /*
+    
     //debug yaw
     listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2)+ "abscisseYaw:"+ Math.Round((abscisseYaw),2) + "ordonneYaw:" + Math.Round((ordonneYaw),2);
     Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
-    /*
+    */
+    
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
 
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-    /*
-     * 
+    
+     /* 
     listAntenna[0].HudText = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
 
     Me.CubeGrid.CustomName = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
