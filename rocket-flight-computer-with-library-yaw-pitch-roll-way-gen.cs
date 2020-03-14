@@ -250,11 +250,56 @@ public void Main(string argument, UpdateType updateSource)
     double ordonneYaw = Vector3D.Dot(LeftPorMNormalized, VectToTarget);
 
     yawCWOrAntiCW = 360 - 180 / Math.PI * Math.Atan2(ordonneYaw, abscisseYaw);
+    //yawCWOrAntiCW = 360 - 180 / Math.PI * Math.Atan2( abscisseYaw, ordonneYaw);
     if (yawCWOrAntiCW > 360)
     {
         yawCWOrAntiCW -= 360;
     }
-    
+
+    //find angle from abs north to projected forward vector measured clockwise  
+    //yawCWOrAntiCW = VectorHelper.VectorAngleBetween(forwardProjPlaneVector, relativeNorthVector) * rad2deg;
+
+    const double rad2deg = 180 / Math.PI;
+    // thanks whip for those vectors
+     Vector3D absoluteNorthPlanetWorldsVector = new Vector3D(0, -1, 0);
+     Vector3D absoluteNorthNotPlanetWorldsVector = new Vector3D(0.342063708833718, -0.704407897782847, -0.621934025954579);
+
+    IMyShipController shipController = listRemoteController[0];
+
+    // roll pitch yaw
+    /*
+    Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
+    Vector3D shipLeftVector = shipController.WorldMatrix.Left;
+    Vector3D shipDownVector = shipController.WorldMatrix.Down;
+    */
+    Vector3D gravityVector = shipController.GetNaturalGravity();
+    Vector3D planetRelativeLeftVector = shipForwardVector.Cross(gravityVector);
+
+    Vector3D absoluteNorthVector;
+    absoluteNorthVector = absoluteNorthPlanetWorldsVector;
+
+    Vector3D relativeEastVector = gravityVector.Cross(absoluteNorthVector);
+    Vector3D relativeNorthVector = relativeEastVector.Cross(gravityVector);
+    /*
+    Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
+    Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
+
+    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(VectToTarget, relativeNorthVector) * rad2deg;
+    if (shipForwardVector.Dot(relativeEastVector) < 0)
+    {
+        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                                                                          
+    }
+    */
+    shipForwardVector = VectToTarget;
+    Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
+    Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
+
+    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(forwardProjPlaneVector, relativeNorthVector) * rad2deg;
+    if (shipForwardVector.Dot(relativeEastVector) < 0)
+    {
+        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                                                                          
+    }
+
     if (distToTarget < 1500)
     {
         if (linearSpeedsShip.Length() > 1)
@@ -265,16 +310,16 @@ public void Main(string argument, UpdateType updateSource)
             //debug
             double surfaceSpeed = Math.Sqrt(pitchFowardOrBackward * pitchFowardOrBackward + rollLeftOrRight * rollLeftOrRight);
 
-            pitchFowardOrBackward *= 0.01f;
-            rollLeftOrRight *= 0.01f;
-            //yaw setting can't put the rocket upside down
-
 
             Echo("\n=====================================");
             Echo("\n" + "pitchFowardOrBackward:\n" + pitchFowardOrBackward);
             Echo("\n" + "rollLeftOrRight:\n" + rollLeftOrRight);
 
-    
+
+            pitchFowardOrBackward *= 0.01f;
+            rollLeftOrRight *= 0.01f;
+            //yaw setting can't put the rocket upside down
+
         }
         /*
         if (elev < 5)
@@ -315,7 +360,7 @@ public void Main(string argument, UpdateType updateSource)
         }
         */
     }
-    
+
     if (altSettingChanged == true)
     {
         altSettingChanged = false;
@@ -686,6 +731,7 @@ public class FlightIndicators
 public class FightStabilizator
 {
     private FlightIndicators flightIndicators;
+    //public FlightIndicators flightIndicators;
     public Action<string> Echo;
     BasicLibrary basicLibrary;
     IMyShipController shipController;
