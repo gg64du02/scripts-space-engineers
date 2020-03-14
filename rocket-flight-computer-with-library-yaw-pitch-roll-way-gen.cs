@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 1000;
+double wantedAltitude = 500;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -300,6 +300,10 @@ public void Main(string argument, UpdateType updateSource)
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                                                                          
     }
 
+    bool stalizablePitch = true;
+    bool stalizableRoll = false;
+    bool stalizableYaw = true;
+
     if (distToTarget < 1500)
     {
         if (linearSpeedsShip.Length() > 1)
@@ -320,8 +324,12 @@ public void Main(string argument, UpdateType updateSource)
             rollLeftOrRight *= 0.01f;
             //yaw setting can't put the rocket upside down
 
+            stalizablePitch = true;
+            stalizableRoll = true;
+            stalizableYaw = false;
+
         }
-        /*
+
         if (elev < 5)
         {
             //general:
@@ -350,15 +358,24 @@ public void Main(string argument, UpdateType updateSource)
         
         if (distToTarget < 1500)
         {
-            double tmpWantedAltitude = 100;
             //issue once the reset for the PID
-            if (wantedAltitude != tmpWantedAltitude)
+            if (wantedAltitude != 100)
             {
                 wantedAltitude = 100;
                 altRegulator.Reset();
             }
         }
-        */
+
+        if (elev < 100)
+        {
+            //issue once the reset for the PID
+            if (wantedAltitude != 15)
+            {
+                wantedAltitude = 15;
+                altRegulator.Reset();
+            }
+        }
+
     }
 
     if (altSettingChanged == true)
@@ -375,11 +392,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
-
-
+    
     // call this next line at each run
     fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
@@ -765,7 +778,7 @@ public class FightStabilizator
 
         pitchPid = new PIDController(pidP, pidI, pidD);
         rollPid = new PIDController(pidP, pidI, pidD);
-        yawPid = new PIDController(pidP, pidI, pidD);
+        yawPid = new PIDController(pidP/6, pidI, pidD);
     }
 
     public void Reset()
