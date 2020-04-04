@@ -59,6 +59,9 @@ System.DateTime lastRunTs = System.DateTime.UtcNow;
 
 bool firstMainLoop = true;
 
+//drone landing
+PIDController angleRollPID = new PIDController(0.06f,0f,0.06f);
+
 
 public Program()
 {
@@ -177,11 +180,11 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #5:57250.86:-21636.06:8383.28:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #6:53613.98:-26613.76:11979.21:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
-    MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
 
 
 
@@ -281,8 +284,9 @@ public void Main(string argument, UpdateType updateSource)
     }
     //End of the part from the library (and mainly from it)========================
 
+    /*
     bool stalizablePitch = true;
-    bool stalizableRoll = false;
+    bool stalizableRoll = true;
     bool stalizableYaw = true;
 
     if (distToTarget < 1500)
@@ -381,51 +385,11 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
     fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
-
+    */
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
-    
-    //debug yaw
-    /*
-    listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
-    Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
-    
-    //debug yaw
-    listAntenna[0].HudText = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2)+ "abscisseYaw:"+ Math.Round((abscisseYaw),2) + "ordonneYaw:" + Math.Round((ordonneYaw),2);
-    Me.CubeGrid.CustomName = "yawCWOrAntiCW:" + Math.Round((yawCWOrAntiCW), 2) + "abscisseYaw:" + Math.Round((abscisseYaw), 2) + "ordonneYaw:" + Math.Round((ordonneYaw), 2);
-    */
-    
-    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-
-    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "wantedAltitude:" + Math.Round((wantedAltitude), 2) + "speed:" + Math.Round((linearSpeedsShip.Length()), 2) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-    
-     /* 
-    listAntenna[0].HudText = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
-
-    Me.CubeGrid.CustomName = "surfaceSpeed:" + Math.Round((surfaceSpeed), 2);
-     * 
-    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-
-    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "distToTarget:" + Math.Round((distToTarget), 2) + "\npitch:" + Math.Round((finalPitchSetting), 2) + "roll:" + Math.Round((finalRollSetting), 2);
-    */
-
-    //if ((now - lastRunTs).Milliseconds / 1000.0f > .5f)
-    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 6f > 3f)
-    //if (((((now - lastRunTs).Milliseconds) % 1000f)) % 2f > 1f)
-    /*
-    if (((((now - lastRunTs).Milliseconds) % 1000f)) % 3f < 0.032f)
-        {
-        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-        fightStabilizator.Reset();
-        // optional : set desired angles
-        fightStabilizator.pitchDesiredAngle = -fightStabilizator.pitchDesiredAngle;
-        fightStabilizator.yawDesiredAngle = 0f;
-        fightStabilizator.rollDesiredAngle = 0f;
-        lastRunTs = System.DateTime.UtcNow;
-    }
-    */
 
     if (firstMainLoop == true)
     {
@@ -460,12 +424,18 @@ public void Main(string argument, UpdateType updateSource)
         flightIndicatorsFlightMode = FlightMode.STANDY;
         fightStabilizator.Release();
     }
-
+    
+    /*
+    bool stalizablePitch = true;
+    bool stalizableRoll = true;
+    bool stalizableYaw = false;
+    */
 
     flightIndicators.Compute();
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
     {
-        fightStabilizator.Stabilize(true, true, stalizableYaw);
+        //fightStabilizator.Stabilize(true, true, stalizableYaw);
+        fightStabilizator.Stabilize(true, true, false);
         //just do one axis gyro axis maximum if stuck
     }
 
@@ -584,6 +554,52 @@ public void Main(string argument, UpdateType updateSource)
     listAntenna[0].HudText = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+ Math.Round((downwardSpeedAltError), 2) + "control:"+ Math.Round((control),2);
     Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "downwardSpeedAltError:" + Math.Round((downwardSpeedAltError), 2) + "control:" + Math.Round((control), 2);
     */
+
+
+    //double TWR = 4.59;
+    double TWR = thr_to_weight_ratio;
+    double V_max = 100;
+    double AngleRollMaxAcc = Math.Atan((TWR - 1)/ 1) * 180 / Math.PI;
+
+    double g = 9.8;
+    double MaxSurfaceAcc = (TWR - 1) * g;
+
+    double brakingTime = V_max / MaxSurfaceAcc;
+    double distWhenToStartBraking = brakingTime * V_max;
+
+    //double wantedSpeedRoll = Vector3D.Dot(shipLeftVector,shipVelocities);
+    //TODO
+    //double distRoll = Vector3D.Dot(shipLeftVector, distToTarget);
+    double distRoll = Vector3D.Dot(shipLeftVector, VectToTarget);
+    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
+    double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
+
+    double speedRoll = Vector3D.Dot(shipLeftVector, linearSpeedsShip);
+
+    double speedRollError = wantedSpeedRoll - speedRoll;
+    double angleRoll = angleRollPID.Control(speedRollError, dts);
+    angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+
+    double finalPitchSetting = 0f;
+    double finalYawSetting = 0f;
+    double finalRollSetting = angleRoll * 180 / Math.PI;
+
+    //+ pitch go foward
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
+    fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
+
+    bool stalizablePitch = true;
+    bool stalizableRoll = true;
+    bool stalizableYaw = false;
+
+    //debug roll\
+    //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
+   // var str_to_display = "distRoll:" + Math.Round((distRoll), 2) + "|" + "clampedDistRoll:" + Math.Round((clampedDistRoll), 2);
+    var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
+    //str_to_display = "finalPitchSetting:" + Math.Round((finalPitchSetting), 2) + "finalRollSetting:" + Math.Round((finalRollSetting), 2) + "finalYawSetting:" + Math.Round((finalYawSetting), 2);
+    listAntenna[0].HudText = str_to_display;
+    Me.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
 
