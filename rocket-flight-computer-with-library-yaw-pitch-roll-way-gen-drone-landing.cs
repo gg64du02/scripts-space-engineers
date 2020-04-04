@@ -40,12 +40,12 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 500;
+double wantedAltitude = 150;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
-PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.01f);
+PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.06f);
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -60,7 +60,8 @@ System.DateTime lastRunTs = System.DateTime.UtcNow;
 bool firstMainLoop = true;
 
 //drone landing
-PIDController angleRollPID = new PIDController(0.06f,0f,0.06f);
+//PIDController angleRollPID = new PIDController(0.06f, 0f, 0.06f);
+PIDController angleRollPID = new PIDController(1f, 0f, 0f);
 
 
 public Program()
@@ -570,19 +571,25 @@ public void Main(string argument, UpdateType updateSource)
     //double wantedSpeedRoll = Vector3D.Dot(shipLeftVector,shipVelocities);
     //TODO
     //double distRoll = Vector3D.Dot(shipLeftVector, distToTarget);
-    double distRoll = Vector3D.Dot(shipLeftVector, VectToTarget);
+
+    Vector3D leftProjectUp = VectorHelper.VectorProjection(shipLeftVector, gravityVector);
+    Vector3D leftProjPlaneVector = shipLeftVector - leftProjectUp;
+
+    double leftProjPlaneVectorLength = leftProjPlaneVector.Length();
+
+    double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
     double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
 
-    double speedRoll = Vector3D.Dot(shipLeftVector, linearSpeedsShip);
+    double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
 
     double speedRollError = wantedSpeedRoll - speedRoll;
     double angleRoll = angleRollPID.Control(speedRollError, dts);
-    angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+    angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
     double finalPitchSetting = 0f;
     double finalYawSetting = 0f;
-    double finalRollSetting = angleRoll * 180 / Math.PI;
+    double finalRollSetting =- angleRoll * 180 / Math.PI;
 
     //+ pitch go foward
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
@@ -595,8 +602,11 @@ public void Main(string argument, UpdateType updateSource)
 
     //debug roll\
     //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
-   // var str_to_display = "distRoll:" + Math.Round((distRoll), 2) + "|" + "clampedDistRoll:" + Math.Round((clampedDistRoll), 2);
-    var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
+    //var str_to_display = "distRoll:" + Math.Round((distRoll), 2) + "|" + "clampedDistRoll:" + Math.Round((clampedDistRoll), 2);
+    //var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
+    //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
+    //var str_to_display = "angleRoll:" + Math.Round((angleRoll), 2) + "|" + "wantedSpeedRoll:" + Math.Round((wantedSpeedRoll), 2) + "|" + "distRoll:" + Math.Round((distRoll), 2);
+    var str_to_display =  Math.Round((distRoll), 2) + "|" + Math.Round((wantedSpeedRoll), 2) + "|"+ Math.Round((angleRoll), 2) + "|" + Math.Round((leftProjPlaneVectorLength), 2);
     //str_to_display = "finalPitchSetting:" + Math.Round((finalPitchSetting), 2) + "finalRollSetting:" + Math.Round((finalRollSetting), 2) + "finalYawSetting:" + Math.Round((finalYawSetting), 2);
     listAntenna[0].HudText = str_to_display;
     Me.CubeGrid.CustomName = str_to_display;
@@ -612,6 +622,7 @@ public void Main(string argument, UpdateType updateSource)
     {
         double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
         c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+        c.ThrustOverride = Convert.ToSingle(temp_thr_n*(1+1/(1-Math.Sin(angleRoll*3.14/180))));
         //debug:disabled the thruster
         //c.ThrustOverride = Convert.ToSingle(0f);
     }
