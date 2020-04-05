@@ -40,7 +40,7 @@ FightStabilizator fightStabilizator;
 
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 150;
+double wantedAltitude = 1500;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -61,7 +61,16 @@ bool firstMainLoop = true;
 
 //drone landing
 //PIDController angleRollPID = new PIDController(0.06f, 0f, 0.06f);
+//PIDController angleRollPID = new PIDController(1f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
+//it is stqrting to be more stable onto the lack
+//PIDController angleRollPID = new PIDController(0.35f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(0.18f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(0.09f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(0.5f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
+//PIDController angleRollPID = new PIDController(2f, 0f, 0f);
 
 
 public Program()
@@ -560,7 +569,9 @@ public void Main(string argument, UpdateType updateSource)
     //double TWR = 4.59;
     double TWR = thr_to_weight_ratio;
     double V_max = 100;
-    double AngleRollMaxAcc = Math.Atan((TWR - 1)/ 1) * 180 / Math.PI;
+    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
+    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
+    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI ;
 
     double g = 9.8;
     double MaxSurfaceAcc = (TWR - 1) * g;
@@ -589,7 +600,8 @@ public void Main(string argument, UpdateType updateSource)
 
     double finalPitchSetting = 0f;
     double finalYawSetting = 0f;
-    double finalRollSetting =- angleRoll * 180 / Math.PI;
+    //double finalRollSetting = -angleRoll * 180 / Math.PI;
+    double finalRollSetting = -angleRoll;
 
     //+ pitch go foward
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
@@ -606,7 +618,7 @@ public void Main(string argument, UpdateType updateSource)
     //var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
     //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
     //var str_to_display = "angleRoll:" + Math.Round((angleRoll), 2) + "|" + "wantedSpeedRoll:" + Math.Round((wantedSpeedRoll), 2) + "|" + "distRoll:" + Math.Round((distRoll), 2);
-    var str_to_display =  Math.Round((distRoll), 2) + "|" + Math.Round((wantedSpeedRoll), 2) + "|"+ Math.Round((angleRoll), 2) + "|" + Math.Round((leftProjPlaneVectorLength), 2);
+    var str_to_display =  Math.Round((distRoll), 2) + " |"+ Math.Round((clampedDistRoll), 2) + " |" + Math.Round((wantedSpeedRoll), 2) + " |"+ Math.Round((angleRoll), 2) + " |" + Math.Round((leftProjectUp.Length()), 5) + " |" + Math.Round((leftProjPlaneVectorLength), 2) + " |" + Math.Round((angleRoll), 2);
     //str_to_display = "finalPitchSetting:" + Math.Round((finalPitchSetting), 2) + "finalRollSetting:" + Math.Round((finalRollSetting), 2) + "finalYawSetting:" + Math.Round((finalYawSetting), 2);
     listAntenna[0].HudText = str_to_display;
     Me.CubeGrid.CustomName = str_to_display;
