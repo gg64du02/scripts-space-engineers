@@ -65,12 +65,8 @@ bool firstMainLoop = true;
 //PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
 //it is stqrting to be more stable onto the lack
 //PIDController angleRollPID = new PIDController(0.35f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(0.18f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(0.09f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(0.5f, 0f, 0f);
 //PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
-PIDController angleRollPID = new PIDController(1f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(2f, 0f, 0f);
+PIDController angleRollPID = new PIDController(1f, 0f, 70.7f);
 
 
 public Program()
@@ -588,11 +584,13 @@ public void Main(string argument, UpdateType updateSource)
 
     double leftProjPlaneVectorLength = leftProjPlaneVector.Length();
 
-    double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+    //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+    double distRoll = Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), VectToTarget);
     double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
     double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
 
-    double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
+    //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
+    double speedRoll = Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), linearSpeedsShip);
 
     double speedRollError = wantedSpeedRoll - speedRoll;
     double angleRoll = angleRollPID.Control(speedRollError, dts);
@@ -618,7 +616,7 @@ public void Main(string argument, UpdateType updateSource)
     //var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
     //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
     //var str_to_display = "angleRoll:" + Math.Round((angleRoll), 2) + "|" + "wantedSpeedRoll:" + Math.Round((wantedSpeedRoll), 2) + "|" + "distRoll:" + Math.Round((distRoll), 2);
-    var str_to_display =  Math.Round((distRoll), 2) + " |"+ Math.Round((clampedDistRoll), 2) + " |" + Math.Round((wantedSpeedRoll), 2) + " |"+ Math.Round((angleRoll), 2) + " |" + Math.Round((leftProjectUp.Length()), 5) + " |" + Math.Round((leftProjPlaneVectorLength), 2) + " |" + Math.Round((angleRoll), 2);
+    var str_to_display =  Math.Round((distRoll), 2) + "\n2|"+ Math.Round((clampedDistRoll), 2) + "\n3|" + Math.Round((wantedSpeedRoll), 2) + "\n4|" +  Math.Round((speedRollError), 2) + "\n5|" + Math.Round((angleRoll), 2) + "\n6|" + Math.Round((leftProjectUp.Length()), 5) + "\n7|" + Math.Round((leftProjPlaneVectorLength), 2) ;
     //str_to_display = "finalPitchSetting:" + Math.Round((finalPitchSetting), 2) + "finalRollSetting:" + Math.Round((finalRollSetting), 2) + "finalYawSetting:" + Math.Round((finalYawSetting), 2);
     listAntenna[0].HudText = str_to_display;
     Me.CubeGrid.CustomName = str_to_display;
