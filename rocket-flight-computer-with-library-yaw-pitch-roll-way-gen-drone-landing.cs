@@ -66,7 +66,9 @@ bool firstMainLoop = true;
 //it is stqrting to be more stable onto the lack
 //PIDController angleRollPID = new PIDController(0.35f, 0f, 0f);
 //PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
-PIDController angleRollPID = new PIDController(1f, 0f, 70.7f);
+//PIDController angleRollPID = new PIDController(1f, 0f, 70.7f);
+PIDController angleRollPID = new PIDController(1f, 0f, 0f);
+PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
 
 
 public Program()
@@ -593,8 +595,23 @@ public void Main(string argument, UpdateType updateSource)
     double speedRoll = Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), linearSpeedsShip);
 
     double speedRollError = wantedSpeedRoll - speedRoll;
-    double angleRoll = angleRollPID.Control(speedRollError, dts);
+    //if speedRollError is => 35.182m/s2 apply AngleRollMaxAcc
+    //else todo
+    // clamp(speedRollError , -MaxSurfaceAcc , MaxSurfaceAcc)
+    // Atan2(speedRollError * 2,1)
+    //0.01, 0, 2
+    double angleRoll = 0;
+    if (distRoll < distWhenToStartBraking)
+    {
+        angleRoll = angleRollPIDcloseToTarget.Control(speedRollError, dts);
+    }
+    else
+    {
+        angleRoll = angleRollPID.Control(speedRollError, dts);
+    }
+
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+
 
     double finalPitchSetting = 0f;
     double finalYawSetting = 0f;
