@@ -69,6 +69,8 @@ bool firstMainLoop = true;
 //PIDController angleRollPID = new PIDController(1f, 0f, 70.7f);
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
 PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
+PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
+PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
 
 
 public Program()
@@ -569,7 +571,7 @@ public void Main(string argument, UpdateType updateSource)
     double V_max = 100;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
-    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI ;
+    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI /2 ;
 
     double g = 9.8;
     double MaxSurfaceAcc = (TWR - 1) * g;
@@ -612,9 +614,48 @@ public void Main(string argument, UpdateType updateSource)
 
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
+    //******Pitch************
 
-    double finalPitchSetting = 0f;
-    double finalYawSetting = 0f;
+    //Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
+    //Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
+    
+
+    double forwardProjPlaneVectorLength = forwardProjPlaneVector.Length();
+
+    //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+    double distPitch = Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
+    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
+    double wantedSpeedPitch = (V_max / distWhenToStartBraking) * clampedDistPitch;
+
+    //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
+    double speedPitch = Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), linearSpeedsShip);
+
+    double speedPitchError = wantedSpeedPitch - speedPitch;
+    //if speedRollError is => 35.182m/s2 apply AngleRollMaxAcc
+    //else todo
+    // clamp(speedRollError , -MaxSurfaceAcc , MaxSurfaceAcc)
+    // Atan2(speedRollError * 2,1)
+    //0.01, 0, 2
+    double anglePitch = 0;
+    if (distPitch < distWhenToStartBraking)
+    {
+        anglePitch = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
+    }
+    else
+    {
+        anglePitch = anglePitchPID.Control(speedPitchError, dts);
+    }
+
+    anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+
+    //******Pitch************
+
+
+
+    //double finalPitchSetting = 0f;
+    double finalPitchSetting = -anglePitch;
+    //double finalYawSetting = 0f;
+    double finalYawSetting = yawCWOrAntiCW;
     //double finalRollSetting = -angleRoll * 180 / Math.PI;
     double finalRollSetting = -angleRoll;
 
@@ -624,8 +665,13 @@ public void Main(string argument, UpdateType updateSource)
     fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
 
     bool stalizablePitch = true;
+    bool stalizableRoll = false;
+    bool stalizableYaw = true;
+    /*
+    bool stalizablePitch = true;
     bool stalizableRoll = true;
     bool stalizableYaw = false;
+    */
 
     //debug roll\
     //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
