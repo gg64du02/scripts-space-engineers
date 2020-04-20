@@ -603,13 +603,15 @@ public void Main(string argument, UpdateType updateSource)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double angleRoll = 0;
+    double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
+    double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
     if (distRoll < distWhenToStartBraking)
     {
-        angleRoll = angleRollPIDcloseToTarget.Control(speedRollError, dts);
+        angleRoll = tmpAngleRollPIDcloseToTarget;
     }
     else
     {
-        angleRoll = angleRollPID.Control(speedRollError, dts);
+        angleRoll = tmpAngleRollPID;
     }
 
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
@@ -637,13 +639,15 @@ public void Main(string argument, UpdateType updateSource)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double anglePitch = 0;
+    double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedRollError, dts);
+    double tmpAnglePitchPID = anglePitchPID.Control(speedRollError, dts);
     if (distPitch < distWhenToStartBraking)
     {
-        anglePitch = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
+        anglePitch = tmpAnglePitchPIDcloseToTarget;
     }
     else
     {
-        anglePitch = anglePitchPID.Control(speedPitchError, dts);
+        anglePitch = tmpAnglePitchPID;
     }
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
@@ -652,8 +656,8 @@ public void Main(string argument, UpdateType updateSource)
 
 
 
-    //double finalPitchSetting = 0f;
-    double finalPitchSetting = -anglePitch;
+    double finalPitchSetting = 0f;
+    //double finalPitchSetting = anglePitch;
     //double finalYawSetting = 0f;
     double finalYawSetting = yawCWOrAntiCW;
     //double finalRollSetting = -angleRoll * 180 / Math.PI;
@@ -679,7 +683,8 @@ public void Main(string argument, UpdateType updateSource)
     //var str_to_display = "AngleRollMaxAcc:" + Math.Round((AngleRollMaxAcc), 2);
     //var str_to_display = "distRoll:" + Math.Round((distRoll), 2);
     //var str_to_display = "angleRoll:" + Math.Round((angleRoll), 2) + "|" + "wantedSpeedRoll:" + Math.Round((wantedSpeedRoll), 2) + "|" + "distRoll:" + Math.Round((distRoll), 2);
-    var str_to_display =  Math.Round((distRoll), 2) + "\n2|"+ Math.Round((clampedDistRoll), 2) + "\n3|" + Math.Round((wantedSpeedRoll), 2) + "\n4|" +  Math.Round((speedRollError), 2) + "\n5|" + Math.Round((angleRoll), 2) + "\n6|" + Math.Round((leftProjectUp.Length()), 5) + "\n7|" + Math.Round((leftProjPlaneVectorLength), 2) ;
+    var str_to_display = Math.Round((distRoll), 2) + "\n2|" + Math.Round((clampedDistRoll), 2) + "\n3|" + Math.Round((wantedSpeedRoll), 2) + "\n4|" + Math.Round((speedRollError), 2) + "\n5|" + Math.Round((angleRoll), 2) + "\n6|" + Math.Round((leftProjectUp.Length()), 5) + "\n7|" + Math.Round((leftProjPlaneVectorLength), 2);
+    //var str_to_display = Math.Round((distPitch), 2) + "\n2|" + Math.Round((clampedDistPitch), 2) + "\n3|" + Math.Round((wantedSpeedPitch), 2) + "\n4|" + Math.Round((speedPitchError), 2) + "\n5|" + Math.Round((anglePitch), 2) + "\n6|" + Math.Round((forwardProjectUp.Length()), 5) + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2);
     //str_to_display = "finalPitchSetting:" + Math.Round((finalPitchSetting), 2) + "finalRollSetting:" + Math.Round((finalRollSetting), 2) + "finalYawSetting:" + Math.Round((finalYawSetting), 2);
     listAntenna[0].HudText = str_to_display;
     Me.CubeGrid.CustomName = str_to_display;
