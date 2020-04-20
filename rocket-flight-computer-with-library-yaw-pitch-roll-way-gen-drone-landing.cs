@@ -283,7 +283,7 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D relativeEastVector = gravityVector.Cross(absoluteNorthVector);
     Vector3D relativeNorthVector = relativeEastVector.Cross(gravityVector);
 
-    /*
+    
     shipForwardVector = VectToTarget;
     Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
     Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
@@ -293,8 +293,8 @@ public void Main(string argument, UpdateType updateSource)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
     }
-    */
-
+    
+    /*
     Vector3D normalizedVectToTarget = Vector3D.Normalize(VectToTarget);
     Vector3D forwardProjectUp = VectorHelper.VectorProjection(normalizedVectToTarget, gravityVector);
     Vector3D forwardProjPlaneVector = normalizedVectToTarget - forwardProjectUp;
@@ -304,6 +304,7 @@ public void Main(string argument, UpdateType updateSource)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
     }
+    */
 
     //End of the part from the library (and mainly from it)========================
 
@@ -458,7 +459,8 @@ public void Main(string argument, UpdateType updateSource)
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
     {
         //fightStabilizator.Stabilize(true, true, stalizableYaw);
-        fightStabilizator.Stabilize(true, true, false);
+        //fightStabilizator.Stabilize(true, true, false);
+        fightStabilizator.Stabilize(true, false, true);
         //just do one axis gyro axis maximum if stuck
     }
 
@@ -618,7 +620,7 @@ public void Main(string argument, UpdateType updateSource)
     double angleRoll = 0;
     double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
     double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
-    if (distRoll < distWhenToStartBraking)
+    if (Math.Abs(distRoll) < Math.Abs(distWhenToStartBraking))
     {
         angleRoll = tmpAngleRollPIDcloseToTarget;
     }
@@ -637,6 +639,7 @@ public void Main(string argument, UpdateType updateSource)
 
     double forwardProjPlaneVectorLength = forwardProjPlaneVector.Length();
 
+    //TODO: CHANGE THE MATH OF THE PITCH BECAUSE IT IS BASED ON THE YAW math
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double distPitch = Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
     double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
@@ -654,7 +657,7 @@ public void Main(string argument, UpdateType updateSource)
     double anglePitch = 0;
     double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedRollError, dts);
     double tmpAnglePitchPID = anglePitchPID.Control(speedRollError, dts);
-    if (distPitch < distWhenToStartBraking)
+    if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
     {
         anglePitch = tmpAnglePitchPIDcloseToTarget;
     }
@@ -670,21 +673,22 @@ public void Main(string argument, UpdateType updateSource)
 
 
     //double finalPitchSetting = 0f;
-    double finalPitchSetting = -anglePitch;
+    double finalPitchSetting = anglePitch;
     //double finalYawSetting = 0f;
     double finalYawSetting = yawCWOrAntiCW;
     //double finalRollSetting = -angleRoll * 180 / Math.PI;
-    double finalRollSetting = 0f;
-    //double finalRollSetting = -angleRoll;
+    //double finalRollSetting = 0f;
+    double finalRollSetting = -angleRoll;
 
     //+ pitch go foward
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
     fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
 
-    bool stalizablePitch = false;
+    bool stalizablePitch = true;
     bool stalizableRoll = true;
-    bool stalizableYaw = true;
+    bool stalizableYaw = false;
+    fightStabilizator.Stabilize(stalizableRoll,stalizablePitch, stalizableYaw);
     /*
     bool stalizablePitch = true;
     bool stalizableRoll = true;
