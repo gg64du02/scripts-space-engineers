@@ -389,7 +389,7 @@ public void Main(string argument, UpdateType updateSource)
         altSettingChanged = false;
         //altRegulator.Reset();
     }
-    */
+    
 
     double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
     finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
@@ -400,18 +400,12 @@ public void Main(string argument, UpdateType updateSource)
 
     BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
 
-    bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
-
-    // call this next line at each run
-    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
     //+ pitch go foward
     fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
     fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
-    
+    */
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
@@ -455,9 +449,7 @@ public void Main(string argument, UpdateType updateSource)
     flightIndicators.Compute();
     if (flightIndicatorsFlightMode == FlightMode.STABILIZATION)
     {
-        //fightStabilizator.Stabilize(true, true, stalizableYaw);
         //fightStabilizator.Stabilize(true, true, false);
-        fightStabilizator.Stabilize(true, false, true);
         //just do one axis gyro axis maximum if stuck
     }
 
@@ -615,10 +607,10 @@ public void Main(string argument, UpdateType updateSource)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double angleRoll = 0;
-    double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(distRoll, dts);
-    double tmpAngleRollPID = angleRollPID.Control(distRoll, dts);
-    //double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
-    //double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
+    //double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(distRoll, dts);
+    //double tmpAngleRollPID = angleRollPID.Control(distRoll, dts);
+    double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
+    double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
     if (Math.Abs(distRoll) < Math.Abs(distWhenToStartBraking))
     {
         angleRoll = tmpAngleRollPID;
@@ -655,10 +647,10 @@ public void Main(string argument, UpdateType updateSource)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double anglePitch = 0;
-    double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(distPitch, dts);
-    double tmpAnglePitchPID = anglePitchPID.Control(distPitch, dts);
-    //double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
-    //double tmpAnglePitchPID = anglePitchPID.Control(speedPitchError, dts);
+    //double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(distPitch, dts);
+    //double tmpAnglePitchPID = anglePitchPID.Control(distPitch, dts);
+    double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
+    double tmpAnglePitchPID = anglePitchPID.Control(speedPitchError, dts);
     if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
     {
         anglePitch = tmpAnglePitchPID;
@@ -673,6 +665,29 @@ public void Main(string argument, UpdateType updateSource)
 
     //******Pitch************
 
+    
+    pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
+    rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
+    pitchFowardOrBackward *= 0.01f;
+    rollLeftOrRight *= 0.01f;
+    speedRollError = wantedSpeedRoll - rollLeftOrRight;
+    speedPitchError = wantedSpeedPitch - pitchFowardOrBackward;
+    angleRoll = speedRollError;
+    angleRoll = 0f;
+    anglePitch = speedPitchError;
+    
+
+    bool stalizablePitch = true;
+    bool stalizableRoll = true;
+    bool stalizableYaw = false;
+
+    // call this next line at each run
+    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+
+    //+ pitch go foward
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(anglePitch);
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(0f);
+    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
 
     /*
     //double finalPitchSetting = 0f;
@@ -704,7 +719,13 @@ public void Main(string argument, UpdateType updateSource)
     */
 
     //debug roll\
-    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0) + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0) + "\n3|" + Math.Round((wantedSpeedPitch),0) + "|3|" + Math.Round((wantedSpeedRoll), 0) + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0) + "\n5|" + Math.Round((anglePitch), 0) + "|5|" + Math.Round((angleRoll), 2) + "\n6|" + Math.Round((forwardProjectUp.Length()), 0)  + "|6|" + Math.Round((leftProjectUp.Length()), 2) + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+        + "\n3|" + Math.Round((wantedSpeedPitch),0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2)  + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
     //var str_to_display = "lol";
     listAntenna[0].HudText = str_to_display;
     Me.CubeGrid.CustomName = str_to_display;
