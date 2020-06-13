@@ -425,7 +425,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     var posInterpolation = Vector3D.Add(myPos / 2, vec3Dtarget / 2);
-    Echo("posInterpolation:\n" + posInterpolation);
+    //Echo("posInterpolation:\n" + posInterpolation);
 
 
     if (argument != null && argument.ToLower().Equals("on"))
@@ -575,8 +575,8 @@ public void Main(string argument, UpdateType updateSource)
     double V_max = 50;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
-    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
-    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
+    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
+    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
 
     double g = 9.8;
     double MaxSurfaceAcc = (TWR - 1) * g;
@@ -634,8 +634,8 @@ public void Main(string argument, UpdateType updateSource)
 
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-    double distPitch = Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
-    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
+    double distPitch =  -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
+    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking+1), Convert.ToSingle(distWhenToStartBraking+1));
     double wantedSpeedPitch = (V_max / distWhenToStartBraking) * clampedDistPitch;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -652,13 +652,17 @@ public void Main(string argument, UpdateType updateSource)
     //double tmpAnglePitchPID = anglePitchPID.Control(distPitch, dts);
     double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
     double tmpAnglePitchPID = anglePitchPID.Control(speedPitchError, dts);
-    if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
-    {
+    //if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
+    if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
+        {
         anglePitch = tmpAnglePitchPID;
+        Echo("tmpAnglePitchPID");
+        Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
     }
     else
     {
         anglePitch = tmpAnglePitchPIDcloseToTarget;
+        Echo("tmpAnglePitchPIDcloseToTarget");
     }
     //anglePitch = tmpAnglePitchPID;
 
@@ -676,28 +680,39 @@ public void Main(string argument, UpdateType updateSource)
     speedPitchError = wantedSpeedPitch - pitchFowardOrBackward;
     speedRollError = wantedSpeedRoll - rollLeftOrRight;
 
-    anglePitch = speedPitchError;
-    angleRoll = speedRollError;
+    //anglePitch = speedPitchError;
+    //angleRoll = speedRollError;
     //angleRoll = 0f;
 
     double engine_cut_n = -1;
     
-    Echo("elev:"+ elev);
+    //Echo("elev:"+ elev);
+    //Echo("distWhenToStartBraking:" + distWhenToStartBraking);
+    //Echo("distPitch:" + distPitch);
+    //Echo("anglePitch:" + anglePitch);
+    Echo("wantedSpeedPitch:" + wantedSpeedPitch);
+    Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
+    Echo("speedPitch:" + speedPitch);
+    
+
     //if (elev > 50)
 
-    //if(distToTarget > 1500)
+    //anglePitch = Convert.ToSingle(-30f);
+
+    //if (distToTarget > 1500)
     //{
-    //    bool stalizablePitch = true;
-    //    bool stalizableRoll = true;
-    //    bool stalizableYaw = false;
+        bool stalizablePitch = true;
+        //bool stalizableRoll = true;
+        bool stalizableRoll = false;
+        bool stalizableYaw = false;
 
-    //    //+ pitch go foward
-    //    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(anglePitch);
-    //    fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
-    //    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
+        //+ pitch go foward
+        fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
+        fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
+        fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
 
-    //    // call this next line at each run
-    //    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+        // call this next line at each run
+        fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
     //}
     //else
     //{
@@ -707,10 +722,7 @@ public void Main(string argument, UpdateType updateSource)
     //{
 
     //    engine_cut_n = 0;
-    //    if (distToTarget > 1500)
-    //    {
-    //    }
-    //}
+
     //Echo("if (elev > 50)");
     ////fightStabilizator.Release();
     ///
