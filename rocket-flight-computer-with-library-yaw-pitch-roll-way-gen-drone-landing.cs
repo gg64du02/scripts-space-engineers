@@ -684,21 +684,25 @@ public void Main(string argument, UpdateType updateSource)
     
     Echo("elev:"+ elev);
     //if (elev > 50)
+
+    //if(distToTarget > 1500)
     //{
-        bool stalizablePitch = true;
-        bool stalizableRoll = true;
-        bool stalizableYaw = false;
+    //    bool stalizablePitch = true;
+    //    bool stalizableRoll = true;
+    //    bool stalizableYaw = false;
 
-        //+ pitch go foward
-        fightStabilizator.pitchDesiredAngle = Convert.ToSingle(anglePitch);
-        fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
-        fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
+    //    //+ pitch go foward
+    //    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(anglePitch);
+    //    fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
+    //    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
 
-
-
-        // call this next line at each run
-        fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+    //    // call this next line at each run
+    //    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
     //}
+    //else
+    //{
+    //}
+
     //else
     //{
 
@@ -709,7 +713,18 @@ public void Main(string argument, UpdateType updateSource)
     //}
     //Echo("if (elev > 50)");
     ////fightStabilizator.Release();
+    ///
+    //// release gyros when you stop stabilization
+    //fightStabilizator.Release();
+    //bool stalizablePitch = true;
+    //bool stalizableRoll = false;
+    //bool stalizableYaw = false;
+    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(0f);
+    //// call this next line at each run
+    //fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+
     //List<IMyGyro> gyroscopes = new List<IMyGyro>();
+    //GridTerminalSystem.GetBlocksOfType(gyroscopes);
     //foreach (IMyGyro gyroscope in gyroscopes)
     //{
     //    gyroscope.GyroPower = 1.0f; // set power to 100%
@@ -718,6 +733,7 @@ public void Main(string argument, UpdateType updateSource)
     //    gyroscope.Roll = 0;
     //    gyroscope.Yaw = 0;
     //    //gyroscope.ApplyAction("OnOff_On");
+    //    Echo("gyro found and forced to a value");
     //}
 
 
@@ -918,7 +934,7 @@ public class FightStabilizator
 
         pitchPid = new PIDController(pidP, pidI, pidD);
         rollPid = new PIDController(pidP, pidI, pidD);
-        yawPid = new PIDController(pidP/6, pidI, pidD);
+        yawPid = new PIDController(pidP, pidI, pidD);
     }
 
     public void Reset()
