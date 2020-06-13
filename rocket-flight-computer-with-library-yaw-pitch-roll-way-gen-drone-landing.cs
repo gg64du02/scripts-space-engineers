@@ -594,8 +594,8 @@ public void Main(string argument, UpdateType updateSource)
     double leftProjPlaneVectorLength = leftProjPlaneVector.Length();
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-    double distRoll = Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), VectToTarget);
-    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
+    double distRoll = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), VectToTarget);
+    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking-1), Convert.ToSingle(distWhenToStartBraking+1));
     double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -612,13 +612,15 @@ public void Main(string argument, UpdateType updateSource)
     //double tmpAngleRollPID = angleRollPID.Control(distRoll, dts);
     double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
     double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
-    if (Math.Abs(distRoll) < Math.Abs(distWhenToStartBraking))
+    if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
     {
         angleRoll = tmpAngleRollPID;
+        Echo("tmpAngleRollPID:" + tmpAngleRollPID);
     }
     else
     {
         angleRoll = tmpAngleRollPIDcloseToTarget;
+        Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
     angleRoll = tmpAngleRollPID;
 
@@ -635,7 +637,7 @@ public void Main(string argument, UpdateType updateSource)
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double distPitch =  -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
-    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking+1), Convert.ToSingle(distWhenToStartBraking+1));
+    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking-1), Convert.ToSingle(distWhenToStartBraking+1));
     double wantedSpeedPitch = (V_max / distWhenToStartBraking) * clampedDistPitch;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -656,7 +658,6 @@ public void Main(string argument, UpdateType updateSource)
     if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
         {
         anglePitch = tmpAnglePitchPID;
-        Echo("tmpAnglePitchPID");
         Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
     }
     else
@@ -685,15 +686,19 @@ public void Main(string argument, UpdateType updateSource)
     //angleRoll = 0f;
 
     double engine_cut_n = -1;
-    
+
     //Echo("elev:"+ elev);
     //Echo("distWhenToStartBraking:" + distWhenToStartBraking);
     //Echo("distPitch:" + distPitch);
     //Echo("anglePitch:" + anglePitch);
-    Echo("wantedSpeedPitch:" + wantedSpeedPitch);
+    //Echo("wantedSpeedPitch:" + wantedSpeedPitch);
+    //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
+    //Echo("speedPitch:" + speedPitch);
+
+    Echo("wantedSpeedRoll:" + wantedSpeedRoll);
     Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
-    Echo("speedPitch:" + speedPitch);
-    
+    Echo("speedRoll:" + speedRoll);
+
 
     //if (elev > 50)
 
@@ -702,8 +707,7 @@ public void Main(string argument, UpdateType updateSource)
     //if (distToTarget > 1500)
     //{
         bool stalizablePitch = true;
-        //bool stalizableRoll = true;
-        bool stalizableRoll = false;
+        bool stalizableRoll = true;
         bool stalizableYaw = false;
 
         //+ pitch go foward
