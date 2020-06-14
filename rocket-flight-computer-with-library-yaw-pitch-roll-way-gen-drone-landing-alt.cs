@@ -12,23 +12,11 @@ enum FlightMode { STABILIZATION, STANDY };
 FlightMode flightIndicatorsFlightMode = FlightMode.STANDY;
 List<IMyTextPanel> flightIndicatorsLcdDisplay = new List<IMyTextPanel>();
 IMyShipController flightIndicatorsShipController = null;
-/*
+
 //default constant
-const double pidP = 0.06f;
-const double pidI = 0.0f;
-const double pidD = 0.01f;
-*/
-/*
-const double pidP = 0.06f;
-const double pidI = 0.0f;
-const double pidD = 0.0f;
-*/
-
-
 const double pidP = 0.06f;
 const double pidI = 0.00f;
 const double pidD = 0.01f;
-
 
 BasicLibrary basicLibrary;
 LCDHelper lcdHelper;
@@ -60,13 +48,6 @@ System.DateTime lastRunTs = System.DateTime.UtcNow;
 bool firstMainLoop = true;
 
 //drone landing
-//PIDController angleRollPID = new PIDController(0.06f, 0f, 0.06f);
-//PIDController angleRollPID = new PIDController(1f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
-//it is stqrting to be more stable onto the lack
-//PIDController angleRollPID = new PIDController(0.35f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(0.7f, 0f, 0f);
-//PIDController angleRollPID = new PIDController(1f, 0f, 70.7f);
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
 PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
@@ -292,120 +273,6 @@ public void Main(string argument, UpdateType updateSource)
     }
 
 
-    /*
-    shipForwardVector = VectToTarget;
-    Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
-    Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
-
-    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(forwardProjPlaneVector, relativeNorthVector) * rad2deg;
-    if (shipForwardVector.Dot(relativeEastVector) < 0)
-    {
-        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
-    }
-    */
-
-    //End of the part from the library (and mainly from it)========================
-
-    /*
-    bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
-    
-    if (distToTarget < 1500)
-    {
-        if (linearSpeedsShip.Length() > 1)
-        {
-            pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
-            rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
-
-            //debug
-            double surfaceSpeed = Math.Sqrt(pitchFowardOrBackward * pitchFowardOrBackward + rollLeftOrRight * rollLeftOrRight);
-
-
-            Echo("\n=====================================");
-            Echo("\n" + "pitchFowardOrBackward:\n" + pitchFowardOrBackward);
-            Echo("\n" + "rollLeftOrRight:\n" + rollLeftOrRight);
-
-
-            pitchFowardOrBackward *= 0.01f;
-            rollLeftOrRight *= 0.01f;
-            //yaw setting can't put the rocket upside down
-
-            stalizablePitch = true;
-            stalizableRoll = true;
-            stalizableYaw = false;
-
-        }
-
-        if (elev < 5)
-        {
-            //general:
-            List<IMyFunctionalBlock> listIMyFunctionalBlock = new List<IMyFunctionalBlock>();
-            GridTerminalSystem.GetBlocksOfType(listIMyFunctionalBlock);
-            //disabling everything but the PB
-            foreach (var l in listIMyFunctionalBlock)
-            {
-                if (!(l is IMyBatteryBlock))
-                {
-                    if (!(l is IMyProgrammableBlock))
-                    {
-                        l.Enabled = false;
-                    }
-                }
-            }
-            //disabling the PB
-            foreach (var l in listIMyFunctionalBlock)
-            {
-                if (l is IMyProgrammableBlock)
-                {
-                    l.Enabled = false;
-                }
-            }
-        }
-        
-        if (distToTarget < 1500)
-        {
-            //issue once the reset for the PID
-            if (wantedAltitude != 100)
-            {
-                wantedAltitude = 100;
-                altRegulator.Reset();
-            }
-        }
-
-        if (elev < 100)
-        {
-            //issue once the reset for the PID
-            if (wantedAltitude != 15)
-            {
-                wantedAltitude = 15;
-                altRegulator.Reset();
-            }
-        }
-
-    }
-    if (altSettingChanged == true)
-    {
-        altSettingChanged = false;
-        //altRegulator.Reset();
-    }
-    
-
-    double finalPitchSetting = Convert.ToSingle(-pitchFowardOrBackward * 3000f);
-    finalPitchSetting = MyMath.Clamp(Convert.ToSingle(finalPitchSetting), -30f, 30f);
-    double finalRollSetting = Convert.ToSingle(rollLeftOrRight * 3000f);
-    finalRollSetting = MyMath.Clamp(Convert.ToSingle(finalRollSetting), -30f, 30f);
-    double finalYawSetting = Convert.ToSingle(yawCWOrAntiCW);
-
-
-    BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-
-
-    //+ pitch go foward
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(finalPitchSetting);
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(finalRollSetting);
-    fightStabilizator.yawDesiredAngle = Convert.ToSingle(finalYawSetting);
-    */
 
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
@@ -463,28 +330,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
     var debugString = "";
-    /*
-    var myCurrentCockpit = GridTerminalSystem.GetBlockWithName("Cockpit") as IMyCockpit;
-    var listShipController = new List<IMyShipController>();
-    if (listShipController == null)
-    { Echo("nope"); return; }
-    var myCurrentCockpit = listShipController[0];
-    */
-    //var listRemoteController = new List<IMyRemoteControl>();
-    //IMyRemoteControl
 
-    /*
-    if (altitudeError > 5)
-    {
-        flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-        fightStabilizator.Reset();
-    }
-    else
-    {
-        flightIndicatorsFlightMode = FlightMode.STANDY;
-        fightStabilizator.Release();
-    }
-    */
 
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
@@ -558,16 +404,6 @@ public void Main(string argument, UpdateType updateSource)
     debugString += "\n" + "massOfShip:" + massOfShip;
     
     var control = altRegulator.Control(altitudeError, dts);
-    /*
-    double downwardSpeedAlt = Vector3D.Dot(totalGravityVect3Dnormalized,linearSpeedsShip);
-    Vector3D downwardSpeedAltVector3D = linearSpeedsShip.Dot(totalGravityVect3D) / totalGravityVect3D.LengthSquared() * totalGravityVect3D;
-    double downwardSpeedAltError = -10- downwardSpeedAltVector3D.Length();
-    
-    var control = downwardSpeedAltRegulator.Control(downwardSpeedAltError, dts);
-
-    listAntenna[0].HudText = "elev:" + Math.Round((elev), 0)+"downwardSpeedAltError:"+ Math.Round((downwardSpeedAltError), 2) + "control:"+ Math.Round((control),2);
-    Me.CubeGrid.CustomName = "elev:" + Math.Round((elev), 0) + "downwardSpeedAltError:" + Math.Round((downwardSpeedAltError), 2) + "control:" + Math.Round((control), 2);
-    */
 
 
     //double TWR = 4.59;
@@ -700,57 +536,20 @@ public void Main(string argument, UpdateType updateSource)
     Echo("speedRoll:" + speedRoll);
 
 
-    //if (elev > 50)
 
-    //anglePitch = Convert.ToSingle(-30f);
+    bool stalizablePitch = true;
+    bool stalizableRoll = true;
+    bool stalizableYaw = false;
 
-    //if (distToTarget > 1500)
-    //{
-        bool stalizablePitch = true;
-        bool stalizableRoll = true;
-        bool stalizableYaw = false;
+    //+ pitch go foward
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
+    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
 
-        //+ pitch go foward
-        fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
-        fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
-        fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
+    // call this next line at each run
+    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
-        // call this next line at each run
-        fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
-    //}
-    //else
-    //{
-    //}
 
-    //else
-    //{
-
-    //    engine_cut_n = 0;
-
-    //Echo("if (elev > 50)");
-    ////fightStabilizator.Release();
-    ///
-    //// release gyros when you stop stabilization
-    //fightStabilizator.Release();
-    //bool stalizablePitch = true;
-    //bool stalizableRoll = false;
-    //bool stalizableYaw = false;
-    //fightStabilizator.rollDesiredAngle = Convert.ToSingle(0f);
-    //// call this next line at each run
-    //fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
-
-    //List<IMyGyro> gyroscopes = new List<IMyGyro>();
-    //GridTerminalSystem.GetBlocksOfType(gyroscopes);
-    //foreach (IMyGyro gyroscope in gyroscopes)
-    //{
-    //    gyroscope.GyroPower = 1.0f; // set power to 100%
-    //    gyroscope.GyroOverride = true;
-    //    gyroscope.Pitch = 100f;
-    //    gyroscope.Roll = 0;
-    //    gyroscope.Yaw = 0;
-    //    //gyroscope.ApplyAction("OnOff_On");
-    //    Echo("gyro found and forced to a value");
-    //}
 
 
     //debug roll\
