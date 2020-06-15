@@ -27,7 +27,8 @@ FightStabilizator fightStabilizator;
 
 
 
-PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
+//PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
+PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 double wantedAltitude = 1000;
 double altitudeError = 0f;
 bool altSettingChanged = false;
@@ -405,6 +406,8 @@ public void Main(string argument, UpdateType updateSource)
     
     var control = altRegulator.Control(altitudeError, dts);
 
+    Echo("altitudeError:" + altitudeError);
+
 
     //double TWR = 4.59;
     double TWR = thr_to_weight_ratio;
@@ -531,10 +534,19 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
     //Echo("speedPitch:" + speedPitch);
 
-    Echo("wantedSpeedRoll:" + wantedSpeedRoll);
-    Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
-    Echo("speedRoll:" + speedRoll);
+    //Echo("wantedSpeedRoll:" + wantedSpeedRoll);
+    //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
+    //Echo("speedRoll:" + speedRoll);
+    Echo("anglePitch:" + anglePitch);
+    Echo("angleRoll:" + angleRoll);
 
+    Vector3D gravityNormalized = totalGravityVect3Dnormalized;
+
+    double scaleForThetaRegardingGravity = Vector3D.Dot(gravityNormalized, shipDownVector);
+    double thetaMustBe = 180 * Math.Acos(scaleForThetaRegardingGravity) / Math.PI;
+    Echo("thetaMustBe:" + thetaMustBe);
+    Echo("wantedAltitude:" + wantedAltitude);
+    Echo("altitudeError:" + altitudeError);
 
 
     bool stalizablePitch = true;
@@ -548,8 +560,6 @@ public void Main(string argument, UpdateType updateSource)
 
     // call this next line at each run
     fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
-
-
 
 
     //debug roll\
@@ -566,6 +576,7 @@ public void Main(string argument, UpdateType updateSource)
     Me.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
+    Echo("control:" + control);
 
     //applying what the pid processed
     //var cs = new List<IMyThrust>();
@@ -577,8 +588,23 @@ public void Main(string argument, UpdateType updateSource)
         if (engine_cut_n == -1)
         {
             double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
-            c.ThrustOverride = Convert.ToSingle(temp_thr_n);
-            c.ThrustOverride = Convert.ToSingle(temp_thr_n * (1 + 1 / (1 - Math.Sin(angleRoll * 3.14 / 180))));
+            //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
+            double pidCalc = physMass_N * control;
+            Echo("temp_thr_n:" + temp_thr_n);
+            Echo("physMass_N:" + physMass_N);
+            Echo("pidCalc:" + pidCalc);
+            if (temp_thr_n < 0)
+            {
+                c.ThrustOverride = Convert.ToSingle(200f);
+            }
+            else
+            {
+                c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+            }
+            //c.ThrustOverride = Convert.ToSingle(physMass_N);
+            //c.ThrustOverride = Convert.ToSingle(40000);
+            //c.ThrustOverride = Convert.ToSingle(temp_thr_n * (1 + 1 / (1 - Math.Sin(angleRoll * 3.14 / 180))));
+            //c.ThrustOverride = Convert.ToSingle(temp_thr_n / (Math.Cos(thetaMustBe)));
         }
         else
         {
