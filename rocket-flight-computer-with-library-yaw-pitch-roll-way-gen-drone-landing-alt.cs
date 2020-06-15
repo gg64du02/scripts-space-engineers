@@ -34,7 +34,9 @@ double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
-PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.06f);
+//PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.06f);
+//PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.0f);
+PIDController downwardSpeedAltRegulator = new PIDController(1f, .00f, 0.0f);
 double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
@@ -404,9 +406,10 @@ public void Main(string argument, UpdateType updateSource)
     var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
     
-    var control = altRegulator.Control(altitudeError, dts);
+    double control = altRegulator.Control(altitudeError, dts);
 
     Echo("altitudeError:" + altitudeError);
+    Echo("alt_speed_ms_1:" + alt_speed_ms_1);
 
 
     //double TWR = 4.59;
@@ -548,6 +551,36 @@ public void Main(string argument, UpdateType updateSource)
     Echo("wantedAltitude:" + wantedAltitude);
     Echo("altitudeError:" + altitudeError);
 
+    //altitude management and downward speed management========================== start
+    double wantedAlitudeSpeed = 0;
+    double altitudeSpeedError = 0;
+    double controlAltSpeed = 0;
+    if (Math.Abs(distPitch) < 100)
+    {
+        if (Math.Abs(distRoll) < 100)
+        {
+            if (dts > 0)
+            {
+
+                wantedAlitudeSpeed = -10;
+                if (elev < 10)
+                {
+                    wantedAlitudeSpeed = -1;
+                }
+                //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+                altitudeSpeedError = (wantedAlitudeSpeed - alt_speed_ms_1);
+                Echo("altitudeSpeedError:" + altitudeSpeedError);
+
+                controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+                Echo("controlAltSpeed:" + controlAltSpeed);
+
+                //feedback loop to counter the wrong speed
+                control = controlAltSpeed;
+            }
+        }
+    }
+    //altitude management and downward speed management========================== end
+
 
     bool stalizablePitch = true;
     bool stalizableRoll = true;
@@ -587,7 +620,7 @@ public void Main(string argument, UpdateType updateSource)
     {
         if (engine_cut_n == -1)
         {
-            double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + physMass_N * control;
+            double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control);
             //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             double pidCalc = physMass_N * control;
             Echo("temp_thr_n:" + temp_thr_n);
