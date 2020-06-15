@@ -28,8 +28,9 @@ FightStabilizator fightStabilizator;
 
 
 //PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
-double wantedAltitude = 1000;
+//PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
+PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
+double wantedAltitude = 600;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -555,15 +556,15 @@ public void Main(string argument, UpdateType updateSource)
     double wantedAlitudeSpeed = 0;
     double altitudeSpeedError = 0;
     double controlAltSpeed = 0;
-    if (Math.Abs(distPitch) < 100)
+    if (Math.Abs(distPitch) < 300)
     {
-        if (Math.Abs(distRoll) < 100)
+        if (Math.Abs(distRoll) < 300)
         {
             if (dts > 0)
             {
 
                 wantedAlitudeSpeed = -10;
-                if (elev < 10)
+                if (elev < 50)
                 {
                     wantedAlitudeSpeed = -1;
                 }
