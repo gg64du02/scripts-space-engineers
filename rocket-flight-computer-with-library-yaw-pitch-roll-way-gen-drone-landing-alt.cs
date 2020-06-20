@@ -417,7 +417,6 @@ public void Main(string argument, UpdateType updateSource)
     double TWR = thr_to_weight_ratio;
     double V_max = 50;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
-    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
     double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
 
@@ -556,20 +555,61 @@ public void Main(string argument, UpdateType updateSource)
     double wantedAlitudeSpeed = 0;
     double altitudeSpeedError = 0;
     double controlAltSpeed = 0;
-    if (Math.Abs(distPitch) < 300)
+
+    double V_max_altSpeed = 100;
+    double V_min_altSpeed = -120;
+    //wantedAltitude 
+    //change the wantedAltitude BEFORE THIS LINE
+    altitudeError = wantedAltitude - elev;
+
+    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length());
+    Echo("h_max_alt:" + h_max_alt);
+
+    double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
+    Echo("clampAltError:" + clampAltError);
+
+    //TODO: make it asymetric
+    wantedAlitudeSpeed = (clampAltError / h_max_alt) * V_max_altSpeed;
+    Echo("wantedAlitudeSpeed:" + wantedAlitudeSpeed);
+
+    double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
+
+
+    //wantedAlitudeSpeed = -10;
+    //if (elev < 50)
+    //{
+    //    wantedAlitudeSpeed = -1;
+    //}
+    //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+    altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+    Echo("altitudeSpeedError:" + altitudeSpeedError);
+
+    controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+    Echo("controlAltSpeed:" + controlAltSpeed);
+
+    //feedback loop to counter the wrong speed
+    control = controlAltSpeed;
+
+    if (Math.Abs(distPitch) < 100)
     {
-        if (Math.Abs(distRoll) < 300)
+        if (Math.Abs(distRoll) < 100)
         {
             if (dts > 0)
             {
-
-                wantedAlitudeSpeed = -10;
-                if (elev < 50)
+                wantedAltitude = 100;
+                
+                if(elev < 125)
                 {
-                    wantedAlitudeSpeed = -1;
+                    clampWantedAlitudeSpeed = -10;
                 }
-                //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-                altitudeSpeedError = (wantedAlitudeSpeed - alt_speed_ms_1);
+
+                   //wantedAlitudeSpeed = -10;
+                   //if (elev < 50)
+                   //{
+                   //    wantedAlitudeSpeed = -1;
+                   //}
+                   //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+                   altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
                 Echo("altitudeSpeedError:" + altitudeSpeedError);
 
                 controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
