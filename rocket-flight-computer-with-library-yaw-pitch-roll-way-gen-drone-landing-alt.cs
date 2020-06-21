@@ -175,9 +175,9 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
-    //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
 
 
     //x,y,z coords
@@ -603,13 +603,13 @@ public void Main(string argument, UpdateType updateSource)
                     clampWantedAlitudeSpeed = -10;
                 }
 
-                   //wantedAlitudeSpeed = -10;
-                   //if (elev < 50)
-                   //{
-                   //    wantedAlitudeSpeed = -1;
-                   //}
-                   //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-                   altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+                //wantedAlitudeSpeed = -10;
+                //if (elev < 50)
+                //{
+                //    wantedAlitudeSpeed = -1;
+                //}
+                //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+                altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
                 Echo("altitudeSpeedError:" + altitudeSpeedError);
 
                 controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
