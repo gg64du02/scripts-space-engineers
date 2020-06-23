@@ -54,8 +54,10 @@ bool firstMainLoop = true;
 //drone landing
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
 PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
+//PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 0f);
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
-PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
+//PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
+PIDController anglePitchPIDcloseToTarget = new PIDController(4f, 0f, 0f);
 
 
 public Program()
@@ -175,9 +177,9 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
-    MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
 
 
     //x,y,z coords
@@ -590,15 +592,15 @@ public void Main(string argument, UpdateType updateSource)
     //feedback loop to counter the wrong speed
     control = controlAltSpeed;
 
-    if (Math.Abs(distPitch) < 100)
+    if (Math.Abs(distPitch) < 10)
     {
-        if (Math.Abs(distRoll) < 100)
+        if (Math.Abs(distRoll) < 10)
         {
             if (dts > 0)
             {
-                wantedAltitude = 100;
+                wantedAltitude = 10;
                 
-                if(elev < 125)
+                if(elev < 25)
                 {
                     clampWantedAlitudeSpeed = -10;
                 }
