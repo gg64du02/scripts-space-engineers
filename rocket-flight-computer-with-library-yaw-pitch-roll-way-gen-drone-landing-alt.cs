@@ -30,7 +30,7 @@ FightStabilizator fightStabilizator;
 //PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 //PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 600;
+double wantedAltitude = 60;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -177,9 +177,10 @@ public void Main(string argument, UpdateType updateSource)
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-    MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:/// #9:53629.33:-26508.26:12015.47:", out myWaypointInfoTarget);
 
 
     //x,y,z coords
@@ -589,6 +590,8 @@ public void Main(string argument, UpdateType updateSource)
     controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
     Echo("controlAltSpeed:" + controlAltSpeed);
 
+    Echo("thr_to_weight_ratio:"+ thr_to_weight_ratio);
+
     //feedback loop to counter the wrong speed
     control = controlAltSpeed;
 
@@ -648,7 +651,9 @@ public void Main(string argument, UpdateType updateSource)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
         //+"\n8|" + Math.Round((engine_cut_n), 2) ;
     //var str_to_display = "lol";
-    listAntenna[0].HudText = str_to_display;
+	if(listAntenna.Count!=0){
+		listAntenna[0].HudText = str_to_display;
+	}
     Me.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
