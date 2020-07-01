@@ -30,7 +30,7 @@ FightStabilizator fightStabilizator;
 //PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 //PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 60;
+double wantedAltitude = 400;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -178,9 +178,9 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-    //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
+    MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
-    MyWaypointInfo.TryParse("GPS:/// #9:53629.33:-26508.26:12015.47:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:/// #9:53629.33:-26508.26:12015.47:", out myWaypointInfoTarget);
 
 
     //x,y,z coords
@@ -595,15 +595,22 @@ public void Main(string argument, UpdateType updateSource)
     //feedback loop to counter the wrong speed
     control = controlAltSpeed;
 
+    //double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
+    //double descSurfaceSpeed = 10;
+
+    Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
+
     if (Math.Abs(distPitch) < 10)
     {
         if (Math.Abs(distRoll) < 10)
         {
             if (dts > 0)
             {
+                //if (descSurfaceSpeed< descSurfaceSpeed* descSurfaceSpeed)
+                //{
                 wantedAltitude = 10;
-                
-                if(elev < 25)
+
+                if (elev < 25)
                 {
                     clampWantedAlitudeSpeed = -10;
                 }
@@ -622,6 +629,7 @@ public void Main(string argument, UpdateType updateSource)
 
                 //feedback loop to counter the wrong speed
                 control = controlAltSpeed;
+                //}
             }
         }
     }
