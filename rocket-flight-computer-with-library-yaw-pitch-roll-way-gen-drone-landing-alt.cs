@@ -24,6 +24,8 @@ FlightIndicators flightIndicators;
 FightStabilizator fightStabilizator;
 
 
+//x,y,z coords
+Vector3D vec3Dtarget = new Vector3D(5, 5, 5);
 
 
 
@@ -67,7 +69,7 @@ public Program()
     lcdHelper = new LCDHelper(basicLibrary, new Color(0, 255, 0), 1.5f);
 }
 
-public void Main(string argument, UpdateType updateSource)
+public void Main(string argument)
 {
     if (!TryInit())
     {
@@ -178,13 +180,23 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-    MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
+    //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
     //MyWaypointInfo.TryParse("GPS:/// #9:53629.33:-26508.26:12015.47:", out myWaypointInfoTarget);
 
+    if (argument != null)
+    {
+        Echo("argument:" + argument);
+        MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+        if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
+        {
+            //x,y,z coords is global to remember between each loop
+            vec3Dtarget = myWaypointInfoTarget.Coords;
+        }
+    }
 
-    //x,y,z coords
-    Vector3D vec3Dtarget = myWaypointInfoTarget.Coords;
+
+    Echo("vec3Dtarget:"+ vec3Dtarget);
 
     //targetGravityVectorNormalized
     Vector3D earthLikeCenter = new Vector3D(0, 0, 0);
@@ -597,8 +609,8 @@ public void Main(string argument, UpdateType updateSource)
 
     //double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
     //double descSurfaceSpeed = 10;
-
-    Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
+    //Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
+    
 
     if (Math.Abs(distPitch) < 10)
     {
