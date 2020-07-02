@@ -25,7 +25,7 @@ FightStabilizator fightStabilizator;
 
 
 //x,y,z coords
-Vector3D vec3Dtarget = new Vector3D(5, 5, 5);
+Vector3D vec3Dtarget = new Vector3D(0,0,0);
 
 
 
@@ -610,7 +610,12 @@ public void Main(string argument)
     //double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
     //double descSurfaceSpeed = 10;
     //Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
-    
+
+
+    if (distPitch * distPitch + distPitch * distPitch > 1000 * 1000)
+    {
+        wantedAltitude = 400;
+    }
 
     if (Math.Abs(distPitch) < 10)
     {
