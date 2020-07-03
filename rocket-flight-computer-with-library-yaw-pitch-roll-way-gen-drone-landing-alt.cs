@@ -59,7 +59,7 @@ PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
 //PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 0f);
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
 //PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
-PIDController anglePitchPIDcloseToTarget = new PIDController(4f, 0f, 0f);
+PIDController anglePitchPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 
 
 public Program()
@@ -623,11 +623,11 @@ public void Main(string argument)
         {
             if (dts > 0)
             {
-                //if (descSurfaceSpeed< descSurfaceSpeed* descSurfaceSpeed)
+                //if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
                 //{
-                wantedAltitude = 10;
+                wantedAltitude = 100;
 
-                if (elev < 25)
+                if (elev < 125)
                 {
                     clampWantedAlitudeSpeed = -10;
                 }
