@@ -500,6 +500,12 @@ public void Main(string argument)
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
     double speedPitch = Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), linearSpeedsShip);
 
+    ////to reach 100m/s
+    //double currentSurfaceSpeedSquared = speedPitch * speedPitch + speedRoll * speedRoll;
+    ////double multiplyingFactorForSpeeds = V_max * V_max / currentSurfaceSpeedSquared;
+    //double multiplyingFactorForSpeeds = 100 * 100 / currentSurfaceSpeedSquared;
+    //Echo("multiplyingFactorForSpeeds:" + multiplyingFactorForSpeeds);
+
     double speedPitchError = wantedSpeedPitch - speedPitch;
     //if speedRollError is => 35.182m/s2 apply AngleRollMaxAcc
     //else todo
@@ -612,7 +618,7 @@ public void Main(string argument)
     //Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
 
 
-    if (distPitch * distPitch + distPitch * distPitch > 1000 * 1000)
+    if (distPitch * distPitch + distRoll * distRoll > 1000 * 1000)
     {
         wantedAltitude = 400;
     }
