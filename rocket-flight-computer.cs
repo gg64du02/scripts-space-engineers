@@ -186,12 +186,15 @@ public void Main(string argument)
 
     if (argument != null)
     {
-        Echo("argument:" + argument);
-        MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
-        if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
+        if (argument != "")
         {
-            //x,y,z coords is global to remember between each loop
-            vec3Dtarget = myWaypointInfoTarget.Coords;
+            Echo("argument:" + argument);
+            MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+            if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
+            {
+                //x,y,z coords is global to remember between each loop
+                vec3Dtarget = myWaypointInfoTarget.Coords;
+            }
         }
     }
 
@@ -441,6 +444,7 @@ public void Main(string argument)
     double brakingTime = V_max / MaxSurfaceAcc;
     double distWhenToStartBraking = brakingTime * V_max;
 
+    //******Roll************start
     //double wantedSpeedRoll = Vector3D.Dot(shipLeftVector,shipVelocities);
     //TODO
     //double distRoll = Vector3D.Dot(shipLeftVector, distToTarget);
@@ -483,7 +487,8 @@ public void Main(string argument)
 
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
-    //******Pitch************
+    //******Roll*************end
+    //******Pitch************Start
 
     Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
     Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
@@ -532,7 +537,7 @@ public void Main(string argument)
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
-    //******Pitch************
+    //******Pitch************end
 
     
     pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
