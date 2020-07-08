@@ -55,7 +55,7 @@ bool firstMainLoop = true;
 
 //drone landing
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
-PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
+PIDController angleRollPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 //PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 0f);
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
 //PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
@@ -483,7 +483,8 @@ public void Main(string argument)
         angleRoll = tmpAngleRollPIDcloseToTarget;
         Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
-    angleRoll = tmpAngleRollPID;
+    //angleRoll = tmpAngleRollPID;
+    //angleRoll = angleRoll + 0.02 * angleRoll * angleRoll * angleRoll;
 
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -534,6 +535,7 @@ public void Main(string argument)
         Echo("tmpAnglePitchPIDcloseToTarget");
     }
     //anglePitch = tmpAnglePitchPID;
+    //anglePitch = anglePitch + 0.02 * anglePitch * anglePitch * anglePitch;
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -628,6 +630,7 @@ public void Main(string argument)
         wantedAltitude = 400;
     }
 
+    Echo("dts:" + dts);
     if (Math.Abs(distPitch) < 10)
     {
         if (Math.Abs(distRoll) < 10)
