@@ -28,7 +28,6 @@ FightStabilizator fightStabilizator;
 Vector3D vec3Dtarget = new Vector3D(0,0,0);
 
 
-
 //PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 //PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
@@ -196,6 +195,14 @@ public void Main(string argument)
                 vec3Dtarget = myWaypointInfoTarget.Coords;
             }
         }
+    }
+
+    if( vec3Dtarget == new Vector3D(0, 0, 0))
+    {
+        //using the expected remote control to give us the center of the current planet
+        List<IMyShipController> listRemote = new List<IMyShipController>();
+        GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemote);
+        listRemote[0].TryGetPlanetPosition(out vec3Dtarget);
     }
 
 
@@ -714,7 +721,7 @@ public void Main(string argument)
         {
             //TODO: adapt to remaining thrust, that would help with damaged ship, and also
             //adapt to various amount of thrusters
-            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .25;
+            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .3333;
             //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             double pidCalc = physMass_N * control;
             Echo("temp_thr_n:" + temp_thr_n);
