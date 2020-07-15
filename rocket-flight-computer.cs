@@ -32,7 +32,7 @@ Vector3D vec3Dtarget = new Vector3D(0,0,0);
 //PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 //PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 400;
+double wantedAltitude = 1500;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
@@ -433,7 +433,7 @@ public void Main(string argument)
 
     //double TWR = 4.59;
     double TWR = thr_to_weight_ratio;
-    double V_max = 50;
+    double V_max = 55;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
     double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
@@ -484,8 +484,10 @@ public void Main(string argument)
         Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
     //angleRoll = tmpAngleRollPID;
-    //angleRoll = angleRoll + 0.02 * angleRoll * angleRoll * angleRoll;
-
+    if (Math.Abs(distRoll) < 2)
+    {
+        angleRoll = angleRoll + 0.02 * angleRoll * angleRoll * angleRoll;
+    }
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
     //******Roll*************end
@@ -535,7 +537,10 @@ public void Main(string argument)
         Echo("tmpAnglePitchPIDcloseToTarget");
     }
     //anglePitch = tmpAnglePitchPID;
-    //anglePitch = anglePitch + 0.02 * anglePitch * anglePitch * anglePitch;
+    if (Math.Abs(distPitch) < 2)
+    {
+        anglePitch = anglePitch + 0.02 * anglePitch * anglePitch * anglePitch;
+    }
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -627,23 +632,23 @@ public void Main(string argument)
 
     if (distPitch * distPitch + distRoll * distRoll > 1000 * 1000)
     {
-        wantedAltitude = 400;
+        wantedAltitude = 1500;
     }
 
     Echo("dts:" + dts);
-    if (Math.Abs(distPitch) < 10)
+    if (Math.Abs(distPitch) < 1)
     {
-        if (Math.Abs(distRoll) < 10)
+        if (Math.Abs(distRoll) < 1)
         {
             if (dts > 0)
             {
                 //if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
                 //{
-                wantedAltitude = 100;
+                wantedAltitude = 25;
 
-                if (elev < 125)
+                if (elev < 40)
                 {
-                    clampWantedAlitudeSpeed = -10;
+                    clampWantedAlitudeSpeed = -5;
                 }
 
                 //wantedAlitudeSpeed = -10;
@@ -707,7 +712,9 @@ public void Main(string argument)
     {
         if (engine_cut_n == -1)
         {
-            double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control);
+            //TODO: adapt to remaining thrust, that would help with damaged ship, and also
+            //adapt to various amount of thrusters
+            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .25;
             //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             double pidCalc = physMass_N * control;
             Echo("temp_thr_n:" + temp_thr_n);
