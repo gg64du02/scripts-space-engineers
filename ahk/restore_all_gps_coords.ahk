@@ -39,7 +39,8 @@ MouseClick, left
 
 MButton::
 
-	tmpFile =all_gps_se2.txt
+	;tmpFile =all_gps_se2.txt
+	tmpFile =all_gps_se2_ore_mapping_clean_me.txt
 	
 	fileread, contents,  %tmpFile%	;reads the notepad
 	

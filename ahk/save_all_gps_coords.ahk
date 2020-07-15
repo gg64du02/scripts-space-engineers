@@ -5,11 +5,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;use it with stimberries on a phioma to get feces
 
-F1::
-	Reload
-	
-	
-	
 
 MouseGetPos, OutputVarX, OutputVarY, OutputVarWin, OutputVarControl, 1
 
@@ -36,17 +31,24 @@ MouseClick, left
 
 ;MsgBox 922 154
 
+MsgBox this script is attended to be used with a screeen size : 1024*768
+
+F1::
+	Reload
+	
+	
+	
 
 MButton::
 
-	tmpFile =all_gps_se2.txt
+	tmpFile =all_gps_se2_ore_mapping_clean_me.txt
 
 	test := 0
 	
 	temps:=50
 	
 	;en permanence
-	While(test<200){
+	While(test<500){
 		;delay in ms
 		;Sleep, 200
 		;Sleep, 10
