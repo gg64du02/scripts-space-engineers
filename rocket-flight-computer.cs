@@ -637,9 +637,9 @@ public void Main(string argument)
     //Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
 
 
-    if (distPitch * distPitch + distRoll * distRoll > 1000 * 1000)
+    if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
     {
-        wantedAltitude = 1500;
+        wantedAltitude = 600;
     }
 
     Echo("dts:" + dts);
@@ -721,7 +721,7 @@ public void Main(string argument)
         {
             //TODO: adapt to remaining thrust, that would help with damaged ship, and also
             //adapt to various amount of thrusters
-            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .3333;
+            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .25;
             //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
             double pidCalc = physMass_N * control;
             Echo("temp_thr_n:" + temp_thr_n);
