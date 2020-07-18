@@ -715,6 +715,7 @@ public void Main(string argument)
     GridTerminalSystem.GetBlocksOfType(cs);
     //Echo(cs.ToString());
 
+    //TODO: support any numbers of available thrusters
     foreach (var c in cs)
     {
         if (engine_cut_n == -1)
