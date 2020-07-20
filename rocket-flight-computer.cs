@@ -715,19 +715,33 @@ public void Main(string argument)
     GridTerminalSystem.GetBlocksOfType(cs);
     //Echo(cs.ToString());
 
-    //TODO: support any numbers of available thrusters
+    double remainingThrustToApply = -1;
+    double temp_thr_n = -1;
+
     foreach (var c in cs)
     {
-        if (engine_cut_n == -1)
+        if(c.IsFunctional == true)
         {
-            //TODO: adapt to remaining thrust, that would help with damaged ship, and also
-            //adapt to various amount of thrusters
-            double temp_thr_n = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control)) * .25;
-            //double temp_thr_n = 1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust;
-            double pidCalc = physMass_N * control;
-            Echo("temp_thr_n:" + temp_thr_n);
-            Echo("physMass_N:" + physMass_N);
-            Echo("pidCalc:" + pidCalc);
+            if (remainingThrustToApply == -1)
+            {
+                remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control));
+            }
+            //Echo("c.MaxThrust"+c.MaxThrust);
+            //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+            //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+            if (c.MaxEffectiveThrust < remainingThrustToApply)
+            {
+                temp_thr_n = c.MaxEffectiveThrust;
+                remainingThrustToApply = remainingThrustToApply - c.MaxEffectiveThrust;
+            }
+            else
+            {
+                temp_thr_n = remainingThrustToApply;
+                remainingThrustToApply = 0;
+            }
+            //Echo("temp_thr_n:" + temp_thr_n);
+            //Echo("remainingThrustToApply:" + remainingThrustToApply);
+
             if (temp_thr_n < 0)
             {
                 c.ThrustOverride = Convert.ToSingle(200f);
@@ -736,18 +750,9 @@ public void Main(string argument)
             {
                 c.ThrustOverride = Convert.ToSingle(temp_thr_n);
             }
-            //c.ThrustOverride = Convert.ToSingle(physMass_N);
-            //c.ThrustOverride = Convert.ToSingle(40000);
-            //c.ThrustOverride = Convert.ToSingle(temp_thr_n * (1 + 1 / (1 - Math.Sin(angleRoll * 3.14 / 180))));
-            //c.ThrustOverride = Convert.ToSingle(temp_thr_n / (Math.Cos(thetaMustBe)));
         }
-        else
-        {
-            c.ThrustOverride = Convert.ToSingle(0f);
-        }
-        //debug:disabled the thruster
-        //c.ThrustOverride = Convert.ToSingle(0f);
     }
+
 }
 
 public class FlightIndicators
