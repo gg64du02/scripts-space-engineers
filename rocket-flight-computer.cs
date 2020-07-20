@@ -1,4 +1,6 @@
-//From https://steamcommunity.com/sharedfiles/filedetails/?id=1390966561
+//STV script on the Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=2167483644
+
+//library used for roll pitch yaw https://steamcommunity.com/sharedfiles/filedetails/?id=1390966561
 
 // config
 string[] flightIndicatorsLcdNames = { "" };
