@@ -49,6 +49,9 @@ double last_alt_speed_ms_1 = 0f;
 double alt_acc_ms_2 = 0f;
 double last_alt_acc_ms_2 = 0f;
 
+double derivateDistToPlanetCenter = 0f;
+double lastDistToPlanetCenter = 0f;
+
 System.DateTime lastTime = System.DateTime.UtcNow;
 System.DateTime lastRunTs = System.DateTime.UtcNow;
 
@@ -175,6 +178,8 @@ public void Main(string argument)
     Vector3D myPos = Me.GetPosition();
     Echo("myPos:\n" + myPos);
 
+
+
     //note:
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     //var targetGpsString = "";
@@ -199,11 +204,11 @@ public void Main(string argument)
         }
     }
 
-    if( vec3Dtarget == new Vector3D(0, 0, 0))
+    List<IMyShipController> listRemote = new List<IMyShipController>();
+    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemote);
+    if ( vec3Dtarget == new Vector3D(0, 0, 0))
     {
         //using the expected remote control to give us the center of the current planet
-        List<IMyShipController> listRemote = new List<IMyShipController>();
-        GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemote);
         listRemote[0].TryGetPlanetPosition(out vec3Dtarget);
     }
 
@@ -250,6 +255,25 @@ public void Main(string argument)
 
     double elev;
     myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+
+    double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+
+    //everything necessary to know if it is underground (sign change will be used)
+    //derivative of elev
+    //known as alt_speed_ms_1
+    //generating a vector from the current position to the center of the planet
+    Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
+    listRemote[0].TryGetPlanetPosition(out VecPlanetCenter);
+    Vector3D negateVecPlanetCenter = new Vector3D(0, 0, 0);
+    Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
+    Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
+    double distToPlanetCenter = vecToPlanetCenter.Length();
+    //derivative of distance to planet center
+    derivateDistToPlanetCenter = (distToPlanetCenter - lastDistToPlanetCenter) / dts;
+    lastDistToPlanetCenter = distToPlanetCenter;
+    var isNegativeMeanUnderground = alt_speed_ms_1 *  derivateDistToPlanetCenter;
+    Echo("isNegativeMeanUnderground:" + isNegativeMeanUnderground);
+
 
     //change the wantedAltitude BEFORE THIS LINE
     altitudeError = wantedAltitude - elev;
@@ -361,9 +385,6 @@ public void Main(string argument)
 
 
     var debugString = "";
-
-
-    double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
     shipAcceleration = Vector3D.Add(Vector3D.Negate(linearSpeedsShip), prevLinearSpeedsShip) / dts;
 
