@@ -301,9 +301,7 @@ public void Main(string argument)
      Vector3D absoluteNorthNotPlanetWorldsVector = new Vector3D(0.342063708833718, -0.704407897782847, -0.621934025954579);
 
     //from gg
-    IMyShipController shipController = listRemoteController[0];
-
-    Vector3D gravityVector = shipController.GetNaturalGravity();
+    Vector3D gravityVector = myRemoteControl.GetNaturalGravity();
     Vector3D planetRelativeLeftVector = shipForwardVector.Cross(gravityVector);
 
     Vector3D absoluteNorthVector;
