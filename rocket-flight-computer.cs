@@ -662,7 +662,7 @@ public void Main(string argument)
 
     if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
     {
-        wantedAltitude = 600;
+        wantedAltitude = 1500;
     }
 
     Echo("dts:" + dts);
@@ -674,9 +674,9 @@ public void Main(string argument)
             {
                 //if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
                 //{
-                wantedAltitude = 25;
+                wantedAltitude = 125;
 
-                if (elev < 40)
+                if (elev < 140)
                 {
                     clampWantedAlitudeSpeed = -5;
                 }
