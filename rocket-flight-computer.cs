@@ -29,17 +29,13 @@ FightStabilizator fightStabilizator;
 //x,y,z coords
 Vector3D vec3Dtarget = new Vector3D(0,0,0);
 
-
-//PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-//PIDController altRegulator = new PIDController(0.006f, .00f, 0.0f);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1500;
 double altitudeError = 0f;
 bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
-//PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.06f);
-//PIDController downwardSpeedAltRegulator = new PIDController(0.06f, .00f, 0.0f);
+
 PIDController downwardSpeedAltRegulator = new PIDController(1f, .00f, 0.0f);
 double g_constant = 9.8f;
 double alt = 0f;
@@ -60,9 +56,8 @@ bool firstMainLoop = true;
 //drone landing
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
 PIDController angleRollPIDcloseToTarget = new PIDController(1f, 0f, 0f);
-//PIDController angleRollPIDcloseToTarget = new PIDController(0f, 0f, 0f);
+
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
-//PIDController anglePitchPIDcloseToTarget = new PIDController(0f, 0f, 70.7f);
 PIDController anglePitchPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 
 
@@ -186,9 +181,6 @@ public void Main(string argument)
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-    //MyWaypointInfo.TryParse("GPS:4 reversed:-53590.85:26608.05:-11979.08:", out myWaypointInfoTarget);
-    //MyWaypointInfo.TryParse("GPS:/// #7:51179.25:-30228.41:13047.45:", out myWaypointInfoTarget);
-    //MyWaypointInfo.TryParse("GPS:/// #9:53629.33:-26508.26:12015.47:", out myWaypointInfoTarget);
 
     if (argument != null)
     {
