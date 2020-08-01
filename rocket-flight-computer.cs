@@ -60,6 +60,8 @@ PIDController angleRollPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
 PIDController anglePitchPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 
+IMyShipController myRemoteControl = null;
+
 
 public Program()
 {
@@ -152,25 +154,28 @@ public void Main(string argument)
     if (listRemoteController == null)
     { Echo("no IMyShipController available"); return; }
     //ship controlller GetTotalGravity()
-    IMyShipController myCurrentCockpit = listRemoteController[0];
-    Vector3D totalGravityVect3D = myCurrentCockpit.GetTotalGravity();
+    if (myRemoteControl == null)
+    {
+        myRemoteControl = listRemoteController[0];
+    }
+    Vector3D totalGravityVect3D = myRemoteControl.GetTotalGravity();
     Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
     Vector3D totalGravityVect3Dnormalized = Vector3D.Normalize(totalGravityVect3D);
     Echo("\n\ntotalGravityVect3Dnormalized:\n" + totalGravityVect3Dnormalized);
-    MyBlockOrientation cockpitOrientation = myCurrentCockpit.Orientation;
+    MyBlockOrientation cockpitOrientation = myRemoteControl.Orientation;
     var leftCockpitOrientation = cockpitOrientation.Left;
     Echo("leftCockpitOrientation:" + leftCockpitOrientation);
 
     //getting vectors to help with angles proposals
-    Vector3D shipForwardVector = myCurrentCockpit.WorldMatrix.Forward;
-    Vector3D shipLeftVector = myCurrentCockpit.WorldMatrix.Left;
-    Vector3D shipDownVector = myCurrentCockpit.WorldMatrix.Down;
+    Vector3D shipForwardVector = myRemoteControl.WorldMatrix.Forward;
+    Vector3D shipLeftVector = myRemoteControl.WorldMatrix.Left;
+    Vector3D shipDownVector = myRemoteControl.WorldMatrix.Down;
     //Echo("shipForwardVector:" + shipForwardVector);
     //Echo("shipLeftVector:" + shipLeftVector);
     //Echo("shipDownVector:" + shipDownVector);
 
     //Getting the ship/pb postion
-    Vector3D myPos = Me.GetPosition();
+    Vector3D myPos = myRemoteControl.GetPosition();
     Echo("myPos:\n" + myPos);
 
 
@@ -246,7 +251,7 @@ public void Main(string argument)
     double yawTmp = yawCWOrAntiCW;
 
     double elev;
-    myCurrentCockpit.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+    myRemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
@@ -270,7 +275,7 @@ public void Main(string argument)
     //change the wantedAltitude BEFORE THIS LINE
     altitudeError = wantedAltitude - elev;
 
-    MyShipVelocities myShipVel = myCurrentCockpit.GetShipVelocities();
+    MyShipVelocities myShipVel = myRemoteControl.GetShipVelocities();
     Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
     Vector3D linearSpeedsShipNormalized = Vector3D.Normalize(linearSpeedsShip);
 
@@ -390,7 +395,7 @@ public void Main(string argument)
 
     Echo("elev:" + elev);
     //PhysicalMass	Gets the physical mass of the ship, which accounts for inventory multiplier.
-    var physMass_kg = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    var physMass_kg = myRemoteControl.CalculateShipMass().PhysicalMass;
     debugString += " " + "physMass_kg:" + physMass_kg;
     debugString += "\n" + "elev:" + elev;
 
@@ -419,7 +424,7 @@ public void Main(string argument)
     //PhysicalMass Gets the physical mass of the ship, which accounts for inventory multiplier.
 
 
-    var totalMass_kg = myCurrentCockpit.CalculateShipMass().TotalMass;
+    var totalMass_kg = myRemoteControl.CalculateShipMass().TotalMass;
     debugString += "\n" + "totalMass_kg:" + totalMass_kg;
 
     var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
@@ -444,7 +449,7 @@ public void Main(string argument)
     last_alt = alt;
     last_alt_speed_ms_1 = alt_speed_ms_1;
 
-    var massOfShip = myCurrentCockpit.CalculateShipMass().PhysicalMass;
+    var massOfShip = myRemoteControl.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
     
     double control = altRegulator.Control(altitudeError, dts);
@@ -720,7 +725,7 @@ public void Main(string argument)
 	if(listAntenna.Count!=0){
 		listAntenna[0].HudText = str_to_display;
 	}
-    Me.CubeGrid.CustomName = str_to_display;
+    myRemoteControl.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
     Echo("control:" + control);
