@@ -580,8 +580,6 @@ public void Main(string argument)
     //angleRoll = speedRollError;
     //angleRoll = 0f;
 
-    double engine_cut_n = -1;
-
     //Echo("elev:"+ elev);
     //Echo("distWhenToStartBraking:" + distWhenToStartBraking);
     //Echo("distPitch:" + distPitch);
@@ -713,7 +711,6 @@ public void Main(string argument)
         + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
         + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
-    //+"\n8|" + Math.Round((engine_cut_n), 2) ;
     //var str_to_display = "lol";
     if (listAntenna.Count != 0)
     {
@@ -736,33 +733,35 @@ public void Main(string argument)
     {
         if (c.IsFunctional == true)
         {
-            if (remainingThrustToApply == -1)
+            if (c.IsSameConstructAs(flightIndicatorsShipController))
             {
-                remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control));
-            }
-            //Echo("c.MaxThrust"+c.MaxThrust);
-            //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
-            //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
-            if (c.MaxEffectiveThrust < remainingThrustToApply)
-            {
-                temp_thr_n = c.MaxEffectiveThrust;
-                remainingThrustToApply = remainingThrustToApply - c.MaxEffectiveThrust;
-            }
-            else
-            {
-                temp_thr_n = remainingThrustToApply;
-                remainingThrustToApply = 0;
-            }
-            //Echo("temp_thr_n:" + temp_thr_n);
-            //Echo("remainingThrustToApply:" + remainingThrustToApply);
-
-            if (temp_thr_n < 0)
-            {
-                c.ThrustOverride = Convert.ToSingle(200f);
-            }
-            else
-            {
-                c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+                if (remainingThrustToApply == -1)
+                {
+                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control));
+                }
+                //Echo("c.MaxThrust"+c.MaxThrust);
+                //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+                //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+                if (c.MaxEffectiveThrust < remainingThrustToApply)
+                {
+                    temp_thr_n = c.MaxEffectiveThrust;
+                    remainingThrustToApply = remainingThrustToApply - c.MaxEffectiveThrust;
+                }
+                else
+                {
+                    temp_thr_n = remainingThrustToApply;
+                    remainingThrustToApply = 0;
+                }
+                //Echo("temp_thr_n:" + temp_thr_n);
+                //Echo("remainingThrustToApply:" + remainingThrustToApply);
+                if (temp_thr_n < 0)
+                {
+                    c.ThrustOverride = Convert.ToSingle(200f);
+                }
+                else
+                {
+                    c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+                }
             }
         }
     }
