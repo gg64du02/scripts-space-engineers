@@ -1048,6 +1048,21 @@ public class FightStabilizator
         if (gyroscopes.Count == 0)
         {
             basicLibrary.GetBlocksOfType(gyroscopes);
+
+            //using just one gyroscope on the same grid as the shipController
+            IMyGyro tmpGyroscope = null;
+            foreach (var gyro in gyroscopes)
+            {
+                if (gyro.IsSameConstructAs(shipController))
+                {
+                    tmpGyroscope = gyro;
+                }
+            }
+            gyroscopes = new List<IMyGyro>();
+            if (tmpGyroscope != null)
+            {
+                gyroscopes.Add(tmpGyroscope);
+            }
             if (gyroscopes.Count == 0)
             {
                 WarningMessage = "Warning no gyro found.";
