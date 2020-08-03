@@ -148,15 +148,12 @@ public void Main(string argument)
     TimeSpan span = current - dt1970;
     Echo("span:" + span.TotalMilliseconds.ToString());
 
-    List<IMyShipController> listRemoteController = new List<IMyShipController>();
-    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemoteController);
-
-    if (listRemoteController == null)
+    if (flightIndicatorsShipController == null)
     { Echo("no IMyShipController available"); return; }
     //ship controlller GetTotalGravity()
     if (myRemoteControl == null)
     {
-        myRemoteControl = listRemoteController[0];
+        myRemoteControl = flightIndicatorsShipController;
     }
     Vector3D totalGravityVect3D = myRemoteControl.GetTotalGravity();
     Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
@@ -204,7 +201,7 @@ public void Main(string argument)
     if (vec3Dtarget == new Vector3D(0, 0, 0))
     {
         //using the expected remote control to give us the center of the current planet
-        listRemoteController[0].TryGetPlanetPosition(out vec3Dtarget);
+        flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
     }
 
 
@@ -258,7 +255,7 @@ public void Main(string argument)
     //known as alt_speed_ms_1
     //generating a vector from the current position to the center of the planet
     Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
-    listRemoteController[0].TryGetPlanetPosition(out VecPlanetCenter);
+    flightIndicatorsShipController.TryGetPlanetPosition(out VecPlanetCenter);
     Vector3D negateVecPlanetCenter = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
     Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
