@@ -1177,11 +1177,17 @@ bool TryInit()
 
             if (remoteControllers.Count != 0)
             {
-                flightIndicatorsShipController = remoteControllers[0];
+                foreach (var sc in remoteControllers)
+                {
+                    if (sc.IsSameConstructAs(Me))
+                    {
+                        flightIndicatorsShipController = (IMyShipController)sc;
+                    }
+                }
             }
             else
             {
-                string message = "No controller found.";
+                string message = "No remote control found on the same grid.";
                 Echo(message);
                 lcdHelper.DisplayMessage(message, flightIndicatorsLcdDisplay);
                 return false;
