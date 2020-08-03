@@ -201,12 +201,10 @@ public void Main(string argument)
         }
     }
 
-    List<IMyShipController> listRemote = new List<IMyShipController>();
-    GridTerminalSystem.GetBlocksOfType<IMyShipController>(listRemote);
     if ( vec3Dtarget == new Vector3D(0, 0, 0))
     {
         //using the expected remote control to give us the center of the current planet
-        listRemote[0].TryGetPlanetPosition(out vec3Dtarget);
+        listRemoteController[0].TryGetPlanetPosition(out vec3Dtarget);
     }
 
 
