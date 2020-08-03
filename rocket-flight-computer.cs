@@ -27,7 +27,7 @@ FightStabilizator fightStabilizator;
 
 
 //x,y,z coords
-Vector3D vec3Dtarget = new Vector3D(0,0,0);
+Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1500;
@@ -201,14 +201,14 @@ public void Main(string argument)
         }
     }
 
-    if ( vec3Dtarget == new Vector3D(0, 0, 0))
+    if (vec3Dtarget == new Vector3D(0, 0, 0))
     {
         //using the expected remote control to give us the center of the current planet
         listRemoteController[0].TryGetPlanetPosition(out vec3Dtarget);
     }
 
 
-    Echo("vec3Dtarget:"+ vec3Dtarget);
+    Echo("vec3Dtarget:" + vec3Dtarget);
 
     //targetGravityVectorNormalized
     Vector3D earthLikeCenter = new Vector3D(0, 0, 0);
@@ -258,7 +258,7 @@ public void Main(string argument)
     //known as alt_speed_ms_1
     //generating a vector from the current position to the center of the planet
     Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
-    listRemote[0].TryGetPlanetPosition(out VecPlanetCenter);
+    listRemoteController[0].TryGetPlanetPosition(out VecPlanetCenter);
     Vector3D negateVecPlanetCenter = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
     Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
@@ -266,7 +266,7 @@ public void Main(string argument)
     //derivative of distance to planet center
     derivateDistToPlanetCenter = (distToPlanetCenter - lastDistToPlanetCenter) / dts;
     lastDistToPlanetCenter = distToPlanetCenter;
-    var isNegativeMeanUnderground = alt_speed_ms_1 *  derivateDistToPlanetCenter;
+    var isNegativeMeanUnderground = alt_speed_ms_1 * derivateDistToPlanetCenter;
     Echo("isNegativeMeanUnderground:" + isNegativeMeanUnderground);
 
 
@@ -295,8 +295,8 @@ public void Main(string argument)
     //Comply with the library (and mainly from it)========================
     const double rad2deg = 180 / Math.PI;
     // thanks whip for those vectors
-     Vector3D absoluteNorthPlanetWorldsVector = new Vector3D(0, -1, 0);
-     Vector3D absoluteNorthNotPlanetWorldsVector = new Vector3D(0.342063708833718, -0.704407897782847, -0.621934025954579);
+    Vector3D absoluteNorthPlanetWorldsVector = new Vector3D(0, -1, 0);
+    Vector3D absoluteNorthNotPlanetWorldsVector = new Vector3D(0.342063708833718, -0.704407897782847, -0.621934025954579);
 
     //from gg
     Vector3D gravityVector = myRemoteControl.GetNaturalGravity();
@@ -447,7 +447,7 @@ public void Main(string argument)
 
     var massOfShip = myRemoteControl.CalculateShipMass().PhysicalMass;
     debugString += "\n" + "massOfShip:" + massOfShip;
-    
+
     double control = altRegulator.Control(altitudeError, dts);
 
     Echo("altitudeError:" + altitudeError);
@@ -479,7 +479,7 @@ public void Main(string argument)
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double distRoll = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), VectToTarget);
-    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking-1), Convert.ToSingle(distWhenToStartBraking+1));
+    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking - 1), Convert.ToSingle(distWhenToStartBraking + 1));
     double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -518,14 +518,14 @@ public void Main(string argument)
 
     Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
     Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
-    
+
 
     double forwardProjPlaneVectorLength = forwardProjPlaneVector.Length();
 
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-    double distPitch =  -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
-    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking-1), Convert.ToSingle(distWhenToStartBraking+1));
+    double distPitch = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
+    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking - 1), Convert.ToSingle(distWhenToStartBraking + 1));
     double wantedSpeedPitch = (V_max / distWhenToStartBraking) * clampedDistPitch;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -550,7 +550,7 @@ public void Main(string argument)
     double tmpAnglePitchPID = anglePitchPID.Control(speedPitchError, dts);
     //if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
     if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
-        {
+    {
         anglePitch = tmpAnglePitchPID;
         Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
     }
@@ -569,7 +569,7 @@ public void Main(string argument)
 
     //******Pitch************end
 
-    
+
     pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
     rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
 
@@ -643,7 +643,7 @@ public void Main(string argument)
     controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
     Echo("controlAltSpeed:" + controlAltSpeed);
 
-    Echo("thr_to_weight_ratio:"+ thr_to_weight_ratio);
+    Echo("thr_to_weight_ratio:" + thr_to_weight_ratio);
 
     //feedback loop to counter the wrong speed
     control = controlAltSpeed;
@@ -716,11 +716,12 @@ public void Main(string argument)
         + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
         + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
-        //+"\n8|" + Math.Round((engine_cut_n), 2) ;
+    //+"\n8|" + Math.Round((engine_cut_n), 2) ;
     //var str_to_display = "lol";
-	if(listAntenna.Count!=0){
-		listAntenna[0].HudText = str_to_display;
-	}
+    if (listAntenna.Count != 0)
+    {
+        listAntenna[0].HudText = str_to_display;
+    }
     myRemoteControl.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
@@ -736,7 +737,7 @@ public void Main(string argument)
 
     foreach (var c in cs)
     {
-        if(c.IsFunctional == true)
+        if (c.IsFunctional == true)
         {
             if (remainingThrustToApply == -1)
             {
