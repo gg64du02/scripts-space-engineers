@@ -1172,12 +1172,12 @@ bool TryInit()
         }
         else
         {
-            List<IMyShipController> shipControllers = new List<IMyShipController>();
-            GridTerminalSystem.GetBlocksOfType<IMyShipController>(shipControllers);
+            List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
+            GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
 
-            if (shipControllers.Count != 0)
+            if (remoteControllers.Count != 0)
             {
-                flightIndicatorsShipController = shipControllers[0];
+                flightIndicatorsShipController = remoteControllers[0];
             }
             else
             {
