@@ -184,12 +184,23 @@ public void Main(string argument)
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
 
+
+
     if (argument != null)
     {
         if (argument != "")
         {
             Echo("argument:" + argument);
-            MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+            if (argument.Contains(":#") == true)
+            {
+                Echo("if (argument.Contains(:#) == true)");
+                MyWaypointInfo.TryParse(argument.Substring(0, argument.Length - 10), out myWaypointInfoTarget);
+            }
+            else
+            {
+                Echo("not if (argument.Contains(:#) == true)");
+                MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+            }
             if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
             {
                 //x,y,z coords is global to remember between each loop
