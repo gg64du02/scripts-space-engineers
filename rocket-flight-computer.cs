@@ -700,6 +700,10 @@ public void Main(string argument)
     }
     //altitude management and downward speed management========================== end
 
+    if (Double.IsNaN(controlAltSpeed) ==true)
+    {
+        downwardSpeedAltRegulator.Reset();
+    }
 
     bool stalizablePitch = true;
     bool stalizableRoll = true;
@@ -726,7 +730,8 @@ public void Main(string argument)
         + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
         + "\n10|" + Math.Round((0.0f), 0)
         + "\n11|wAS|" + Math.Round((wantedAlitudeSpeed), 0)
-        + "\n12|con|" + Math.Round((control), 0);
+        + "\n12|wA|" + Math.Round((wantedAltitude), 0)
+        + "\n13|con|" + Math.Round((control), 0);
     //var str_to_display = "lol";
     if (listAntenna.Count != 0)
     {
