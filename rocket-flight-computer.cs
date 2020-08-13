@@ -722,6 +722,11 @@ public void Main(string argument)
         + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
         + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+    str_to_display = "\n8|elev|" + Math.Round((elev), 0)
+        + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
+        + "\n10|" + Math.Round((0.0f), 0)
+        + "\n11|wAS|" + Math.Round((wantedAlitudeSpeed), 0)
+        + "\n12|con|" + Math.Round((control), 0);
     //var str_to_display = "lol";
     if (listAntenna.Count != 0)
     {
