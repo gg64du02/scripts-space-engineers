@@ -470,7 +470,8 @@ public void Main(string argument)
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
 
     double g = 9.8;
-    double MaxSurfaceAcc = (TWR - 1) * g;
+    //double MaxSurfaceAcc = (TWR - 1) * g;
+    double MaxSurfaceAcc = (Math.Sin(Math.PI * AngleRollMaxAcc / 180)) * g;
 
     double brakingTime = V_max / MaxSurfaceAcc;
     double distWhenToStartBraking = brakingTime * V_max;
