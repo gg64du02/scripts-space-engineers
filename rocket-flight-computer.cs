@@ -516,9 +516,9 @@ public void Main(string argument)
         Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
     //angleRoll = tmpAngleRollPID;
-    if (Math.Abs(distRoll) < 2)
+    if (Math.Abs(distRoll) < 8)
     {
-        angleRoll = angleRoll + 0.02 * angleRoll * angleRoll * angleRoll;
+        angleRoll = angleRoll + 0.2 * angleRoll * angleRoll * angleRoll;
     }
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -569,9 +569,9 @@ public void Main(string argument)
         Echo("tmpAnglePitchPIDcloseToTarget");
     }
     //anglePitch = tmpAnglePitchPID;
-    if (Math.Abs(distPitch) < 2)
+    if (Math.Abs(distPitch) < 8)
     {
-        anglePitch = anglePitch + 0.02 * anglePitch * anglePitch * anglePitch;
+        anglePitch = anglePitch + 0.2 * anglePitch * anglePitch * anglePitch;
     }
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
@@ -705,6 +705,12 @@ public void Main(string argument)
     {
         downwardSpeedAltRegulator.Reset();
     }
+
+    if (Double.IsNaN(control) == true)
+    {
+        altRegulator.Reset();
+    }
+    
 
     bool stalizablePitch = true;
     bool stalizableRoll = true;
