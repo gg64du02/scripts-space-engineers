@@ -261,6 +261,11 @@ public void Main(string argument)
 
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
+    if(dts == 0)
+    {
+        return;
+    }
+
     //everything necessary to know if it is underground (sign change will be used)
     //derivative of elev
     //known as alt_speed_ms_1
@@ -701,7 +706,7 @@ public void Main(string argument)
     }
     //altitude management and downward speed management========================== end
 
-    if (Double.IsNaN(controlAltSpeed) ==true)
+    if (Double.IsNaN(controlAltSpeed) == true)
     {
         downwardSpeedAltRegulator.Reset();
     }
@@ -710,7 +715,7 @@ public void Main(string argument)
     {
         altRegulator.Reset();
     }
-    
+
 
     bool stalizablePitch = true;
     bool stalizableRoll = true;
