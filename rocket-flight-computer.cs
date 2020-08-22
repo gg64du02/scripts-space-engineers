@@ -781,13 +781,14 @@ public void Main(string argument)
                 {
                     remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control *1 ));
                 }
+                //Echo("physMass_N" + physMass_N);
                 //Echo("c.MaxThrust"+c.MaxThrust);
                 //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
                 //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
-                if (c.MaxEffectiveThrust < remainingThrustToApply)
+                if (c.MaxThrust < remainingThrustToApply)
                 {
-                    temp_thr_n = c.MaxEffectiveThrust;
-                    remainingThrustToApply = remainingThrustToApply - c.MaxEffectiveThrust;
+                    temp_thr_n = c.MaxThrust;
+                    remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
                 }
                 else
                 {
