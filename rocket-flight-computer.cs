@@ -633,8 +633,8 @@ public void Main(string argument)
     double altitudeSpeedError = 0;
     double controlAltSpeed = 0;
 
-    double V_max_altSpeed = 100;
-    double V_min_altSpeed = -120;
+    double V_max_altSpeed = 110;
+    double V_min_altSpeed = -100;
     //wantedAltitude 
     //change the wantedAltitude BEFORE THIS LINE
     altitudeError = wantedAltitude - elev;
