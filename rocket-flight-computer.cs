@@ -261,8 +261,11 @@ public void Main(string argument)
 
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
 
-    if(dts == 0)
+    //var listLight = new List<IMyInteriorLight>();
+    //GridTerminalSystem.GetBlocksOfType(listLight);
+    if (dts == 0)
     {
+        //listLight[0].Color = Color.DarkRed;
         return;
     }
 
@@ -521,9 +524,12 @@ public void Main(string argument)
         Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
     //angleRoll = tmpAngleRollPID;
+    if (vec3Dtarget != new Vector3D(0, 0, 0))
+    {
     if (Math.Abs(distRoll) < 8)
     {
         angleRoll = angleRoll + 0.2 * angleRoll * angleRoll * angleRoll;
+    }
     }
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -573,10 +579,13 @@ public void Main(string argument)
         anglePitch = tmpAnglePitchPIDcloseToTarget;
         Echo("tmpAnglePitchPIDcloseToTarget");
     }
-    //anglePitch = tmpAnglePitchPID;
+    //anglePitch = tmpAnglePitchPID;*
+    if (vec3Dtarget != new Vector3D(0, 0, 0))
+    {
     if (Math.Abs(distPitch) < 8)
     {
         anglePitch = anglePitch + 0.2 * anglePitch * anglePitch * anglePitch;
+    }
     }
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
@@ -770,7 +779,7 @@ public void Main(string argument)
             {
                 if (remainingThrustToApply == -1)
                 {
-                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control));
+                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control *1 ));
                 }
                 //Echo("c.MaxThrust"+c.MaxThrust);
                 //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
