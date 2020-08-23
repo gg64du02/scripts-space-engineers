@@ -432,8 +432,8 @@ public void Main(string argument)
 
     debugString += "\n" + "physMass_kg:" + physMass_kg;
 
-    double g = 9.8;
-    //double g = gravityVector.Length();
+    //double g = 9.8;
+    double g = gravityVector.Length();
 
     double physMass_N = physMass_kg * g;
     debugString += "\n" + "physMass_N:" + physMass_N;
