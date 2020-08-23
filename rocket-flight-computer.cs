@@ -122,6 +122,7 @@ public void Main(string argument)
 
     //USE aaa_needs_testing bp
 
+
     System.DateTime now = System.DateTime.UtcNow;
     Echo("now:" + now);
 
@@ -135,13 +136,13 @@ public void Main(string argument)
     DateTime d = new DateTime(1970, 01, 01);
     var temp = d.Ticks; // == 621355968000000000
 
-    Echo("temp:" + temp);
+    //Echo("temp:" + temp);
 
     var temp2 = now.Ticks;
 
-    Echo("temp2:" + temp2);
+    //Echo("temp2:" + temp2);
 
-    Echo("temp2/10**6:" + (temp2 / 1000000f));
+    //Echo("temp2/10**6:" + (temp2 / 1000000f));
 
     DateTime dt1970 = new DateTime(1970, 1, 1);
     DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
@@ -156,7 +157,7 @@ public void Main(string argument)
         myRemoteControl = flightIndicatorsShipController;
     }
     Vector3D totalGravityVect3D = myRemoteControl.GetTotalGravity();
-    Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
+    //Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
     Vector3D totalGravityVect3Dnormalized = Vector3D.Normalize(totalGravityVect3D);
     Echo("\n\ntotalGravityVect3Dnormalized:\n" + totalGravityVect3Dnormalized);
     MyBlockOrientation cockpitOrientation = myRemoteControl.Orientation;
@@ -173,7 +174,7 @@ public void Main(string argument)
 
     //Getting the ship/pb postion
     Vector3D myPos = myRemoteControl.GetPosition();
-    Echo("myPos:\n" + myPos);
+    //Echo("myPos:\n" + myPos);
 
 
 
@@ -216,7 +217,7 @@ public void Main(string argument)
     }
 
 
-    Echo("vec3Dtarget:" + vec3Dtarget);
+    //Echo("vec3Dtarget:" + vec3Dtarget);
 
     //targetGravityVectorNormalized
     Vector3D earthLikeCenter = new Vector3D(0, 0, 0);
@@ -228,7 +229,7 @@ public void Main(string argument)
     //distance to target TODO
     Vector3D VectToTarget = Vector3D.Add(vec3DtargetNegate, myPos);
     double distToTarget = VectToTarget.Length();
-    Echo("\ndistToTarget:" + distToTarget);
+    //Echo("\ndistToTarget:" + distToTarget);
 
     //totalGravityVect3Dnormalized cross targetGravityVectorNormalized
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
@@ -259,7 +260,11 @@ public void Main(string argument)
     double elev;
     myRemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
+    //Best we have is Runtime.LastRunTime and Runtime.TimeSinceLastRun
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+    Echo("dts:" + dts);
+    double dts2 = Runtime.LastRunTimeMs;
+    Echo("dts2:" + dts2);
 
     //var listLight = new List<IMyInteriorLight>();
     //GridTerminalSystem.GetBlocksOfType(listLight);
@@ -283,7 +288,7 @@ public void Main(string argument)
     derivateDistToPlanetCenter = (distToPlanetCenter - lastDistToPlanetCenter) / dts;
     lastDistToPlanetCenter = distToPlanetCenter;
     var isNegativeMeanUnderground = alt_speed_ms_1 * derivateDistToPlanetCenter;
-    Echo("isNegativeMeanUnderground:" + isNegativeMeanUnderground);
+    //Echo("isNegativeMeanUnderground:" + isNegativeMeanUnderground);
 
 
     //change the wantedAltitude BEFORE THIS LINE
@@ -427,7 +432,10 @@ public void Main(string argument)
 
     debugString += "\n" + "physMass_kg:" + physMass_kg;
 
-    double physMass_N = physMass_kg * g_constant;
+    double g = 9.8;
+    //double g = gravityVector.Length();
+
+    double physMass_N = physMass_kg * g;
     debugString += "\n" + "physMass_N:" + physMass_N;
 
 
@@ -466,8 +474,8 @@ public void Main(string argument)
 
     double control = altRegulator.Control(altitudeError, dts);
 
-    Echo("altitudeError:" + altitudeError);
-    Echo("alt_speed_ms_1:" + alt_speed_ms_1);
+    Echo("altitudeError:" + Math.Round((altitudeError), 3));
+    Echo("alt_speed_ms_1:" + Math.Round((alt_speed_ms_1), 3));
 
 
     //double TWR = 4.59;
@@ -477,7 +485,6 @@ public void Main(string argument)
     double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
 
-    double g = 9.8;
     //double MaxSurfaceAcc = (TWR - 1) * g;
     double MaxSurfaceAcc = (Math.Sin(Math.PI * AngleRollMaxAcc / 180)) * g;
 
@@ -516,12 +523,12 @@ public void Main(string argument)
     if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
     {
         angleRoll = tmpAngleRollPID;
-        Echo("tmpAngleRollPID:" + tmpAngleRollPID);
+        //Echo("tmpAngleRollPID:" + tmpAngleRollPID);
     }
     else
     {
         angleRoll = tmpAngleRollPIDcloseToTarget;
-        Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
+        //Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
     }
     //angleRoll = tmpAngleRollPID;
     if (vec3Dtarget != new Vector3D(0, 0, 0))
@@ -572,12 +579,12 @@ public void Main(string argument)
     if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
     {
         anglePitch = tmpAnglePitchPID;
-        Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
+        //Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
     }
     else
     {
         anglePitch = tmpAnglePitchPIDcloseToTarget;
-        Echo("tmpAnglePitchPIDcloseToTarget");
+        //Echo("tmpAnglePitchPIDcloseToTarget");
     }
     //anglePitch = tmpAnglePitchPID;*
     if (vec3Dtarget != new Vector3D(0, 0, 0))
@@ -617,16 +624,16 @@ public void Main(string argument)
     //Echo("wantedSpeedRoll:" + wantedSpeedRoll);
     //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
     //Echo("speedRoll:" + speedRoll);
-    Echo("anglePitch:" + anglePitch);
-    Echo("angleRoll:" + angleRoll);
+    Echo("anglePitch:" + Math.Round((anglePitch), 3));
+    Echo("angleRoll:" + Math.Round((angleRoll), 3));
 
     Vector3D gravityNormalized = totalGravityVect3Dnormalized;
 
     double scaleForThetaRegardingGravity = Vector3D.Dot(gravityNormalized, shipDownVector);
     double thetaMustBe = 180 * Math.Acos(scaleForThetaRegardingGravity) / Math.PI;
-    Echo("thetaMustBe:" + thetaMustBe);
-    Echo("wantedAltitude:" + wantedAltitude);
-    Echo("altitudeError:" + altitudeError);
+    Echo("thetaMustBe:" + Math.Round((thetaMustBe), 3));
+    Echo("wantedAltitude:" + Math.Round((wantedAltitude), 3));
+    Echo("altitudeError:" + Math.Round((altitudeError), 3));
 
     //altitude management and downward speed management========================== start
     double wantedAlitudeSpeed = 0;
@@ -643,15 +650,15 @@ public void Main(string argument)
     //compute the spare thrust to change the change of altitude speed, cap it at 1 to avoid "spectacular landing" aka ship crash if lag occurs
     //it helps avoid hitting the ground quick while the ship is loaded with a 1 < thr_to_weight_ratio < 2
     double spareThrustToWeightRatio = MyMath.Clamp(Convert.ToSingle(thr_to_weight_ratio - 1), Convert.ToSingle(0), Convert.ToSingle(1));
-    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length() * spareThrustToWeightRatio);
-    Echo("h_max_alt:" + h_max_alt);
+    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * g * spareThrustToWeightRatio);
+    Echo("h_max_alt:" + Math.Round((h_max_alt), 3));
 
     double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
-    Echo("clampAltError:" + clampAltError);
+    Echo("clampAltError:" + Math.Round((clampAltError), 3));
 
     //TODO: make it asymetric
     wantedAlitudeSpeed = (clampAltError / h_max_alt) * V_max_altSpeed;
-    Echo("wantedAlitudeSpeed:" + wantedAlitudeSpeed);
+    Echo("wantedAlitudeSpeed:" + Math.Round((wantedAlitudeSpeed), 3));
 
     double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
 
@@ -663,12 +670,12 @@ public void Main(string argument)
     //}
     //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
     altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-    Echo("altitudeSpeedError:" + altitudeSpeedError);
+    Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
 
     controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-    Echo("controlAltSpeed:" + controlAltSpeed);
+    Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
 
-    Echo("thr_to_weight_ratio:" + thr_to_weight_ratio);
+    Echo("thr_to_weight_ratio:" + Math.Round((thr_to_weight_ratio), 3));
 
     //feedback loop to counter the wrong speed
     control = controlAltSpeed;
@@ -706,10 +713,10 @@ public void Main(string argument)
                 //}
                 //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
                 altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-                Echo("altitudeSpeedError:" + altitudeSpeedError);
+                Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3) );
 
                 controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-                Echo("controlAltSpeed:" + controlAltSpeed);
+                Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3) );
 
                 //feedback loop to counter the wrong speed
                 control = controlAltSpeed;
@@ -765,7 +772,7 @@ public void Main(string argument)
     myRemoteControl.CubeGrid.CustomName = str_to_display;
 
     debugString += "\n" + "control:" + control;
-    Echo("control:" + control);
+    Echo("control:" + Math.Round((control), 2));
 
     //applying what the pid processed
     //var cs = new List<IMyThrust>();
