@@ -639,7 +639,11 @@ public void Main(string argument)
     //change the wantedAltitude BEFORE THIS LINE
     altitudeError = wantedAltitude - elev;
 
-    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length());
+    //double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length());
+    //compute the spare thrust to change the change of altitude speed, cap it at 1 to avoid "spectacular landing" aka ship crash if lag occurs
+    //it helps avoid hitting the ground quick while the ship is loaded with a 1 < thr_to_weight_ratio < 2
+    double spareThrustToWeightRatio = MyMath.Clamp(Convert.ToSingle(thr_to_weight_ratio - 1), Convert.ToSingle(0), Convert.ToSingle(1));
+    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length() * spareThrustToWeightRatio);
     Echo("h_max_alt:" + h_max_alt);
 
     double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
