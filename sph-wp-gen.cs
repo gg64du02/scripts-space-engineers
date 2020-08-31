@@ -21,6 +21,12 @@ double planetRadius = 60000;
 
 List<Vector3D> generatedPoints = new List<Vector3D>();
 
+List<double> listOfRange = new List<Double>();
+
+
+Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
+
+
 
 public Program()
 {
@@ -60,6 +66,13 @@ public Program()
             generatedPoints.Add(generatedPoint);
             N_count = N_count + 1;
         }
+    }
+    foreach(Vector3D gp in generatedPoints)
+    {
+        Vector3D tmpV3D = gp- currentShipPos;
+        //Echo("tmpV3D:" + tmpV3D);
+        double range = tmpV3D.Length();
+        Echo("range:" + range);
     }
 }
 
@@ -106,6 +119,14 @@ public void Main(string argument, UpdateType updateSource)
             N_count = N_count + 1;
         }
     }*/
+
+    foreach (Vector3D gp in generatedPoints)
+    {
+        Vector3D tmpV3D = gp - currentShipPos;
+        //Echo("tmpV3D:" + tmpV3D);
+        double range = tmpV3D.Length();
+        Echo("range:" + range);
+    }
 
     Echo("N_count:" + N_count);
     Echo("generatedPoints:" + generatedPoints);
