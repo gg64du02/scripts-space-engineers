@@ -2,10 +2,10 @@
 //https://www.cmu.edu/biolphys/deserno/pdf/sphere_equi.pdf
 
 //sphere radius in meters
-double r = 60000;
+double r = 60;
 
 //Numbers of wanted points
-double N = 5000;
+double N = 50;
 
 //numbers of generated points
 double N_count = 0;
@@ -75,7 +75,7 @@ public void Main(string argument, UpdateType updateSource)
     for (int m = 0; m < M_v; m++)
     {
         double v = Math.PI * (m + .5) / M_v;
-        double M_phi = Math.Round((2 * Math.PI * Math.sin(v) / d_v), 3);
+        double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
         for (int n = 0; n < M_phi; n++)
         {
             double phi = 2 * Math.PI * n / M_phi;
@@ -83,4 +83,5 @@ public void Main(string argument, UpdateType updateSource)
             N_count = N_count + 1;
         }
     }
+    Echo("N_count:" + N_count);
 }
