@@ -19,6 +19,8 @@ double d_phi = 0;
 
 double planetRadius = 60000;
 
+List<Vector3D> generatedPoints = new List<Vector3D>();
+
 
 public Program()
 {
@@ -54,7 +56,8 @@ public Program()
             double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
             double z = planetRadius * r * Math.Cos(phi);
             Vector3D generatedPoint = new Vector3D(x, y, z);
-            Echo("generatedPoint:"+ generatedPoint);
+            //Echo("generatedPoint:"+ generatedPoint);
+            generatedPoints.Add(generatedPoint);
             N_count = N_count + 1;
         }
     }
@@ -79,12 +82,14 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
+    Echo("N:" + N);
     Echo("a:" + a);
     Echo("d:" + d);
     Echo("M_v:" + M_v);
     Echo("d_v:" + d_v);
     Echo("d_phi:" + d_phi);
 
+    /*
     for (int m = 0; m < M_v; m++)
     {
         double v = Math.PI * (m + .5) / M_v;
@@ -97,10 +102,13 @@ public void Main(string argument, UpdateType updateSource)
             double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
             double z = planetRadius * r * Math.Cos(phi);
             Vector3D generatedPoint = new Vector3D(x, y, z);
-            Echo("generatedPoint:" + generatedPoint);
+            //Echo("generatedPoint:" + generatedPoint);
             N_count = N_count + 1;
         }
-    }
+    }*/
 
     Echo("N_count:" + N_count);
+    Echo("generatedPoints:" + generatedPoints);
+    Echo("generatedPoints.Count:" + generatedPoints.Count);
+
 }
