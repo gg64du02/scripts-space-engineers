@@ -26,7 +26,33 @@ List<double> listOfRange = new List<Double>();
 
 Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
 
-
+public void generateWaypoints()
+{
+    for (int m = 0; m < M_v; m++)
+    {
+        double v = Math.PI * (m + .5) / M_v;
+        double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
+        for (int n = 0; n < M_phi; n++)
+        {
+            double phi = 2 * Math.PI * n / M_phi;
+            //Create point using Eqn. (1).
+            double x = planetRadius * r * Math.Sin(v) * Math.Cos(phi);
+            double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
+            double z = planetRadius * r * Math.Cos(phi);
+            Vector3D generatedPoint = new Vector3D(x, y, z);
+            //Echo("generatedPoint:"+ generatedPoint);
+            generatedPoints.Add(generatedPoint);
+            N_count = N_count + 1;
+        }
+    }
+    foreach (Vector3D gp in generatedPoints)
+    {
+        Vector3D tmpV3D = gp - currentShipPos;
+        //Echo("tmpV3D:" + tmpV3D);
+        double range = tmpV3D.Length();
+        Echo("range:" + range);
+    }
+}
 
 public Program()
 {
@@ -49,31 +75,7 @@ public Program()
     d_v = Math.PI / M_v;
     d_phi = a / d_v;
 
-
-    for (int m = 0; m < M_v; m++)
-    {
-        double v = Math.PI * (m + .5) / M_v;
-        double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
-        for (int n = 0; n < M_phi; n++)
-        {
-            double phi = 2 * Math.PI * n / M_phi;
-            //Create point using Eqn. (1).
-            double x = planetRadius * r * Math.Sin(v) * Math.Cos(phi);
-            double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
-            double z = planetRadius * r * Math.Cos(phi);
-            Vector3D generatedPoint = new Vector3D(x, y, z);
-            //Echo("generatedPoint:"+ generatedPoint);
-            generatedPoints.Add(generatedPoint);
-            N_count = N_count + 1;
-        }
-    }
-    foreach(Vector3D gp in generatedPoints)
-    {
-        Vector3D tmpV3D = gp- currentShipPos;
-        //Echo("tmpV3D:" + tmpV3D);
-        double range = tmpV3D.Length();
-        Echo("range:" + range);
-    }
+    generateWaypoints();
 }
 
 public void Save()
@@ -102,23 +104,8 @@ public void Main(string argument, UpdateType updateSource)
     Echo("d_v:" + d_v);
     Echo("d_phi:" + d_phi);
 
-    /*
-    for (int m = 0; m < M_v; m++)
-    {
-        double v = Math.PI * (m + .5) / M_v;
-        double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
-        for (int n = 0; n < M_phi; n++)
-        {
-            double phi = 2 * Math.PI * n / M_phi;
-            //Create point using Eqn. (1).
-            double x = planetRadius * r * Math.Sin(v) * Math.Cos(phi);
-            double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
-            double z = planetRadius * r * Math.Cos(phi);
-            Vector3D generatedPoint = new Vector3D(x, y, z);
-            //Echo("generatedPoint:" + generatedPoint);
-            N_count = N_count + 1;
-        }
-    }*/
+
+    generateWaypoints();
 
     foreach (Vector3D gp in generatedPoints)
     {
