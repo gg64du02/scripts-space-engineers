@@ -1,6 +1,8 @@
 //script would be based on
 //https://www.cmu.edu/biolphys/deserno/pdf/sphere_equi.pdf
 
+
+//Constants to generate equidistributed points on the surface of a sphere
 //sphere radius in meters
 double r = 1;
 
@@ -19,8 +21,8 @@ double d_phi = 0;
 
 double planetRadius = 60000;
 
-List<double> listOfRange = new List<Double>();
 
+//the ship position when the script is started
 Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
 
 public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> pointsToTest, Vector3D pointToGetCloseTo)
@@ -97,16 +99,16 @@ public List<Vector3D> generateWaypoints()
     }
 
     Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
-    foreach (Vector3D gp in generatedPoints)
-    {
-        Vector3D tmpV3D = gp - currentShipPos;
-        //Echo("tmpV3D:" + tmpV3D);
-        double range = tmpV3D.Length();
-        //Echo("range:" + range);
-        //length squared needed (quicker)
-        double rangeSquared = tmpV3D.LengthSquared();
-        //Echo("rangeSquared:" + rangeSquared);
-    }
+    //foreach (Vector3D gp in generatedPoints)
+    //{
+    //    Vector3D tmpV3D = gp - currentShipPos;
+    //    //Echo("tmpV3D:" + tmpV3D);
+    //    double range = tmpV3D.Length();
+    //    //Echo("range:" + range);
+    //    //length squared needed (quicker)
+    //    double rangeSquared = tmpV3D.LengthSquared();
+    //    //Echo("rangeSquared:" + rangeSquared);
+    //}
 
 
     List<Vector3D> pointsPath = new List<Vector3D>();
@@ -202,15 +204,6 @@ public void Main(string argument, UpdateType updateSource)
     List<Vector3D> waypointsListV3D = new List<Vector3D>();
 
     waypointsListV3D = generateWaypoints();
-
-    //List<Vector3D> lol = new List<Vector3D>();
-    //lol= nClosestPointsToADesignatedPoint(6, generatedPoints, new Vector3D(30000, 30000, 30000));
-    //Echo("lol.Count:" + lol.Count);
-
-    //foreach (Vector3D nCP in lol)
-    //{
-    //    //Echo("nCP:" + nCP);
-    //}
 
     Echo("N_count:" + N_count);
     Echo("waypointsListV3D:" + waypointsListV3D);
