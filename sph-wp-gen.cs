@@ -41,7 +41,7 @@ public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> poi
         foreach (var pt in pointsToTest)
         {
             //Echo("foreach (var pt in pointsToTest)");
-            if (tmpListOfClosestPoints.Count<= n)
+            if (tmpListOfClosestPoints.Count< n)
             {
                 //Echo("if (tmpListOfClosestPoints.Count<= n)");
                 //fill up the list with the start of the list
@@ -106,10 +106,26 @@ public void generateWaypoints()
         //Echo("rangeSquared:" + rangeSquared);
     }
 
-    //while( RemainingPoints.Count != 0)
-    //{
-    //    Remine
-    //}
+
+    List<Vector3D> pointsPath = new List<Vector3D>();
+    
+    //copy of generated that can be modified
+    List<Vector3D> RemainingPoints = generatedPoints;
+
+    Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
+
+    //get the closest point
+    Vector3D pointPath = nClosestPointsToADesignatedPoint(1, generatedPoints, currentShipPos);
+    pointsPath.Add(pointPath);
+
+    //removed it because it is now inside the path
+    RemainingPoints.Remove(pointPath);
+
+    //start doing the same to the rest of the points
+    while (RemainingPoints.Count > 0)
+    {
+        lol = nClosestPointsToADesignatedPoint(6, generatedPoints, currentShipPos);
+    }
 
 }
 
