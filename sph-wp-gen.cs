@@ -115,11 +115,13 @@ public void generateWaypoints()
     List<Vector3D> RemainingPoints = generatedPoints;
 
     //get the closest point
-    Vector3D pointPath = nClosestPointsToADesignatedPoint(1, generatedPoints, currentShipPos);
+    Vector3D pointPath = (nClosestPointsToADesignatedPoint(1, generatedPoints, currentShipPos))[0];
     pointsPath.Add(pointPath);
 
     //removed it because it is now inside the path
     RemainingPoints.Remove(pointPath);
+
+    List<Vector3D> localPointsToLastPointPath = new List<Vector3D>();
 
     //start doing the same to the rest of the points
     while (RemainingPoints.Count > 0)
