@@ -19,8 +19,6 @@ double d_phi = 0;
 
 double planetRadius = 60000;
 
-List<Vector3D> generatedPoints = new List<Vector3D>();
-
 List<double> listOfRange = new List<Double>();
 
 Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
@@ -76,8 +74,10 @@ public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> poi
     return tmpListOfClosestPoints;
 }
 
-public void generateWaypoints()
+public List<Vector3D> generateWaypoints()
 {
+    List<Vector3D> generatedPoints = new List<Vector3D>();
+
     for (int m = 0; m < M_v; m++)
     {
         double v = Math.PI * (m + .5) / M_v;
@@ -138,11 +138,14 @@ public void generateWaypoints()
         RemainingPoints.Remove(nextPointPath);
     }
 
-    foreach (Vector3D PP_WPT in pointsPath)
-    {
-        Echo("PP_WPT:" + PP_WPT);
-    }
+    //foreach (Vector3D PP_WPT in pointsPath)
+    //{
+    ////   Echo("PP_WPT:" + PP_WPT);
+    //}
 
+    Echo("pointsPath.Count:" + pointsPath.Count);
+
+    return pointsPath;
 
 }
 
@@ -196,15 +199,13 @@ public void Main(string argument, UpdateType updateSource)
     Echo("d_v:" + d_v);
     Echo("d_phi:" + d_phi);
 
-    //flushing the list for debugging purpose
-    generatedPoints = new List<Vector3D>();
+    List<Vector3D> waypointsListV3D = new List<Vector3D>();
 
-    generateWaypoints();
+    waypointsListV3D = generateWaypoints();
 
-    List<Vector3D> lol = new List<Vector3D>();
-    lol= nClosestPointsToADesignatedPoint(6, generatedPoints, new Vector3D(30000, 30000, 30000));
-
-    Echo("lol.Count:" + lol.Count);
+    //List<Vector3D> lol = new List<Vector3D>();
+    //lol= nClosestPointsToADesignatedPoint(6, generatedPoints, new Vector3D(30000, 30000, 30000));
+    //Echo("lol.Count:" + lol.Count);
 
     //foreach (Vector3D nCP in lol)
     //{
@@ -212,7 +213,7 @@ public void Main(string argument, UpdateType updateSource)
     //}
 
     Echo("N_count:" + N_count);
-    Echo("generatedPoints:" + generatedPoints);
-    Echo("generatedPoints.Count:" + generatedPoints.Count);
+    Echo("waypointsListV3D:" + waypointsListV3D);
+    Echo("waypointsListV3D.Count:" + waypointsListV3D.Count);
 
 }
