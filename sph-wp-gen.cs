@@ -110,16 +110,6 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
     {
         currentShipPos = remote.GetPosition();
     }
-    //foreach (Vector3D gp in generatedPoints)
-    //{
-    //    Vector3D tmpV3D = gp - currentShipPos;
-    //    //Echo("tmpV3D:" + tmpV3D);
-    //    double range = tmpV3D.Length();
-    //    //Echo("range:" + range);
-    //    //length squared needed (quicker)
-    //    double rangeSquared = tmpV3D.LengthSquared();
-    //    //Echo("rangeSquared:" + rangeSquared);
-    //}
 
 
         List<Vector3D> pointsPath = new List<Vector3D>();
@@ -219,6 +209,17 @@ public void Main(string argument, UpdateType updateSource)
     List<Vector3D> waypointsListV3D = new List<Vector3D>();
 
     waypointsListV3D = generateWaypoints(null);
+
+    foreach (Vector3D gp in waypointsListV3D)
+    {
+        Vector3D tmpV3D = gp - myRemoteControl.GetPosition();
+        //Echo("tmpV3D:" + tmpV3D);
+        double range = tmpV3D.Length();
+        Echo("range:" + range);
+        //length squared needed (quicker)
+        double rangeSquared = tmpV3D.LengthSquared();
+        //Echo("rangeSquared:" + rangeSquared);
+    }
 
     Echo("N_count:" + N_count);
     Echo("waypointsListV3D:" + waypointsListV3D);
