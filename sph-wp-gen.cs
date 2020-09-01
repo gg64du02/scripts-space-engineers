@@ -23,8 +23,51 @@ List<Vector3D> generatedPoints = new List<Vector3D>();
 
 List<double> listOfRange = new List<Double>();
 
-
 Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
+
+public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> pointsToTest, Vector3D pointToGetCloseTo)
+{
+    List<Vector3D> tmpListOfClosestPoints = new List<Vector3D>();
+
+    if(pointsToTest.Count <= n)
+    {
+        return pointsToTest;
+    }
+    else
+    {
+        //pointsToTest.Count > n
+        foreach (var pt in pointsToTest)
+        {
+            if(tmpListOfClosestPoints.Count<= n)
+            {
+                //fill up the list with the start of the list
+                tmpListOfClosestPoints.Add(pt);
+            }
+            else
+            {
+                //sweep through the list to find anything closer
+                foreach (var pt2 in tmpListOfClosestPoints)
+                {
+                    double tmpRangeSquared1 = (pt - pointToGetCloseTo).LengthSquared();
+                    double tmpRangeSquared2 = (pt2 - pointToGetCloseTo).LengthSquared();
+                    //test if the next pt or pt2 is closer to pointToGetCloseTo
+                    if (Math.Min(tmpRangeSquared1, tmpRangeSquared2) == tmpRangeSquared1)
+                    {
+                        //means pt is closer than pt2
+                        //aka pt2 needs to be replaced
+
+                        tmpListOfClosestPoints.Remove(pt2);
+
+                        tmpListOfClosestPoints.Add(pt);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return new List<Vector3D>();
+}
 
 public void generateWaypoints()
 {
@@ -51,7 +94,16 @@ public void generateWaypoints()
         //Echo("tmpV3D:" + tmpV3D);
         double range = tmpV3D.Length();
         Echo("range:" + range);
+        //length squared needed (quicker)
+        double rangeSquared = tmpV3D.LengthSquared();
+        Echo("rangeSquared:" + rangeSquared);
     }
+
+    //while( RemainingPoints.Count != 0)
+    //{
+    //    Remine
+    //}
+        
 }
 
 public Program()
