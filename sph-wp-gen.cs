@@ -95,6 +95,8 @@ public void generateWaypoints()
             N_count = N_count + 1;
         }
     }
+
+    Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
     foreach (Vector3D gp in generatedPoints)
     {
         Vector3D tmpV3D = gp - currentShipPos;
@@ -112,8 +114,6 @@ public void generateWaypoints()
     //copy of generated that can be modified
     List<Vector3D> RemainingPoints = generatedPoints;
 
-    Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
-
     //get the closest point
     Vector3D pointPath = nClosestPointsToADesignatedPoint(1, generatedPoints, currentShipPos);
     pointsPath.Add(pointPath);
@@ -124,8 +124,23 @@ public void generateWaypoints()
     //start doing the same to the rest of the points
     while (RemainingPoints.Count > 0)
     {
-        lol = nClosestPointsToADesignatedPoint(6, generatedPoints, currentShipPos);
+        //6 can be more if we want
+        localPointsToLastPointPath = nClosestPointsToADesignatedPoint(6, RemainingPoints, pointPath);
+        //1 because we want the closest to the starting position in order to do a peel pattern
+
+        List<Vector3D> nextPointPathList = nClosestPointsToADesignatedPoint(1, RemainingPoints, currentShipPos);
+
+        Vector3D nextPointPath = nextPointPathList[0];
+
+        pointsPath.Add(nextPointPath);
+        RemainingPoints.Remove(nextPointPath);
     }
+
+    foreach (Vector3D PP_WPT in pointsPath)
+    {
+        Echo("PP_WPT:" + PP_WPT);
+    }
+
 
 }
 
