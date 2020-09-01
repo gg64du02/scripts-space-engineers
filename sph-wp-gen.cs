@@ -31,35 +31,35 @@ public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> poi
 
     if(pointsToTest.Count <= n)
     {
-        Echo("    if(pointsToTest.Count <= n)");
+        //Echo("    if(pointsToTest.Count <= n)");
         return pointsToTest;
     }
     else
     {
-        Echo("    !if(pointsToTest.Count <= n)");
+        //Echo("    !if(pointsToTest.Count <= n)");
         //pointsToTest.Count > n
         foreach (var pt in pointsToTest)
         {
-            Echo("foreach (var pt in pointsToTest)");
+            //Echo("foreach (var pt in pointsToTest)");
             if (tmpListOfClosestPoints.Count<= n)
             {
-                Echo("if (tmpListOfClosestPoints.Count<= n)");
+                //Echo("if (tmpListOfClosestPoints.Count<= n)");
                 //fill up the list with the start of the list
                 tmpListOfClosestPoints.Add(pt);
             }
             else
             {
-                Echo("!if (tmpListOfClosestPoints.Count<= n)");
+                //Echo("!if (tmpListOfClosestPoints.Count<= n)");
                 //sweep through the list to find anything closer
                 foreach (var pt2 in tmpListOfClosestPoints)
                 {
-                    Echo("foreach (var pt2 in tmpListOfClosestPoints)");
+                    //Echo("foreach (var pt2 in tmpListOfClosestPoints)");
                     double tmpRangeSquared1 = (pt - pointToGetCloseTo).LengthSquared();
                     double tmpRangeSquared2 = (pt2 - pointToGetCloseTo).LengthSquared();
                     //test if the next pt or pt2 is closer to pointToGetCloseTo
                     if (Math.Min(tmpRangeSquared1, tmpRangeSquared2) == tmpRangeSquared1)
                     {
-                        Echo("if (Math.Min(tmpRangeSquared1, tmpRangeSquared2) == tmpRangeSquared1)");
+                        //Echo("if (Math.Min(tmpRangeSquared1, tmpRangeSquared2) == tmpRangeSquared1)");
                         //means pt is closer than pt2
                         //aka pt2 needs to be replaced
 
@@ -173,10 +173,10 @@ public void Main(string argument, UpdateType updateSource)
 
     Echo("lol.Count:" + lol.Count);
 
-    foreach (Vector3D nCP in lol)
-    {
-        Echo("nCP:" + nCP);
-    }
+    //foreach (Vector3D nCP in lol)
+    //{
+    //    //Echo("nCP:" + nCP);
+    //}
 
     Echo("N_count:" + N_count);
     Echo("generatedPoints:" + generatedPoints);
