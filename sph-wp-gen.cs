@@ -76,7 +76,7 @@ public List<Vector3D> nClosestPointsToADesignatedPoint(int n, List<Vector3D> poi
     return tmpListOfClosestPoints;
 }
 
-public List<Vector3D> generateWaypoints()
+public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
 {
     List<Vector3D> generatedPoints = new List<Vector3D>();
 
@@ -92,6 +92,13 @@ public List<Vector3D> generateWaypoints()
             double y = planetRadius * r * Math.Sin(v) * Math.Sin(phi);
             double z = planetRadius * r * Math.Cos(phi);
             Vector3D generatedPoint = new Vector3D(x, y, z);
+
+            Vector3D tmpCenterOfPlanet = new Vector3D(0, 0, 0);
+            if (remote != null)
+            {
+                remote.TryGetPlanetPosition(out tmpCenterOfPlanet);
+                generatedPoint += tmpCenterOfPlanet;
+            }
             //Echo("generatedPoint:"+ generatedPoint);
             generatedPoints.Add(generatedPoint);
             N_count = N_count + 1;
@@ -99,6 +106,10 @@ public List<Vector3D> generateWaypoints()
     }
 
     Vector3D currentShipPos = new Vector3D(30000, 30000, 30000);
+    if (remote != null)
+    {
+        currentShipPos = remote.GetPosition();
+    }
     //foreach (Vector3D gp in generatedPoints)
     //{
     //    Vector3D tmpV3D = gp - currentShipPos;
@@ -111,7 +122,7 @@ public List<Vector3D> generateWaypoints()
     //}
 
 
-    List<Vector3D> pointsPath = new List<Vector3D>();
+        List<Vector3D> pointsPath = new List<Vector3D>();
     
     //copy of generated that can be modified
     List<Vector3D> RemainingPoints = generatedPoints;
@@ -172,7 +183,7 @@ public Program()
     d_v = Math.PI / M_v;
     d_phi = a / d_v;
 
-    generateWaypoints();
+    //generateWaypoints();
 }
 
 public void Save()
@@ -201,9 +212,13 @@ public void Main(string argument, UpdateType updateSource)
     Echo("d_v:" + d_v);
     Echo("d_phi:" + d_phi);
 
+    List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
+    GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
+    IMyRemoteControl myRemoteControl = remoteControllers[0];
+
     List<Vector3D> waypointsListV3D = new List<Vector3D>();
 
-    waypointsListV3D = generateWaypoints();
+    waypointsListV3D = generateWaypoints(null);
 
     Echo("N_count:" + N_count);
     Echo("waypointsListV3D:" + waypointsListV3D);
