@@ -130,7 +130,7 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
     while (RemainingPoints.Count > 0)
     {
         //6 can be more if we want
-        localPointsToLastPointPath = nClosestPointsToADesignatedPoint(1, RemainingPoints, pointPath);
+        localPointsToLastPointPath = nClosestPointsToADesignatedPoint(5, RemainingPoints, pointPath);
         //1 because we want the closest to the starting position in order to do a peel pattern
 
         List<Vector3D> nextPointPathList = nClosestPointsToADesignatedPoint(1, RemainingPoints, currentShipPos);
@@ -164,7 +164,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
     a = 4 * Math.PI * (r * r) / N;
     d = Math.Sqrt(a);
 
@@ -227,6 +227,10 @@ public void Main(string argument, UpdateType updateSource)
     Echo("dts:" + dts);
     double dts2 = Runtime.LastRunTimeMs;
     Echo("dts2:" + dts2);
+
+    double avg = 0;
+    avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
+    Echo(avg + "");
 
     Echo("N_count:" + N_count);
     Echo("waypointsListV3D:" + waypointsListV3D);
