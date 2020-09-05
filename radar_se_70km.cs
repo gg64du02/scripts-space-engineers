@@ -174,8 +174,11 @@ public void Main(string argument, UpdateType updateSource)
 
     foreach (var result in scanResults)
     {
-        Echo("" + result);
-        Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+        if(result.Type != MyDetectedEntityType.Planet)
+        {
+            Echo("=======================");
+            Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+        }
 
     }
 
