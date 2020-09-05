@@ -24,6 +24,7 @@ List<Vector3D> pointsToScan = null;
 
 List<MyDetectedEntityInfo> scanResults = new List<MyDetectedEntityInfo>();
 
+List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
 
 
 public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
@@ -74,7 +75,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
 
     a = 4 * Math.PI * (r * r) / N;
@@ -86,6 +87,17 @@ public Program()
     d_phi = a / d_v;
 
     planetRadius = range_to_test_at;
+
+
+    GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraBlocksList);
+    
+    foreach (var cb in cameraBlocksList)
+    {
+        if (cb.EnableRaycast == false)
+        {
+            cb.EnableRaycast = true;
+        }
+    }
 }
 
 public void Save()
@@ -119,20 +131,7 @@ public void Main(string argument, UpdateType updateSource)
     Echo(avg + "");
 
 
-    List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
-    GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraBlocksList);
     IMyCameraBlock cameraBlock = cameraBlocksList[0];
-
-    Echo("" + cameraBlock.DefinitionDisplayNameText);
-
-    Echo("1");
-    foreach(var cb in cameraBlocksList)
-    {
-        if (cb.EnableRaycast == false)
-        {
-            cb.EnableRaycast = true;
-        }
-    }
 
     if (pointsToScan == null)
     {
@@ -148,17 +147,10 @@ public void Main(string argument, UpdateType updateSource)
 
     //degree not radians ?
     Echo("RaycastConeLimit " + cameraBlock.RaycastConeLimit);
-
     Echo("Position " + cameraBlock.Position);
-
     //Echo("" + Me.Position);
-
     //Echo("" + Me.GetPosition());
-
     //Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
-
-    
-
     Echo("pointsToScan.Count:"+pointsToScan.Count);
 
     foreach (var cb in cameraBlocksList)
@@ -200,8 +192,6 @@ public void Main(string argument, UpdateType updateSource)
 
     foreach (var result in scanResults)
     {
-        //    Echo("=======================");
-        //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
         //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
         //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
         Vector3D tmpV3D = (Vector3D)result.HitPosition;
