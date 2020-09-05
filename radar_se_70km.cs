@@ -1,4 +1,4 @@
-double range_to_test_at = 300;
+double range_to_test_at = 6000;
 
 
 //Constants to generate equidistributed points on the surface of a sphere
@@ -18,7 +18,7 @@ double M_v = 0;
 double d_v = 0;
 double d_phi = 0;
 
-double planetRadius = 600;
+double planetRadius = range_to_test_at;
 
 List<Vector3D> pointsToScan = null;
 
