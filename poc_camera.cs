@@ -45,15 +45,17 @@ public void Main(string argument, UpdateType updateSource)
     }
 
     //degree not radians ?
-    Echo("" + cameraBlock.RaycastConeLimit);
+    Echo("RaycastConeLimit " + cameraBlock.RaycastConeLimit);
 
-    Echo("" + cameraBlock.Position);
+    Echo("Position " + cameraBlock.Position);
 
     Echo("" + Me.Position);
 
     Echo("" + Me.GetPosition());
 
-    Echo("" + cameraBlock.RaycastDistanceLimit);
+    Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
+
+    Echo("AvailableScanRange " + cameraBlock.AvailableScanRange);
 }
 
 
