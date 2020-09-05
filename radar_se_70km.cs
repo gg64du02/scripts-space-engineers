@@ -6,7 +6,7 @@ double range_to_test_at = 6000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 500;
+double N = 1500;
 
 //numbers of generated points
 double N_count = 0;
@@ -18,7 +18,7 @@ double M_v = 0;
 double d_v = 0;
 double d_phi = 0;
 
-double planetRadius = range_to_test_at;
+double planetRadius = 0;
 
 List<Vector3D> pointsToScan = null;
 
@@ -85,7 +85,7 @@ public Program()
     d_v = Math.PI / M_v;
     d_phi = a / d_v;
 
-
+    planetRadius = range_to_test_at;
 }
 
 public void Save()
@@ -114,9 +114,12 @@ public void Main(string argument, UpdateType updateSource)
     Echo("" + cameraBlock.DefinitionDisplayNameText);
 
     Echo("1");
-    if (cameraBlock.EnableRaycast == false)
+    foreach(var cb in cameraBlocksList)
     {
-        cameraBlock.EnableRaycast = true;
+        if (cb.EnableRaycast == false)
+        {
+            cb.EnableRaycast = true;
+        }
     }
 
     if (pointsToScan == null)
@@ -140,44 +143,52 @@ public void Main(string argument, UpdateType updateSource)
 
     //Echo("" + Me.GetPosition());
 
-    Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
+    //Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
 
-    Echo("AvailableScanRange " + Math.Round((cameraBlock.AvailableScanRange),2));
+    
 
     Echo("pointsToScan.Count:"+pointsToScan.Count);
-	
-	if(cameraBlock.AvailableScanRange> range_to_test_at)
+
+    foreach (var cb in cameraBlocksList)
     {
-        //Echo("AvailableScanRange> range_to_test_at");
-        bool canScanOnePoint = false;
-        Vector3D pointAboutToBeScanned = new Vector3D(0,0,0);
-        foreach(Vector3D point in pointsToScan)
+        Echo("AvailableScanRange " + Math.Round((cameraBlock.AvailableScanRange), 2));
+        if (cb.AvailableScanRange > range_to_test_at)
         {
-            //CanScan(Vector3D)   Checks if the camera can scan to the given target
-            if (cameraBlock.CanScan(point) == true)
+            //Echo("AvailableScanRange> range_to_test_at");
+            bool canScanOnePoint = false;
+            Vector3D pointAboutToBeScanned = new Vector3D(0, 0, 0);
+            foreach (Vector3D point in pointsToScan)
             {
-                canScanOnePoint = true;
-                pointAboutToBeScanned = point;
+                //CanScan(Vector3D)   Checks if the camera can scan to the given target
+                if (cb.CanScan(point) == true)
+                {
+                    canScanOnePoint = true;
+                    pointAboutToBeScanned = point;
+                    break;
+                }
+            }
+            if (canScanOnePoint == true)
+            {
+                var result = cb.Raycast(pointAboutToBeScanned);
+                //Echo("result " + result);
+                //Echo("result.HitPosition " + result.HitPosition);
+                scanResults.Add(result);
+                pointsToScan.Remove(pointAboutToBeScanned);
                 break;
             }
+
         }
-        if(canScanOnePoint == true)
-        {
-            var result = cameraBlock.Raycast(pointAboutToBeScanned);
-            //Echo("result " + result);
-            //Echo("result.HitPosition " + result.HitPosition);
-            scanResults.Add(result);
-            pointsToScan.Remove(pointAboutToBeScanned);
-        }
-        
     }
 
     foreach (var result in scanResults)
     {
         if(result.Type != MyDetectedEntityType.Planet)
         {
-            Echo("=======================");
-            Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+            if (result.Type != MyDetectedEntityType.None)
+            {
+                Echo("=======================");
+                Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+            }
         }
 
     }
