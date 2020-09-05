@@ -6,7 +6,7 @@ double range_to_test_at = 6000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 1500;
+double N = 100;
 
 //numbers of generated points
 double N_count = 0;
@@ -153,6 +153,19 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
     Echo("pointsToScan.Count:"+pointsToScan.Count);
 
+    foreach (var result in scanResults)
+    {
+        //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
+        //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+        Vector3D tmpV3D = (Vector3D)result.HitPosition;
+        MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), tmpV3D);
+        Echo(tmpWP.ToString());
+    }
+
+    if (pointsToScan.Count == 0)
+    {
+        return;
+    }
     foreach (var cb in cameraBlocksList)
     {
         //Echo("AvailableScanRange " + Math.Round((cb.AvailableScanRange), 2));
@@ -190,14 +203,6 @@ public void Main(string argument, UpdateType updateSource)
         }
     }
 
-    foreach (var result in scanResults)
-    {
-        //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
-        //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
-        Vector3D tmpV3D = (Vector3D)result.HitPosition;
-        MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), tmpV3D);
-        Echo(tmpWP.ToString());
-    }
 
 }
 
