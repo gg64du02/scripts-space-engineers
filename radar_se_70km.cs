@@ -18,9 +18,12 @@ double M_v = 0;
 double d_v = 0;
 double d_phi = 0;
 
-double planetRadius = 60000;
+double planetRadius = 600;
 
 List<Vector3D> pointsToScan = null;
+
+List<MyDetectedEntityInfo> scanResults = new List<MyDetectedEntityInfo>();
+
 
 
 public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
@@ -139,18 +142,17 @@ public void Main(string argument, UpdateType updateSource)
 
     Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
 
-    Echo("AvailableScanRange " + cameraBlock.AvailableScanRange);
+    Echo("AvailableScanRange " + Math.Round((cameraBlock.AvailableScanRange),2));
 
-    Echo("pointsToScan.Count "+ pointsToScan.Count);
+    Echo("pointsToScan.Count:"+pointsToScan.Count);
 	
 	if(cameraBlock.AvailableScanRange> range_to_test_at)
     {
-        Echo("AvailableScanRange> range_to_test_at");
+        //Echo("AvailableScanRange> range_to_test_at");
         bool canScanOnePoint = false;
         Vector3D pointAboutToBeScanned = new Vector3D(0,0,0);
         foreach(Vector3D point in pointsToScan)
         {
-            //Echo("point " + point);
             //CanScan(Vector3D)   Checks if the camera can scan to the given target
             if (cameraBlock.CanScan(point) == true)
             {
@@ -161,14 +163,22 @@ public void Main(string argument, UpdateType updateSource)
         }
         if(canScanOnePoint == true)
         {
-            //Echo("point " + point);
             var result = cameraBlock.Raycast(pointAboutToBeScanned);
-            Echo("result " + result);
-            Echo("result.HitPosition " + result.HitPosition);
+            //Echo("result " + result);
+            //Echo("result.HitPosition " + result.HitPosition);
+            scanResults.Add(result);
             pointsToScan.Remove(pointAboutToBeScanned);
         }
         
     }
+
+    foreach (var result in scanResults)
+    {
+        Echo("" + result);
+        Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+
+    }
+
 }
 
 
