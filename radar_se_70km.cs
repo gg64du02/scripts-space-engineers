@@ -74,7 +74,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 
 
     a = 4 * Math.PI * (r * r) / N;
@@ -107,11 +107,6 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
-    List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
-    GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraBlocksList);
-    IMyCameraBlock cameraBlock = cameraBlocksList[0];
-
-    Echo("" + cameraBlock.DefinitionDisplayNameText);
 
     //Best we have is Runtime.LastRunTime and Runtime.TimeSinceLastRun
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
@@ -123,6 +118,12 @@ public void Main(string argument, UpdateType updateSource)
     avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
     Echo(avg + "");
 
+
+    List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
+    GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraBlocksList);
+    IMyCameraBlock cameraBlock = cameraBlocksList[0];
+
+    Echo("" + cameraBlock.DefinitionDisplayNameText);
 
     Echo("1");
     foreach(var cb in cameraBlocksList)
@@ -162,7 +163,7 @@ public void Main(string argument, UpdateType updateSource)
 
     foreach (var cb in cameraBlocksList)
     {
-        Echo("AvailableScanRange " + Math.Round((cameraBlock.AvailableScanRange), 2));
+        //Echo("AvailableScanRange " + Math.Round((cb.AvailableScanRange), 2));
         if (cb.AvailableScanRange > range_to_test_at)
         {
             //Echo("AvailableScanRange> range_to_test_at");
