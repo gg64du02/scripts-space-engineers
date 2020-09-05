@@ -130,6 +130,10 @@ public void Main(string argument, UpdateType updateSource)
     avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
     Echo(avg + "");
 
+    if (avg > .1)
+    {
+        return;
+    }
 
     IMyCameraBlock cameraBlock = cameraBlocksList[0];
 
