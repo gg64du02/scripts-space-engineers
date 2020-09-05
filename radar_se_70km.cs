@@ -74,7 +74,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
 
     a = 4 * Math.PI * (r * r) / N;
@@ -112,6 +112,17 @@ public void Main(string argument, UpdateType updateSource)
     IMyCameraBlock cameraBlock = cameraBlocksList[0];
 
     Echo("" + cameraBlock.DefinitionDisplayNameText);
+
+    //Best we have is Runtime.LastRunTime and Runtime.TimeSinceLastRun
+    double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+    Echo("dts:" + dts);
+    double dts2 = Runtime.LastRunTimeMs;
+    Echo("dts2:" + dts2);
+
+    double avg = 0;
+    avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
+    Echo(avg + "");
+
 
     Echo("1");
     foreach(var cb in cameraBlocksList)
@@ -172,7 +183,13 @@ public void Main(string argument, UpdateType updateSource)
                 var result = cb.Raycast(pointAboutToBeScanned);
                 //Echo("result " + result);
                 //Echo("result.HitPosition " + result.HitPosition);
-                scanResults.Add(result);
+                if (result.Type != MyDetectedEntityType.Planet)
+                {
+                    if (result.Type != MyDetectedEntityType.None)
+                    {
+                        scanResults.Add(result);
+                    }
+                }
                 pointsToScan.Remove(pointAboutToBeScanned);
                 break;
             }
@@ -182,15 +199,13 @@ public void Main(string argument, UpdateType updateSource)
 
     foreach (var result in scanResults)
     {
-        if(result.Type != MyDetectedEntityType.Planet)
-        {
-            if (result.Type != MyDetectedEntityType.None)
-            {
-                Echo("=======================");
-                Echo("" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
-            }
-        }
-
+        //    Echo("=======================");
+        //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+        //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
+        //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
+        Vector3D tmpV3D = (Vector3D)result.HitPosition;
+        MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), tmpV3D);
+        Echo(tmpWP.ToString());
     }
 
 }
