@@ -10,6 +10,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 }
 
 public void Save()
@@ -31,6 +32,28 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
+    List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
+    GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraBlocksList);
+    IMyCameraBlock cameraBlock = cameraBlocksList[0];
+
+    Echo("" + cameraBlock.DefinitionDisplayNameText);
+
+    Echo("1");
+    if (cameraBlock.EnableRaycast == false)
+    {
+        cameraBlock.EnableRaycast = true;
+    }
+
+    //degree not radians ?
+    Echo("" + cameraBlock.RaycastConeLimit);
+
+    Echo("" + cameraBlock.Position);
+
+    Echo("" + Me.Position);
+
+    Echo("" + Me.GetPosition());
+
+    Echo("" + cameraBlock.RaycastDistanceLimit);
 }
 
 
