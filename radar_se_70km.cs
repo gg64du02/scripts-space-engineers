@@ -20,22 +20,24 @@ double d_phi = 0;
 
 double planetRadius = 0;
 
-List<Vector3D> pointsToScan = null;
+List<Vector3D> pointsToScan = new List<Vector3D>();
 
 List<MyDetectedEntityInfo> scanResults = new List<MyDetectedEntityInfo>();
 
 List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
 
+int m_in_main = 0;
+int n_in_main = 0;
 
 public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
 {
     List<Vector3D> generatedPoints = new List<Vector3D>();
 
-    for (int m = 0; m < M_v; m++)
+    for (int m = m_in_main; m < M_v; m++)
     {
         double v = Math.PI * (m + .5) / M_v;
         double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
-        for (int n = 0; n < M_phi; n++)
+        for (int n = n_in_main; n < M_phi; n++)
         {
             double phi = 2 * Math.PI * n / M_phi;
             //Create point using Eqn. (1).
@@ -57,9 +59,16 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
             //Echo("generatedPoint:"+ generatedPoint);
             generatedPoints.Add(generatedPoint);
             N_count = N_count + 1;
+			if(N_count%10==0){
+				m_in_main = m;
+				n_in_main = n;
+				return generatedPoints;
+			}
         }
     }
 
+	m_in_main = -1;
+	n_in_main = -1;
     return generatedPoints;
 }
 
@@ -129,6 +138,8 @@ public void Main(string argument, UpdateType updateSource)
     double avg = 0;
     avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
     Echo(avg + "");
+	
+	Echo("N_count " + N_count);
 
     if (avg > .1)
     {
@@ -137,9 +148,17 @@ public void Main(string argument, UpdateType updateSource)
 
     IMyCameraBlock cameraBlock = cameraBlocksList[0];
 
-    if (pointsToScan == null)
+    if (pointsToScan.Count <20)
     {
-        pointsToScan = generateWaypoints(null);
+		List<Vector3D> tmpListV3D = generateWaypoints(null);
+		
+		if(tmpListV3D.Count  == 0){
+			Echo("scan finnished");
+		}
+		
+		foreach(Vector3D point in tmpListV3D){
+			pointsToScan.Add(point);
+		}
     }
 
     //Echo("N:" + N);
@@ -162,7 +181,7 @@ public void Main(string argument, UpdateType updateSource)
         //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
         //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
         Vector3D tmpV3D = (Vector3D)result.HitPosition;
-        MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), tmpV3D);
+        MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
         Echo(tmpWP.ToString());
     }
 
