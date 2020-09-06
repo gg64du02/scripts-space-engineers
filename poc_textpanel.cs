@@ -1,3 +1,9 @@
+
+
+
+
+List<IMyTextPanel> textPanelList = new List<IMyTextPanel>();
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -10,6 +16,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
+    Runtime.UpdateFrequency = UpdateFrequency.Update100;
 }
 
 public void Save()
@@ -31,4 +38,24 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
+	
+    GridTerminalSystem.GetBlocksOfType<IMyTextPanel>(textPanelList);
+	
+	if(textPanelList.Count != 0){
+		foreach(var tp in textPanelList){
+			Echo(""+tp.BlockDefinition);
+				tp.WriteText("lol",false);
+		}
+	}
+	else{
+		Echo("No LCD to display on");
+	}
+	
+	
+	
+	
+	//StringBuilder stringBuilder = new StringBuilder();
+	// WriteText(string, bool)	Inherited from IMyTextSurface
+	// GetText()	Inherited from IMyTextSurface
+	// WriteText(StringBuilder, bool)	Inherited from IMyTextSurface
 }
