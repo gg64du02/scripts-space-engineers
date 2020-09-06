@@ -175,6 +175,8 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("" + Me.GetPosition());
     //Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
     Echo("pointsToScan.Count:"+pointsToScan.Count);
+	
+	Echo("scanResults.Count "+scanResults.Count );
 
     foreach (var result in scanResults)
     {
@@ -182,7 +184,7 @@ public void Main(string argument, UpdateType updateSource)
         //    Echo(scanResults.IndexOf(result) + "" + result.Name + "\n" + result.Type + "\n" + result.HitPosition);
         Vector3D tmpV3D = (Vector3D)result.HitPosition;
         MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
-        Echo(tmpWP.ToString());
+        //Echo(tmpWP.ToString());
     }
 
     if (pointsToScan.Count == 0)
