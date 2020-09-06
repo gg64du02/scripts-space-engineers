@@ -37,6 +37,7 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
     {
         double v = Math.PI * (m + .5) / M_v;
         double M_phi = Math.Round((2 * Math.PI * Math.Sin(v) / d_v), 3);
+		//Echo("M_v:"+M_v+"|M_phi:"+M_phi);
         for (int n = n_in_main; n < M_phi; n++)
         {
             double phi = 2 * Math.PI * n / M_phi;
@@ -62,6 +63,9 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
 			if(N_count%10==0){
 				m_in_main = m;
 				n++;
+				if(!(n < M_phi)){
+					m_in_main++;
+				}
 				n_in_main = n;
 				return generatedPoints;
 			}
@@ -147,6 +151,7 @@ public void Main(string argument, UpdateType updateSource)
     Echo("RaycastConeLimit " + cameraBlock.RaycastConeLimit);
     Echo("Position " + cameraBlock.Position);
 	
+	Echo("N " + N);
 	Echo("N_count " + N_count);
     Echo("pointsToScan.Count:"+pointsToScan.Count);
 	
