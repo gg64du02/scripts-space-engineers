@@ -6,7 +6,7 @@ double range_to_test_at = 6000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 100;
+double N = 500;
 
 //numbers of generated points
 double N_count = 0;
@@ -61,6 +61,7 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
             N_count = N_count + 1;
 			if(N_count%10==0){
 				m_in_main = m;
+				n++;
 				n_in_main = n;
 				return generatedPoints;
 			}
@@ -136,28 +137,42 @@ public void Main(string argument, UpdateType updateSource)
     Echo("dts2:" + dts2);
 
     double avg = 0;
-    avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
+    //avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
+    avg = avg * 0.9 + Runtime.LastRunTimeMs * 0.1;
     Echo(avg + "");
 	
+
+    IMyCameraBlock cameraBlock = cameraBlocksList[0];
+    //degree not radians ?
+    Echo("RaycastConeLimit " + cameraBlock.RaycastConeLimit);
+    Echo("Position " + cameraBlock.Position);
+	
 	Echo("N_count " + N_count);
+    Echo("pointsToScan.Count:"+pointsToScan.Count);
+	
+	Echo("scanResults.Count "+scanResults.Count );
+
 
     if (avg > .1)
     {
         return;
     }
 
-    IMyCameraBlock cameraBlock = cameraBlocksList[0];
-
-    if (pointsToScan.Count <20)
+    if (pointsToScan.Count <5)
     {
-		List<Vector3D> tmpListV3D = generateWaypoints(null);
-		
-		if(tmpListV3D.Count  == 0){
-			Echo("scan finnished");
+		//Echo(m_in_main + " "+ n_in_main);
+		if(N_count<N*1.02){
+			List<Vector3D> tmpListV3D = generateWaypoints(null);
+
+			foreach(Vector3D point in tmpListV3D){
+				pointsToScan.Add(point);
+			}
 		}
-		
-		foreach(Vector3D point in tmpListV3D){
-			pointsToScan.Add(point);
+		else{
+			Echo("!if(N_count<N*1.02)");
+			if(pointsToScan.Count  == 0){
+				Echo("scan finnished");
+			}
 		}
     }
 
@@ -168,16 +183,10 @@ public void Main(string argument, UpdateType updateSource)
     //Echo("d_v:" + d_v);
     //Echo("d_phi:" + d_phi);
 
-    //degree not radians ?
-    Echo("RaycastConeLimit " + cameraBlock.RaycastConeLimit);
-    Echo("Position " + cameraBlock.Position);
     //Echo("" + Me.Position);
     //Echo("" + Me.GetPosition());
     //Echo("RaycastDistanceLimit " + cameraBlock.RaycastDistanceLimit);
-    Echo("pointsToScan.Count:"+pointsToScan.Count);
 	
-	Echo("scanResults.Count "+scanResults.Count );
-
     foreach (var result in scanResults)
     {
         //    //example: "GPS:/// #4:53590.85:-26608.05:11979.08:
