@@ -256,6 +256,14 @@ public void Main(string argument, UpdateType updateSource)
 			if(tmpCmdTest.Contains("RR ")==true){
 				//RR -p<page_number> [-all] <options>
 				Echo("writting in the LCD");
+				StringBuilder sb = new StringBuilder(tmpCmdTest+":\n", 500);
+				foreach (var result in scanResults)
+				{
+					Vector3D tmpV3D = (Vector3D)result.HitPosition;
+					MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
+					sb.AppendFormat(tmpWP.ToString() +"\n");
+				}
+				tp.WriteText(sb,false);
 				
 				//header 
 				
