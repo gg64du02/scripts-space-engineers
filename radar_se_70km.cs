@@ -268,33 +268,59 @@ public void Main(string argument, UpdateType updateSource)
 					}
 				}
 				else{
+					//    RR -SG -LG -CH -FO -As -Me -Mi
+					//
+					//bool No = tmpCmdTest.Contains("-No");
 					bool SG = tmpCmdTest.Contains("-SG");
 					bool LG = tmpCmdTest.Contains("-LG");
 					bool CH = tmpCmdTest.Contains("-CH");
 					bool CO = tmpCmdTest.Contains("-CO");
 					bool FO = tmpCmdTest.Contains("-FO");
 					bool As = tmpCmdTest.Contains("-As");
-					bool Pl = tmpCmdTest.Contains("-Pl");
+					//bool Pl = tmpCmdTest.Contains("-Pl");
 					bool Me = tmpCmdTest.Contains("-Me");
 					bool Mi = tmpCmdTest.Contains("-Mi");
 					foreach (var result in scanResults){
 						Vector3D tmpV3D = (Vector3D)result.HitPosition;
 						MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
+						//Echo(""+result.Type);
 						if(SG){
 							if(result.Type==MyDetectedEntityType.SmallGrid){
-								Echo("if(result.Type==MyDetectedEntityType.SmallGrid){");
 								sb.AppendFormat(tmpWP.ToString() +"\n");
 							}
 						}
 						if(LG){
 							if(result.Type==MyDetectedEntityType.LargeGrid){
-								Echo("if(result.Type==MyDetectedEntityType.LargeGrid){");
 								sb.AppendFormat(tmpWP.ToString() +"\n");
 							}
 						}
 						if(CH){
 							if(result.Type==MyDetectedEntityType.CharacterHuman){
-								Echo("if(result.Type==MyDetectedEntityType.CharacterHuman){");
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(CO){
+							if(result.Type==MyDetectedEntityType.CharacterOther){
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(FO){
+							if(result.Type==MyDetectedEntityType.FloatingObject){
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(As){
+							if(result.Type==MyDetectedEntityType.Asteroid){
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(Me){
+							if(result.Type==MyDetectedEntityType.Meteor){
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(Mi){
+							if(result.Type==MyDetectedEntityType.Missile){
 								sb.AppendFormat(tmpWP.ToString() +"\n");
 							}
 						}
@@ -307,7 +333,6 @@ public void Main(string argument, UpdateType updateSource)
 				
 				//content of the page
 				
-				
 			}
         }
     }
@@ -315,8 +340,4 @@ public void Main(string argument, UpdateType updateSource)
     {
         Echo("No LCD to display on");
     }
-
-
 }
-
-
