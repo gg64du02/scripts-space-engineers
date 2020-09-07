@@ -243,6 +243,34 @@ public void Main(string argument, UpdateType updateSource)
     }
 
 
+    List<IMyTextPanel> textPanelList = new List<IMyTextPanel>();
+
+    GridTerminalSystem.GetBlocksOfType<IMyTextPanel>(textPanelList);
+
+    if (textPanelList.Count != 0)
+    {
+        foreach (IMyTextPanel tp in textPanelList)
+        {
+			 //Echo(""+tp.CustomName);
+			 string tmpCmdTest = tp.CustomName;
+			if(tmpCmdTest.Contains("RR ")==true){
+				//RR -p<page_number> [-all] <options>
+				Echo("writting in the LCD");
+				
+				//header 
+				
+				//content of the page
+				
+				
+			}
+        }
+    }
+    else
+    {
+        Echo("No LCD to display on");
+    }
+
+
 }
 
 
