@@ -257,12 +257,50 @@ public void Main(string argument, UpdateType updateSource)
 				//RR -p<page_number> [-all] <options>
 				Echo("writting in the LCD");
 				StringBuilder sb = new StringBuilder(tmpCmdTest+":\n", 500);
-				foreach (var result in scanResults)
-				{
-					Vector3D tmpV3D = (Vector3D)result.HitPosition;
-					MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
-					sb.AppendFormat(tmpWP.ToString() +"\n");
+				if(tmpCmdTest.Contains("-all")==true){
+					foreach (var result in scanResults)
+					{
+						//    List<MyDetectedEntityInfo> scanResults 
+						//Echo(""+result.Type	);
+						Vector3D tmpV3D = (Vector3D)result.HitPosition;
+						MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
+						sb.AppendFormat(tmpWP.ToString() +"\n");
+					}
 				}
+				else{
+					bool SG = tmpCmdTest.Contains("-SG");
+					bool LG = tmpCmdTest.Contains("-LG");
+					bool CH = tmpCmdTest.Contains("-CH");
+					bool CO = tmpCmdTest.Contains("-CO");
+					bool FO = tmpCmdTest.Contains("-FO");
+					bool As = tmpCmdTest.Contains("-As");
+					bool Pl = tmpCmdTest.Contains("-Pl");
+					bool Me = tmpCmdTest.Contains("-Me");
+					bool Mi = tmpCmdTest.Contains("-Mi");
+					foreach (var result in scanResults){
+						Vector3D tmpV3D = (Vector3D)result.HitPosition;
+						MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
+						if(SG){
+							if(result.Type==MyDetectedEntityType.SmallGrid){
+								Echo("if(result.Type==MyDetectedEntityType.SmallGrid){");
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(LG){
+							if(result.Type==MyDetectedEntityType.LargeGrid){
+								Echo("if(result.Type==MyDetectedEntityType.LargeGrid){");
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+						if(CH){
+							if(result.Type==MyDetectedEntityType.CharacterHuman){
+								Echo("if(result.Type==MyDetectedEntityType.CharacterHuman){");
+								sb.AppendFormat(tmpWP.ToString() +"\n");
+							}
+						}
+					}
+				}
+				
 				tp.WriteText(sb,false);
 				
 				//header 
