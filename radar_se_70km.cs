@@ -6,7 +6,7 @@ double range_to_test_at = 6000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 500;
+double N = 5000;
 
 //numbers of generated points
 double N_count = 0;
@@ -89,7 +89,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
 
     a = 4 * Math.PI * (r * r) / N;
@@ -158,7 +158,7 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("scanResults.Count "+scanResults.Count );
 
 
-    if (avg > .1)
+    if (avg > .02)
     {
         return;
     }
@@ -247,6 +247,7 @@ public void Main(string argument, UpdateType updateSource)
 
     GridTerminalSystem.GetBlocksOfType<IMyTextPanel>(textPanelList);
 
+	//font size 0.78
     if (textPanelList.Count != 0)
     {
         foreach (IMyTextPanel tp in textPanelList)
@@ -256,8 +257,9 @@ public void Main(string argument, UpdateType updateSource)
 			if(tmpCmdTest.Contains("RR ")==true){
 				//RR -p<page_number> [-all] <options>
 				Echo("writting in the LCD");
-				StringBuilder sb = new StringBuilder(tmpCmdTest+":\n", 500);
+				StringBuilder sb = new StringBuilder(tmpCmdTest+":", 500);
 				if(tmpCmdTest.Contains("-all")==true){
+					sb.AppendFormat("total:"+scanResults.Count + " " +"\n");
 					foreach (var result in scanResults)
 					{
 						//    List<MyDetectedEntityInfo> scanResults 
@@ -268,7 +270,7 @@ public void Main(string argument, UpdateType updateSource)
 					}
 				}
 				else{
-					//    RR -SG -LG -CH -FO -As -Me -Mi
+					//    RR -SG -LG -CH -FO -As -Me -Mi -p2
 					//
 					//bool No = tmpCmdTest.Contains("-No");
 					bool SG = tmpCmdTest.Contains("-SG");
@@ -280,6 +282,10 @@ public void Main(string argument, UpdateType updateSource)
 					//bool Pl = tmpCmdTest.Contains("-Pl");
 					bool Me = tmpCmdTest.Contains("-Me");
 					bool Mi = tmpCmdTest.Contains("-Mi");
+					var pageNumber = tmpCmdTest.Split(' ');
+					sb.AppendFormat("total:"+scanResults.Count + " Pages:"+ (scanResults.Count/5+1) +"\n");
+					sb.AppendFormat("total:"+scanResults.Count + " Pages:"+ (scanResults.Count/5+1) +"Page:"+pageNumber+"\n");
+					//tmpCmdTest.Contains("-p")
 					foreach (var result in scanResults){
 						Vector3D tmpV3D = (Vector3D)result.HitPosition;
 						MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
