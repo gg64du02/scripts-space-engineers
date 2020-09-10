@@ -1,4 +1,4 @@
-double range_to_test_at = 6000;
+double range_to_test_at = 100000;
 
 
 //Constants to generate equidistributed points on the surface of a sphere
@@ -6,7 +6,7 @@ double range_to_test_at = 6000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 5000;
+double N = 100;
 
 //numbers of generated points
 double N_count = 0;
@@ -159,7 +159,7 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("scanResults.Count "+scanResults.Count );
 
 
-    if (avg > .1)
+    if (avg > .2)
     {
         return;
     }
