@@ -6,7 +6,7 @@ double range_to_test_at = 100000;
 double r = 1;
 
 //Numbers of wanted points
-double N = 100;
+double N = 45000;
 
 //numbers of generated points
 double N_count = 0;
@@ -233,11 +233,14 @@ public void Main(string argument, UpdateType updateSource)
                 {
                     if (result.Type != MyDetectedEntityType.None)
                     {
-                        scanResults.Add(result);
+						// if (result.Type != MyDetectedEntityType.Asteroid)
+						// {
+							scanResults.Add(result);
+						// }
                     }
                 }
                 pointsToScan.Remove(pointAboutToBeScanned);
-                break;
+                //break;
             }
 
         }
