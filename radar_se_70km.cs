@@ -62,7 +62,7 @@ public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
             //Echo("generatedPoint:"+ generatedPoint);
             generatedPoints.Add(generatedPoint);
             N_count = N_count + 1;
-			if(N_count%10==0){
+			if(N_count%50==0){
 				m_in_main = m;
 				n++;
 				if(!(n < M_phi)){
@@ -91,7 +91,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 
 
     a = 4 * Math.PI * (r * r) / N;
