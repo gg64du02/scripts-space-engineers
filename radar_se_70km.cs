@@ -29,6 +29,8 @@ List<IMyCameraBlock> cameraBlocksList = new List<IMyCameraBlock>();
 int m_in_main = 0;
 int n_in_main = 0;
 
+double avg = 0;
+
 public List<Vector3D> generateWaypoints(IMyRemoteControl remote)
 {
     List<Vector3D> generatedPoints = new List<Vector3D>();
@@ -89,7 +91,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update100;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
 
     a = 4 * Math.PI * (r * r) / N;
@@ -140,9 +142,8 @@ public void Main(string argument, UpdateType updateSource)
     double dts2 = Runtime.LastRunTimeMs;
     Echo("dts2:" + dts2);
 
-    double avg = 0;
     //avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
-    avg = avg * 0.9 + Runtime.LastRunTimeMs * 0.1;
+    avg = avg * 0.99 + Runtime.LastRunTimeMs * 0.01;
     Echo(avg + "");
 	
 
@@ -158,7 +159,7 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("scanResults.Count "+scanResults.Count );
 
 
-    if (avg > .02)
+    if (avg > .1)
     {
         return;
     }
