@@ -533,10 +533,10 @@ public void Main(string argument)
     //angleRoll = tmpAngleRollPID;
     if (vec3Dtarget != new Vector3D(0, 0, 0))
     {
-    if (Math.Abs(distRoll) < 8)
-    {
-        angleRoll = angleRoll + 0.2 * angleRoll * angleRoll * angleRoll;
-    }
+        if (Math.Abs(distRoll) < 8)
+        {
+            angleRoll = angleRoll + 0.2 * angleRoll * angleRoll * angleRoll;
+        }
     }
     angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
@@ -589,10 +589,10 @@ public void Main(string argument)
     //anglePitch = tmpAnglePitchPID;*
     if (vec3Dtarget != new Vector3D(0, 0, 0))
     {
-    if (Math.Abs(distPitch) < 8)
-    {
-        anglePitch = anglePitch + 0.2 * anglePitch * anglePitch * anglePitch;
-    }
+        if (Math.Abs(distPitch) < 8)
+        {
+            anglePitch = anglePitch + 0.2 * anglePitch * anglePitch * anglePitch;
+        }
     }
 
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
@@ -713,10 +713,10 @@ public void Main(string argument)
                 //}
                 //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
                 altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-                Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3) );
+                Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
 
                 controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-                Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3) );
+                Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
 
                 //feedback loop to counter the wrong speed
                 control = controlAltSpeed;
@@ -790,7 +790,7 @@ public void Main(string argument)
             {
                 if (remainingThrustToApply == -1)
                 {
-                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control *1 ));
+                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
                 }
                 //Echo("physMass_N" + physMass_N);
                 //Echo("c.MaxThrust"+c.MaxThrust);
