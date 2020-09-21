@@ -101,6 +101,9 @@ List<bool> gravityGeneratorsSphereExcludeEnable = new List<bool>();
    
 IMyShipController thisReferenceBlock = null;
 
+//spherical GDRIVE mod
+List<IMyGravityGeneratorSphere> gravityGeneratorsSphere= new List<IMyGravityGeneratorSphere>(); 
+
 public Program()
 {
   // Configure this program to run the Main method every 1 update ticks
@@ -109,11 +112,14 @@ public Program()
    
 void Main(string argument)   
 {   
+	//Echo("lol1");
     ProcessArgument(argument);   
    
     timeCurrentCycle += Runtime.TimeSinceLastRun.TotalSeconds;   
     refreshTime += Runtime.TimeSinceLastRun.TotalSeconds;   
    
+	//Echo("lol2");
+	
 	if (Runtime.TimeSinceLastRun.TotalSeconds > 0.1)   
 	{   
 		Echo("WARNING: Slow refresh detected \nUse a 'Trigger Now' timer loop\n");   
@@ -121,10 +127,25 @@ void Main(string argument)
    
     if (!isSetup || (refreshTime >= refreshInterval))   
     {   
+		//Echo("lol3");
         isSetup = GrabBlocks();   
         refreshTime = 0;   
+		//Echo("lol4");
     }   
-   
+	
+	if(gravityGenerators!=null){
+		Echo("gravityGenerators.Count: "+gravityGenerators.Count);
+	}
+	if(gravityGeneratorsSphere == null){
+	Echo("gravityGeneratorsSphere == null");
+	}
+	else{
+		Echo("gravityGeneratorsSphere.Count: "+gravityGeneratorsSphere.Count);
+	}
+
+	//Echo("lol5");
+	
+	
     if (isSetup && (timeCurrentCycle >= timeMaxCycle))   
     {   
         try   
@@ -241,15 +262,29 @@ bool GrabBlocks()
         return false;   
     }  
    
-	theGroup.GetBlocksOfType(gravityGenerators, block => block.CubeGrid == referenceList[0].CubeGrid);   
+	GridTerminalSystem.GetBlocksOfType<IMyGravityGeneratorSphere>(gravityGeneratorsSphere);
+	
+	theGroup.GetBlocksOfType(gravityGeneratorsSphere, block => block.CubeGrid == referenceList[0].CubeGrid);   
+	if(gravityGeneratorsSphere.Count == 0){
+        Echo($"[ERROR]: No SPHERICAL Gravity Generators inside group name tag '{nameTag}' was found");   
+        return false;   
+	}
+	/*
     if (gravityGenerators.Count == 0)   
     {   
         Echo($"[ERROR]: No Gravity Generators inside group name tag '{nameTag}' was found");   
         return false;   
     }   
+	*/
    
-    theGroup.GetBlocksOfType(virtualMasses, block => block.CubeGrid == referenceList[0].CubeGrid);   
-    if (gravityGenerators.Count == 0)   
+	Echo("virtualMasses.Count: "+virtualMasses.Count);
+	//Echo("block: "+block);
+	Echo("referenceList: "+referenceList);
+   
+    theGroup.GetBlocksOfType(virtualMasses, block => block.CubeGrid == referenceList[0].CubeGrid); 
+	
+	//Echo("theGroup.Count: "+theGroup.Count);
+    if (gravityGeneratorsSphere.Count == 0)   
     {   
         Echo($"[ERROR]: No Artificial Mass inside group name tag '{nameTag}' was found");   
         return false;   
