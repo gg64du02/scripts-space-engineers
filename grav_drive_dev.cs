@@ -108,6 +108,7 @@ public Program()
 {
   // Configure this program to run the Main method every 1 update ticks
   Runtime.UpdateFrequency = UpdateFrequency.Update1;
+  
 }
    
 void Main(string argument)   
@@ -194,6 +195,7 @@ void Main(string argument)
 			}   
 			else   
 			{   
+		
 				ApplyThrust( travelVec, shipSpeed, desiredDirection, dampenersOn);   
 			}   
                
@@ -341,6 +343,21 @@ void ShutdownDrive()
 void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec, bool dampenersOn)   
 {  
 	bool isActive = false;  
+	
+	Echo("ApplyThrust:begin");
+	
+	Echo("desiredDirectionVec: "+desiredDirectionVec);
+    foreach (IMyVirtualMass virtualMass in virtualMasses)   
+    {
+		//Echo("virtualMass.CustomName:"+virtualMass.CustomName);
+		//make out the side of center of gravity the artificial mass is on
+		//Echo("virtualMass.CubeGrid.GetPosition()"+virtualMass.CubeGrid.GetPosition());
+		//Echo("virtualMass.GetPosition()"+virtualMass.GetPosition());
+		//Echo("thisReferenceBlock.CenterOfMass"+thisReferenceBlock.CenterOfMass);
+		Vector3D COGtoAMass = virtualMass.GetPosition() - thisReferenceBlock.CenterOfMass;
+		Echo("COGtoAMass: "+COGtoAMass);
+		
+	}
    
     /// GDrive Gravity Generator ///   
     foreach (IMyGravityGenerator thisGravityGenerator in gravityGenerators)   
