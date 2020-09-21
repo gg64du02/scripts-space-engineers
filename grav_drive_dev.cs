@@ -347,6 +347,14 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 	Echo("ApplyThrust:begin");
 	
 	Echo("desiredDirectionVec: "+desiredDirectionVec);
+	
+	//disable the artificial mass
+	foreach (IMyVirtualMass thisVirtualMass in virtualMasses)   
+    {   
+    	thisVirtualMass.ApplyAction("OnOff_Off");   
+		Echo("OnOff_On");
+    }   
+	
     foreach (IMyVirtualMass virtualMass in virtualMasses)   
     {
 		//Echo("virtualMass.CustomName:"+virtualMass.CustomName);
@@ -355,8 +363,15 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 		//Echo("virtualMass.GetPosition()"+virtualMass.GetPosition());
 		//Echo("thisReferenceBlock.CenterOfMass"+thisReferenceBlock.CenterOfMass);
 		Vector3D COGtoAMass = virtualMass.GetPosition() - thisReferenceBlock.CenterOfMass;
-		Echo("COGtoAMass: "+COGtoAMass);
+		//Echo("COGtoAMass: "+COGtoAMass);
 		
+		double offsetNeededInVelocity = COGtoAMass.Dot(desiredDirectionVec);
+		Echo("offsetNeededInVelocity:"+offsetNeededInVelocity);
+		
+		if(offsetNeededInVelocity>0){
+			//choose to enable on not a specific artificial mass
+			virtualMass.ApplyAction("OnOff_On");   
+		}
 	}
    
     /// GDrive Gravity Generator ///   
@@ -487,6 +502,7 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
         gravityGeneratorsExcludeStandby = false;  
     }   
   
+  /*
     /// Artificial Masses ///  
     if (isActive)   
     {   
@@ -496,12 +512,12 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
         }   
     }   
     else   
-    {   
+    // {   
         foreach (IMyVirtualMass thisVirtualMass in virtualMasses)   
         {   
             thisVirtualMass.ApplyAction("OnOff_Off");   
         }   
-    }   
+    }   */
 }   
    
 void SetGravityGeneratorOverride(IMyGravityGenerator gravityGenerator, float overrideValue)      
