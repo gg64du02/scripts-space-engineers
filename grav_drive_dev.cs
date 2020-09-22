@@ -370,7 +370,7 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 		double offsetNeededInVelocity = COGtoAMass.Dot(desiredDirectionVec);
 		Echo("offsetNeededInVelocity:"+offsetNeededInVelocity);
 		
-		mdr_str = mdr_str + "|" + Math.Round((offsetNeededInVelocity), 2);
+		mdr_str = mdr_str + "|" + Math.Round((offsetNeededInVelocity), 0);
 		
 		//if(Math.Abs(offsetNeededInVelocity)>4){
 		if(offsetNeededInVelocity>4){
