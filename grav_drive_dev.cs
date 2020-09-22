@@ -355,6 +355,8 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 		Echo("OnOff_On");
     }   
 	
+	var mdr_str = "";
+	
     foreach (IMyVirtualMass virtualMass in virtualMasses)   
     {
 		//Echo("virtualMass.CustomName:"+virtualMass.CustomName);
@@ -368,11 +370,22 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 		double offsetNeededInVelocity = COGtoAMass.Dot(desiredDirectionVec);
 		Echo("offsetNeededInVelocity:"+offsetNeededInVelocity);
 		
+		mdr_str = mdr_str + "|" + Math.Round((offsetNeededInVelocity), 2);
+		
 		if(offsetNeededInVelocity>0){
 			//choose to enable on not a specific artificial mass
 			virtualMass.ApplyAction("OnOff_On");   
 		}
 	}
+	
+    List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
+    GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
+    //debug roll
+    var str_to_display = mdr_str;
+    if (listAntenna.Count != 0)
+    {
+        listAntenna[0].HudText = str_to_display;
+    }
    
     /// GDrive Gravity Generator ///   
     foreach (IMyGravityGenerator thisGravityGenerator in gravityGenerators)   
