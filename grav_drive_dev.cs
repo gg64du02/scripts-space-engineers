@@ -372,7 +372,8 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 		
 		mdr_str = mdr_str + "|" + Math.Round((offsetNeededInVelocity), 2);
 		
-		if(offsetNeededInVelocity>0){
+		//if(Math.Abs(offsetNeededInVelocity)>4){
+		if(offsetNeededInVelocity>4){
 			//choose to enable on not a specific artificial mass
 			virtualMass.ApplyAction("OnOff_On");   
 		}
