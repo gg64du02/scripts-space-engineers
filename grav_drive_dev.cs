@@ -1,4 +1,4 @@
-//from https://steamcommunity.com/sharedfiles/filedetails/?id=1134945036
+//Modified from https://steamcommunity.com/sharedfiles/filedetails/?id=1134945036
 /*   
 /// Gravity Drive Manager v5 - 10/9/2018 ///   
 /________________________________________________   
@@ -10,8 +10,13 @@ How do I use this?
    
     1) Create a group with the name "GDrive" which contain:  
         - At least one Seat, Cockpit or Remote.  
-        - At least one Gravity Generator (3 in different axis for full motion).  
-        - At least one Artificial Mass (In the range of the Gravity Generator).  
+        - At least one Spherical Gravity Generator where the CenterOfMass is (set at -9.8m/s^2)
+        - At least six Artificial Mass (In the range of the Gravity Generator).  
+		
+		To get more performance put a bunch of sperical gen next to each other and put mass according on the six faces (6 gens with 30 masses is decent)
+		
+		To get dampening :
+		Put at least a truster on the grid (Large Grid small h2 will do)
    
     2) Place a program block with this code   
 
