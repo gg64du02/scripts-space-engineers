@@ -388,10 +388,12 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 				virtualMass.ApplyAction("OnOff_On");   
 			}
 			
-            //SetGravityGeneratorOverride(thisGravityGenerator, (float)Math.Max(scale * 100f, targetOverride));   
+            SetSphericalGravityGeneratorOverride(gravityGeneratorsSphere[0], -(float)Math.Max(offsetDampeningVelocity * 100f, 0f));   
+            //SetGravityGeneratorOverride(gravityGeneratorsSphere[0], (float)Math.Max(offsetDampeningVelocity * 100f, targetOverride));   
 		}
 		else{
 			//Echo("damp:off");
+            SetSphericalGravityGeneratorOverride(gravityGeneratorsSphere[0], -(9.8f));   
 		}
 	}
 	
@@ -551,6 +553,19 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 }   
    
 void SetGravityGeneratorOverride(IMyGravityGenerator gravityGenerator, float overrideValue)      
+{      
+    if (overrideValue > 0 || overrideValue < 0)   
+    {   
+    	gravityGenerator.SetValue<Single>("Gravity", overrideValue);   
+		gravityGenerator.ApplyAction("OnOff_On");    
+    }   
+    else   
+    {   
+    	gravityGenerator.ApplyAction("OnOff_Off");   
+    }   
+}   
+   
+void SetSphericalGravityGeneratorOverride(IMyGravityGeneratorSphere gravityGenerator, float overrideValue)      
 {      
     if (overrideValue > 0 || overrideValue < 0)   
     {   
