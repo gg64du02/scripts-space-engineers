@@ -377,6 +377,22 @@ void ApplyThrust(Vector3D travelVec, double speed, Vector3D desiredDirectionVec,
 			//choose to enable on not a specific artificial mass
 			virtualMass.ApplyAction("OnOff_On");   
 		}
+		
+		if(dampenersOn == true){
+			//Echo("damp:on");
+			double offsetDampeningVelocity = COGtoAMass.Dot(travelVec);
+			if(offsetDampeningVelocity>-4){
+				virtualMass.ApplyAction("OnOff_Off");   
+			}
+			else{
+				virtualMass.ApplyAction("OnOff_On");   
+			}
+			
+            //SetGravityGeneratorOverride(thisGravityGenerator, (float)Math.Max(scale * 100f, targetOverride));   
+		}
+		else{
+			//Echo("damp:off");
+		}
 	}
 	
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
