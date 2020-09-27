@@ -55,10 +55,8 @@ bool firstMainLoop = true;
 
 //drone landing
 PIDController angleRollPID = new PIDController(1f, 0f, 0f);
-PIDController angleRollPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 
 PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
-PIDController anglePitchPIDcloseToTarget = new PIDController(1f, 0f, 0f);
 
 IMyShipController myRemoteControl = null;
 
@@ -516,20 +514,9 @@ public void Main(string argument)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double angleRoll = 0;
-    //double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(distRoll, dts);
-    //double tmpAngleRollPID = angleRollPID.Control(distRoll, dts);
-    double tmpAngleRollPIDcloseToTarget = angleRollPIDcloseToTarget.Control(speedRollError, dts);
+	
     double tmpAngleRollPID = angleRollPID.Control(speedRollError, dts);
-    if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
-    {
-        angleRoll = tmpAngleRollPID;
-        //Echo("tmpAngleRollPID:" + tmpAngleRollPID);
-    }
-    else
-    {
-        angleRoll = tmpAngleRollPIDcloseToTarget;
-        //Echo("tmpAngleRollPIDcloseToTarget:" + tmpAngleRollPIDcloseToTarget);
-    }
+	angleRoll = tmpAngleRollPID;
     //angleRoll = tmpAngleRollPID;
     if (vec3Dtarget != new Vector3D(0, 0, 0))
     {
@@ -571,21 +558,9 @@ public void Main(string argument)
     // Atan2(speedRollError * 2,1)
     //0.01, 0, 2
     double anglePitch = 0;
-    //double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(distPitch, dts);
-    //double tmpAnglePitchPID = anglePitchPID.Control(distPitch, dts);
-    double tmpAnglePitchPIDcloseToTarget = anglePitchPIDcloseToTarget.Control(speedPitchError, dts);
+	
     double tmpAnglePitchPID = anglePitchPID.Control(speedPitchError, dts);
-    //if (Math.Abs(distPitch) < Math.Abs(distWhenToStartBraking))
-    if (Math.Abs(distToTarget) > Math.Abs(distWhenToStartBraking))
-    {
-        anglePitch = tmpAnglePitchPID;
-        //Echo("tmpAnglePitchPID:" + tmpAnglePitchPID);
-    }
-    else
-    {
-        anglePitch = tmpAnglePitchPIDcloseToTarget;
-        //Echo("tmpAnglePitchPIDcloseToTarget");
-    }
+	anglePitch = tmpAnglePitchPID;
     //anglePitch = tmpAnglePitchPID;*
     if (vec3Dtarget != new Vector3D(0, 0, 0))
     {
