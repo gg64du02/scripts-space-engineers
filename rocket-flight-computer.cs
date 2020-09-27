@@ -501,7 +501,7 @@ public void Main(string argument)
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double distRoll = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector), VectToTarget);
-    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking - 1), Convert.ToSingle(distWhenToStartBraking + 1));
+    double clampedDistRoll = MyMath.Clamp(Convert.ToSingle(distRoll), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
     double wantedSpeedRoll = (V_max / distWhenToStartBraking) * clampedDistRoll;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -539,7 +539,7 @@ public void Main(string argument)
 
     //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
     double distPitch = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector), VectToTarget);
-    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking - 1), Convert.ToSingle(distWhenToStartBraking + 1));
+    double clampedDistPitch = MyMath.Clamp(Convert.ToSingle(distPitch), Convert.ToSingle(-distWhenToStartBraking), Convert.ToSingle(distWhenToStartBraking));
     double wantedSpeedPitch = (V_max / distWhenToStartBraking) * clampedDistPitch;
 
     //double speedRoll = Vector3D.Dot(leftProjPlaneVector, linearSpeedsShip);
@@ -573,6 +573,22 @@ public void Main(string argument)
     anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 
     //******Pitch************end
+	if(Math.Abs(speedRoll)<1){
+		if(Math.Abs(speedPitch)<1){
+            anglePitch *= 10f;
+            angleRoll *= 10f;
+			anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+			angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+		}
+	}
+	if(Math.Abs(speedRoll)<.01){
+		if(Math.Abs(speedPitch)<.01){
+            anglePitch *= 10f;
+            angleRoll *= 10f;
+			anglePitch = MyMath.Clamp(Convert.ToSingle(anglePitch), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+			angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
+		}
+	}
 
 
     pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
