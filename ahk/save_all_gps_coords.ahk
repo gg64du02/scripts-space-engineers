@@ -81,19 +81,25 @@ MButton::
 		;MouseClick, X1, Xpos_center + 350 , Ypos_center - 200 , 1, 0
 		
 		sleep %temps%
+		send {Tab down}
+		sleep %temps%
+		send {Tab up}
+		sleep %temps%
+		
+		sleep %temps%
+		send {Tab down}
+		sleep %temps%
+		send {Tab up}
+		sleep %temps%
 		
 		send {Down down}
 		sleep %temps%
 		send {Down up}
 		sleep %temps%
 		
-		send {Up down}
+		send {Down down}
 		sleep %temps%
-		send {Up up}
-		sleep %temps%
-		send {Up down}
-		sleep %temps%
-		send {Up up}
+		send {Down up}
 		sleep %temps%
 		
 		send {Down down}
