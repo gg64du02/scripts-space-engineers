@@ -257,6 +257,20 @@ public void Main(string argument)
 
     double elev;
     myRemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
+	
+	
+
+    List<IMySensorBlock> listSensors = new List<IMySensorBlock>();
+    GridTerminalSystem.GetBlocksOfType<IMySensorBlock>(listSensors);
+	
+	bool isUnderground = false;
+	
+	if(listSensors.Count!=0){
+		if(listSensors[0].IsActive == true){
+		elev *=-1;
+		isUnderground =true;
+		}
+	}
 
     //Best we have is Runtime.LastRunTime and Runtime.TimeSinceLastRun
     double dts = Runtime.TimeSinceLastRun.TotalSeconds;
@@ -715,6 +729,24 @@ public void Main(string argument)
             }
         }
     }
+    Echo("dts:" + dts);
+	Echo("isUnderground:"+isUnderground);
+    if (Math.Abs(distPitch) > 1|| Math.Abs(distRoll) > 1)
+    {
+		if (dts > 0)
+		{
+			if(isUnderground ==true){
+				clampWantedAlitudeSpeed = 1;
+				altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+				Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+
+				controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+				Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+
+				control = controlAltSpeed;
+			}
+		}
+	}
     //altitude management and downward speed management========================== end
 
     if (Double.IsNaN(controlAltSpeed) == true)
