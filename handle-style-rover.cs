@@ -59,6 +59,16 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D moveIndicator = shipController.MoveIndicator;
 			Echo("moveIndicator:"+moveIndicator);
 			
+			
+			var str_to_display = ""+moveIndicator;
+			if (listAntenna.Count != 0)
+			{
+				//var str_to_display = "133";
+				listAntenna[0].HudText = str_to_display;
+			}
+			shipController.CubeGrid.CustomName = str_to_display;
+			
+			
 			if(moveIndicator.Z!=0){
 				if(moveIndicator.Z ==1){
 					tryToGoBackward = true;
@@ -81,15 +91,36 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("isNotManned");
 			tryToStandStill = true;
 		}
+		int V_max = 10;
+		
+		int V_wanted = 0;
+		int V_right = 0;
+		int V_left = 0;
+		if(tryToStandStill ==true){
+			V_wanted = 0;
+		    V_right = 0;
+			V_left = 0;
+		}
+		else{
+			if(tryToGoLeft ==true){
+				V_left = V_max * 2;
+			}
+			if(tryToGoRight==true){
+				V_right = V_max * 2;
+			}
+			if(tryToGoFoward ==true){
+				V_wanted = V_max;
+				V_right = V_max * 1;
+				V_left = V_max * 1;
+			}
+			if(tryToGoBackward ==true){
+				V_wanted = -V_max;
+				V_right = V_max * -1;
+				V_left = V_max * -1;
+			}
+		}
+		
 	}
-	
-	var str_to_display = ""+moveIndicator;
-	if (listAntenna.Count != 0)
-	{
-		//var str_to_display = "133";
-		listAntenna[0].HudText = str_to_display;
-	}
-	shipController.CubeGrid.CustomName = str_to_display;
 	
 			
 	
