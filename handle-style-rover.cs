@@ -187,14 +187,61 @@ public void Main(string argument, UpdateType updateSource)
 				Echo("==========");
 			}
 			
-			//now going through all components to sorts them into a leg
+			
+			
+			//now going through all components to sort them into a leg
+			List<IMyMotorBase> rightLeg= new List<IMyMotorBase>();
+			List<IMyMotorBase> leftLeg= new List<IMyMotorBase>();
+			
+			
+			Echo("==========");
+			foreach(IMyMotorBase mb3 in myMotorBases){
+				 // Echo("mb3.CustomName:"+mb3.CustomName);
+				 // Echo("mb3.Position"+mb3.Position);
+				 // Echo("mb3.GetPosition"+mb3.GetPosition());
+				 // Echo("shipController.GetPosition"+shipController.GetPosition());
+				 Vector3D tmpVectorCompToShip = new Vector3D(shipController.GetPosition() - mb3.GetPosition());
+				 // Echo("tmpVectorCompToShip"+tmpVectorCompToShip);
+				 Vector3D tmpCheckThisSign =  shipDownVector.Cross(tmpVectorCompToShip);
+				 // Echo("tmpCheckThisSign"+tmpCheckThisSign);
+				 double signScalar = tmpCheckThisSign.Dot(shipForwardVector);
+				 // Echo("signScalar"+signScalar);
+				 if(signScalar>0){
+					 leftLeg.Add(mb3);
+					 // Echo("leftLeg.Add");
+				 }
+				 else{
+					 rightLeg.Add(mb3);
+					 // Echo("rightLeg.Add");
+				 }
+				 
+				// Echo("==========");
+			}
+			
+			Echo("leftLeg.Count:"+leftLeg.Count);
+			Echo("rightLeg.Count:"+rightLeg.Count);
+			
+			foreach(var mb4 in leftLeg){
+				Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
+			}
+			foreach(var mb5 in rightLeg){
+				Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
+			}
+				
+				
+			// // //figuring out what is the upper legs' angle:
+			var tmpPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
+			Echo("tmpPosLeft:"+tmpPosLeft);
+			var tmpPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
+			Echo("tmpPosRight:"+tmpPosRight);
+
 			
 		}
 		
 		
-		//guessing hips rotors and directions
-		Vector3I currentGridControllerPos = shipController.Position;
-		Echo("currentGridControllerPos:"+currentGridControllerPos);
+		// //guessing hips rotors and directions
+		// Vector3I currentGridControllerPos = shipController.Position;
+		// Echo("currentGridControllerPos:"+currentGridControllerPos);
 		
 		
 	}
