@@ -124,6 +124,7 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		
 		List<IMyMotorBase> hipsRotors = new List<IMyMotorBase>();
+		List<IMyMotorBase> kneesRotors = new List<IMyMotorBase>();
 		
 		//guessing vectors for the two wheeled legs
 		if(myMotorBases.Count != 0 ){
@@ -142,13 +143,52 @@ public void Main(string argument, UpdateType updateSource)
 						}
 						else{
 							//Echo("notSameGrid!!!");
+							kneesRotors.Add(mb);
 						}
 					}
 				}
 			}
+			// foreach(IMyMotorBase mb2 in hipsRotors){
+				 // Echo("hipsRotor:"+mb2);
+			// }
+			// foreach(IMyMotorBase mb2 in kneesRotors){
+				 // Echo("kneesRotor:"+mb2);
+			// }
+			//figure out what components belong to the right leg and the left leg
+			//getting vectors to help with angles proposals
+			Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
+			Vector3D shipLeftVector = shipController.WorldMatrix.Left;
+			Vector3D shipDownVector = shipController.WorldMatrix.Down;
+			// Echo("shipForwardVector:" + shipForwardVector);
+			// Echo("shipLeftVector:" + shipLeftVector);
+			// Echo("shipDownVector:" + shipDownVector);
+			
+			//?: if you were an humanoid, knew your hips and knees' position, how do you figure out which one belongs to which leg ?
+			double tmpScalar = 0;
+			IMyMotorBase leftHip = null;
+			IMyMotorBase rightHip = null;
 			foreach(IMyMotorBase mb2 in hipsRotors){
-				 Echo("mb2:"+mb2);
+				Echo("==========");
+				 Echo("hipsRotor:"+mb2);
+				 Vector3D tmpVector = new Vector3D(mb2.Position -shipController.Position);
+				 Echo("tmpVector:"+tmpVector);
+				 //tmpScalar = shipLeftVector.Dot(tmpVector);
+				 tmpScalar = tmpVector.X;
+				 Echo("tmpScalar:"+tmpScalar);
+				 if(tmpScalar>.5){
+					 leftHip = mb2;
+					 Echo("leftHipDectected");
+				 }
+				 else{
+					 rightHip = mb2;
+					 Echo("rightHipDectected");
+				 }
+				 
+				Echo("==========");
 			}
+			
+			//now going through all components to sorts them into a leg
+			
 		}
 		
 		
