@@ -37,6 +37,9 @@ public void Main(string argument, UpdateType updateSource)
     List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 	
+    List<IMyMotorBase> myMotorBases = new List<IMyMotorBase>();
+    GridTerminalSystem.GetBlocksOfType<IMyMotorBase>(myMotorBases);
+	
 	bool tryToStandStill = false;
 	bool tryToGoFoward = false;
 	bool tryToGoBackward = false;
@@ -119,6 +122,40 @@ public void Main(string argument, UpdateType updateSource)
 				V_left = V_max * -1;
 			}
 		}
+		
+		List<IMyMotorBase> hipsRotors = new List<IMyMotorBase>();
+		
+		//guessing vectors for the two wheeled legs
+		if(myMotorBases.Count != 0 ){
+			foreach(IMyMotorBase mb in myMotorBases){
+				//Echo("mb:"+mb);
+				if(mb.IsSameConstructAs(shipController)){
+					if(mb is IMyMotorStator){
+						var cubeGridShipController = shipController.CubeGrid;
+						var myMotorBaseGrid = mb.CubeGrid;
+						// Echo("cubeGridShipController:"+cubeGridShipController);
+						// Echo("myMotorBaseGrid:"+myMotorBaseGrid);
+						// Echo("==============");
+						if(cubeGridShipController == myMotorBaseGrid){
+							//Echo("sameGrid!!!");
+							hipsRotors.Add(mb);
+						}
+						else{
+							//Echo("notSameGrid!!!");
+						}
+					}
+				}
+			}
+			foreach(IMyMotorBase mb2 in hipsRotors){
+				 Echo("mb2:"+mb2);
+			}
+		}
+		
+		
+		//guessing hips rotors and directions
+		Vector3I currentGridControllerPos = shipController.Position;
+		Echo("currentGridControllerPos:"+currentGridControllerPos);
+		
 		
 	}
 	
