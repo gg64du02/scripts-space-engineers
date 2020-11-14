@@ -1,3 +1,5 @@
+  //library used for the vectorHelper   https://steamcommunity.com/sharedfiles/filedetails/?id=1390966561
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -206,7 +208,7 @@ public void Main(string argument, UpdateType updateSource)
 				 // Echo("tmpCheckThisSign"+tmpCheckThisSign);
 				 double signScalar = tmpCheckThisSign.Dot(shipForwardVector);
 				 // Echo("signScalar"+signScalar);
-				 if(signScalar>0){
+				 if(signScalar<0){
 					 leftLeg.Add(mb3);
 					 // Echo("leftLeg.Add");
 				 }
@@ -245,15 +247,59 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D tmpLowerPosRight = rightLeg[1].GetPosition() - rightLeg[2].GetPosition();
 			Echo("tmpLowerPosRight:"+tmpLowerPosRight);
 			
-			Vector3D tmpLowerPosLeftNorm = Vector3D.Normalize(tmpLowerPosLeft);
-			Vector3D tmpLowerPosRightNorm = Vector3D.Normalize(tmpLowerPosRight);
 			
-			//angle at the knees
-			var angleKneeLeft = Math.Acos((tmpUpperPosLeftNorm.Dot(tmpLowerPosLeftNorm))/1);
-			Echo("angleKneeLeft"+angleKneeLeft);
-			var angleKneeRight = Math.Acos((tmpUpperPosRightNorm.Dot(tmpLowerPosRightNorm))/1);
-			Echo("angleKneeRight"+angleKneeRight);
+			
+		
+			
+			// Vector3D tmpLowerPosLeftNorm = Vector3D.Normalize(tmpLowerPosLeft);
+			// Vector3D tmpLowerPosRightNorm = Vector3D.Normalize(tmpLowerPosRight);
+			
+			// //angle at the knees
+			// var angleKneeLeftCos = (180/Math.PI)*(tmpUpperPosLeftNorm.Dot(tmpLowerPosLeftNorm));
+			// Echo("angleKneeLeftCos:"+angleKneeLeftCos);
+			// var angleKneeRightCos = (180/Math.PI)*(tmpUpperPosRightNorm.Dot(tmpLowerPosRightNorm));
+			// Echo("angleKneeRightCos:"+angleKneeRightCos);
+			
+			// var angleKneeLeftSin= (180/Math.PI)*(tmpUpperPosLeftNorm.Cross(tmpLowerPosLeftNorm)).Length();
+			// Echo("angleKneeLeftSin:"+angleKneeLeftSin);
+			// var angleKneeRightSin = (180/Math.PI)*(tmpUpperPosRightNorm.Cross(tmpLowerPosRightNorm)).Length();
+			// Echo("angleKneeRightSin:"+angleKneeRightSin);
 
+			// var angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(tmpUpperPosLeftNorm,tmpLowerPosLeftNorm);
+			// Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			// var angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(tmpUpperPosRightNorm,tmpLowerPosRightNorm);
+			// Echo("angleRightVectorHelper:"+angleRightVectorHelper);
+
+			
+			// IMyMotorBase leftHip = null;
+			// IMyMotorBase rightHip = null
+			//Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Left;
+			Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Down;
+			
+			
+			// Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
+			// Vector3D shipLeftVector = shipController.WorldMatrix.Left;
+			// Vector3D shipDownVector = shipController.WorldMatrix.Down;
+			
+			
+    //Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
+			
+			Vector3D hipProjTmpUpperPosLeft = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
+			Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
+			Vector3D hipProjTmpLowerPosLeft =  leftHipRotatingAxis - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
+			Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
+			
+			
+			// Vector3D hipProjTmpUpperPosRight = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
+			// Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
+			// Vector3D hipProjTmpLowerPosLeft =  leftHipRotatingAxis - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
+			// Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
+			
+			var angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
+			Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			// var angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
+			// Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			
 			
 		}
 		
@@ -268,4 +314,25 @@ public void Main(string argument, UpdateType updateSource)
 			
 	
 	Echo("lol2");
+}
+
+public static class VectorHelper
+{
+    // in radians
+    public static double VectorAngleBetween(Vector3D a, Vector3D b)
+    {
+        if (Vector3D.IsZero(a) || Vector3D.IsZero(b))
+            return 0;
+        else
+            return Math.Acos(MathHelper.Clamp(a.Dot(b) / Math.Sqrt(a.LengthSquared() * b.LengthSquared()), -1, 1));
+    }
+
+    public static Vector3D VectorProjection(Vector3D vectorToProject, Vector3D projectsToVector)
+    {
+        if (Vector3D.IsZero(projectsToVector))
+            return Vector3D.Zero;
+
+        return vectorToProject.Dot(projectsToVector) / projectsToVector.LengthSquared() * projectsToVector;
+    }
+
 }
