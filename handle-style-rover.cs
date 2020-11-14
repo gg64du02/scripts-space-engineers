@@ -229,11 +229,30 @@ public void Main(string argument, UpdateType updateSource)
 			}
 				
 				
-			// // //figuring out what is the upper legs' angle:
-			var tmpPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
-			Echo("tmpPosLeft:"+tmpPosLeft);
-			var tmpPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
-			Echo("tmpPosRight:"+tmpPosRight);
+			//figuring out what is the upper legs' angle:
+			Vector3D tmpUpperPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
+			Echo("tmpUpperPosLeft:"+tmpUpperPosLeft);
+			Vector3D tmpUpperPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
+			Echo("tmpUpperPosRight:"+tmpUpperPosRight);
+			
+			Vector3D tmpUpperPosLeftNorm = Vector3D.Normalize(tmpUpperPosLeft);
+			Vector3D tmpUpperPosRightNorm = Vector3D.Normalize(tmpUpperPosRight);
+			
+			
+			//figuring out what is the lower legs' angle:
+			Vector3D tmpLowerPosLeft = leftLeg[1].GetPosition() - leftLeg[2].GetPosition();
+			Echo("tmpLowerPosLeft:"+tmpLowerPosLeft);
+			Vector3D tmpLowerPosRight = rightLeg[1].GetPosition() - rightLeg[2].GetPosition();
+			Echo("tmpLowerPosRight:"+tmpLowerPosRight);
+			
+			Vector3D tmpLowerPosLeftNorm = Vector3D.Normalize(tmpLowerPosLeft);
+			Vector3D tmpLowerPosRightNorm = Vector3D.Normalize(tmpLowerPosRight);
+			
+			//angle at the knees
+			var angleKneeLeft = Math.Acos((tmpUpperPosLeftNorm.Dot(tmpLowerPosLeftNorm))/1);
+			Echo("angleKneeLeft"+angleKneeLeft);
+			var angleKneeRight = Math.Acos((tmpUpperPosRightNorm.Dot(tmpLowerPosRightNorm))/1);
+			Echo("angleKneeRight"+angleKneeRight);
 
 			
 		}
