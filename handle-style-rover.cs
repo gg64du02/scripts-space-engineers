@@ -12,7 +12,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update100;
 }
 
 public void Save()
@@ -170,23 +170,23 @@ public void Main(string argument, UpdateType updateSource)
 			IMyMotorBase leftHip = null;
 			IMyMotorBase rightHip = null;
 			foreach(IMyMotorBase mb2 in hipsRotors){
-				Echo("==========");
-				 Echo("hipsRotor:"+mb2);
+				//Echo("==========");
+				 //Echo("hipsRotor:"+mb2);
 				 Vector3D tmpVector = new Vector3D(mb2.Position -shipController.Position);
-				 Echo("tmpVector:"+tmpVector);
+				 //Echo("tmpVector:"+tmpVector);
 				 //tmpScalar = shipLeftVector.Dot(tmpVector);
 				 tmpScalar = tmpVector.X;
-				 Echo("tmpScalar:"+tmpScalar);
+				 //Echo("tmpScalar:"+tmpScalar);
 				 if(tmpScalar>.5){
 					 leftHip = mb2;
-					 Echo("leftHipDectected");
+					 //Echo("leftHipDectected");
 				 }
 				 else{
 					 rightHip = mb2;
-					 Echo("rightHipDectected");
+					 //Echo("rightHipDectected");
 				 }
 				 
-				Echo("==========");
+				//Echo("==========");
 			}
 			
 			
@@ -196,7 +196,7 @@ public void Main(string argument, UpdateType updateSource)
 			List<IMyMotorBase> leftLeg= new List<IMyMotorBase>();
 			
 			
-			Echo("==========");
+			//Echo("==========");
 			foreach(IMyMotorBase mb3 in myMotorBases){
 				 // Echo("mb3.CustomName:"+mb3.CustomName);
 				 // Echo("mb3.Position"+mb3.Position);
@@ -223,19 +223,19 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("leftLeg.Count:"+leftLeg.Count);
 			Echo("rightLeg.Count:"+rightLeg.Count);
 			
-			foreach(var mb4 in leftLeg){
-				Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
-			}
-			foreach(var mb5 in rightLeg){
-				Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
-			}
+			// foreach(var mb4 in leftLeg){
+				// Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
+			// }
+			// foreach(var mb5 in rightLeg){
+				// Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
+			// }
 				
 				
 			//figuring out what is the upper legs' angle:
 			Vector3D tmpUpperPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
-			Echo("tmpUpperPosLeft:"+tmpUpperPosLeft);
+			Echo("tmpUpperPosLeft:"+Vector3D.Round(tmpUpperPosLeft,2));
 			Vector3D tmpUpperPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
-			Echo("tmpUpperPosRight:"+tmpUpperPosRight);
+			Echo("tmpUpperPosRight:"+Vector3D.Round(tmpUpperPosRight,2));
 			
 			Vector3D tmpUpperPosLeftNorm = Vector3D.Normalize(tmpUpperPosLeft);
 			Vector3D tmpUpperPosRightNorm = Vector3D.Normalize(tmpUpperPosRight);
@@ -243,9 +243,9 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//figuring out what is the lower legs' angle:
 			Vector3D tmpLowerPosLeft = leftLeg[1].GetPosition() - leftLeg[2].GetPosition();
-			Echo("tmpLowerPosLeft:"+tmpLowerPosLeft);
+			Echo("tmpLowerPosLeft:"+Vector3D.Round(tmpLowerPosLeft,2));
 			Vector3D tmpLowerPosRight = rightLeg[1].GetPosition() - rightLeg[2].GetPosition();
-			Echo("tmpLowerPosRight:"+tmpLowerPosRight);
+			Echo("tmpLowerPosRight:"+Vector3D.Round(tmpLowerPosRight,2));
 			
 			
 			
@@ -285,9 +285,9 @@ public void Main(string argument, UpdateType updateSource)
     //Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
 			
 			Vector3D hipProjTmpUpperPosLeft = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
-			Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
+			//Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
 			Vector3D hipProjTmpLowerPosLeft =  leftHipRotatingAxis - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
-			Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
+			//Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
 			
 			
 			// Vector3D hipProjTmpUpperPosRight = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
@@ -296,7 +296,7 @@ public void Main(string argument, UpdateType updateSource)
 			// Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
 			
 			var angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
-			Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			//Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
 			// var angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
 			// Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
 			
