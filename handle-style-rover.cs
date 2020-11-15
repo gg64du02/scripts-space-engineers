@@ -187,7 +187,7 @@ public void Main(string argument, UpdateType updateSource)
 				 //tmpScalar = shipLeftVector.Dot(tmpVector);
 				 tmpScalar = tmpVector.X;
 				 //Echo("tmpScalar:"+tmpScalar);
-				 if(tmpScalar<.5){
+				 if(tmpScalar<0.5){
 					 leftHip = mb2;
 					 //Echo("leftHipDectected");
 				 }
@@ -197,6 +197,27 @@ public void Main(string argument, UpdateType updateSource)
 				 }
 				 
 				//Echo("==========");
+			}
+			
+			//kneesRotors
+			IMyMotorStator leftKnee = null;
+			IMyMotorStator rightKnee = null;
+			foreach(IMyMotorStator kr in kneesRotors){
+				 Vector3D tmpVector = new Vector3D(kr.Position -shipController.Position);
+				 tmpScalar = tmpVector.X;
+				//TODO: fix this...
+				 if(leftKnee==null){
+					 if(tmpScalar<0.25){
+						 leftKnee = kr;
+						 Echo("leftKnee!!!!");
+					 }
+					 else{
+						 rightKnee = kr;
+					 }
+				 }
+				 else{
+					  rightKnee = kr;
+				 }
 			}
 			
 			
@@ -279,12 +300,12 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D hipProjTmpLowerPosRight =  tmpLowerPosRight - VectorHelper.VectorProjection(tmpLowerPosRight,leftHipRotatingAxis);
 			//DONE?: add the sign to the angle
 			double angleSignRightKnee = -rightHip.WorldMatrix.Up.Dot(hipProjTmpUpperPosRight.Cross(hipProjTmpLowerPosRight));//<- cross needed to guess the angle
-			double angleRighKnee =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
-			if(angleSignRightKnee<0){angleRighKnee = -angleRighKnee;}
+			double angleRightKnee =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
+			if(angleSignRightKnee<0){angleRightKnee = -angleRightKnee;}
 			// Echo("hipProjTmpUpperPosRight:"+Vector3D.Round(hipProjTmpUpperPosRight,2));
 			// Echo("hipProjTmpLowerPosRight:"+Vector3D.Round(hipProjTmpLowerPosRight,2));
 			Echo("angleSignRightKnee:"+Math.Round(angleSignRightKnee,2));
-			Echo("angleRighKnee:"+Math.Round(angleRighKnee,2));
+			Echo("angleRightKnee:"+Math.Round(angleRightKnee,2));
 			
 			//angle for the right hip
 			//angle between the forward vector and the upper legs
@@ -330,7 +351,7 @@ public void Main(string argument, UpdateType updateSource)
 			rightHip.CustomName = "rightHip";
 			
 			
-			double wantedAngleHipLeft = 45;
+			double wantedAngleHipLeft = 90;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
@@ -338,8 +359,36 @@ public void Main(string argument, UpdateType updateSource)
 			
 			leftHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
 			leftHip.CustomName = "leftHip";
-			// pidAngleHipLeft.Control(Error);
-			// pidAngleKneeRight..Control(Error);
+			
+			
+			double wantedAngleKneeLeft = 90;
+			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
+			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
+			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
+			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
+			
+			leftKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			leftKnee.CustomName = "leftKnee";
+			
+			
+			
+			double wantedAngleKneeRight = 90;
+			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
+			double angleControlKneeRight = pidAngleKneeRight.Control(errorAngleKneeRight,dts);
+			Echo("errorAngleKneeRight:"+Math.Round(errorAngleKneeRight,2));
+			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
+			
+			if(rightKnee==null){Echo("rightKnee is null");}
+			rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
+			rightKnee.CustomName = "rightKnee";
+			
+					 // leftKnee = kr;
+				 // }
+				 // else{
+					 // rightKnee = kr;
+			
+			
+			// pidAngleKneeRight.Control(Error);
 			// pidAngleKneeLeft.Control(Error);
 
 			
