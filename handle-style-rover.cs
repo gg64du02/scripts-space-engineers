@@ -347,17 +347,17 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
-			// rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
+			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
 			rightHip.CustomName = "rightHip";
 			
 			
-			double wantedAngleHipLeft = 170;
+			double wantedAngleHipLeft = -135;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
 			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
 			
-			// leftHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			leftHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipLeft);
 			leftHip.CustomName = "leftHip";
 			
 			
