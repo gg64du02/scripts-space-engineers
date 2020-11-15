@@ -1,5 +1,15 @@
   //library used for the vectorHelper   https://steamcommunity.com/sharedfiles/filedetails/?id=1390966561
 
+// PIDController pidAngleHipRight = new PIDController(0.06f, .00f, 0.01f);
+// PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
+// PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
+// PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
+PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -167,9 +177,9 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//?: if you were an humanoid, knew your hips and knees' position, how do you figure out which one belongs to which leg ?
 			double tmpScalar = 0;
-			IMyMotorBase leftHip = null;
-			IMyMotorBase rightHip = null;
-			foreach(IMyMotorBase mb2 in hipsRotors){
+			IMyMotorStator leftHip = null;
+			IMyMotorStator rightHip = null;
+			foreach(IMyMotorStator mb2 in hipsRotors){
 				//Echo("==========");
 				 //Echo("hipsRotor:"+mb2);
 				 Vector3D tmpVector = new Vector3D(mb2.Position -shipController.Position);
@@ -188,6 +198,35 @@ public void Main(string argument, UpdateType updateSource)
 				 
 				//Echo("==========");
 			}
+			
+			
+			
+			// List<IMyMotorStator> myMotorStators = new List<IMyMotorStator>();
+			// GridTerminalSystem.GetBlocksOfType<IMyMotorStator>(myMotorStators);
+			// IMyMotorStator leftHipStator = null;
+			// IMyMotorStator rightHipStator = null;
+			// //guessing vectors for the two wheeled legs
+			// if(myMotorStators.Count != 0 ){
+				// foreach(IMyMotorStator ms in myMotorStator){
+					// //Echo("mb:"+mb);
+					// if(ms.IsSameConstructAs(shipController)){
+						// if(ms is IMyMotorStator){
+							// var cubeGridShipController = shipController.CubeGrid;
+							// var myMotorBaseGrid = mb.CubeGrid;
+							// // Echo("cubeGridShipController:"+cubeGridShipController);
+							// // Echo("myMotorBaseGrid:"+myMotorBaseGrid);
+							// // Echo("==============");
+							// if(cubeGridShipController == myMotorBaseGrid){
+								// //Echo("sameGrid!!!");
+								// hipsRotors.Add(mb);
+							// }
+							// else{
+								// //Echo("notSameGrid!!!");
+								// kneesRotors.Add(mb);
+							// }
+						// }
+					// }
+				// }
 			
 			
 			
@@ -226,9 +265,9 @@ public void Main(string argument, UpdateType updateSource)
 			// foreach(var mb4 in leftLeg){
 				// Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
 			// }
-			// foreach(var mb5 in rightLeg){
-				// Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
-			// }
+			foreach(var mb5 in rightLeg){
+				Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
+			}
 				
 				
 			//figuring out what is the upper legs' angle:
@@ -293,6 +332,34 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleBbodyAUpperLegLeft:"+Math.Round(angleBbodyAUpperLegLeft,2));
 			
 			
+			//======================================
+			//=============CONTROL===================
+			//======================================
+			
+			//Best we have is Runtime.LastRunTime and Runtime.TimeSinceLastRun
+			double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+			Echo("dts:" + dts);
+			double dts2 = Runtime.LastRunTimeMs;
+			Echo("dts2:" + dts2);
+			
+			if (dts == 0)
+			{
+				//listLight[0].Color = Color.DarkRed;
+				return;
+			}
+			
+			double wantedAngleHipRight = 45;
+			double errorAngleHipRight = angleBbodyAUpperLegRight-wantedAngleHipRight;
+			double angleControlHipRight = pidAngleHipRight.Control(errorAngleHipRight,dts);
+			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
+			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
+			
+			rightHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipRight);
+			// pidAngleHipLeft.Control(Error);
+			// pidAngleKneeRight..Control(Error);
+			// pidAngleKneeLeft.Control(Error);
+
+			
 			
 			
 		}
@@ -306,6 +373,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Echo("lol2");
 }
+
 
 //=================================
 //from the workshop link in the file's header
