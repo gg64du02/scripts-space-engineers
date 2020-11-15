@@ -361,13 +361,13 @@ public void Main(string argument, UpdateType updateSource)
 			leftHip.CustomName = "leftHip";
 			
 			
-			double wantedAngleKneeLeft = 45;
+			double wantedAngleKneeLeft = -145;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
 			
-			// leftKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
 			leftKnee.CustomName = "leftKnee";
 			
 			
