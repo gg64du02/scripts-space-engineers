@@ -307,6 +307,57 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("lol2");
 }
 
+//=================================
+//from the workshop link in the file's header
+
+public class PIDController
+{
+    double p = 0;
+    double i = 0;
+    double d = 0;
+
+    double errorIntegral = 0;
+    double lastError = 0;
+
+    bool firstRun = true;
+
+    public PIDController(double p, double i, double d)
+    {
+        this.p = p;
+        this.i = i;
+        this.d = d;
+    }
+
+    public double Control(double error, double timeStep)
+    {
+        double errorDerivative;
+
+        if (firstRun)
+        {
+            errorDerivative = 0;
+            firstRun = false;
+        }
+        else
+        {
+            errorDerivative = (error - lastError) / timeStep;
+        }
+
+        lastError = error;
+
+        errorIntegral += error * timeStep;
+        return p * error + i * errorIntegral + d * errorDerivative;
+    }
+
+    public void Reset()
+    {
+        errorIntegral = 0;
+        lastError = 0;
+        firstRun = true;
+    }
+}
+
+
+
 public static class VectorHelper
 {
     // in radians
