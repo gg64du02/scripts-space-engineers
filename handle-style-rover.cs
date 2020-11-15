@@ -4,14 +4,14 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-// PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
 
 
 public Program()
@@ -210,17 +210,18 @@ public void Main(string argument, UpdateType updateSource)
 				 Vector3D tmpVector = new Vector3D(kr.Position -shipController.Position);
 				 tmpScalar = tmpVector.X;
 				//TODO: fix this...
-				 if(leftKnee==null){
+				 if(rightKnee==null){
 					 if(tmpScalar<0.25){
-						 leftKnee = kr;
-						 Echo("leftKnee!!!!");
+						rightKnee = kr;
+						 Echo("rightKnee!!!!");
 					 }
 					 else{
-						 rightKnee = kr;
+						 leftKnee = kr;
 					 }
 				 }
 				 else{
-					  rightKnee = kr;
+					    leftKnee= kr;
+						 Echo("leftKnee!!!!");
 				 }
 			}
 			
@@ -260,9 +261,9 @@ public void Main(string argument, UpdateType updateSource)
 			// foreach(var mb4 in leftLeg){
 				// Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
 			// }
-			foreach(var mb5 in rightLeg){
-				Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
-			}
+			// foreach(var mb5 in rightLeg){
+				// Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
+			// }
 				
 				
 			//figuring out what is the upper legs' angle:
@@ -352,7 +353,6 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
 			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
-			rightHip.CustomName = "rightHip";
 			
 			
 			double wantedAngleHipLeft = 45;
@@ -362,7 +362,6 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
 			
 			leftHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipLeft);
-			leftHip.CustomName = "leftHip";
 			
 			
 			double wantedAngleKneeLeft = 90;
@@ -372,7 +371,6 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
 			
 			leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
-			leftKnee.CustomName = "leftKnee";
 			
 			
 			
@@ -384,6 +382,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
 			rightKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeRight);
+			
+			leftHip.CustomName = "leftHip";
+			rightHip.CustomName = "rightHip";
+			leftKnee.CustomName = "leftKnee";
 			rightKnee.CustomName = "rightKnee";
 			
 			
