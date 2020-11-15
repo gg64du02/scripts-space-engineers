@@ -256,10 +256,9 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D hipProjTmpUpperPosLeft = tmpUpperPosLeft - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
 			Vector3D hipProjTmpLowerPosLeft =  tmpLowerPosLeft - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
 			//TODO: add the sign to the angle
-			double angleSignLeftKnee = -shipController.WorldMatrix.Forward.Dot(hipProjTmpUpperPosLeft);
-			double angleLeftKnee = angleSignLeftKnee <0 ?
-			-(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft):
-			(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
+			double angleSignLeftKnee = -hipProjTmpLowerPosLeft.Dot(hipProjTmpUpperPosLeft);
+			double angleLeftKnee = (180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
+			if(angleSignLeftKnee<0){angleLeftKnee = -angleLeftKnee;}
 			// Echo("hipProjTmpUpperPosLeft:"+Vector3D.Round(hipProjTmpUpperPosLeft,2));
 			// Echo("hipProjTmpLowerPosLeft:"+Vector3D.Round(hipProjTmpLowerPosLeft,2));
 			Echo("angleLeftKnee:"+Math.Round(angleLeftKnee,2));
@@ -269,19 +268,25 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D hipProjTmpUpperPosRight = tmpUpperPosRight - VectorHelper.VectorProjection(tmpUpperPosRight,leftHipRotatingAxis);
 			Vector3D hipProjTmpLowerPosRight =  tmpLowerPosRight - VectorHelper.VectorProjection(tmpLowerPosRight,leftHipRotatingAxis);
 			//TODO: add the sign to the angle
-			double angleSignRightKnee = -shipController.WorldMatrix.Forward.Dot(hipProjTmpUpperPosRight);
-			double angleRighKnee =angleSignRightKnee<0?
-			-(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight):
-			(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
+			double angleSignRightKnee = -hipProjTmpLowerPosRight.Dot(hipProjTmpUpperPosRight);
+			double angleRighKnee =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
+			if(angleSignRightKnee<0){angleRighKnee = -angleRighKnee;}
 			// Echo("hipProjTmpUpperPosRight:"+Vector3D.Round(hipProjTmpUpperPosRight,2));
 			// Echo("hipProjTmpLowerPosRight:"+Vector3D.Round(hipProjTmpLowerPosRight,2));
 			Echo("angleRighKnee:"+Math.Round(angleRighKnee,2));
 			
 			//angle for the right hip
 			//angle between the forward vector and the upper legs
+			double angleSignRightHip = -shipController.WorldMatrix.Down.Dot(hipProjTmpUpperPosRight);
+			double angleSignLeftHip = -shipController.WorldMatrix.Down.Dot(hipProjTmpUpperPosLeft);
 			double angleBbodyAUpperLegRight = (180/Math.PI)* VectorHelper.VectorAngleBetween(shipController.WorldMatrix.Forward,hipProjTmpUpperPosRight);
+			if(angleSignRightHip<0){
+				angleBbodyAUpperLegRight = - angleBbodyAUpperLegRight;
+			}
 			double angleBbodyAUpperLegLeft = (180/Math.PI)* VectorHelper.VectorAngleBetween(shipController.WorldMatrix.Forward,hipProjTmpUpperPosLeft);
-			
+			if(angleSignRightHip<0){
+				angleBbodyAUpperLegLeft = - angleBbodyAUpperLegLeft;
+			}
 			Echo("angleBbodyAUpperLegRight:"+Math.Round(angleBbodyAUpperLegRight,2));
 			Echo("angleBbodyAUpperLegLeft:"+Math.Round(angleBbodyAUpperLegLeft,2));
 			
