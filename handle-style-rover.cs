@@ -372,14 +372,14 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			
-			double wantedAngleKneeRight = 45;
+			double wantedAngleKneeRight = -90;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			double angleControlKneeRight = pidAngleKneeRight.Control(errorAngleKneeRight,dts);
 			Echo("errorAngleKneeRight:"+Math.Round(errorAngleKneeRight,2));
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
-			// rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
+			rightKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeRight);
 			rightKnee.CustomName = "rightKnee";
 			
 			
