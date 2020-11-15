@@ -4,10 +4,10 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(0.01f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(0.01f, .00f, 0.00f);
 
 
 public Program()
@@ -22,7 +22,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 }
 
 public void Save()
@@ -187,7 +187,7 @@ public void Main(string argument, UpdateType updateSource)
 				 //tmpScalar = shipLeftVector.Dot(tmpVector);
 				 tmpScalar = tmpVector.X;
 				 //Echo("tmpScalar:"+tmpScalar);
-				 if(tmpScalar>.5){
+				 if(tmpScalar<.5){
 					 leftHip = mb2;
 					 //Echo("leftHipDectected");
 				 }
@@ -198,36 +198,6 @@ public void Main(string argument, UpdateType updateSource)
 				 
 				//Echo("==========");
 			}
-			
-			
-			
-			// List<IMyMotorStator> myMotorStators = new List<IMyMotorStator>();
-			// GridTerminalSystem.GetBlocksOfType<IMyMotorStator>(myMotorStators);
-			// IMyMotorStator leftHipStator = null;
-			// IMyMotorStator rightHipStator = null;
-			// //guessing vectors for the two wheeled legs
-			// if(myMotorStators.Count != 0 ){
-				// foreach(IMyMotorStator ms in myMotorStator){
-					// //Echo("mb:"+mb);
-					// if(ms.IsSameConstructAs(shipController)){
-						// if(ms is IMyMotorStator){
-							// var cubeGridShipController = shipController.CubeGrid;
-							// var myMotorBaseGrid = mb.CubeGrid;
-							// // Echo("cubeGridShipController:"+cubeGridShipController);
-							// // Echo("myMotorBaseGrid:"+myMotorBaseGrid);
-							// // Echo("==============");
-							// if(cubeGridShipController == myMotorBaseGrid){
-								// //Echo("sameGrid!!!");
-								// hipsRotors.Add(mb);
-							// }
-							// else{
-								// //Echo("notSameGrid!!!");
-								// kneesRotors.Add(mb);
-							// }
-						// }
-					// }
-				// }
-			
 			
 			
 			//now going through all components to sort them into a leg
@@ -348,13 +318,26 @@ public void Main(string argument, UpdateType updateSource)
 				return;
 			}
 			
+			//Lol I somehow am controlling the wrong side, so each side is regulated according to the other side those got nothing to do between each others....
+			
 			double wantedAngleHipRight = 45;
-			double errorAngleHipRight = angleBbodyAUpperLegRight-wantedAngleHipRight;
+			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
 			double angleControlHipRight = pidAngleHipRight.Control(errorAngleHipRight,dts);
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
-			rightHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipRight);
+			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
+			rightHip.CustomName = "rightHip";
+			
+			
+			double wantedAngleHipLeft = 45;
+			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
+			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
+			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
+			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
+			
+			leftHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			leftHip.CustomName = "leftHip";
 			// pidAngleHipLeft.Control(Error);
 			// pidAngleKneeRight..Control(Error);
 			// pidAngleKneeLeft.Control(Error);
