@@ -12,7 +12,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update100;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 }
 
 public void Save()
@@ -248,65 +248,24 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("tmpLowerPosRight:"+Vector3D.Round(tmpLowerPosRight,2));
 			
 			
-			
-		
-			
-			// Vector3D tmpLowerPosLeftNorm = Vector3D.Normalize(tmpLowerPosLeft);
-			// Vector3D tmpLowerPosRightNorm = Vector3D.Normalize(tmpLowerPosRight);
-			
-			// //angle at the knees
-			// var angleKneeLeftCos = (180/Math.PI)*(tmpUpperPosLeftNorm.Dot(tmpLowerPosLeftNorm));
-			// Echo("angleKneeLeftCos:"+angleKneeLeftCos);
-			// var angleKneeRightCos = (180/Math.PI)*(tmpUpperPosRightNorm.Dot(tmpLowerPosRightNorm));
-			// Echo("angleKneeRightCos:"+angleKneeRightCos);
-			
-			// var angleKneeLeftSin= (180/Math.PI)*(tmpUpperPosLeftNorm.Cross(tmpLowerPosLeftNorm)).Length();
-			// Echo("angleKneeLeftSin:"+angleKneeLeftSin);
-			// var angleKneeRightSin = (180/Math.PI)*(tmpUpperPosRightNorm.Cross(tmpLowerPosRightNorm)).Length();
-			// Echo("angleKneeRightSin:"+angleKneeRightSin);
-
-			// var angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(tmpUpperPosLeftNorm,tmpLowerPosLeftNorm);
-			// Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
-			// var angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(tmpUpperPosRightNorm,tmpLowerPosRightNorm);
-			// Echo("angleRightVectorHelper:"+angleRightVectorHelper);
-
-			
-			// IMyMotorBase leftHip = null;
-			// IMyMotorBase rightHip = null
-			//Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Left;
-			Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Down;
+			Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Up;
+			Echo("leftHipRotatingAxis:"+Vector3D.Round(leftHipRotatingAxis,2));
 			
 			
-			// Vector3D shipForwardVector = shipController.WorldMatrix.Forward;
-			// Vector3D shipLeftVector = shipController.WorldMatrix.Left;
-			// Vector3D shipDownVector = shipController.WorldMatrix.Down;
+			Vector3D hipProjTmpUpperPosLeft = tmpUpperPosLeft - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
+			Vector3D hipProjTmpLowerPosLeft =  tmpLowerPosLeft - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
 			
+			//TODO: add the sign to the angle
+			double angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
 			
-    //Vector3D forwardProjPlaneVector = shipForwardVector - forwardProjectUp;
-			
-			Vector3D hipProjTmpUpperPosLeft = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
-			//Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
-			Vector3D hipProjTmpLowerPosLeft =  leftHipRotatingAxis - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
-			//Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
-			
-			
-			// Vector3D hipProjTmpUpperPosRight = leftHipRotatingAxis - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
-			// Echo("hipProjTmpUpperPosLeft:"+hipProjTmpUpperPosLeft);
-			// Vector3D hipProjTmpLowerPosLeft =  leftHipRotatingAxis - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
-			// Echo("hipProjTmpLowerPosLeft:"+hipProjTmpLowerPosLeft);
-			
-			var angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
-			//Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
-			// var angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
-			// Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			Echo("hipProjTmpUpperPosLeft:"+Vector3D.Round(hipProjTmpUpperPosLeft,2));
+			Echo("hipProjTmpLowerPosLeft:"+Vector3D.Round(hipProjTmpLowerPosLeft,2));
+			Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
 			
 			
 		}
 		
 		
-		// //guessing hips rotors and directions
-		// Vector3I currentGridControllerPos = shipController.Position;
-		// Echo("currentGridControllerPos:"+currentGridControllerPos);
 		
 		
 	}
