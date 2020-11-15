@@ -255,24 +255,26 @@ public void Main(string argument, UpdateType updateSource)
 			//generate vectors that belong to the plane normal to the hip vector
 			Vector3D hipProjTmpUpperPosLeft = tmpUpperPosLeft - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
 			Vector3D hipProjTmpLowerPosLeft =  tmpLowerPosLeft - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
-			//TODO: add the sign to the angle
-			double angleSignLeftKnee = -hipProjTmpLowerPosLeft.Dot(hipProjTmpUpperPosLeft);
+			//DONE?: add the sign to the angle
+			double angleSignLeftKnee = -leftHip.WorldMatrix.Up.Dot(hipProjTmpUpperPosLeft.Cross(hipProjTmpLowerPosLeft));//<- cross needed to guess the angle
 			double angleLeftKnee = (180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
 			if(angleSignLeftKnee<0){angleLeftKnee = -angleLeftKnee;}
 			// Echo("hipProjTmpUpperPosLeft:"+Vector3D.Round(hipProjTmpUpperPosLeft,2));
 			// Echo("hipProjTmpLowerPosLeft:"+Vector3D.Round(hipProjTmpLowerPosLeft,2));
+			Echo("angleSignLeftKnee:"+Math.Round(angleSignLeftKnee,2));
 			Echo("angleLeftKnee:"+Math.Round(angleLeftKnee,2));
 			
 			//angle for the right knee
 			//generate vectors that belong to the plane normal to the hip vector
 			Vector3D hipProjTmpUpperPosRight = tmpUpperPosRight - VectorHelper.VectorProjection(tmpUpperPosRight,leftHipRotatingAxis);
 			Vector3D hipProjTmpLowerPosRight =  tmpLowerPosRight - VectorHelper.VectorProjection(tmpLowerPosRight,leftHipRotatingAxis);
-			//TODO: add the sign to the angle
-			double angleSignRightKnee = -hipProjTmpLowerPosRight.Dot(hipProjTmpUpperPosRight);
+			//DONE?: add the sign to the angle
+			double angleSignRightKnee = -rightHip.WorldMatrix.Up.Dot(hipProjTmpUpperPosRight.Cross(hipProjTmpLowerPosRight));//<- cross needed to guess the angle
 			double angleRighKnee =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
 			if(angleSignRightKnee<0){angleRighKnee = -angleRighKnee;}
 			// Echo("hipProjTmpUpperPosRight:"+Vector3D.Round(hipProjTmpUpperPosRight,2));
 			// Echo("hipProjTmpLowerPosRight:"+Vector3D.Round(hipProjTmpLowerPosRight,2));
+			Echo("angleSignRightKnee:"+Math.Round(angleSignRightKnee,2));
 			Echo("angleRighKnee:"+Math.Round(angleRighKnee,2));
 			
 			//angle for the right hip
