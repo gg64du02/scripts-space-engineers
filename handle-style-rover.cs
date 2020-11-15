@@ -346,8 +346,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//Lol I somehow am controlling the wrong side, so each side is regulated according to the other side those got nothing to do between each others....
 			
-			double wantedAngleHipRight = 45;
+			double wantedAngleHipRight = 135;
 			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
+			if(errorAngleHipRight<-180){errorAngleHipRight += 180;}
+			if(errorAngleHipRight>+180){errorAngleHipRight += -180;}
 			double angleControlHipRight = pidAngleHipRight.Control(errorAngleHipRight,dts);
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
@@ -357,6 +359,8 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double wantedAngleHipLeft = 45;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
+			if(errorAngleHipLeft<-180){errorAngleHipLeft += 180;}
+			if(errorAngleHipLeft>+180){errorAngleHipLeft += -180;}
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
 			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
@@ -366,6 +370,8 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double wantedAngleKneeLeft = 90;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
+			if(errorAngleKneeLeft<-180){errorAngleKneeLeft += 180;}
+			if(errorAngleKneeLeft>+180){errorAngleKneeLeft += -180;}
 			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
@@ -376,12 +382,14 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double wantedAngleKneeRight = -90;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
+			if(errorAngleKneeRight<-180){errorAngleKneeRight += 180;}
+			if(errorAngleKneeRight>+180){errorAngleKneeRight += -180;}
 			double angleControlKneeRight = pidAngleKneeRight.Control(errorAngleKneeRight,dts);
 			Echo("errorAngleKneeRight:"+Math.Round(errorAngleKneeRight,2));
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
-			rightKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeRight);
+			rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
 			
 			leftHip.CustomName = "leftHip";
 			rightHip.CustomName = "rightHip";
