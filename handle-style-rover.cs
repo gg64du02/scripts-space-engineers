@@ -316,7 +316,7 @@ public void Main(string argument, UpdateType updateSource)
 				angleBbodyAUpperLegRight = - angleBbodyAUpperLegRight;
 			}
 			double angleBbodyAUpperLegLeft = (180/Math.PI)* VectorHelper.VectorAngleBetween(shipController.WorldMatrix.Forward,hipProjTmpUpperPosLeft);
-			if(angleSignRightHip<0){
+			if(angleSignLeftHip<0){
 				angleBbodyAUpperLegLeft = - angleBbodyAUpperLegLeft;
 			}
 			Echo("angleBbodyAUpperLegRight:"+Math.Round(angleBbodyAUpperLegRight,2));
@@ -347,45 +347,40 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
-			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
+			// rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
 			rightHip.CustomName = "rightHip";
 			
 			
-			double wantedAngleHipLeft = 90;
+			double wantedAngleHipLeft = 170;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
 			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
 			
-			leftHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			// leftHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
 			leftHip.CustomName = "leftHip";
 			
 			
-			double wantedAngleKneeLeft = 90;
+			double wantedAngleKneeLeft = 45;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
 			
-			leftKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
+			// leftKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlHipLeft);
 			leftKnee.CustomName = "leftKnee";
 			
 			
 			
-			double wantedAngleKneeRight = 90;
+			double wantedAngleKneeRight = 45;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			double angleControlKneeRight = pidAngleKneeRight.Control(errorAngleKneeRight,dts);
 			Echo("errorAngleKneeRight:"+Math.Round(errorAngleKneeRight,2));
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
-			rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
+			// rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
 			rightKnee.CustomName = "rightKnee";
-			
-					 // leftKnee = kr;
-				 // }
-				 // else{
-					 // rightKnee = kr;
 			
 			
 			// pidAngleKneeRight.Control(Error);
