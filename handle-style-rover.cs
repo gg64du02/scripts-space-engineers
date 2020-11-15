@@ -351,7 +351,7 @@ public void Main(string argument, UpdateType updateSource)
 			rightHip.CustomName = "rightHip";
 			
 			
-			double wantedAngleHipLeft = -135;
+			double wantedAngleHipLeft = 45;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
@@ -361,7 +361,7 @@ public void Main(string argument, UpdateType updateSource)
 			leftHip.CustomName = "leftHip";
 			
 			
-			double wantedAngleKneeLeft = -145;
+			double wantedAngleKneeLeft = 90;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
