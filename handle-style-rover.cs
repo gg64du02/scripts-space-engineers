@@ -4,10 +4,14 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(0.01f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(0.01f, .00f, 0.00f);
+// PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
 
 
 public Program()
