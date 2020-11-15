@@ -251,17 +251,23 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Up;
 			Echo("leftHipRotatingAxis:"+Vector3D.Round(leftHipRotatingAxis,2));
 			
-			
+			//angle for the left knee
 			Vector3D hipProjTmpUpperPosLeft = tmpUpperPosLeft - VectorHelper.VectorProjection(tmpUpperPosLeft,leftHipRotatingAxis);
 			Vector3D hipProjTmpLowerPosLeft =  tmpLowerPosLeft - VectorHelper.VectorProjection(tmpLowerPosLeft,leftHipRotatingAxis);
-			
 			//TODO: add the sign to the angle
 			double angleLeftVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosLeft,hipProjTmpLowerPosLeft);
-			
 			Echo("hipProjTmpUpperPosLeft:"+Vector3D.Round(hipProjTmpUpperPosLeft,2));
 			Echo("hipProjTmpLowerPosLeft:"+Vector3D.Round(hipProjTmpLowerPosLeft,2));
-			Echo("angleLeftVectorHelper:"+angleLeftVectorHelper);
+			Echo("angleLeftVectorHelper:"+Math.Round(angleLeftVectorHelper,2));
 			
+			//angle for the right knee
+			Vector3D hipProjTmpUpperPosRight = tmpUpperPosRight - VectorHelper.VectorProjection(tmpUpperPosRight,leftHipRotatingAxis);
+			Vector3D hipProjTmpLowerPosRight =  tmpLowerPosRight - VectorHelper.VectorProjection(tmpLowerPosRight,leftHipRotatingAxis);
+			//TODO: add the sign to the angle
+			double angleRightVectorHelper =(180/Math.PI)* VectorHelper.VectorAngleBetween(hipProjTmpUpperPosRight,hipProjTmpLowerPosRight);
+			Echo("hipProjTmpUpperPosRight:"+Vector3D.Round(hipProjTmpUpperPosRight,2));
+			Echo("hipProjTmpLowerPosRight:"+Vector3D.Round(hipProjTmpLowerPosRight,2));
+			Echo("angleRightVectorHelper:"+Math.Round(angleRightVectorHelper,2));
 			
 		}
 		
