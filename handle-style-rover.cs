@@ -207,13 +207,13 @@ public void Main(string argument, UpdateType updateSource)
 			IMyMotorStator leftKnee = null;
 			IMyMotorStator rightKnee = null;
 			foreach(IMyMotorStator kr in kneesRotors){
-				if(shipController.WorldMatrix.Left.Dot(kr.WorldMatrix.Up)>0){
-					leftKnee=kr;
-					Echo("leftKnee!!!!");
-				}	 
-				else{
+				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - kr.GetPosition()))>0){
 					rightKnee=kr;
 					Echo("rightKnee!!!!");
+				}	 
+				else{
+					leftKnee=kr;
+					Echo("leftKnee!!!!");
 				}
 			}
 			
