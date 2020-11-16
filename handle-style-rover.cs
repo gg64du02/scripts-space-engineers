@@ -180,27 +180,17 @@ public void Main(string argument, UpdateType updateSource)
 			// Echo("shipDownVector:" + shipDownVector);
 			
 			//?: if you were an humanoid, knew your hips and knees' position, how do you figure out which one belongs to which leg ?
-			double tmpScalar = 0;
 			IMyMotorStator leftHip = null;
 			IMyMotorStator rightHip = null;
 			foreach(IMyMotorStator mb2 in hipsRotors){
-				//Echo("==========");
-				 //Echo("hipsRotor:"+mb2);
-				 Vector3D tmpVector = new Vector3D(mb2.Position -shipController.Position);
-				 //Echo("tmpVector:"+tmpVector);
-				 //tmpScalar = shipLeftVector.Dot(tmpVector);
-				 tmpScalar = tmpVector.X;
-				 //Echo("tmpScalar:"+tmpScalar);
-				 if(tmpScalar<0.5){
-					 leftHip = mb2;
-					 //Echo("leftHipDectected");
-				 }
-				 else{
+				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - mb2.GetPosition()))>0){
 					 rightHip = mb2;
 					 //Echo("rightHipDectected");
 				 }
-				 
-				//Echo("==========");
+				 else{
+					 leftHip = mb2;
+					 //Echo("leftHipDectected");
+				 }
 			}
 			
 			//kneesRotors
@@ -209,11 +199,11 @@ public void Main(string argument, UpdateType updateSource)
 			foreach(IMyMotorStator kr in kneesRotors){
 				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - kr.GetPosition()))>0){
 					rightKnee=kr;
-					Echo("rightKnee!!!!");
+					//Echo("rightKnee!!!!");
 				}	 
 				else{
 					leftKnee=kr;
-					Echo("leftKnee!!!!");
+					//Echo("leftKnee!!!!");
 				}
 			}
 			
