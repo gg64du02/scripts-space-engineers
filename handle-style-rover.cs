@@ -250,12 +250,46 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("leftLeg.Count:"+leftLeg.Count);
 			Echo("rightLeg.Count:"+rightLeg.Count);
 			
-			// foreach(var mb4 in leftLeg){
-				// Echo("leftLeg:mb4.CustomName:"+mb4.CustomName);
-			// }
-			// foreach(var mb5 in rightLeg){
-				// Echo("rightLeg:mb5.CustomName:"+mb5.CustomName);
-			// }
+			
+
+			IMyMotorSuspension rightWheel = null;
+			IMyMotorSuspension leftWheel = null;
+			List<IMyMotorSuspension> motorSuspensions = new List<IMyMotorSuspension>();
+			GridTerminalSystem.GetBlocksOfType<IMyMotorSuspension>(motorSuspensions);
+			//Echo("==========");
+			foreach(var mS in motorSuspensions){
+				//TODO: fix quick and dirty
+				if(leftHip.WorldMatrix.Up.Dot(mS.WorldMatrix.Up)>0){
+					rightWheel  =mS;
+					 Echo("rightWheel");
+				}
+				else{
+					leftWheel  =mS;
+					 Echo("leftWheel");
+				}
+				
+				 // // Echo("mS:"+mS);
+				 // Vector3D tmpVectorCompToShip = new Vector3D(shipController.GetPosition() - mS.GetPosition());
+				  // tmpVectorCompToShip = tmpVectorCompToShip - VectorHelper.VectorProjection(tmpVectorCompToShip,leftHip.WorldMatrix.Up);
+				 // // Echo("tmpVectorCompToShip"+tmpVectorCompToShip);
+				 // Vector3D tmpCheckThisSign =  shipLeftVector.Cross(tmpVectorCompToShip);
+				 // // Echo("tmpCheckThisSign"+tmpCheckThisSign);
+				 // double signScalar = tmpCheckThisSign.Dot(shipForwardVector);
+				 // // Echo("signScalar"+signScalar);
+				 // if(signScalar<0){
+					 // rightWheel = mS;
+					 // Echo("rightWheel");
+				 // }
+				 // else{
+					 // leftWheel = mS;
+					 // Echo("leftWheel");
+				 // }
+				 
+				// Echo("==========");
+			}
+			leftWheel.CustomName = "leftWheel";
+			rightWheel.CustomName = "rightWheel";
+			
 				
 				
 			//figuring out what is the upper legs' angle:
@@ -340,7 +374,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//Lol I somehow am controlling the wrong side, so each side is regulated according to the other side those got nothing to do between each others....
 			
-			double wantedAngleHipRight = 135;
+			double wantedAngleHipRight = 45;
 			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
 			if(errorAngleHipRight<-180){errorAngleHipRight += 180;}
 			if(errorAngleHipRight>+180){errorAngleHipRight += -180;}
@@ -348,7 +382,7 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
-			// rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
+			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
 			
 			
 			double wantedAngleHipLeft = 45;
@@ -362,7 +396,7 @@ public void Main(string argument, UpdateType updateSource)
 			leftHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipLeft);
 			
 			
-			double wantedAngleKneeLeft = 90;
+			double wantedAngleKneeLeft = -90;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			if(errorAngleKneeLeft<-180){errorAngleKneeLeft += 180;}
 			if(errorAngleKneeLeft>+180){errorAngleKneeLeft += -180;}
@@ -370,11 +404,11 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
 			
-			// leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
+			leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
 			
 			
 			
-			double wantedAngleKneeRight = -45;
+			double wantedAngleKneeRight = -90;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			if(errorAngleKneeRight<-180){errorAngleKneeRight += 180;}
 			if(errorAngleKneeRight>+180){errorAngleKneeRight += -180;}
@@ -383,7 +417,7 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
-			// rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
+			rightKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeRight);
 			
 			leftHip.CustomName = "leftHip";
 			rightHip.CustomName = "rightHip";
