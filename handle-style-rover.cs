@@ -207,22 +207,14 @@ public void Main(string argument, UpdateType updateSource)
 			IMyMotorStator leftKnee = null;
 			IMyMotorStator rightKnee = null;
 			foreach(IMyMotorStator kr in kneesRotors){
-				 Vector3D tmpVector = new Vector3D(kr.Position -shipController.Position);
-				 tmpScalar = tmpVector.X;
-				//TODO: fix this...
-				 if(rightKnee==null){
-					 if(tmpScalar<0.25){
-						rightKnee = kr;
-						 Echo("rightKnee!!!!");
-					 }
-					 else{
-						 leftKnee = kr;
-					 }
-				 }
-				 else{
-					    leftKnee= kr;
-						 Echo("leftKnee!!!!");
-				 }
+				if(shipController.WorldMatrix.Left.Dot(kr.WorldMatrix.Up)>0){
+					leftKnee=kr;
+					Echo("leftKnee!!!!");
+				}	 
+				else{
+					rightKnee=kr;
+					Echo("rightKnee!!!!");
+				}
 			}
 			
 			
