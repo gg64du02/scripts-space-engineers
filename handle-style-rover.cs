@@ -4,14 +4,14 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
 
 
 public Program()
@@ -363,7 +363,7 @@ public void Main(string argument, UpdateType updateSource)
 				// wantedAngleKneeRight = 20;
 				
 				// //offsets while standing up
-				//pos 1
+				// //pos 1
 				// wantedAngleHipRight = 45;
 				// wantedAngleHipLeft = 45;
 				// wantedAngleKneeLeft = 90;
@@ -377,11 +377,19 @@ public void Main(string argument, UpdateType updateSource)
 				// wantedAngleKneeLeft = -20;
 				// wantedAngleKneeRight = 20;
 				
-				//legs in the air
-				wantedAngleHipRight = 90;
-				wantedAngleHipLeft = 90;
-				wantedAngleKneeLeft = 0;
-				wantedAngleKneeRight = 0;
+				// //legs in the air
+				// // pos 4
+				// wantedAngleHipRight = 90;
+				// wantedAngleHipLeft = 90;
+				// wantedAngleKneeLeft = 0;
+				// wantedAngleKneeRight = 0;
+				
+				// get the legs in a duck position right before standing up
+				// pos 5
+				wantedAngleHipRight = 0;
+				wantedAngleHipLeft = 0;
+				wantedAngleKneeLeft = 160;
+				wantedAngleKneeRight = -160;
 			}
 			
 			
