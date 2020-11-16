@@ -344,9 +344,20 @@ public void Main(string argument, UpdateType updateSource)
 				return;
 			}
 			
-			//Lol I somehow am controlling the wrong side, so each side is regulated according to the other side those got nothing to do between each others....
-			
 			double wantedAngleHipRight = 45;
+			double wantedAngleHipLeft = 45;
+			double wantedAngleKneeLeft = 90;
+			double wantedAngleKneeRight = -90;
+			
+			bool tryToStandUp = false;
+			
+			if(tryToStandUp ==true){
+				Echo("TODO: tryToStandUp ==true")
+				
+			}
+			
+			
+			
 			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
 			if(errorAngleHipRight<-180){errorAngleHipRight += 180;}
 			if(errorAngleHipRight>+180){errorAngleHipRight += -180;}
@@ -357,7 +368,6 @@ public void Main(string argument, UpdateType updateSource)
 			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
 			
 			
-			double wantedAngleHipLeft = 45;
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			if(errorAngleHipLeft<-180){errorAngleHipLeft += 180;}
 			if(errorAngleHipLeft>+180){errorAngleHipLeft += -180;}
@@ -368,7 +378,6 @@ public void Main(string argument, UpdateType updateSource)
 			leftHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipLeft);
 			
 			
-			double wantedAngleKneeLeft = 90;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			if(errorAngleKneeLeft<-180){errorAngleKneeLeft += 180;}
 			if(errorAngleKneeLeft>+180){errorAngleKneeLeft += -180;}
@@ -380,7 +389,6 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			
-			double wantedAngleKneeRight = -90;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			if(errorAngleKneeRight<-180){errorAngleKneeRight += 180;}
 			if(errorAngleKneeRight>+180){errorAngleKneeRight += -180;}
