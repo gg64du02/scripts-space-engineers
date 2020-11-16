@@ -351,8 +351,19 @@ public void Main(string argument, UpdateType updateSource)
 			
 			bool tryToStandUp = false;
 			
+			//DEBUG
+			tryToStandUp = true;
 			if(tryToStandUp ==true){
-				Echo("TODO: tryToStandUp ==true")
+				Echo("TODO: tryToStandUp ==true");
+				//legs extended behing the cockpit on the floor, cockpit is upright
+				wantedAngleHipRight = 0;
+				wantedAngleHipLeft = 0;
+				wantedAngleKneeLeft = -20;
+				wantedAngleKneeRight = 20;
+				
+				
+				
+				
 				
 			}
 			
