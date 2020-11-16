@@ -4,14 +4,14 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-// PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
 
 
 public Program()
@@ -392,14 +392,53 @@ public void Main(string argument, UpdateType updateSource)
 				// wantedAngleKneeRight = -160;
 				
 				
-				// // get the legs in a duck position right before standing up
-				// // pos 6
-				wantedAngleHipRight = 0;
-				wantedAngleHipLeft = 0;
-				wantedAngleKneeLeft = -135;
-				wantedAngleKneeRight = 135;
+				// // // get the legs in a duck position right before standing up
+				// // // pos 6
+				// wantedAngleHipRight = 0;
+				// wantedAngleHipLeft = 0;
+				// wantedAngleKneeLeft = -135;
+				// wantedAngleKneeRight = 135;
+				
+				Vector3D grav = shipController.GetTotalGravity();
+				Vector3D gravNorm = Vector3D.Normalize(grav);
+				
+				double uprightEnough = shipDownVector.Dot(gravNorm);
+				Echo("uprightEnough:"+uprightEnough);
+				//testing if the ship is upright enough
+				// if(Math.Abs(uprightEnough)<.5f){
+				if(uprightEnough<.5f){
+					Echo("ship is not upright");
+					//test if the back or the front is on the ground
+					if(shipForwardVector.Dot(gravNorm)>0){	
+						Echo("pos3");	
+						wantedAngleHipRight = 178;
+						wantedAngleHipLeft = 178;
+						wantedAngleKneeLeft = -20;
+						wantedAngleKneeRight = 20;			
+					}
+					else{	
+						Echo("pos2");
+						wantedAngleHipRight = 0;
+						wantedAngleHipLeft = 0;
+						wantedAngleKneeLeft = -20;
+						wantedAngleKneeRight = 20;
+					}
+				}
+				else{
+					// Echo("4545");
+					// wantedAngleHipRight = 45;
+					// wantedAngleHipLeft = 45;
+					// wantedAngleKneeLeft = 45;
+					// wantedAngleKneeRight = -45;
+				}
 			}
 			
+			Echo("===============");
+			Echo("wantedAngleHipRight:"+Math.Round(wantedAngleHipRight,2));
+			Echo("wantedAngleHipLeft:"+Math.Round(wantedAngleHipLeft,2));
+			Echo("wantedAngleKneeLeft:"+Math.Round(wantedAngleKneeLeft,2));
+			Echo("wantedAngleKneeRight:"+Math.Round(wantedAngleKneeRight,2));
+			Echo("===============");
 			
 			
 			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
