@@ -355,13 +355,17 @@ public void Main(string argument, UpdateType updateSource)
 			tryToStandUp = true;
 			if(tryToStandUp ==true){
 				Echo("TODO: tryToStandUp ==true");
-				//legs extended behing the cockpit on the floor, cockpit is upright
-				wantedAngleHipRight = 0;
-				wantedAngleHipLeft = 0;
-				wantedAngleKneeLeft = -20;
-				wantedAngleKneeRight = 20;
+				// //legs extended behing the cockpit on the floor, cockpit is upright
+				// wantedAngleHipRight = 0;
+				// wantedAngleHipLeft = 0;
+				// wantedAngleKneeLeft = -20;
+				// wantedAngleKneeRight = 20;
 				
-				
+				//offsets while standing up
+				wantedAngleHipRight = 45;
+				wantedAngleHipLeft = 45;
+				wantedAngleKneeLeft = 90;
+				wantedAngleKneeRight = -90;
 				
 				
 				
