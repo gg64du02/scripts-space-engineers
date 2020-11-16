@@ -356,19 +356,32 @@ public void Main(string argument, UpdateType updateSource)
 			if(tryToStandUp ==true){
 				Echo("TODO: tryToStandUp ==true");
 				// //legs extended behing the cockpit on the floor, cockpit is upright
+				//pos 2
 				// wantedAngleHipRight = 0;
 				// wantedAngleHipLeft = 0;
 				// wantedAngleKneeLeft = -20;
 				// wantedAngleKneeRight = 20;
 				
-				//offsets while standing up
-				wantedAngleHipRight = 45;
-				wantedAngleHipLeft = 45;
-				wantedAngleKneeLeft = 90;
-				wantedAngleKneeRight = -90;
+				// //offsets while standing up
+				//pos 1
+				// wantedAngleHipRight = 45;
+				// wantedAngleHipLeft = 45;
+				// wantedAngleKneeLeft = 90;
+				// wantedAngleKneeRight = -90;
 				
+				// //mirror symetrical relative to Up and Left of
+				// //pos 2
+				// //pos 3
+				// wantedAngleHipRight = 178;
+				// wantedAngleHipLeft = 178;
+				// wantedAngleKneeLeft = -20;
+				// wantedAngleKneeRight = 20;
 				
-				
+				//legs in the air
+				wantedAngleHipRight = 90;
+				wantedAngleHipLeft = 90;
+				wantedAngleKneeLeft = 0;
+				wantedAngleKneeRight = 0;
 			}
 			
 			
