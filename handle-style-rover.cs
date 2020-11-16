@@ -384,12 +384,20 @@ public void Main(string argument, UpdateType updateSource)
 				// wantedAngleKneeLeft = 0;
 				// wantedAngleKneeRight = 0;
 				
-				// get the legs in a duck position right before standing up
-				// pos 5
+				// // get the legs in a duck position right before standing up
+				// // pos 5
+				// wantedAngleHipRight = 0;
+				// wantedAngleHipLeft = 0;
+				// wantedAngleKneeLeft = 160;
+				// wantedAngleKneeRight = -160;
+				
+				
+				// // get the legs in a duck position right before standing up
+				// // pos 6
 				wantedAngleHipRight = 0;
 				wantedAngleHipLeft = 0;
-				wantedAngleKneeLeft = 160;
-				wantedAngleKneeRight = -160;
+				wantedAngleKneeLeft = -135;
+				wantedAngleKneeRight = 135;
 			}
 			
 			
@@ -397,6 +405,7 @@ public void Main(string argument, UpdateType updateSource)
 			double errorAngleHipRight = wantedAngleHipRight-angleBbodyAUpperLegRight;
 			if(errorAngleHipRight<-180){errorAngleHipRight += 180;}
 			if(errorAngleHipRight>+180){errorAngleHipRight += -180;}
+			if(wantedAngleHipRight*angleBbodyAUpperLegRight<0){errorAngleHipRight *= -1;}
 			double angleControlHipRight = pidAngleHipRight.Control(errorAngleHipRight,dts);
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
@@ -407,6 +416,7 @@ public void Main(string argument, UpdateType updateSource)
 			double errorAngleHipLeft = wantedAngleHipLeft-angleBbodyAUpperLegLeft;
 			if(errorAngleHipLeft<-180){errorAngleHipLeft += 180;}
 			if(errorAngleHipLeft>+180){errorAngleHipLeft += -180;}
+			if(wantedAngleHipLeft*angleBbodyAUpperLegLeft<0){errorAngleHipLeft *= -1;}
 			double angleControlHipLeft = pidAngleHipLeft.Control(errorAngleHipLeft,dts);
 			Echo("errorAngleHipLeft:"+Math.Round(errorAngleHipLeft,2));
 			Echo("angleControlHipLeft:"+Math.Round(angleControlHipLeft,2));
@@ -417,6 +427,7 @@ public void Main(string argument, UpdateType updateSource)
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			if(errorAngleKneeLeft<-180){errorAngleKneeLeft += 180;}
 			if(errorAngleKneeLeft>+180){errorAngleKneeLeft += -180;}
+			if(wantedAngleKneeLeft*angleLeftKnee<0){errorAngleKneeLeft *= -1;}
 			double angleControlKneeLeft = pidAngleKneeLeft.Control(errorAngleKneeLeft,dts);
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
@@ -428,6 +439,7 @@ public void Main(string argument, UpdateType updateSource)
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			if(errorAngleKneeRight<-180){errorAngleKneeRight += 180;}
 			if(errorAngleKneeRight>+180){errorAngleKneeRight += -180;}
+			if(wantedAngleKneeRight*angleRightKnee<0){errorAngleKneeRight *= -1;}
 			double angleControlKneeRight = pidAngleKneeRight.Control(errorAngleKneeRight,dts);
 			Echo("errorAngleKneeRight:"+Math.Round(errorAngleKneeRight,2));
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
