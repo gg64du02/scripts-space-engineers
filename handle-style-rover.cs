@@ -258,8 +258,7 @@ public void Main(string argument, UpdateType updateSource)
 			GridTerminalSystem.GetBlocksOfType<IMyMotorSuspension>(motorSuspensions);
 			//Echo("==========");
 			foreach(var mS in motorSuspensions){
-				//TODO: fix quick and dirty
-				if(leftHip.WorldMatrix.Up.Dot(mS.WorldMatrix.Up)<0){
+				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - mS.GetPosition()))>0){
 					rightWheel  =mS;
 					 Echo("rightWheel");
 				}
@@ -267,25 +266,6 @@ public void Main(string argument, UpdateType updateSource)
 					leftWheel  =mS;
 					 Echo("leftWheel");
 				}
-				
-				 // // Echo("mS:"+mS);
-				 // Vector3D tmpVectorCompToShip = new Vector3D(shipController.GetPosition() - mS.GetPosition());
-				  // tmpVectorCompToShip = tmpVectorCompToShip - VectorHelper.VectorProjection(tmpVectorCompToShip,leftHip.WorldMatrix.Up);
-				 // // Echo("tmpVectorCompToShip"+tmpVectorCompToShip);
-				 // Vector3D tmpCheckThisSign =  shipLeftVector.Cross(tmpVectorCompToShip);
-				 // // Echo("tmpCheckThisSign"+tmpCheckThisSign);
-				 // double signScalar = tmpCheckThisSign.Dot(shipForwardVector);
-				 // // Echo("signScalar"+signScalar);
-				 // if(signScalar<0){
-					 // rightWheel = mS;
-					 // Echo("rightWheel");
-				 // }
-				 // else{
-					 // leftWheel = mS;
-					 // Echo("leftWheel");
-				 // }
-				 
-				// Echo("==========");
 			}
 			leftWheel.CustomName = "leftWheel";
 			rightWheel.CustomName = "rightWheel";
