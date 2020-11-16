@@ -259,8 +259,10 @@ public void Main(string argument, UpdateType updateSource)
 				
 				
 			//figuring out what is the upper legs' angle:
-			Vector3D tmpUpperPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
-			Vector3D tmpUpperPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
+			// Vector3D tmpUpperPosLeft = leftLeg[0].GetPosition() - leftLeg[1].GetPosition();
+			// Vector3D tmpUpperPosRight = rightLeg[0].GetPosition() - rightLeg[1].GetPosition();
+			Vector3D tmpUpperPosLeft = leftHip.GetPosition() - leftKnee.GetPosition();
+			Vector3D tmpUpperPosRight = rightHip.GetPosition() - rightKnee.GetPosition();
 			// Echo("tmpUpperPosLeft:"+Vector3D.Round(tmpUpperPosLeft,2));
 			// Echo("tmpUpperPosRight:"+Vector3D.Round(tmpUpperPosRight,2));
 			
@@ -346,7 +348,7 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleHipRight:"+Math.Round(errorAngleHipRight,2));
 			Echo("angleControlHipRight:"+Math.Round(angleControlHipRight,2));
 			
-			rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
+			// rightHip.TargetVelocityRPM=-Convert.ToSingle(angleControlHipRight);
 			
 			
 			double wantedAngleHipLeft = 45;
@@ -368,11 +370,11 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorAngleKneeLeft:"+Math.Round(errorAngleKneeLeft,2));
 			Echo("angleControlKneeLeft:"+Math.Round(angleControlKneeLeft,2));
 			
-			leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
+			// leftKnee.TargetVelocityRPM=Convert.ToSingle(angleControlKneeLeft);
 			
 			
 			
-			double wantedAngleKneeRight = -90;
+			double wantedAngleKneeRight = -45;
 			double errorAngleKneeRight = wantedAngleKneeRight-angleRightKnee;
 			if(errorAngleKneeRight<-180){errorAngleKneeRight += 180;}
 			if(errorAngleKneeRight>+180){errorAngleKneeRight += -180;}
@@ -381,7 +383,7 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("angleControlKneeRight:"+Math.Round(angleControlKneeRight,2));
 			
 			if(rightKnee==null){Echo("rightKnee is null");}
-			rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
+			// rightKnee.TargetVelocityRPM=-Convert.ToSingle(angleControlKneeRight);
 			
 			leftHip.CustomName = "leftHip";
 			rightHip.CustomName = "rightHip";
