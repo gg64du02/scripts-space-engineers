@@ -259,7 +259,7 @@ public void Main(string argument, UpdateType updateSource)
 			//Echo("==========");
 			foreach(var mS in motorSuspensions){
 				//TODO: fix quick and dirty
-				if(leftHip.WorldMatrix.Up.Dot(mS.WorldMatrix.Up)>0){
+				if(leftHip.WorldMatrix.Up.Dot(mS.WorldMatrix.Up)<0){
 					rightWheel  =mS;
 					 Echo("rightWheel");
 				}
@@ -305,8 +305,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			//figuring out what is the lower legs' angle:
-			Vector3D tmpLowerPosLeft = leftLeg[1].GetPosition() - leftLeg[2].GetPosition();
-			Vector3D tmpLowerPosRight = rightLeg[1].GetPosition() - rightLeg[2].GetPosition();
+			// Vector3D tmpLowerPosLeft = leftLeg[1].GetPosition() - leftLeg[2].GetPosition();
+			// Vector3D tmpLowerPosRight = rightLeg[1].GetPosition() - rightLeg[2].GetPosition();
+			Vector3D tmpLowerPosLeft = leftKnee.GetPosition() - leftWheel.GetPosition();
+			Vector3D tmpLowerPosRight = rightKnee.GetPosition() - rightWheel.GetPosition();
 			// Echo("tmpLowerPosLeft:"+Vector3D.Round(tmpLowerPosLeft,2));
 			// Echo("tmpLowerPosRight:"+Vector3D.Round(tmpLowerPosRight,2));
 			
@@ -396,7 +398,7 @@ public void Main(string argument, UpdateType updateSource)
 			leftHip.TargetVelocityRPM=Convert.ToSingle(angleControlHipLeft);
 			
 			
-			double wantedAngleKneeLeft = -90;
+			double wantedAngleKneeLeft = 90;
 			double errorAngleKneeLeft = wantedAngleKneeLeft-angleLeftKnee;
 			if(errorAngleKneeLeft<-180){errorAngleKneeLeft += 180;}
 			if(errorAngleKneeLeft>+180){errorAngleKneeLeft += -180;}
