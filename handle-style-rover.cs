@@ -72,8 +72,27 @@ public void Main(string argument, UpdateType updateSource)
 	List<IMyShipController> shipControllers = new List<IMyShipController>();
 	GridTerminalSystem.GetBlocksOfType<IMyShipController>(shipControllers);
 	
+	
+	List<IMyProgrammableBlock> programmableBlocks = new List<IMyProgrammableBlock>();
+	GridTerminalSystem.GetBlocksOfType<IMyProgrammableBlock>(programmableBlocks);
+	
+	foreach(IMyShipController sc in shipControllers){
+		var cubeGridShipController = sc.CubeGrid;
+		var programmableBlocksGrid = programmableBlocks[0].CubeGrid;
+		// Echo("cubeGridShipController:"+cubeGridShipController);
+		// Echo("myMotorBaseGrid:"+myMotorBaseGrid);
+		// Echo("==============");
+		if(cubeGridShipController == programmableBlocksGrid){
+			shipController = shipControllers[0];
+		}
+	}
+	
+	if(shipController == null){
+		Echo("no ship controllers onto the PB grid!!!");
+		return;
+	}
+	
 	if(shipControllers.Count!=0){
-		shipController = shipControllers[0];
 		if(shipController.IsUnderControl == true){
 			Echo("isManned");
 			//TODO
@@ -346,14 +365,14 @@ public void Main(string argument, UpdateType updateSource)
 				return;
 			}
 			
-			// double wantedAngleHipRight = 45;
-			// double wantedAngleHipLeft = 45;
-			// double wantedAngleKneeLeft = 90;
-			// double wantedAngleKneeRight = -90;
-			double wantedAngleHipRight = 30;
-			double wantedAngleHipLeft = 30;
-			double wantedAngleKneeLeft = 150;
-			double wantedAngleKneeRight = -150;
+			double wantedAngleHipRight = 45;
+			double wantedAngleHipLeft = 45;
+			double wantedAngleKneeLeft = 90;
+			double wantedAngleKneeRight = -90;
+			// double wantedAngleHipRight = 30;
+			// double wantedAngleHipLeft = 30;
+			// double wantedAngleKneeLeft = 150;
+			// double wantedAngleKneeRight = -150;
 			
 			bool tryToStandUp = false;
 			
