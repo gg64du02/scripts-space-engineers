@@ -12,6 +12,8 @@ PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
 // PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
 // PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
 // PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidLeftWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidRightWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 
 
 public Program()
@@ -357,8 +359,47 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			//TODO: consider all COM and figure out the global COM
-			Vector3D rightWheelToCOM = new Vector3D(shipController.CenterOfMass() - rightWheel.GetPosition);
-			Vector3D leftWheelToCOM = new Vector3D(shipController.CenterOfMass() - leftWheel.GetPosition);
+			Vector3D rightWheelToCOM = new Vector3D(shipController.CenterOfMass - rightWheel.GetPosition());
+			Vector3D leftWheelToCOM = new Vector3D(shipController.CenterOfMass - leftWheel.GetPosition());
+			Vector3D wheelsCombToCOM = new Vector3D(rightWheelToCOM+leftWheelToCOM);
+			Vector3D wheelsCombToCOMNorm = Vector3D.Normalize(wheelsCombToCOM);
+			Echo("wheelsCombToCOMNorm:"+Vector3D.Round(wheelsCombToCOMNorm,2));
+			
+			Vector3D grav = shipController.GetTotalGravity();
+			Vector3D gravNorm = Vector3D.Normalize(grav);
+			
+			//we can check is wheelsCombToCOMNorm is going above or below the plane normal to the gravity vector aka using Dot
+			double areWheelsCOMalignWithGravity = gravNorm.Dot(wheelsCombToCOMNorm);
+			Echo("areWheelsCOMalignWithGravity:"+Math.Round(areWheelsCOMalignWithGravity,2));
+			
+			double leftWheelPropControl =0;
+			double rightWheelPropControl = 0;
+			
+			if(areWheelsCOMalignWithGravity<0){
+				//is the pendulum align with gravity ?
+				double isPendulumAlignWithGravity = shipLeftVector.Dot(wheelsCombToCOMNorm.Cross(gravNorm));
+				//yes if = 0
+				if(isPendulumAlignWithGravity<0){
+					Echo("isPendulumAlignWithGravity<0");
+					rightWheel.SetValueFloat("Propulsion override", 1.00f);
+					leftWheel.SetValueFloat("Propulsion override", -1.00f);
+				}
+				else{
+					Echo("notisPendulumAlignWithGravity<0");
+					rightWheel.SetValueFloat("Propulsion override", -1.00f);
+					leftWheel.SetValueFloat("Propulsion override", 1.00f);
+				}
+			}
+			
+			
+			
+			// leftWheelPropControl = pidLeftWheelSpeed.Control(1 ,dts);
+			  // rightWheelPropControl = pidRightWheelSpeed.Control(lol,dts);
+
+			// isItOnTheShipControllerBack
+			
+			// rightWheel.SetValueFloat("Propulsion override", 1.00f);
+			// leftWheel.SetValueFloat("Propulsion override", -1.00f);
 			
 			//DEBUG
 			tryToStandUp = true;
