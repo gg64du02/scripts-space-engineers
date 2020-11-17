@@ -344,12 +344,21 @@ public void Main(string argument, UpdateType updateSource)
 				return;
 			}
 			
-			double wantedAngleHipRight = 45;
-			double wantedAngleHipLeft = 45;
-			double wantedAngleKneeLeft = 90;
-			double wantedAngleKneeRight = -90;
+			// double wantedAngleHipRight = 45;
+			// double wantedAngleHipLeft = 45;
+			// double wantedAngleKneeLeft = 90;
+			// double wantedAngleKneeRight = -90;
+			double wantedAngleHipRight = 30;
+			double wantedAngleHipLeft = 30;
+			double wantedAngleKneeLeft = 150;
+			double wantedAngleKneeRight = -150;
 			
 			bool tryToStandUp = false;
+			
+			
+			//TODO: consider all COM and figure out the global COM
+			Vector3D rightWheelToCOM = new Vector3D(shipController.CenterOfMass() - rightWheel.GetPosition);
+			Vector3D leftWheelToCOM = new Vector3D(shipController.CenterOfMass() - leftWheel.GetPosition);
 			
 			//DEBUG
 			tryToStandUp = true;
@@ -399,38 +408,38 @@ public void Main(string argument, UpdateType updateSource)
 				// wantedAngleKneeLeft = -135;
 				// wantedAngleKneeRight = 135;
 				
-				Vector3D grav = shipController.GetTotalGravity();
-				Vector3D gravNorm = Vector3D.Normalize(grav);
+				// Vector3D grav = shipController.GetTotalGravity();
+				// Vector3D gravNorm = Vector3D.Normalize(grav);
 				
-				double uprightEnough = shipDownVector.Dot(gravNorm);
-				Echo("uprightEnough:"+uprightEnough);
-				//testing if the ship is upright enough
-				// if(Math.Abs(uprightEnough)<.5f){
-				if(uprightEnough<.5f){
-					Echo("ship is not upright");
-					//test if the back or the front is on the ground
-					if(shipForwardVector.Dot(gravNorm)>0){	
-						Echo("pos3");	
-						wantedAngleHipRight = 178;
-						wantedAngleHipLeft = 178;
-						wantedAngleKneeLeft = -20;
-						wantedAngleKneeRight = 20;			
-					}
-					else{	
-						Echo("pos2");
-						wantedAngleHipRight = 0;
-						wantedAngleHipLeft = 0;
-						wantedAngleKneeLeft = -20;
-						wantedAngleKneeRight = 20;
-					}
-				}
-				else{
-					// Echo("4545");
-					// wantedAngleHipRight = 45;
-					// wantedAngleHipLeft = 45;
-					// wantedAngleKneeLeft = 45;
-					// wantedAngleKneeRight = -45;
-				}
+				// double uprightEnough = shipDownVector.Dot(gravNorm);
+				// Echo("uprightEnough:"+uprightEnough);
+				// //testing if the ship is upright enough
+				// // if(Math.Abs(uprightEnough)<.5f){
+				// if(uprightEnough<.5f){
+					// Echo("ship is not upright");
+					// //test if the back or the front is on the ground
+					// if(shipForwardVector.Dot(gravNorm)>0){	
+						// Echo("pos3");	
+						// wantedAngleHipRight = 178;
+						// wantedAngleHipLeft = 178;
+						// wantedAngleKneeLeft = -20;
+						// wantedAngleKneeRight = 20;			
+					// }
+					// else{	
+						// Echo("pos2");
+						// wantedAngleHipRight = 0;
+						// wantedAngleHipLeft = 0;
+						// wantedAngleKneeLeft = -20;
+						// wantedAngleKneeRight = 20;
+					// }
+				// }
+				// else{
+					// // Echo("4545");
+					// // wantedAngleHipRight = 45;
+					// // wantedAngleHipLeft = 45;
+					// // wantedAngleKneeLeft = 45;
+					// // wantedAngleKneeRight = -45;
+				// }
 			}
 			
 			Echo("===============");
