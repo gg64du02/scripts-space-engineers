@@ -381,16 +381,17 @@ public void Main(string argument, UpdateType updateSource)
 			if(areWheelsCOMalignWithGravity<0){
 				//is the pendulum align with gravity ?
 				double isPendulumAlignWithGravity = shipLeftVector.Dot(wheelsCombToCOMNorm.Cross(gravNorm));
+				float ORWheels = 0.75f;
 				//yes if = 0
 				if(isPendulumAlignWithGravity<0){
 					Echo("isPendulumAlignWithGravity<0");
-					rightWheel.SetValueFloat("Propulsion override", 0.25f);
-					leftWheel.SetValueFloat("Propulsion override", -0.25f);
+					rightWheel.SetValueFloat("Propulsion override", ORWheels);
+					leftWheel.SetValueFloat("Propulsion override", -ORWheels);
 				}
 				else{
 					Echo("notisPendulumAlignWithGravity<0");
-					rightWheel.SetValueFloat("Propulsion override", -0.25f);
-					leftWheel.SetValueFloat("Propulsion override", 0.25f);
+					rightWheel.SetValueFloat("Propulsion override", -ORWheels);
+					leftWheel.SetValueFloat("Propulsion override", ORWheels);
 				}
 			}
 			
