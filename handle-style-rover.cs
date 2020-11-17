@@ -381,7 +381,8 @@ public void Main(string argument, UpdateType updateSource)
 			if(areWheelsCOMalignWithGravity<0){
 				//is the pendulum align with gravity ?
 				double isPendulumAlignWithGravity = shipLeftVector.Dot(wheelsCombToCOMNorm.Cross(gravNorm));
-				float ORWheels = 0.75f;
+				//float ORWheels = 0.75f ;
+				float ORWheels = Convert.ToSingle( Math.Acos(areWheelsCOMalignWithGravity) / Math.PI );
 				//yes if = 0
 				if(isPendulumAlignWithGravity<0){
 					Echo("isPendulumAlignWithGravity<0");
@@ -397,7 +398,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			
-			// leftWheelPropControl = pidLeftWheelSpeed.Control(1 ,dts);
+			// leftWheelPropControl = pidLeftWheelSpeed.Control(1 ,dts);*
 			  // rightWheelPropControl = pidRightWheelSpeed.Control(lol,dts);
 
 			// isItOnTheShipControllerBack
