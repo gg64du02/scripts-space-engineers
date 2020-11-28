@@ -341,12 +341,13 @@ public void Main(string argument)
 
 
 
-    List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
-    GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 
+	List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
 
     if (firstMainLoop == true)
     {
+		GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
+		
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
         // optional : set desired angles
@@ -767,7 +768,7 @@ public void Main(string argument)
 
     //applying what the pid processed
     //var cs = new List<IMyThrust>();
-    GridTerminalSystem.GetBlocksOfType(cs);
+    //GridTerminalSystem.GetBlocksOfType(cs);
     //Echo(cs.ToString());
 
     double remainingThrustToApply = -1;
