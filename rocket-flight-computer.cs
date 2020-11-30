@@ -60,12 +60,15 @@ PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
 
 IMyShipController myRemoteControl = null;
 
-
+List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
+	
 public Program()
 {
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
     basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
     lcdHelper = new LCDHelper(basicLibrary, new Color(0, 255, 0), 1.5f);
+	
+	GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 }
 
 public void Main(string argument)
@@ -339,15 +342,8 @@ public void Main(string argument)
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
     }
 
-
-
-
-	List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
-
     if (firstMainLoop == true)
     {
-		GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
-		
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
         fightStabilizator.Reset();
         // optional : set desired angles
@@ -742,7 +738,7 @@ public void Main(string argument)
     fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
 
-    //debug roll\
+    //debug roll
     var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
         + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
         + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
