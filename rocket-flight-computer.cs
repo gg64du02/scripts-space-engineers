@@ -13,6 +13,7 @@ const bool isPlanetWorld = true; // this should be true for every easy start or 
 enum FlightMode { STABILIZATION, STANDY };
 FlightMode flightIndicatorsFlightMode = FlightMode.STANDY;
 List<IMyTextPanel> flightIndicatorsLcdDisplay = new List<IMyTextPanel>();
+List<IMyTextSurface> flightIndicatorsSurfaceDisplay =  new List<IMyTextSurface>();
 IMyShipController flightIndicatorsShipController = null;
 
 //default constant
@@ -390,7 +391,8 @@ public void Main(string argument)
     {
         lcdHelper.AppendMessageBuffer(fightStabilizator.DisplayText());
     }
-    lcdHelper.DisplayMessageBuffer(flightIndicatorsLcdDisplay);
+    //lcdHelper.DisplayMessageBuffer(flightIndicatorsLcdDisplay);
+    lcdHelper.DisplayMessageBuffer(flightIndicatorsSurfaceDisplay);
 
 
     var debugString = "";
@@ -815,6 +817,7 @@ public class FlightIndicators
     IMyShipController shipController;
     readonly Action<string> Echo;
     readonly List<IMyTextPanel> lcdDisplays = null;
+    readonly List<IMyTextSurface> surfaceDisplays = null;
     private LCDHelper lcdHelper;
     Vector3D absoluteNorthVector;
 
@@ -834,6 +837,26 @@ public class FlightIndicators
         this.shipController = shipController;
         this.Echo = Echo;
         this.lcdDisplays = lcdDisplays;
+        this.lcdHelper = lcdHelper;
+
+        if (isPlanetWorld)
+        {
+            absoluteNorthVector = absoluteNorthPlanetWorldsVector;
+        }
+        else
+        {
+            absoluteNorthVector = absoluteNorthNotPlanetWorldsVector;
+        }
+
+
+    }
+	
+	
+    public FlightIndicators(IMyShipController shipController, Action<String> Echo, bool isPlanetWorld = true, List<IMyTextSurface> surfaceDisplays = null, LCDHelper lcdHelper = null)
+    {
+        this.shipController = shipController;
+        this.Echo = Echo;
+		this.surfaceDisplays = surfaceDisplays;
         this.lcdHelper = lcdHelper;
 
         if (isPlanetWorld)
@@ -922,13 +945,14 @@ public class FlightIndicators
 
     public void Display()
     {
-        if (lcdHelper == null || lcdDisplays == null)
-        {
-            Echo("Can't diplay, LCD or LCDHelper not set");
-            return;
-        }
+        // if (lcdHelper == null || lcdDisplays == null)
+        // {
+            // Echo("Can't diplay, LCD or LCDHelper not set");
+            // return;
+        // }
 
-        lcdHelper.DisplayMessage(DisplayText(), lcdDisplays);
+        //lcdHelper.DisplayMessage(DisplayText(), lcdDisplays);
+		lcdHelper.DisplayMessage(DisplayText(),surfaceDisplays);
     }
 
 }
@@ -1184,6 +1208,14 @@ public static class VectorHelper
 
 bool TryInit()
 {
+	
+	IMyTextSurface pbTextSurface = Me.GetSurface(0);
+	if(flightIndicatorsSurfaceDisplay.Count == 0){
+		flightIndicatorsSurfaceDisplay.Add(pbTextSurface);
+	}
+	if(flightIndicatorsSurfaceDisplay.Count == 0){
+        Echo("Cound not find any Surface");
+	}
     // LCD
     if (flightIndicatorsLcdDisplay.Count == 0)
     {
@@ -1194,13 +1226,15 @@ bool TryInit()
         else
         {
             IMyTextPanel textPanel = lcdHelper.FindFirst();
+			//if no LCD is specified use the included screen onto the PB
+			
             if (textPanel != null)
             {
                 flightIndicatorsLcdDisplay.Add(textPanel);
             }
             else
             {
-                Echo("Cound not find any LCD");
+                //Echo("Cound not find any LCD");
             }
         }
         if (flightIndicatorsLcdDisplay.Count == 0)
@@ -1221,7 +1255,8 @@ bool TryInit()
             {
                 string message = "No controller named \n" + flightIndicatorsControllerName + " found.";
                 Echo(message);
-                lcdHelper.DisplayMessage(message, flightIndicatorsLcdDisplay);
+                //lcdHelper.DisplayMessage(message, flightIndicatorsLcdDisplay);
+                lcdHelper.DisplayMessage(message, flightIndicatorsSurfaceDisplay);
                 return false;
             }
             flightIndicatorsShipController = (IMyShipController)namedController;
@@ -1245,7 +1280,8 @@ bool TryInit()
             {
                 string message = "No remote control found on the same grid.";
                 Echo(message);
-                lcdHelper.DisplayMessage(message, flightIndicatorsLcdDisplay);
+                //lcdHelper.DisplayMessage(message, flightIndicatorsLcdDisplay);
+                lcdHelper.DisplayMessage(message, flightIndicatorsSurfaceDisplay);
                 return false;
             }
         }
@@ -1253,7 +1289,8 @@ bool TryInit()
 
     if (flightIndicators == null)
     {
-        flightIndicators = new FlightIndicators(flightIndicatorsShipController, Echo, isPlanetWorld, flightIndicatorsLcdDisplay, lcdHelper);
+        //flightIndicators = new FlightIndicators(flightIndicatorsShipController, Echo, isPlanetWorld, flightIndicatorsLcdDisplay, lcdHelper);
+        flightIndicators = new FlightIndicators(flightIndicatorsShipController, Echo, isPlanetWorld, flightIndicatorsSurfaceDisplay, lcdHelper);
     }
 
     if (fightStabilizator == null)
@@ -1271,7 +1308,6 @@ bool TryInit()
 
     return true;
 }
-
 
 
 
@@ -1359,6 +1395,20 @@ public class LCDHelper
     {
         myTextPanel.WritePublicText(message, append);
     }
+	
+
+    public void DisplayMessage(string message, List<IMyTextSurface> myTextSurfaces, bool append = false)
+    {
+        foreach (IMyTextSurface myTextSurface in myTextSurfaces)
+        {
+            DisplayMessage(message, myTextSurface, append);
+        }
+    }
+
+    public void DisplayMessage(string message, IMyTextSurface myTextSurface, bool append = false)
+    {
+        myTextSurface.WriteText(message, append);
+    }
 
     // return null if no lcd
     public IMyTextPanel FindFirst()
@@ -1421,6 +1471,12 @@ public class LCDHelper
     public void DisplayMessageBuffer(List<IMyTextPanel> myTextPanels)
     {
         DisplayMessage(messageBuffer.ToString(), myTextPanels);
+    }
+	
+    //pb screen
+    public void DisplayMessageBuffer(List<IMyTextSurface> myTextSurfaces)
+    {
+        DisplayMessage(messageBuffer.ToString(), myTextSurfaces);
     }
 }
 
