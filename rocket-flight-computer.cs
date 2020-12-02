@@ -1216,6 +1216,13 @@ bool TryInit()
 	if(flightIndicatorsSurfaceDisplay.Count == 0){
         Echo("Cound not find any Surface");
 	}
+	else{
+		//TODO add fonts settings put to Text and Image , size, color,
+		flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.TEXT_AND_IMAGE;
+        flightIndicatorsSurfaceDisplay[0].FontColor = new Color(255, 255, 255);
+        flightIndicatorsSurfaceDisplay[0].FontSize = 1.5f;
+	}
+	
     // LCD
     if (flightIndicatorsLcdDisplay.Count == 0)
     {
@@ -1456,6 +1463,11 @@ public class LCDHelper
         myTextPanel.ApplyAction("OnOff_On");
     }
 
+    public void InitDisplay(IMyTextSurface myTextSurface, Color color, float fontSize)
+    {
+        myTextSurface.FontColor = color;
+        myTextSurface.FontSize = fontSize;
+    }
 
     public void ClearMessageBuffer()
     {
