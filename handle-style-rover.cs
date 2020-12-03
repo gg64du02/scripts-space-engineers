@@ -160,6 +160,21 @@ public void Main(string argument, UpdateType updateSource)
 			}
 		}
 		
+		//names used :
+		// leftHip
+		// leftKnee
+		// leftWheel
+		
+		// rightHip
+		// rightKnee
+		// rightWheel
+		
+		// leftUpperRc
+		// leftLowerRc
+		// rightUpperRc
+		// rightLowerRc
+		
+		
 		List<IMyMotorBase> hipsRotors = new List<IMyMotorBase>();
 		List<IMyMotorBase> kneesRotors = new List<IMyMotorBase>();
 		
@@ -373,6 +388,10 @@ public void Main(string argument, UpdateType updateSource)
 			// double wantedAngleHipLeft = 30;
 			// double wantedAngleKneeLeft = 150;
 			// double wantedAngleKneeRight = -150;
+			wantedAngleHipRight = 90;
+			wantedAngleHipLeft = 90;
+			wantedAngleKneeLeft = 0;
+			wantedAngleKneeRight = 0;
 			
 			bool tryToStandUp = false;
 			
@@ -401,7 +420,11 @@ public void Main(string argument, UpdateType updateSource)
 				//is the pendulum align with gravity ?
 				double isPendulumAlignWithGravity = shipLeftVector.Dot(wheelsCombToCOMNorm.Cross(gravNorm));
 				//float ORWheels = 0.75f ;
-				float ORWheels = Convert.ToSingle( Math.Acos(areWheelsCOMalignWithGravity) / Math.PI );
+				//float ORWheels = 0.2f* Convert.ToSingle( Math.Acos(areWheelsCOMalignWithGravity) / Math.PI );
+				//float ORWheels = -2f * Convert.ToSingle( Math.Asin(areWheelsCOMalignWithGravity) / Math.PI );
+				//float ORWheels = 2f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
+				//float ORWheels = 0.20f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
+				float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
 				//yes if = 0
 				if(isPendulumAlignWithGravity<0){
 					Echo("isPendulumAlignWithGravity<0");
