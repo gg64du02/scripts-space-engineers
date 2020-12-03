@@ -83,9 +83,12 @@ public void Main(string argument, UpdateType updateSource)
 		// Echo("myMotorBaseGrid:"+myMotorBaseGrid);
 		// Echo("==============");
 		if(cubeGridShipController == programmableBlocksGrid){
-			shipController = shipControllers[0];
+			//shipController = shipControllers[0];
+			shipController = sc;
 		}
 	}
+	
+	Echo("shipController:"+shipController);
 	
 	if(shipController == null){
 		Echo("no ship controllers onto the PB grid!!!");
@@ -200,6 +203,9 @@ public void Main(string argument, UpdateType updateSource)
 					}
 				}
 			}
+			Echo("hipsRotors.Count:"+hipsRotors.Count);
+			Echo("kneesRotors.Count:"+kneesRotors.Count);
+			
 			// foreach(IMyMotorBase mb2 in hipsRotors){
 				 // Echo("hipsRotor:"+mb2);
 			// }
@@ -218,6 +224,7 @@ public void Main(string argument, UpdateType updateSource)
 			//?: if you were an humanoid, knew your hips and knees' position, how do you figure out which one belongs to which leg ?
 			IMyMotorStator leftHip = null;
 			IMyMotorStator rightHip = null;
+			
 			foreach(IMyMotorStator mb2 in hipsRotors){
 				Echo("mb2:"+mb2);
 				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - mb2.GetPosition()))>0){
@@ -317,11 +324,11 @@ public void Main(string argument, UpdateType updateSource)
 			if(rightHip == null){
 				Echo("if(rightHip == null){");
 			} 
-			if(hipsRotors == null){
-				Echo("if(hipsRotors == null){");
+			if(hipsRotors.Count == 0){
+				Echo("if(hipsRotors.Count == 0){");
 			} 
-			if(kneesRotors == null){
-				Echo("if(kneesRotors == null){");
+			if(kneesRotors.Count == 0){
+				Echo("if(kneesRotors.Count == 0){");
 			} 
 			
 			Echo("lol_15");
@@ -440,7 +447,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			bool tryToStandUp = false;
 			
-			
+			Echo("lol_17");
 			
 			
 		// leftUpperRc
@@ -455,6 +462,21 @@ public void Main(string argument, UpdateType updateSource)
 			IMyRemoteControl rightLowerRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("rightLowerRc");
 			
 			
+			if(leftUpperRc == null){
+				Echo("if(leftUpperRc == null){");
+			} 
+			if(leftLowerRc == null){
+				Echo("if(leftLowerRc == null){");
+			} 
+			if(rightUpperRc == null){
+				Echo("if(rightUpperRc == null){");
+			} 
+			if(rightLowerRc == null){
+				Echo("if(rightLowerRc == null){");
+			} 
+			
+			Echo("lol_18");
+			
 			
 			//===================================
 			//BARYCENTER computing start
@@ -462,13 +484,19 @@ public void Main(string argument, UpdateType updateSource)
 			//use https://en.wikipedia.org/wiki/Barycenter
 			
 			//Multiply(Vector3D, double)	Multiplies a vector by a scalar value.
-			Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
+			Echo("lol_20");
+			//Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
+			//Vector3D WcomRightLowerLeg = Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass);
+			Vector3D WcomRightLowerLeg = new Vector3D(0,0,0);
+			Echo("lol_21");
 			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
 			
 			Vector3D WcomRightUpperLeg = new Vector3D(Vector3D.Multiply(rightUpperRc.CenterOfMass,rightUpperRc.Mass));
 			Vector3D WcomLeftUpperLeg = new Vector3D(Vector3D.Multiply(leftUpperRc.CenterOfMass,leftUpperRc.Mass));
 			
 			Vector3D WcomShipPond = new Vector3D(Vector3D.Multiply(shipController.CenterOfMass,shipController.Mass));
+			
+			Echo("lol_19");
 			
 			Vector3D sumOfWcom = WcomRightLowerLeg+WcomLeftLowerLeg+
 			WcomRightUpperLeg + WcomLeftUpperLeg
@@ -485,6 +513,8 @@ public void Main(string argument, UpdateType updateSource)
 			//===================================
 			//BARYCENTER computing end
 			//===================================
+			
+			
 			
 			
 			//TODO: consider all COM and figure out the global COM
