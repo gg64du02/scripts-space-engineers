@@ -181,7 +181,7 @@ public void Main(string argument, UpdateType updateSource)
 		//guessing vectors for the two wheeled legs
 		if(myMotorBases.Count != 0 ){
 			foreach(IMyMotorBase mb in myMotorBases){
-				//Echo("mb:"+mb);
+				Echo("mb:"+mb);
 				if(mb.IsSameConstructAs(shipController)){
 					if(mb is IMyMotorStator){
 						var cubeGridShipController = shipController.CubeGrid;
@@ -219,6 +219,7 @@ public void Main(string argument, UpdateType updateSource)
 			IMyMotorStator leftHip = null;
 			IMyMotorStator rightHip = null;
 			foreach(IMyMotorStator mb2 in hipsRotors){
+				Echo("mb2:"+mb2);
 				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - mb2.GetPosition()))>0){
 					 rightHip = mb2;
 					 //Echo("rightHipDectected");
@@ -284,17 +285,51 @@ public void Main(string argument, UpdateType updateSource)
 			GridTerminalSystem.GetBlocksOfType<IMyMotorSuspension>(motorSuspensions);
 			//Echo("==========");
 			foreach(var mS in motorSuspensions){
+				Echo("mS:"+mS);
 				if(shipLeftVector.Dot(new Vector3D(shipController.GetPosition() - mS.GetPosition()))>0){
 					rightWheel  =mS;
-					 Echo("rightWheel");
+					 // Echo("rightWheel");
 				}
 				else{
 					leftWheel  =mS;
-					 Echo("leftWheel");
+					 // Echo("leftWheel");
 				}
 			}
+			
+			
+			Echo("lol_14");
+			
+			if(leftWheel == null){
+				Echo("if(leftWheel == null){");
+			}
+			if(rightWheel == null){
+				Echo("if(rightWheel == null){");
+			} 
+			if(leftKnee == null){
+				Echo("if(leftKnee == null){");
+			}
+			if(rightKnee == null){
+				Echo("if(rightKnee == null){");
+			} 
+			if(leftHip == null){
+				Echo("if(leftHip == null){");
+			} 
+			if(rightHip == null){
+				Echo("if(rightHip == null){");
+			} 
+			if(hipsRotors == null){
+				Echo("if(hipsRotors == null){");
+			} 
+			if(kneesRotors == null){
+				Echo("if(kneesRotors == null){");
+			} 
+			
+			Echo("lol_15");
+			
 			leftWheel.CustomName = "leftWheel";
 			rightWheel.CustomName = "rightWheel";
+			
+			Echo("lol_16");
 			
 				
 				
@@ -306,8 +341,12 @@ public void Main(string argument, UpdateType updateSource)
 			// Echo("tmpUpperPosLeft:"+Vector3D.Round(tmpUpperPosLeft,2));
 			// Echo("tmpUpperPosRight:"+Vector3D.Round(tmpUpperPosRight,2));
 			
+			Echo("lol_11");
+			
 			Vector3D tmpUpperPosLeftNorm = Vector3D.Normalize(tmpUpperPosLeft);
 			Vector3D tmpUpperPosRightNorm = Vector3D.Normalize(tmpUpperPosRight);
+			
+			Echo("lol_12");
 			
 			
 			//figuring out what is the lower legs' angle:
@@ -317,6 +356,8 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D tmpLowerPosRight = rightKnee.GetPosition() - rightWheel.GetPosition();
 			// Echo("tmpLowerPosLeft:"+Vector3D.Round(tmpLowerPosLeft,2));
 			// Echo("tmpLowerPosRight:"+Vector3D.Round(tmpLowerPosRight,2));
+			
+			Echo("lol_13");
 			
 			
 			Vector3D leftHipRotatingAxis = leftHip.WorldMatrix.Up;
