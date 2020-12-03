@@ -388,12 +388,62 @@ public void Main(string argument, UpdateType updateSource)
 			// double wantedAngleHipLeft = 30;
 			// double wantedAngleKneeLeft = 150;
 			// double wantedAngleKneeRight = -150;
-			wantedAngleHipRight = 90;
-			wantedAngleHipLeft = 90;
-			wantedAngleKneeLeft = 0;
-			wantedAngleKneeRight = 0;
+			// wantedAngleHipRight = 90;
+			// wantedAngleHipLeft = 90;
+			// wantedAngleKneeLeft = 0;
+			// wantedAngleKneeRight = 0;
+			wantedAngleHipRight = 45;
+			wantedAngleHipLeft = 45;
+			wantedAngleKneeLeft = 135;
+			wantedAngleKneeRight = -135;
 			
 			bool tryToStandUp = false;
+			
+			
+			
+			
+		// leftUpperRc
+		// leftLowerRc
+		// rightUpperRc
+		// rightLowerRc
+		
+			
+			IMyRemoteControl leftUpperRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("leftUpperRc");
+			IMyRemoteControl leftLowerRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("leftLowerRc");
+			IMyRemoteControl rightUpperRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("rightUpperRc");
+			IMyRemoteControl rightLowerRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("rightLowerRc");
+			
+			
+			
+			//===================================
+			//BARYCENTER computing start
+			//===================================
+			//use https://en.wikipedia.org/wiki/Barycenter
+			
+			//Multiply(Vector3D, double)	Multiplies a vector by a scalar value.
+			Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
+			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
+			
+			Vector3D WcomRightUpperLeg = new Vector3D(Vector3D.Multiply(rightUpperRc.CenterOfMass,rightUpperRc.Mass));
+			Vector3D WcomLeftUpperLeg = new Vector3D(Vector3D.Multiply(leftUpperRc.CenterOfMass,leftUpperRc.Mass));
+			
+			Vector3D WcomShipPond = new Vector3D(Vector3D.Multiply(shipController.CenterOfMass,shipController.Mass));
+			
+			Vector3D sumOfWcom = WcomRightLowerLeg+WcomLeftLowerLeg+
+			WcomRightUpperLeg + WcomLeftUpperLeg
+			+WcomShipPond;
+			
+			double sumOfMass = rightLowerRc.Mass + leftLowerRc.Mass+
+			rightUpperRc.Mass + leftUpperRc.Mass+
+			shipController.Mass;
+			
+			Vector3D barycenter = new Vector3D(Vector3D.Divide(sumOfWcom,sumOfMass));
+			
+			Echo("barycenter: "+Vector3D.Round(barycenter,2));
+			
+			//===================================
+			//BARYCENTER computing end
+			//===================================
 			
 			
 			//TODO: consider all COM and figure out the global COM
