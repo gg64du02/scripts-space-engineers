@@ -455,6 +455,8 @@ public void Main(string argument, UpdateType updateSource)
 		// rightUpperRc
 		// rightLowerRc
 		
+		
+		
 			
 			IMyRemoteControl leftUpperRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("leftUpperRc");
 			IMyRemoteControl leftLowerRc = (IMyRemoteControl) GridTerminalSystem.GetBlockWithName("leftLowerRc");
@@ -465,17 +467,55 @@ public void Main(string argument, UpdateType updateSource)
 			if(leftUpperRc == null){
 				Echo("if(leftUpperRc == null){");
 			} 
+			else{
+				Echo(""+leftUpperRc);
+			}
 			if(leftLowerRc == null){
 				Echo("if(leftLowerRc == null){");
 			} 
+			else{
+				Echo(""+leftLowerRc);
+			}
 			if(rightUpperRc == null){
 				Echo("if(rightUpperRc == null){");
 			} 
+			else{
+				Echo(""+rightUpperRc);
+			}
 			if(rightLowerRc == null){
 				Echo("if(rightLowerRc == null){");
 			} 
+			else{
+				Echo(""+rightLowerRc);
+			}
+			
+			Echo("if any are not detected with the same don't copy paste it, clear the name and type the name provided in the script on the ship");
 			
 			Echo("lol_18");
+			
+			
+			// List<IMyRemoteControl> listRemoteControls = new List<IMyRemoteControl>();
+			// GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(listRemoteControls);
+			// foreach(IMyRemoteControl rc in listRemoteControls){
+				// //Echo("rc:"+rc);
+				// Echo("rc.CustomName:"+rc.CustomName);
+				// if(rc.CustomName == "rightUpperRc")
+				// {
+					// if(rightUpperRc == null){
+						// rightUpperRc = rc;
+						// Echo("rightUpperRc_assigned");
+					// }
+				// }
+				// if(rc.CustomName == "rightLowerRc")
+				// {
+					// if(rightLowerRc == null){
+						// rightLowerRc = rc;
+						// Echo("rightLowerRc_assigned");
+					// }
+				// }
+			// }
+			
+			// Echo("listRemoteControls.Count:"+listRemoteControls.Count);
 			
 			
 			//===================================
@@ -485,11 +525,11 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//Multiply(Vector3D, double)	Multiplies a vector by a scalar value.
 			Echo("lol_20");
+			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
 			//Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
 			//Vector3D WcomRightLowerLeg = Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass);
 			Vector3D WcomRightLowerLeg = new Vector3D(0,0,0);
 			Echo("lol_21");
-			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
 			
 			Vector3D WcomRightUpperLeg = new Vector3D(Vector3D.Multiply(rightUpperRc.CenterOfMass,rightUpperRc.Mass));
 			Vector3D WcomLeftUpperLeg = new Vector3D(Vector3D.Multiply(leftUpperRc.CenterOfMass,leftUpperRc.Mass));
