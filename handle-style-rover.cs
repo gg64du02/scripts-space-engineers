@@ -525,10 +525,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//Multiply(Vector3D, double)	Multiplies a vector by a scalar value.
 			Echo("lol_20");
-			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
-			//Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
+			Vector3D WcomRightLowerLeg = new Vector3D(Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass));
 			//Vector3D WcomRightLowerLeg = Vector3D.Multiply(rightLowerRc.CenterOfMass,rightLowerRc.Mass);
-			Vector3D WcomRightLowerLeg = new Vector3D(0,0,0);
+			//Vector3D WcomRightLowerLeg = new Vector3D(0,0,0);
+			Vector3D WcomLeftLowerLeg = new Vector3D(Vector3D.Multiply(leftLowerRc.CenterOfMass,leftLowerRc.Mass));
 			Echo("lol_21");
 			
 			Vector3D WcomRightUpperLeg = new Vector3D(Vector3D.Multiply(rightUpperRc.CenterOfMass,rightUpperRc.Mass));
@@ -558,8 +558,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			//TODO: consider all COM and figure out the global COM
-			Vector3D rightWheelToCOM = new Vector3D(shipController.CenterOfMass - rightWheel.GetPosition());
-			Vector3D leftWheelToCOM = new Vector3D(shipController.CenterOfMass - leftWheel.GetPosition());
+			// Vector3D rightWheelToCOM = new Vector3D(shipController.CenterOfMass - rightWheel.GetPosition());
+			// Vector3D leftWheelToCOM = new Vector3D(shipController.CenterOfMass - leftWheel.GetPosition());
+			Vector3D rightWheelToCOM = new Vector3D(barycenter - rightWheel.GetPosition());
+			Vector3D leftWheelToCOM = new Vector3D(barycenter - leftWheel.GetPosition());
 			Vector3D wheelsCombToCOM = new Vector3D(rightWheelToCOM+leftWheelToCOM);
 			Vector3D wheelsCombToCOMNorm = Vector3D.Normalize(wheelsCombToCOM);
 			Echo("wheelsCombToCOMNorm:"+Vector3D.Round(wheelsCombToCOMNorm,2));
