@@ -16,6 +16,8 @@ PIDController pidLeftWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 PIDController pidRightWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 
 
+Vector3D prevBarycenter = new Vector3D(0,0,0);
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -28,7 +30,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 }
 
 public void Save()
@@ -579,7 +581,14 @@ public void Main(string argument, UpdateType updateSource)
 			rightWheel.SetValueFloat("Propulsion override", 0.00f);
 			leftWheel.SetValueFloat("Propulsion override", 0.00f);
 			
-			if(areWheelsCOMalignWithGravity<0){
+			//barycenter absolute speed
+			//if(barycenter)
+			Vector3D speedBarycenter = new Vector3D((barycenter - prevBarycenter)/dts);
+			Echo("speedBarycenter:"+Vector3D.Round(speedBarycenter,2));
+			
+			prevBarycenter = barycenter;
+			
+			//if(areWheelsCOMalignWithGravity<0){
 				//is the pendulum align with gravity ?
 				double isPendulumAlignWithGravity = shipLeftVector.Dot(wheelsCombToCOMNorm.Cross(gravNorm));
 				//float ORWheels = 0.75f ;
@@ -599,7 +608,7 @@ public void Main(string argument, UpdateType updateSource)
 					rightWheel.SetValueFloat("Propulsion override", -ORWheels);
 					leftWheel.SetValueFloat("Propulsion override", ORWheels);
 				}
-			}
+			//}
 			
 			
 			
