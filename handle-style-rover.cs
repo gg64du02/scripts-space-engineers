@@ -597,17 +597,19 @@ public void Main(string argument, UpdateType updateSource)
 				//float ORWheels = 2f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
 				//float ORWheels = 0.20f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
 				float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
+				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector));
+				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector)+Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
 				//yes if = 0
-				if(isPendulumAlignWithGravity<0){
+				// if(isPendulumAlignWithGravity<0){
 					Echo("isPendulumAlignWithGravity<0");
 					rightWheel.SetValueFloat("Propulsion override", ORWheels);
 					leftWheel.SetValueFloat("Propulsion override", -ORWheels);
-				}
-				else{
-					Echo("notisPendulumAlignWithGravity<0");
-					rightWheel.SetValueFloat("Propulsion override", -ORWheels);
-					leftWheel.SetValueFloat("Propulsion override", ORWheels);
-				}
+				// }
+				// else{
+					// Echo("notisPendulumAlignWithGravity<0");
+					// rightWheel.SetValueFloat("Propulsion override", -ORWheels);
+					// leftWheel.SetValueFloat("Propulsion override", ORWheels);
+				// }
 			//}
 			
 			
@@ -633,10 +635,10 @@ public void Main(string argument, UpdateType updateSource)
 				
 				// //offsets while standing up
 				// //pos 1
-				// wantedAngleHipRight = 45;
-				// wantedAngleHipLeft = 45;
-				// wantedAngleKneeLeft = 90;
-				// wantedAngleKneeRight = -90;
+				wantedAngleHipRight = 45;
+				wantedAngleHipLeft = 45;
+				wantedAngleKneeLeft = 90;
+				wantedAngleKneeRight = -90;
 				
 				// //mirror symetrical relative to Up and Left of
 				// //pos 2
