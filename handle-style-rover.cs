@@ -442,10 +442,10 @@ public void Main(string argument, UpdateType updateSource)
 			// wantedAngleHipLeft = 90;
 			// wantedAngleKneeLeft = 0;
 			// wantedAngleKneeRight = 0;
-			wantedAngleHipRight = 45;
-			wantedAngleHipLeft = 45;
-			wantedAngleKneeLeft = 135;
-			wantedAngleKneeRight = -135;
+			// wantedAngleHipRight = 45;
+			// wantedAngleHipLeft = 45;
+			// wantedAngleKneeLeft = 135;
+			// wantedAngleKneeRight = -135;
 			
 			bool tryToStandUp = false;
 			
@@ -571,8 +571,13 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D grav = shipController.GetTotalGravity();
 			Vector3D gravNorm = Vector3D.Normalize(grav);
 			
+			//TODO change to something that change sign if the barycenter change side betzeen the 2 wheels and the gravity vector
+			Vector3D crossRightLeftWheelsToCOM = leftWheelToCOM.Cross(rightWheelToCOM);
+			
+
 			//we can check is wheelsCombToCOMNorm is going above or below the plane normal to the gravity vector aka using Dot
-			double areWheelsCOMalignWithGravity = gravNorm.Dot(wheelsCombToCOMNorm);
+			//double areWheelsCOMalignWithGravity = gravNorm.Dot(wheelsCombToCOMNorm);
+			double areWheelsCOMalignWithGravity = crossRightLeftWheelsToCOM.Dot(gravNorm);
 			Echo("areWheelsCOMalignWithGravity:"+Math.Round(areWheelsCOMalignWithGravity,2));
 			
 			double leftWheelPropControl =0;
@@ -580,6 +585,15 @@ public void Main(string argument, UpdateType updateSource)
 			
 			rightWheel.SetValueFloat("Propulsion override", 0.00f);
 			leftWheel.SetValueFloat("Propulsion override", 0.00f);
+			
+			rightWheel.Friction = 100f;
+			leftWheel.Friction = 100f;
+			rightWheel.Height = 0f;
+			leftWheel.Height = 0f;
+			rightWheel.Height = 0f;
+			leftWheel.Height = 0f;
+			rightWheel.Strength = 100f;
+			leftWheel.Strength = 100f;
 			
 			//barycenter absolute speed
 			//if(barycenter)
@@ -596,12 +610,18 @@ public void Main(string argument, UpdateType updateSource)
 				//float ORWheels = -2f * Convert.ToSingle( Math.Asin(areWheelsCOMalignWithGravity) / Math.PI );
 				//float ORWheels = 2f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
 				//float ORWheels = 0.20f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,3));
-				float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
+				
+				
+				//TODO using something that change the sign if it flips on its back
+				
+				//float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
 				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector));
 				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector)+Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
+				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector)+ Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
+				float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
 				//yes if = 0
 				// if(isPendulumAlignWithGravity<0){
-					Echo("isPendulumAlignWithGravity<0");
+					//Echo("isPendulumAlignWithGravity<0");
 					rightWheel.SetValueFloat("Propulsion override", ORWheels);
 					leftWheel.SetValueFloat("Propulsion override", -ORWheels);
 				// }
@@ -635,10 +655,10 @@ public void Main(string argument, UpdateType updateSource)
 				
 				// //offsets while standing up
 				// //pos 1
-				wantedAngleHipRight = 45;
-				wantedAngleHipLeft = 45;
-				wantedAngleKneeLeft = 90;
-				wantedAngleKneeRight = -90;
+				// wantedAngleHipRight = 45;
+				// wantedAngleHipLeft = 45;
+				// wantedAngleKneeLeft = 90;
+				// wantedAngleKneeRight = -90;
 				
 				// //mirror symetrical relative to Up and Left of
 				// //pos 2
