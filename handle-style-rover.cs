@@ -4,14 +4,14 @@
 // PIDController pidAngleHipLeft = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeRight = new PIDController(0.06f, .00f, 0.01f);
 // PIDController pidAngleKneeLeft = new PIDController(0.06f, .00f, 0.01f);
-PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
-PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
-// PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
-// PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
+// PIDController pidAngleHipRight = new PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleHipLeft = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeRight = new  PIDController(0.1f, .00f, 0.00f);
+// PIDController pidAngleKneeLeft = new  PIDController(0.1f, .00f, 0.00f);
+PIDController pidAngleHipRight = new PIDController(1f, .00f, 0.00f);
+PIDController pidAngleHipLeft = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeRight = new  PIDController(1f, .00f, 0.00f);
+PIDController pidAngleKneeLeft = new  PIDController(1f, .00f, 0.00f);
 PIDController pidLeftWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 PIDController pidRightWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 
@@ -594,6 +594,10 @@ public void Main(string argument, UpdateType updateSource)
 			leftWheel.Height = 0f;
 			rightWheel.Strength = 100f;
 			leftWheel.Strength = 100f;
+			
+			MyWaypointInfo toCustomData = new MyWaypointInfo("bary",barycenter);
+			
+			Me.CustomData = toCustomData.ToString();
 			
 			//barycenter absolute speed
 			//if(barycenter)
