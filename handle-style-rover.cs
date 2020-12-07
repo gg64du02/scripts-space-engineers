@@ -675,12 +675,18 @@ public void Main(string argument, UpdateType updateSource)
 			double g = shipController.GetNaturalGravity().Length();
 			//angle between grav and wheels/bary
 			double theta = angleGravCOM;
-			double J = 4000000000;
+			double J = 40000;
 			//double h = 1;
-			double h = (((2*barycenter)-(leftWheel.GetPosition()-rightWheel.GetPosition()))*.5).Length();
+			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
 			//wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2));
 			wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
+			// if((m * g * h)*Math.Sin(theta)*2<m*speedBarycenter.Length()*speedBarycenter.Length()){
+				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
+			// }
+			// else{
+				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2+m*speedBarycenter.Length()*speedBarycenter.Length()));
+			// }
 			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
 				wantedCOMangularSpeed *= 1;
 			}
