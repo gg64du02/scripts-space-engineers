@@ -655,7 +655,41 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double angularSpeedGravCOM = (prevAngleGravCOM - angleGravCOM) / dts;
 			
-			wantedCOMangularSpeed = -1 * angleGravCOM;
+			//E_p = MGH (1 - sin(theta))
+			//with w = d theta / dts
+			//E_c = 1/2*m*v*v
+			//E_J = 1/2*J*w*w
+			
+			//to get E_p = mgh
+			//we need theta = 0
+			//delta_E = E_c + E_J
+			//delta_E = .5 * (J*w*w + m*v*v)
+			
+			// MGH * sin( theta ) =  1/2 * (J*w*w + m*v*v)
+			// MGH * sin( theta ) *2 - m*v*v  =   J*w*w 
+			//1/J * (  MGH * sin( theta ) *2 - m*v*v   ) = w * w
+			// w = sqrt (  1/J * (  MGH * sin( theta ) *2 - m*v*v   )    )
+			
+			double m = rightLowerRc.Mass  + leftLowerRc.Mass+rightUpperRc.Mass + leftUpperRc.Mass+shipController.Mass;
+			
+			double g = shipController.GetNaturalGravity().Length();
+			//angle between grav and wheels/bary
+			double theta = angleGravCOM;
+			double J = 400000000;
+			//double h = 1;
+			double h = (((2*barycenter)-(leftWheel.GetPosition()-rightWheel.GetPosition()))*.5).Length();
+			
+			wantedCOMangularSpeed = Math.Sqrt((1/J)*(m * g * h)*Math.Abs(Math.Sin(theta)*2));
+			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
+				wantedCOMangularSpeed *= 1;
+			}
+			else{
+				wantedCOMangularSpeed *=  -1;
+			}
+			
+			//==============
+			
+			//wantedCOMangularSpeed = -1 * angleGravCOM;
 			
 			Echo("wantedCOMangularSpeed:"+wantedCOMangularSpeed);
 			
