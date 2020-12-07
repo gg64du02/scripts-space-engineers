@@ -17,6 +17,7 @@ PIDController pidRightWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 
 
 Vector3D prevBarycenter = new Vector3D(0,0,0);
+double prevAngleGravCOM = 0;
 
 public Program()
 {
@@ -622,19 +623,59 @@ public void Main(string argument, UpdateType updateSource)
 				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector));
 				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector)+Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
 				//float ORWheels = 2.0f * Convert.ToSingle(speedBarycenter.Dot(shipForwardVector)+ Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
-				float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
-				//yes if = 0
-				// if(isPendulumAlignWithGravity<0){
-					//Echo("isPendulumAlignWithGravity<0");
-					rightWheel.SetValueFloat("Propulsion override", ORWheels);
-					leftWheel.SetValueFloat("Propulsion override", -ORWheels);
-				// }
-				// else{
-					// Echo("notisPendulumAlignWithGravity<0");
-					// rightWheel.SetValueFloat("Propulsion override", -ORWheels);
-					// leftWheel.SetValueFloat("Propulsion override", ORWheels);
-				// }
-			//}
+				// float ORWheels = 2.0f * Convert.ToSingle( Math.Pow(Math.Cos(areWheelsCOMalignWithGravity) / Math.PI ,1));
+				// //yes if = 0
+				// // if(isPendulumAlignWithGravity<0){
+					// //Echo("isPendulumAlignWithGravity<0");
+					// rightWheel.SetValueFloat("Propulsion override", ORWheels);
+					// leftWheel.SetValueFloat("Propulsion override", -ORWheels);
+				// // }
+				// // else{
+					// // Echo("notisPendulumAlignWithGravity<0");
+					// // rightWheel.SetValueFloat("Propulsion override", -ORWheels);
+					// // leftWheel.SetValueFloat("Propulsion override", ORWheels);
+				// // }
+			// //}
+			
+			double wantedCOMangularSpeed = 0;
+			double angleGravCOM = 0;
+			
+			double signlessAngleGravCOM = VectorHelper.VectorAngleBetween(crossRightLeftWheelsToCOM,gravNorm);
+			
+			double signOfCosAngleBetweenCOMwheelsAndGravNorm = shipLeftVector.Dot(gravNorm.Cross(wheelsCombToCOMNorm));
+			
+			Echo("signOfCosAngleBetweenCOMwheelsAndGravNorm:"+Math.Round(signOfCosAngleBetweenCOMwheelsAndGravNorm,2));
+			
+			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
+				angleGravCOM = -signlessAngleGravCOM;
+			}
+			else{
+				angleGravCOM = signlessAngleGravCOM;
+			}
+			
+			double angularSpeedGravCOM = (prevAngleGravCOM - angleGravCOM) / dts;
+			
+			if(angleGravCOM>0){
+				wantedCOMangularSpeed = 3 * angleGravCOM;
+			}
+			else{
+				wantedCOMangularSpeed = -3* angleGravCOM;
+			}
+			
+			Echo("wantedCOMangularSpeed:"+wantedCOMangularSpeed);
+			
+			double errorCOMangularSpeed = wantedCOMangularSpeed - angularSpeedGravCOM;
+			Echo("errorCOMangularSpeed:"+errorCOMangularSpeed);
+			
+			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
+			
+			rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
+			leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
+			
+			
+			
+			
+			prevAngleGravCOM = angleGravCOM;
 			
 			
 			
