@@ -655,12 +655,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double angularSpeedGravCOM = (prevAngleGravCOM - angleGravCOM) / dts;
 			
-			if(angleGravCOM>0){
-				wantedCOMangularSpeed = 3 * angleGravCOM;
-			}
-			else{
-				wantedCOMangularSpeed = -3* angleGravCOM;
-			}
+			wantedCOMangularSpeed = -1 * angleGravCOM;
 			
 			Echo("wantedCOMangularSpeed:"+wantedCOMangularSpeed);
 			
