@@ -679,14 +679,15 @@ public void Main(string argument, UpdateType updateSource)
 			//double h = 1;
 			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
-			//wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2));
-			wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
+			wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2));
+			//wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// if((m * g * h)*Math.Sin(theta)*2<m*speedBarycenter.Length()*speedBarycenter.Length()){
 				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// }
 			// else{
 				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2+m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// }
+			wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.5f),Convert.ToSingle(0.5f));
 			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
 				wantedCOMangularSpeed *= 1;
 			}
@@ -701,6 +702,7 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("wantedCOMangularSpeed:"+wantedCOMangularSpeed);
 			
 			double errorCOMangularSpeed = wantedCOMangularSpeed - angularSpeedGravCOM;
+			errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
 			Echo("errorCOMangularSpeed:"+errorCOMangularSpeed);
 			
 			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
