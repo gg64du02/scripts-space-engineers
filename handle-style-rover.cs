@@ -31,7 +31,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 }
 
 public void Save()
@@ -640,7 +640,16 @@ public void Main(string argument, UpdateType updateSource)
 			double wantedCOMangularSpeed = 0;
 			double angleGravCOM = 0;
 			
-			double signlessAngleGravCOM = VectorHelper.VectorAngleBetween(crossRightLeftWheelsToCOM,gravNorm);
+			//double signlessAngleGravCOM = VectorHelper.VectorAngleBetween(crossRightLeftWheelsToCOM,gravNorm);
+			
+			// Vector3D rightWheelToCOM = new Vector3D(barycenter - rightWheel.GetPosition());
+			// Vector3D leftWheelToCOM = new Vector3D(barycenter - leftWheel.GetPositionw());
+			Vector3D rightleftWheelToCOM = rightWheelToCOM + leftWheelToCOM;
+			double signlessAngleGravCOM = VectorHelper.VectorAngleBetween(gravNorm,-rightleftWheelToCOM);
+			
+			//double signlessAngleGravCOM = VectorHelper.VectorAngleBetween((),gravNorm);
+			
+			
 			
 			double signOfCosAngleBetweenCOMwheelsAndGravNorm = shipLeftVector.Dot(gravNorm.Cross(wheelsCombToCOMNorm));
 			
@@ -654,6 +663,7 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			
 			double angularSpeedGravCOM = (prevAngleGravCOM - angleGravCOM) / dts;
+			
 			
 			//E_p = MGH (1 - sin(theta))
 			//with w = d theta / dts
@@ -676,6 +686,10 @@ public void Main(string argument, UpdateType updateSource)
 			//angle between grav and wheels/bary
 			double theta = angleGravCOM;
 			double J = 40000;
+			//double J = 400000000;//+
+			//double J = 4000000000000;//-
+			//double J = 40000000000;//--
+			//double J = 4000000;//
 			//double h = 1;
 			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
@@ -687,7 +701,10 @@ public void Main(string argument, UpdateType updateSource)
 			// else{
 				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2+m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// }
-			wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.5f),Convert.ToSingle(0.5f));
+			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.5f),Convert.ToSingle(0.5f));
+			wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.2f),Convert.ToSingle(0.2f));
+			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
+			
 			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
 				wantedCOMangularSpeed *= 1;
 			}
@@ -702,8 +719,19 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("wantedCOMangularSpeed:"+wantedCOMangularSpeed);
 			
 			double errorCOMangularSpeed = wantedCOMangularSpeed - angularSpeedGravCOM;
-			errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
+			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.2f),Convert.ToSingle(.2f));
+			errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.4f),Convert.ToSingle(.4f));
+			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.5f),Convert.ToSingle(.5f));
+			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
 			Echo("errorCOMangularSpeed:"+errorCOMangularSpeed);
+			
+			
+			GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
+			if (listAntenna.Count != 0)
+			{
+				listAntenna[0].HudText = "errorCOMangularSpeed:"+Math.Round(errorCOMangularSpeed,2);
+			}
+			
 			
 			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
 			
