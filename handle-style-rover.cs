@@ -31,7 +31,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    Runtime.UpdateFrequency = UpdateFrequency.Update1;
 }
 
 public void Save()
@@ -685,11 +685,12 @@ public void Main(string argument, UpdateType updateSource)
 			double g = shipController.GetNaturalGravity().Length();
 			//angle between grav and wheels/bary
 			double theta = angleGravCOM;
-			double J = 40000;
+			//double J = 40000;
 			//double J = 400000000;//+
 			//double J = 4000000000000;//-
 			//double J = 40000000000;//--
 			//double J = 4000000;//
+			double J = 400000;
 			//double h = 1;
 			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
@@ -701,9 +702,8 @@ public void Main(string argument, UpdateType updateSource)
 			// else{
 				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2+m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// }
-			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.5f),Convert.ToSingle(0.5f));
-			wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.2f),Convert.ToSingle(0.2f));
-			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
+			
+			var str_to_display ="";
 			
 			if(signOfCosAngleBetweenCOMwheelsAndGravNorm>0){
 				wantedCOMangularSpeed *= 1;
@@ -712,6 +712,12 @@ public void Main(string argument, UpdateType updateSource)
 				wantedCOMangularSpeed *=  -1;
 			}
 			
+			str_to_display += "\n" +Math.Round(wantedCOMangularSpeed,2)  ;
+			str_to_display += "\n" +Math.Round(angularSpeedGravCOM,2)  ;
+			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.5f),Convert.ToSingle(0.5f));
+			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.2f),Convert.ToSingle(0.2f));
+			wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-0.3f),Convert.ToSingle(0.3f));
+			//wantedCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(wantedCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
 			//==============
 			
 			//wantedCOMangularSpeed = -1 * angleGravCOM;
@@ -720,7 +726,8 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double errorCOMangularSpeed = wantedCOMangularSpeed - angularSpeedGravCOM;
 			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.2f),Convert.ToSingle(.2f));
-			errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.4f),Convert.ToSingle(.4f));
+			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.4f),Convert.ToSingle(.4f));
+			errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.3f),Convert.ToSingle(.3f));
 			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-.5f),Convert.ToSingle(.5f));
 			//errorCOMangularSpeed = MyMath.Clamp(Convert.ToSingle(errorCOMangularSpeed),Convert.ToSingle(-1f),Convert.ToSingle(1f));
 			Echo("errorCOMangularSpeed:"+errorCOMangularSpeed);
@@ -729,7 +736,12 @@ public void Main(string argument, UpdateType updateSource)
 			GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 			if (listAntenna.Count != 0)
 			{
-				listAntenna[0].HudText = "errorCOMangularSpeed:"+Math.Round(errorCOMangularSpeed,2);
+				
+				//listAntenna[0].HudText = "errorCOMangularSpeed:"+Math.Round(errorCOMangularSpeed,2);
+				 
+				str_to_display += "\n" +Math.Round(errorCOMangularSpeed,2)  ;
+				str_to_display += "\n" +Math.Round(angleGravCOM,2)  ;
+				listAntenna[0].HudText = str_to_display;
 			}
 			
 			
