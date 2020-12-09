@@ -695,6 +695,8 @@ public void Main(string argument, UpdateType updateSource)
 			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
 			wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2));
+			//wantedCOMangularSpeed = theta;
+			//wantedCOMangularSpeed = 1000*theta*theta;
 			//wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
 			// if((m * g * h)*Math.Sin(theta)*2<m*speedBarycenter.Length()*speedBarycenter.Length()){
 				// wantedCOMangularSpeed = Math.Sqrt((1/J)*Math.Abs((m * g * h)*Math.Sin(theta)*2-m*speedBarycenter.Length()*speedBarycenter.Length()));
@@ -733,6 +735,28 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("errorCOMangularSpeed:"+errorCOMangularSpeed);
 			
 			
+			
+			float v_max_wheels = 300f;
+			
+			rightWheel.SetValueFloat("Speed Limit", v_max_wheels);
+			leftWheel.SetValueFloat("Speed Limit", v_max_wheels);
+			
+			float percentToFollowTheCurrentMouvement = Convert.ToSingle(speedBarycenter.Length()/(v_max_wheels/3.6f));
+			
+			//TODO: add the control for angular speed and momentum ?
+			//float pourcentTotalControlWheels =  percentToFollowTheCurrentMouvement + 0;
+			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement);
+			//float pourcentTotalControlWheels =  .5f;
+			
+			
+			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
+			
+			// rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
+			// leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
+			rightWheel.SetValueFloat("Propulsion override", pourcentTotalControlWheels);
+			leftWheel.SetValueFloat("Propulsion override", -pourcentTotalControlWheels);
+			
+			
 			GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 			if (listAntenna.Count != 0)
 			{
@@ -741,16 +765,9 @@ public void Main(string argument, UpdateType updateSource)
 				 
 				str_to_display += "\n" +Math.Round(errorCOMangularSpeed,2)  ;
 				str_to_display += "\n" +Math.Round(angleGravCOM,2)  ;
+				str_to_display += "\n" +Math.Round(pourcentTotalControlWheels,2)  ;
 				listAntenna[0].HudText = str_to_display;
 			}
-			
-			
-			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
-			
-			rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
-			leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
-			
-			
 			
 			
 			prevAngleGravCOM = angleGravCOM;
