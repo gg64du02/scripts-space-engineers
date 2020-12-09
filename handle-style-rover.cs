@@ -18,6 +18,7 @@ PIDController pidRightWheelSpeed = new  PIDController(0.1f, .00f, 0.00f);
 
 Vector3D prevBarycenter = new Vector3D(0,0,0);
 double prevAngleGravCOM = 0;
+Vector3D prevRightWheel = new Vector3D(0,0,0);
 
 public Program()
 {
@@ -31,7 +32,7 @@ public Program()
     // It's recommended to set RuntimeInfo.UpdateFrequency 
     // here, which will allow your script to run itself without a 
     // timer block.
-    Runtime.UpdateFrequency = UpdateFrequency.Update1;
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
 }
 
 public void Save()
@@ -650,6 +651,15 @@ public void Main(string argument, UpdateType updateSource)
 			//double signlessAngleGravCOM = VectorHelper.VectorAngleBetween((),gravNorm);
 			
 			
+			//Echo("rightWheel.GetPosition():"+Vector3D.Round(rightWheel.GetPosition(),2));
+			//Echo("rightWheel.GetShipVelocities():"+Vector3D.Round(rightWheel.GetShipVelocities(),2));
+			//derivative of rightWheel - derivative of barycenter
+			
+			Vector3D speedRightWheelPosition = (prevRightWheel - rightWheel.GetPosition()) / dts;
+			prevRightWheel = rightWheel.GetPosition();
+			
+			Vector3D diffSpeedBarycenterRightWheel =speedBarycenter- speedRightWheelPosition ;
+			
 			
 			double signOfCosAngleBetweenCOMwheelsAndGravNorm = shipLeftVector.Dot(gravNorm.Cross(wheelsCombToCOMNorm));
 			
@@ -743,6 +753,9 @@ public void Main(string argument, UpdateType updateSource)
 			leftWheel.SetValueFloat("Speed Limit", v_max_wheels_km_h);
 			
 			float percentToFollowTheCurrentMouvement = Convert.ToSingle(speedBarycenter.Length()/(v_max_wheels_m_s));
+			//float percentToFollowTheCurrentMouvement = Convert.ToSingle(rightWheel..Length()/(v_max_wheels_m_s));
+			
+			
 			
 			if(shipForwardVector.Dot(speedBarycenter)>0){
 				percentToFollowTheCurrentMouvement *= -1;
@@ -752,14 +765,28 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			
 			
-			float percentAngularErrorWheels = Convert.ToSingle(errorCOMangularSpeed*h/v_max_wheels_m_s);
+			//float percentAngularErrorWheels = Convert.ToSingle(errorCOMangularSpeed*h/v_max_wheels_m_s);
+			
+			float percentAngularErrorWheels = Convert.ToSingle(diffSpeedBarycenterRightWheel.Length()/h);
+			if(shipForwardVector.Dot(diffSpeedBarycenterRightWheel)>0){
+				percentAngularErrorWheels *= 1;
+			}
+			else{
+				percentAngularErrorWheels *= -1;
+				}
+			
 			
 			//TODO: add the control for angular speed and momentum ?
 			//float pourcentTotalControlWheels =  percentToFollowTheCurrentMouvement + 0;
 			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement);
-			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+60*percentAngularErrorWheels);
-			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+120*percentAngularErrorWheels);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+10*percentAngularErrorWheels);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+1*percentAngularErrorWheels);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+6*percentAngularErrorWheels);
+			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+1*percentAngularErrorWheels);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(0+6*percentAngularErrorWheels);
 			//float pourcentTotalControlWheels =  .5f;
+			
+			//pourcentTotalControlWheels = MyMath.Clamp(Convert.ToSingle(pourcentTotalControlWheels),Convert.ToSingle(-.2f),Convert.ToSingle(.2f));
 			
 			
 			float errorCOMangularSpeedFloat = -Convert.ToSingle(errorCOMangularSpeed);
@@ -777,7 +804,8 @@ public void Main(string argument, UpdateType updateSource)
 				//listAntenna[0].HudText = "errorCOMangularSpeed:"+Math.Round(errorCOMangularSpeed,2);
 				 
 				str_to_display += "\n" +Math.Round(errorCOMangularSpeed,2)  ;
-				str_to_display += "\nangleGravCOM." +Math.Round(angleGravCOM,2)  ;
+				//str_to_display += "\nangleGravCOM." +Math.Round(angleGravCOM,2)  ;
+				str_to_display += "\n" +Math.Round(angleGravCOM,2)  ;
 				str_to_display += "\n" +Math.Round(h,2)  ;
 				str_to_display += "\n" +Math.Round(percentToFollowTheCurrentMouvement,2)  ;
 				str_to_display += "\n" +Math.Round(percentAngularErrorWheels,2)  ;
