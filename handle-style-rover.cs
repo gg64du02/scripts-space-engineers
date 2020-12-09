@@ -685,12 +685,12 @@ public void Main(string argument, UpdateType updateSource)
 			double g = shipController.GetNaturalGravity().Length();
 			//angle between grav and wheels/bary
 			double theta = angleGravCOM;
-			//double J = 40000;
+			double J = 40000;
 			//double J = 400000000;//+
 			//double J = 4000000000000;//-
 			//double J = 40000000000;//--
 			//double J = 4000000;//
-			double J = 400000;
+			//double J = 400000;
 			//double h = 1;
 			double h = (((2*barycenter)-(leftWheel.GetPosition()+rightWheel.GetPosition()))*.5).Length();
 			
@@ -736,20 +736,33 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			
-			float v_max_wheels = 300f;
+			float v_max_wheels_km_h = 300f;
+			float v_max_wheels_m_s = v_max_wheels_km_h/3.6f;
 			
-			rightWheel.SetValueFloat("Speed Limit", v_max_wheels);
-			leftWheel.SetValueFloat("Speed Limit", v_max_wheels);
+			rightWheel.SetValueFloat("Speed Limit", v_max_wheels_km_h);
+			leftWheel.SetValueFloat("Speed Limit", v_max_wheels_km_h);
 			
-			float percentToFollowTheCurrentMouvement = Convert.ToSingle(speedBarycenter.Length()/(v_max_wheels/3.6f));
+			float percentToFollowTheCurrentMouvement = Convert.ToSingle(speedBarycenter.Length()/(v_max_wheels_m_s));
+			
+			if(shipForwardVector.Dot(speedBarycenter)>0){
+				percentToFollowTheCurrentMouvement *= -1;
+			}
+			else{
+				percentToFollowTheCurrentMouvement *=  1;
+			}
+			
+			
+			float percentAngularErrorWheels = Convert.ToSingle(errorCOMangularSpeed*h/v_max_wheels_m_s);
 			
 			//TODO: add the control for angular speed and momentum ?
 			//float pourcentTotalControlWheels =  percentToFollowTheCurrentMouvement + 0;
-			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement);
+			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+60*percentAngularErrorWheels);
+			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+120*percentAngularErrorWheels);
 			//float pourcentTotalControlWheels =  .5f;
 			
 			
-			float errorCOMangularSpeedFloat = Convert.ToSingle(errorCOMangularSpeed);
+			float errorCOMangularSpeedFloat = -Convert.ToSingle(errorCOMangularSpeed);
 			
 			// rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
 			// leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
@@ -764,7 +777,10 @@ public void Main(string argument, UpdateType updateSource)
 				//listAntenna[0].HudText = "errorCOMangularSpeed:"+Math.Round(errorCOMangularSpeed,2);
 				 
 				str_to_display += "\n" +Math.Round(errorCOMangularSpeed,2)  ;
-				str_to_display += "\n" +Math.Round(angleGravCOM,2)  ;
+				str_to_display += "\nangleGravCOM." +Math.Round(angleGravCOM,2)  ;
+				str_to_display += "\n" +Math.Round(h,2)  ;
+				str_to_display += "\n" +Math.Round(percentToFollowTheCurrentMouvement,2)  ;
+				str_to_display += "\n" +Math.Round(percentAngularErrorWheels,2)  ;
 				str_to_display += "\n" +Math.Round(pourcentTotalControlWheels,2)  ;
 				listAntenna[0].HudText = str_to_display;
 			}
