@@ -20,6 +20,9 @@ Vector3D prevBarycenter = new Vector3D(0,0,0);
 double prevAngleGravCOM = 0;
 Vector3D prevRightWheel = new Vector3D(0,0,0);
 
+simplLPfilter filterBarySpeed = new simplLPfilter(0.16f,0.01f);
+//simplLPfilter filterBarySpeed = new simplLPfilter(0.016f,100f);
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -33,6 +36,7 @@ public Program()
     // here, which will allow your script to run itself without a 
     // timer block.
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
+    //Runtime.UpdateFrequency = UpdateFrequency.Update1;
 }
 
 public void Save()
@@ -784,6 +788,11 @@ public void Main(string argument, UpdateType updateSource)
 			//float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+6*percentAngularErrorWheels);
 			float pourcentTotalControlWheels =  Convert.ToSingle(percentToFollowTheCurrentMouvement+1*percentAngularErrorWheels);
 			//float pourcentTotalControlWheels =  Convert.ToSingle(0+6*percentAngularErrorWheels);
+			
+			
+			float lpResult =  filterBarySpeed.compute(pourcentTotalControlWheels);
+			Echo("lpResult:"+lpResult);
+			
 			//float pourcentTotalControlWheels =  .5f;
 			
 			//pourcentTotalControlWheels = MyMath.Clamp(Convert.ToSingle(pourcentTotalControlWheels),Convert.ToSingle(-.2f),Convert.ToSingle(.2f));
@@ -793,8 +802,12 @@ public void Main(string argument, UpdateType updateSource)
 			
 			// rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
 			// leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
-			rightWheel.SetValueFloat("Propulsion override", pourcentTotalControlWheels);
-			leftWheel.SetValueFloat("Propulsion override", -pourcentTotalControlWheels);
+			// rightWheel.SetValueFloat("Propulsion override", pourcentTotalControlWheels);
+			// leftWheel.SetValueFloat("Propulsion override", -pourcentTotalControlWheels);
+			rightWheel.SetValueFloat("Propulsion override", lpResult);
+			leftWheel.SetValueFloat("Propulsion override", -lpResult);
+			// rightWheel.SetValueFloat("Propulsion override", -lpResult);
+			// leftWheel.SetValueFloat("Propulsion override", lpResult);
 			
 			
 			GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
@@ -810,6 +823,7 @@ public void Main(string argument, UpdateType updateSource)
 				str_to_display += "\n" +Math.Round(percentToFollowTheCurrentMouvement,2)  ;
 				str_to_display += "\n" +Math.Round(percentAngularErrorWheels,2)  ;
 				str_to_display += "\n" +Math.Round(pourcentTotalControlWheels,2)  ;
+				str_to_display += "\n" +Math.Round(lpResult,2)  ;
 				listAntenna[0].HudText = str_to_display;
 			}
 			
@@ -1056,4 +1070,28 @@ public static class VectorHelper
         return vectorToProject.Dot(projectsToVector) / projectsToVector.LengthSquared() * projectsToVector;
     }
 
+}
+
+
+public class simplLPfilter
+{
+	float output = 0f;
+	 float expected_dts =0f;
+	 float frequency = 100f;
+	 float tau=1f;
+	public simplLPfilter(float expected_dts, float frequency){
+		this.expected_dts = expected_dts;
+		this.frequency = frequency;
+		this.tau = 1 / (1/(2*Convert.ToSingle(Math.PI) *this.frequency));
+	}
+	
+	public float compute(float new_sample){
+		float tmp = 0f;
+		//tmp = this.output*0.99f + (new_sample-this.output)/this.expected_dts;
+		//tmp = this.output*(1-this.expected_dts) + (1/(2*Convert.ToSingle(Math.PI) *this.frequency))*((new_sample-this.output)/this.expected_dts);
+		//tmp = this.output*(1-this.expected_dts) + (1/this.tau)*((new_sample-this.output))*this.expected_dts;
+		tmp = this.output + (1/this.tau)*((new_sample-this.output))*this.expected_dts;
+		
+		return tmp;
+	}
 }
