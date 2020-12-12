@@ -67,7 +67,8 @@ public Program()
 {
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
     basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    lcdHelper = new LCDHelper(basicLibrary, new Color(0, 255, 0), 1.5f);
+    //lcdHelper = new LCDHelper(basicLibrary, new Color(0, 255, 0), 1.5f);
+    lcdHelper = new LCDHelper(basicLibrary, new Color(255, 255, 255), 1.5f);
 	
 	GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 }
@@ -759,7 +760,10 @@ public void Main(string argument)
     {
         listAntenna[0].HudText = str_to_display;
     }
-    myRemoteControl.CubeGrid.CustomName = str_to_display;
+	Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
+    // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
+			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
+	// }
 
     debugString += "\n" + "control:" + control;
     Echo("control:" + Math.Round((control), 2));
