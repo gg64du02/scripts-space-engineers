@@ -23,6 +23,8 @@ Vector3D prevRightWheel = new Vector3D(0,0,0);
 simplLPfilter filterBarySpeed = new simplLPfilter(0.16f,0.01f);
 //simplLPfilter filterBarySpeed = new simplLPfilter(0.016f,100f);
 
+Vector3D prevWheelsCombToCOM = new Vector3D(0,0,0);
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -790,6 +792,24 @@ public void Main(string argument, UpdateType updateSource)
 			//float pourcentTotalControlWheels =  Convert.ToSingle(0+6*percentAngularErrorWheels);
 			
 			
+			
+			Vector3D diffWheelsCombToCOM = prevWheelsCombToCOM - wheelsCombToCOM/2;
+			double angularSpeedWheelsCombToCOMRelativeToShipForwardVector = VectorHelper.VectorAngleBetween(diffWheelsCombToCOM,gravNorm);
+			double signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector = shipLeftVector.Dot(diffWheelsCombToCOM.Cross(gravNorm));
+			if(signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector>0){
+				angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= -1;
+			}
+			else{
+				angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= 1;
+			}
+			prevWheelsCombToCOM = wheelsCombToCOM / 2;
+			double jointsOffsetSpeed = h * angularSpeedWheelsCombToCOMRelativeToShipForwardVector/v_max_wheels_m_s;
+			if(VectorHelper.VectorAngleBetween(gravNorm,wheelsCombToCOM)>0.3){
+				pourcentTotalControlWheels += Convert.ToSingle(jointsOffsetSpeed);
+			}
+			
+			
+			
 			float lpResult =  filterBarySpeed.compute(pourcentTotalControlWheels);
 			Echo("lpResult:"+lpResult);
 			
@@ -802,10 +822,10 @@ public void Main(string argument, UpdateType updateSource)
 			
 			// rightWheel.SetValueFloat("Propulsion override", errorCOMangularSpeedFloat);
 			// leftWheel.SetValueFloat("Propulsion override", -errorCOMangularSpeedFloat);
-			// rightWheel.SetValueFloat("Propulsion override", pourcentTotalControlWheels);
-			// leftWheel.SetValueFloat("Propulsion override", -pourcentTotalControlWheels);
-			rightWheel.SetValueFloat("Propulsion override", lpResult);
-			leftWheel.SetValueFloat("Propulsion override", -lpResult);
+			rightWheel.SetValueFloat("Propulsion override", pourcentTotalControlWheels);
+			leftWheel.SetValueFloat("Propulsion override", -pourcentTotalControlWheels);
+			// rightWheel.SetValueFloat("Propulsion override", lpResult);
+			// leftWheel.SetValueFloat("Propulsion override", -lpResult);
 			// rightWheel.SetValueFloat("Propulsion override", -lpResult);
 			// leftWheel.SetValueFloat("Propulsion override", lpResult);
 			
@@ -824,6 +844,7 @@ public void Main(string argument, UpdateType updateSource)
 				str_to_display += "\n" +Math.Round(percentAngularErrorWheels,2)  ;
 				str_to_display += "\n" +Math.Round(pourcentTotalControlWheels,2)  ;
 				str_to_display += "\n" +Math.Round(lpResult,2)  ;
+				str_to_display += "\n" +Math.Round(angularSpeedWheelsCombToCOMRelativeToShipForwardVector,2)  ;
 				listAntenna[0].HudText = str_to_display;
 			}
 			
