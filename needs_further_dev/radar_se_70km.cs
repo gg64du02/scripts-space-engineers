@@ -290,6 +290,7 @@ public void Main(string argument, UpdateType updateSource)
 					sb.AppendFormat("total:"+scanResults.Count + " Pages:"+ (scanResults.Count/5+1) +"\n");
 					sb.AppendFormat("total:"+scanResults.Count + " Pages:"+ (scanResults.Count/5+1) +"Page:"+pageNumber+"\n");
 					//tmpCmdTest.Contains("-p")
+					//TODO: needs to support page numbers
 					foreach (var result in scanResults){
 						Vector3D tmpV3D = (Vector3D)result.HitPosition;
 						MyWaypointInfo tmpWP = new MyWaypointInfo("scan " + scanResults.IndexOf(result), Vector3D.Round((tmpV3D),0));
