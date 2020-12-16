@@ -25,6 +25,8 @@ simplLPfilter filterBarySpeed = new simplLPfilter(0.16f,0.01f);
 
 Vector3D prevWheelsCombToCOM = new Vector3D(0,0,0);
 
+double prevAngleWheelsCombToCOMRelativeToShipForwardVector = 0;
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -794,19 +796,39 @@ public void Main(string argument, UpdateType updateSource)
 			
 			
 			Vector3D diffWheelsCombToCOM = prevWheelsCombToCOM - wheelsCombToCOM/2;
-			double angularSpeedWheelsCombToCOMRelativeToShipForwardVector = VectorHelper.VectorAngleBetween(diffWheelsCombToCOM,gravNorm);
-			double signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector = shipLeftVector.Dot(diffWheelsCombToCOM.Cross(gravNorm));
-			if(signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector>0){
-				angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= -1;
+			double angleWheelsCombToCOMRelativeToShipForwardVector = VectorHelper.VectorAngleBetween(diffWheelsCombToCOM,gravNorm);
+			double signOfangleWheelsCombToCOMRelativeToShipForwardVector = shipLeftVector.Dot(diffWheelsCombToCOM.Cross(gravNorm));
+			if(signOfangleWheelsCombToCOMRelativeToShipForwardVector>0){
+				angleWheelsCombToCOMRelativeToShipForwardVector *= 1;
 			}
 			else{
-				angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= 1;
+				angleWheelsCombToCOMRelativeToShipForwardVector *= -1;
 			}
 			prevWheelsCombToCOM = wheelsCombToCOM / 2;
+			
+			double angularSpeedWheelsCombToCOMRelativeToShipForwardVector = (prevAngleWheelsCombToCOMRelativeToShipForwardVector - angleWheelsCombToCOMRelativeToShipForwardVector)/dts;
+			
 			double jointsOffsetSpeed = h * angularSpeedWheelsCombToCOMRelativeToShipForwardVector/v_max_wheels_m_s;
-			if(VectorHelper.VectorAngleBetween(gravNorm,wheelsCombToCOM)>0.3){
+			if(VectorHelper.VectorAngleBetween(gravNorm,wheelsCombToCOM)>5){
 				pourcentTotalControlWheels += Convert.ToSingle(jointsOffsetSpeed);
 			}
+			
+			
+			// double angularSpeedWheelsCombToCOMRelativeToShipForwardVector = VectorHelper.VectorAngleBetween(diffWheelsCombToCOM,gravNorm);
+			
+			// double angularSpeedWheelsCombToCOMRelativeToShipForwardVector = VectorHelper.VectorAngleBetween(diffWheelsCombToCOM,gravNorm);
+			// double signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector = shipLeftVector.Dot(diffWheelsCombToCOM.Cross(gravNorm));
+			// if(signOfangularSpeedWheelsCombToCOMRelativeToShipForwardVector>0){
+				// angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= 1;
+			// }
+			// else{
+				// angularSpeedWheelsCombToCOMRelativeToShipForwardVector *= -1;
+			// }
+			// prevWheelsCombToCOM = wheelsCombToCOM / 2;
+			// double jointsOffsetSpeed = h * angularSpeedWheelsCombToCOMRelativeToShipForwardVector/v_max_wheels_m_s;
+			// if(VectorHelper.VectorAngleBetween(gravNorm,wheelsCombToCOM)>0.5){
+				// pourcentTotalControlWheels += Convert.ToSingle(jointsOffsetSpeed);
+			// }
 			
 			
 			
