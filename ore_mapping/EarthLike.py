@@ -5,6 +5,12 @@ from matplotlib import pyplot
 import numpy as np
 import os
 
+def centeroidnp(arr):
+    length = arr.shape[0]
+    sum_x = np.sum(arr[:, 0])
+    sum_y = np.sum(arr[:, 1])
+    return sum_x/length, sum_y/length
+
 from skimage import measure
 for i in range(6):
     # print(i)
@@ -84,6 +90,9 @@ for i in range(6):
                 if( tmp_region_size != regionSize):
                     print("regionSize:",regionSize)
                     tmp_region_size = regionSize
+
+                centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
+                print("centroid_surface_lack:",centroid_surface_lack)
 
     #find the centroid on lack spot with constant_surface_lack
 
