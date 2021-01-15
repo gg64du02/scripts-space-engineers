@@ -78,6 +78,9 @@ for i in range(6):
                 # props.image  # array matching the bbox sub-image
                 # print(len(props.coords))  # list of (row,col) pixel indices
                 regionSize = len(props.coords)
+                pointsOfCurrentDetectedLackArray = props.coords
+                for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
+                    converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 if( tmp_region_size != regionSize):
                     print("regionSize:",regionSize)
                     tmp_region_size = regionSize
