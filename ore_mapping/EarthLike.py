@@ -11,6 +11,11 @@ def centeroidnp(arr):
     sum_y = np.sum(arr[:, 1])
     return sum_x/length, sum_y/length
 
+
+import array as arr
+planet_radius = 62000 #in meters
+center_of_planet = arr.array('d', [0, 0, 0])
+
 from skimage import measure
 for i in range(6):
     # print(i)
@@ -21,6 +26,9 @@ for i in range(6):
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
     if(i==2):
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
+        # GPS: test4 front ?:0: 0:-62000:  # FF75C9F1:
+        centerFacePosition = arr.array('d', [0, 0, -planet_radius])
+        vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==3):
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
     if(i==4):
@@ -54,9 +62,6 @@ for i in range(6):
     #2b
     constant_hidden_lack  = 16*2+11
 
-    planet_diameter = 62000 #in meters
-
-    center_of_planet = [0,0,0]
 
     converted_to_bool_surface_array  = np.zeros_like(data_lack_layer)
     for j in range(2048):
@@ -93,6 +98,32 @@ for i in range(6):
 
                 centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
                 print("centroid_surface_lack:",centroid_surface_lack)
+
+
+    try:
+        print("vector3DNormalToFaceScanned:",vector3DNormalToFaceScanned)
+    except NameError:
+        print("vector3DNormalToFaceScanned is not defined")
+
+    try:
+        tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
+        # #generate a point of a the cube that it is based on
+        # #parameters are: planet_radius, image_width, centroid_surface_lack
+        # # example: for the front face it is should x,y but not z
+        # intX = planet_radius * (centroid_surface_lack[0]-2048/2) * planet_radius
+        # intY = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+        # # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+        #
+        # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
+        # # vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
+        #
+        # print("tmpPointOnTheCubeFace:",tmpPointOnTheCubeFace)
+
+
+    except NameError:
+        print("tmpPointOnTheCubeFace computation failed")
+
+
 
     #find the centroid on lack spot with constant_surface_lack
 
