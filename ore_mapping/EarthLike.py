@@ -17,7 +17,7 @@ def convertArraryToGPSString(arrayOfThree):
     iLackSurface += 1
     # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
     tmpGpsString = "GPS: LackN" + str(iLackSurface) + ":" + str(arrayOfThree[0]) + ":" + \
-                   str(arrayOfThree[1]) + ":" + str(arrayOfThree[2]) + ":#FF75C9F1:"
+                   str(arrayOfThree[1]) + ":" + str(arrayOfThree[2]) + ":#F175DC:"
     return tmpGpsString
 
 import array as arr
@@ -40,6 +40,7 @@ for i in range(6):
         centerFacePosition = arr.array('d', [0, 0, -planet_radius])
         vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==3):
+        break
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
     if(i==4):
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
@@ -109,52 +110,53 @@ for i in range(6):
                 centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
                 centroid_surface_lack_array = arr.array('d', [centroid_surface_lack[0], centroid_surface_lack[1]])
                 # print("centroid_surface_lack:",centroid_surface_lack)
-                print("centroid_surface_lack_array:",centroid_surface_lack_array)
+                # print("centroid_surface_lack_array:",centroid_surface_lack_array)
 
 
-    try:
-        print("vector3DNormalToFaceScanned:",vector3DNormalToFaceScanned)
-    except NameError:
-        print("vector3DNormalToFaceScanned is not defined")
+                try:
+                    pass
+                    # print("vector3DNormalToFaceScanned:",vector3DNormalToFaceScanned)
+                except NameError:
+                    print("vector3DNormalToFaceScanned is not defined")
 
-    try:
-        tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
+                try:
+                    tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
 
-        # we can test:
-        #case1: if unit north (0,-1,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
-        #case2: if unit ? (-1,0,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
-        #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
+                    # we can test:
+                    #case1: if unit north (0,-1,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+                    #case2: if unit ? (-1,0,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+                    #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
 
-        # caseX got their custom formulas to generate the points
+                    # caseX got their custom formulas to generate the points
 
-        centroid_surface_lack_planetSized = arr.array('d', [planet_radius* (centroid_surface_lack_array[0]/2048),planet_radius* (centroid_surface_lack_array[1]/2048)])
-        print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
-
-
-        #generate a point of a the cube that it is based on
-        #parameters are: planet_radius, image_width, centroid_surface_lack
-        # example: for the front face it is should x,y but not z
-        intX = - planet_radius+centroid_surface_lack_planetSized[0]
-        intY = - planet_radius+centroid_surface_lack_planetSized[1]
-        # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-        print("intX:",intX,"|intY:",intY)
-        generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
-        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-        print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-        print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-        GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
-
-        print("GPSString:",GPSString)
+                    centroid_surface_lack_planetSized = arr.array('d', [planet_radius* (centroid_surface_lack_array[0]/2048),planet_radius* (centroid_surface_lack_array[1]/2048)])
+                    # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
 
 
-        # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
-        # # vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
-        # print("tmpPointOnTheCubeFace:",tmpPointOnTheCubeFace)
+                    #generate a point of a the cube that it is based on
+                    #parameters are: planet_radius, image_width, centroid_surface_lack
+                    # example: for the front face it is should x,y but not z
+                    intX = - planet_radius+centroid_surface_lack_planetSized[0]
+                    intY = - planet_radius+centroid_surface_lack_planetSized[1]
+                    # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+                    # print("intX:",intX,"|intY:",intY)
+                    generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
+                    generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
+                    # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                    # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
+
+                    GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
+
+                    print(GPSString)
 
 
-    except NameError:
-        print("tmpPointOnTheCubeFace computation failed")
+                    # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
+                    # # vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
+                    # print("tmpPointOnTheCubeFace:",tmpPointOnTheCubeFace)
+
+
+                except NameError:
+                    print("tmpPointOnTheCubeFace computation failed")
 
 
 
