@@ -12,6 +12,14 @@ def centeroidnp(arr):
     return sum_x/length, sum_y/length
 
 
+def convertArraryToGPSString(arrayOfThree):
+    iLackSurface = 0
+    iLackSurface += 1
+    # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
+    tmpGpsString = "GPS: LackN" + str(iLackSurface) + ":" + str(arrayOfThree[0]) + ":" + \
+                   str(arrayOfThree[1]) + ":" + str(arrayOfThree[2]) + ":#FF75C9F1:"
+    return tmpGpsString
+
 import array as arr
 planet_radius = 62000 #in meters
 center_of_planet = arr.array('d', [0, 0, 0])
@@ -126,14 +134,22 @@ for i in range(6):
         #generate a point of a the cube that it is based on
         #parameters are: planet_radius, image_width, centroid_surface_lack
         # example: for the front face it is should x,y but not z
-        intX = planet_radius * (centroid_surface_lack[0]-2048/2)
-        intY = planet_radius * (centroid_surface_lack[1]-2048/2)
+        intX = - planet_radius+centroid_surface_lack_planetSized[0]
+        intY = - planet_radius+centroid_surface_lack_planetSized[1]
         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
         print("intX:",intX,"|intY:",intY)
-        #
+        generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
+        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
+        print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+        print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
+
+        GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
+
+        print("GPSString:",GPSString)
+
+
         # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
         # # vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
-        #
         # print("tmpPointOnTheCubeFace:",tmpPointOnTheCubeFace)
 
 
