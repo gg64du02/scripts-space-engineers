@@ -21,8 +21,10 @@ for i in range(6):
     # print(i)
     folder_planetsfiles = 'planets_files/EarthLike/'
     if(i==0):
+        continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
     if(i==1):
+        continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
     if(i==2):
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
@@ -97,7 +99,9 @@ for i in range(6):
                     tmp_region_size = regionSize
 
                 centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
-                print("centroid_surface_lack:",centroid_surface_lack)
+                centroid_surface_lack_array = arr.array('d', [centroid_surface_lack[0], centroid_surface_lack[1]])
+                # print("centroid_surface_lack:",centroid_surface_lack)
+                print("centroid_surface_lack_array:",centroid_surface_lack_array)
 
 
     try:
@@ -107,12 +111,25 @@ for i in range(6):
 
     try:
         tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
-        # #generate a point of a the cube that it is based on
-        # #parameters are: planet_radius, image_width, centroid_surface_lack
-        # # example: for the front face it is should x,y but not z
-        # intX = planet_radius * (centroid_surface_lack[0]-2048/2) * planet_radius
-        # intY = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-        # # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+
+        # we can test:
+        #case1: if unit north (0,-1,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+        #case2: if unit ? (-1,0,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+        #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
+
+        # caseX got their custom formulas to generate the points
+
+        centroid_surface_lack_planetSized = arr.array('d', [planet_radius* (centroid_surface_lack_array[0]/2048),planet_radius* (centroid_surface_lack_array[1]/2048)])
+        print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
+
+
+        #generate a point of a the cube that it is based on
+        #parameters are: planet_radius, image_width, centroid_surface_lack
+        # example: for the front face it is should x,y but not z
+        intX = planet_radius * (centroid_surface_lack[0]-2048/2)
+        intY = planet_radius * (centroid_surface_lack[1]-2048/2)
+        # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+        print("intX:",intX,"|intY:",intY)
         #
         # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
         # # vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
