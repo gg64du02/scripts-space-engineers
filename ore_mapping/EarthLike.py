@@ -12,8 +12,10 @@ def centeroidnp(arr):
     return sum_x/length, sum_y/length
 
 
+iLackSurface = 0
+
 def convertArraryToGPSString(arrayOfThree):
-    iLackSurface = 0
+    global iLackSurface
     iLackSurface += 1
     # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
     tmpGpsString = "GPS: LackN" + str(iLackSurface) + ":" + str(arrayOfThree[0]) + ":" + \
@@ -104,7 +106,7 @@ for i in range(6):
                 for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
                     converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 if( tmp_region_size != regionSize):
-                    print("regionSize:",regionSize)
+                    # print("regionSize:",regionSize)
                     tmp_region_size = regionSize
 
                 centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
@@ -129,15 +131,19 @@ for i in range(6):
 
                     # caseX got their custom formulas to generate the points
 
-                    centroid_surface_lack_planetSized = arr.array('d', [planet_radius* (centroid_surface_lack_array[0]/2048),planet_radius* (centroid_surface_lack_array[1]/2048)])
+                    centroid_surface_lack_planetSized = arr.array('d', [2*planet_radius* (centroid_surface_lack_array[0]/2048),2*planet_radius* (centroid_surface_lack_array[1]/2048)])
                     # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
 
 
                     #generate a point of a the cube that it is based on
                     #parameters are: planet_radius, image_width, centroid_surface_lack
                     # example: for the front face it is should x,y but not z
-                    intX = - planet_radius+centroid_surface_lack_planetSized[0]
-                    intY = - planet_radius+centroid_surface_lack_planetSized[1]
+                    # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
+                    # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
+                    # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                    # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                    intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                    intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                     # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
                     # print("intX:",intX,"|intY:",intY)
                     generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
@@ -148,6 +154,8 @@ for i in range(6):
                     GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
 
                     print(GPSString)
+
+                    # GPS: PREMIER LAC FRONT ?:-32251.04: 20263.04:-48243.61:  # FF75C9F1:
 
 
                     # # centerFacePosition = arr.array('d', [0, 0, -planet_radius])
