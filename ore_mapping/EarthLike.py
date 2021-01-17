@@ -49,9 +49,12 @@ for i in range(6):
         centerFacePosition = arr.array('d', [0, 0, -planet_radius])
         vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==3):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
+        #to be tested
+        centerFacePosition = arr.array('d', [planet_radius, 0, 0])
     if(i==4):
+        continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
         #to be tested
         centerFacePosition = arr.array('d', [-planet_radius, 0, 0])
@@ -192,6 +195,31 @@ for i in range(6):
                         GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
 
                         # print(GPSString)
+
+                    if(i==3):
+                        #generate a point of a the cube that it is based on
+                        #parameters are: planet_radius, image_width, centroid_surface_lack
+                        # example: for the front face it is should x,y but not z
+                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
+                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
+                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        # print("intX:",intX,"|intY:",intY)
+                        generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,])
+                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
+                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
+
+                        GPSString = convertArraryToGPSString(generated_gps_point_on_planet)
+
+                        # if(centroid_surface_lack_array[1]<900):
+                        #     if(centroid_surface_lack_array[0]<900):
+                        #         print("lower right:")
+                        print("i:",3)
+                        print(GPSString)
 
                     if(i==4):
                         #generate a point of a the cube that it is based on
