@@ -36,7 +36,6 @@ for i in range(6):
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, planet_radius])
-        vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==1):
         # continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
@@ -47,7 +46,6 @@ for i in range(6):
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, -planet_radius])
-        vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==3):
         # continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
@@ -131,12 +129,6 @@ for i in range(6):
 
 
                 try:
-                    pass
-                    # print("vector3DNormalToFaceScanned:",vector3DNormalToFaceScanned)
-                except NameError:
-                    print("vector3DNormalToFaceScanned is not defined")
-
-                try:
                     tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
 
                     # we can test:
@@ -150,25 +142,10 @@ for i in range(6):
                     # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
 
                     if(i==0):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
                         generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius])
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
-
-                        # if(centroid_surface_lack_array[1]>1100):
-                        #     if(centroid_surface_lack_array[0]>1100):
-                        #         print("lower right:")
-
-                        print(GPSString)
-
 
                     if(i==1):
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
