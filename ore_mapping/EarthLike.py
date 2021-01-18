@@ -18,8 +18,8 @@ def convertArraryToGPSString(prefix,arrayOfThree):
     global iLackSurface
     iLackSurface += 1
     # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
-    tmpGpsString = "GPS: "+str(prefix)+"N" + str(iLackSurface) + ":" + str(arrayOfThree[0]) + ":" + \
-                   str(arrayOfThree[1]) + ":" + str(arrayOfThree[2]) + ":#F175DC:"
+    tmpGpsString = "GPS: "+str(prefix)+"N" + str(iLackSurface) + ":" + str(round(arrayOfThree[0],1)) + ":" + \
+                   str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
     return tmpGpsString
 
 import array as arr
@@ -155,8 +155,8 @@ for i in range(6):
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius])
+                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
                         # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
                         # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
@@ -174,88 +174,44 @@ for i in range(6):
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [intX,-planet_radius, intZ,])
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
-
-                        # if(centroid_surface_lack_array[1]>900):
-                        #     if(centroid_surface_lack_array[0]>900):
-                        #         print("lower right:")
-                        # print("i:",1)
-                        print(GPSString)
-
 
                     if(i==2):
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
-
-                        print(GPSString)
 
                     if(i==3):
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,])
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
-
-                        # if(centroid_surface_lack_array[1]<900):
-                        #     if(centroid_surface_lack_array[0]<900):
-                        #         print("lower right:")
-                        # print("i:",3)
-                        print(GPSString)
 
                     if(i==4):
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [-planet_radius,intY, intZ,])
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
-
-                        # if(centroid_surface_lack_array[1]>900):
-                        #     if(centroid_surface_lack_array[0]>900):
-                                # print("lower right:")
-                        # print("i:",4)
-                        print(GPSString)
 
                     if(i==5):
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # print("intX:",intX,"|intY:",intY,"|intZ:",intZ)
                         generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
-                        generated_gps_point_on_planet = planet_radius * (generated_gps_point_on_cube  / np.linalg.norm(generated_gps_point_on_cube))
-                        # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                        # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
-                        GPSString = convertArraryToGPSString("Lack",generated_gps_point_on_planet)
+                    generated_gps_point_on_planet = planet_radius * (
+                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
+                    # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                    # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
-                        # if(centroid_surface_lack_array[1]>900):
-                        #     if(centroid_surface_lack_array[0]>900):
-                        #         print("lower right:")
-                        # print("i:",5)
-                        print(GPSString)
+                    GPSString = convertArraryToGPSString("Lack", generated_gps_point_on_planet)
+
+                    # if(centroid_surface_lack_array[1]>900):
+                    #     if(centroid_surface_lack_array[0]>900):
+                    #         print("lower right:")
+                    # print("i:",1)
+                    print(GPSString)
 
 
 
