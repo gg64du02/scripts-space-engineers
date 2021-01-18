@@ -32,7 +32,7 @@ for i in range(6):
     # print(i)
     folder_planetsfiles = 'planets_files/EarthLike/'
     if(i==0):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, planet_radius])
@@ -43,23 +43,23 @@ for i in range(6):
         #verifie
         centerFacePosition = arr.array('d', [0, -planet_radius, 0])
     if(i==2):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, -planet_radius])
         vector3DNormalToFaceScanned = np.subtract(center_of_planet, centerFacePosition)
     if(i==3):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [planet_radius, 0, 0])
     if(i==4):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [-planet_radius, 0, 0])
     if(i==5):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'up_mat.png')
         #verifie
         centerFacePosition = arr.array('d', [0, planet_radius, 0])
@@ -152,11 +152,6 @@ for i in range(6):
                     if(i==0):
                         #generate a point of a the cube that it is based on
                         #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
@@ -176,13 +171,6 @@ for i in range(6):
 
 
                     if(i==1):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
@@ -197,18 +185,11 @@ for i in range(6):
                         # if(centroid_surface_lack_array[1]>900):
                         #     if(centroid_surface_lack_array[0]>900):
                         #         print("lower right:")
-                        print("i:",1)
+                        # print("i:",1)
                         print(GPSString)
 
 
                     if(i==2):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
@@ -223,13 +204,6 @@ for i in range(6):
                         # print(GPSString)
 
                     if(i==3):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
@@ -244,17 +218,10 @@ for i in range(6):
                         # if(centroid_surface_lack_array[1]<900):
                         #     if(centroid_surface_lack_array[0]<900):
                         #         print("lower right:")
-                        print("i:",3)
+                        # print("i:",3)
                         print(GPSString)
 
                     if(i==4):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
@@ -273,13 +240,6 @@ for i in range(6):
                         print(GPSString)
 
                     if(i==5):
-                        #generate a point of a the cube that it is based on
-                        #parameters are: planet_radius, image_width, centroid_surface_lack
-                        # example: for the front face it is should x,y but not z
-                        # intX = - planet_radius+centroid_surface_lack_planetSized[0]*1
-                        # intY = - planet_radius+centroid_surface_lack_planetSized[1]*1
-                        # intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
@@ -294,7 +254,7 @@ for i in range(6):
                         # if(centroid_surface_lack_array[1]>900):
                         #     if(centroid_surface_lack_array[0]>900):
                         #         print("lower right:")
-                        print("i:",5)
+                        # print("i:",5)
                         print(GPSString)
 
 
