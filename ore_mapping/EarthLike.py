@@ -25,8 +25,14 @@ def convertArraryToGPSString(prefix,arrayOfThree):
 import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
-planet_radius = 61000 #in meters
+# planet_radius = 61000 #in meters
+planet_radius = 60000 #in meters
 center_of_planet = arr.array('d', [0, 0, 0])
+
+# TODO: add the offset introduced by center of the planet
+# TODO: re factor points/coords generation for each faces
+# TODO: account for the heightmap of the planet
+# TODO: find out the min and max altitude
 
 from skimage import measure
 for i in range(6):
