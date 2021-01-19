@@ -32,49 +32,72 @@ center_of_planet = arr.array('d', [0, 0, 0])
 # TODO: add the offset introduced by center of the planet
 # TODO: re factor points/coords generation for each faces
 # TODO: account for the heightmap of the planet
+# TODO. check PlanetGeneratorDefinitions.sbc to guess ore spots
 # TODO: find out the min and max altitude
+# lack on heigthmap : 3d3d3d 62.05km
+# mountain top : e3e3e3 5.17km 65.17km? GPS: OreN1:-85.8:43921.7:-40876.4:#F175DC: [1978-1,1027-1]
+
+# actual might be actually: 66.35km
+
+# lack - mountains = a6a6a6 = in dec 166 : 5170 / 166
+# lack - mountains = a6a6a6 = in dec 166 : 6635 / 166 between 32 - 39
+
+
+constant_hm_lacks = 3*16+13  # 3d
+
+constant_hm_mountains = 14*16+3  # e3
+
+constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 
 from skimage import measure
 for i in range(6):
     # print(i)
     folder_planetsfiles = 'planets_files/EarthLike/'
     if(i==0):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'back.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, planet_radius])
     if(i==1):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'down.png')
         #verifie
         centerFacePosition = arr.array('d', [0, -planet_radius, 0])
     if(i==2):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'front.png')
         #verifie
         centerFacePosition = arr.array('d', [0, 0, -planet_radius])
     if(i==3):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'left.png')
         #verifie
         centerFacePosition = arr.array('d', [planet_radius, 0, 0])
     if(i==4):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'right.png')
         #verifie
         centerFacePosition = arr.array('d', [-planet_radius, 0, 0])
     if(i==5):
         # continue
         filename = os.path.join(folder_planetsfiles,'up_mat.png')
+        filenameHeightmap = os.path.join(folder_planetsfiles,'up.png')
         #verifie
         centerFacePosition = arr.array('d', [0, planet_radius, 0])
     print("filename:",filename)
 
     # load image as pixel array
     data = image.imread(filename)
+    dataHM = image.imread(filename)
 
     data_lack_layer = 255*data[:,:,0]
     data_ore_layer = 255*data[:,:,2]
+    data_HM = 255*data[:,:,0]
 
 
     # # summarize shape of the pixel array
@@ -252,6 +275,9 @@ for i in range(6):
                     #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
 
                     # caseX got their custom formulas to generate the points
+
+                    # dev debug: just to figure out what min max altitude are
+                    # centroid_underground_lack_array = [1978-1,1027-1]
 
                     centroid_underground_lack_planetSized = arr.array('d', [2*planet_radius* (centroid_underground_lack_array[0]/2048),2*planet_radius* (centroid_underground_lack_array[1]/2048)])
                     # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
