@@ -50,6 +50,9 @@ constant_hm_mountains = 14*16+3  # e3
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
+# import module
+import traceback
+
 from skimage import measure
 for i in range(6):
     # print(i)
@@ -150,97 +153,121 @@ for i in range(6):
     for j in range(2048):
         for k in range(2048):
             # print("lol2")
-            # if(converted_to_bool_surface_array[j,k]==1):
-            #     pass
-            #     label = labeled[j, k]  # known pixel location
-            #     # print("label:",label)
-            #
-            #     rp = measure.regionprops(labeled)
-            #     # todo: debug(crash): check why: props = rp[label - 1]  # background is labeled 0, not in rp IndexError: list index out of range
-            #     props = rp[label - 1]  # background is labeled 0, not in rp
-            #     # props.bbox  # (min_row, min_col, max_row, max_col)
-            #     # props.image  # array matching the bbox sub-image
-            #     # print(len(props.coords))  # list of (row,col) pixel indices
-            #     regionSize = len(props.coords)
-            #     pointsOfCurrentDetectedLackArray = props.coords
-            #     for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
-            #         converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
-            #     if( tmp_region_size != regionSize):
-            #         # print("regionSize:",regionSize)
-            #         tmp_region_size = regionSize
-            #
-            #     centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
-            #     centroid_surface_lack_array = arr.array('d', [centroid_surface_lack[0], centroid_surface_lack[1]])
-            #     # print("centroid_surface_lack:",centroid_surface_lack)
-            #     # print("centroid_surface_lack_array:",centroid_surface_lack_array)
-            #
-            #
-            #     try:
-            #         tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
-            #
-            #         # we can test:
-            #         #case1: if unit north (0,-1,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
-            #         #case2: if unit ? (-1,0,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
-            #         #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
-            #
-            #         # caseX got their custom formulas to generate the points
-            #
-            #         centroid_surface_lack_planetSized = arr.array('d', [2*planet_radius* (centroid_surface_lack_array[0]/2048),2*planet_radius* (centroid_surface_lack_array[1]/2048)])
-            #         # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
-            #
-            #         if(i==0):
-            #             intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-            #             generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius])
-            #
-            #         if(i==1):
-            #             intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             generated_gps_point_on_cube = arr.array('d', [intX,-planet_radius, intZ,])
-            #
-            #         if(i==2):
-            #             intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-            #             generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
-            #
-            #         if(i==3):
-            #             # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,])
-            #
-            #         if(i==4):
-            #             # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             generated_gps_point_on_cube = arr.array('d', [-planet_radius,intY, intZ,])
-            #
-            #         if(i==5):
-            #             intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-            #             # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-            #             generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
-            #
-            #         generated_gps_point_on_planet = planet_radius * (
-            #                     generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
-            #         # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-            #         # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
-            #
-            #         GPSString = convertArraryToGPSString("Lack", generated_gps_point_on_planet)
-            #
-            #         # if(centroid_surface_lack_array[1]>900):
-            #         #     if(centroid_surface_lack_array[0]>900):
-            #         #         print("lower right:")
-            #         # print("i:",1)
-            #         # print(GPSString)
-            #
-            #     except NameError:
-            #         print("tmpPointOnTheCubeFace computation failed")
+            if(converted_to_bool_surface_array[j,k]==1):
+                # pass
+                label = labeled[j, k]  # known pixel location
+                # print("label:",label)
+
+                rp = measure.regionprops(labeled)
+                # todo: debug(crash): check why: props = rp[label - 1]  # background is labeled 0, not in rp IndexError: list index out of range
+                props = rp[label - 1]  # background is labeled 0, not in rp
+                # props.bbox  # (min_row, min_col, max_row, max_col)
+                # props.image  # array matching the bbox sub-image
+                # print(len(props.coords))  # list of (row,col) pixel indices
+                regionSize = len(props.coords)
+                pointsOfCurrentDetectedLackArray = props.coords
+                for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
+                    converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
+                if( tmp_region_size != regionSize):
+                    # print("regionSize:",regionSize)
+                    tmp_region_size = regionSize
+
+                centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
+                centroid_surface_lack_array = arr.array('d', [centroid_surface_lack[0], centroid_surface_lack[1]])
+                # print("centroid_surface_lack:",centroid_surface_lack)
+                # print("centroid_surface_lack_array:",centroid_surface_lack_array)
+
+
+                try:
+                    tmpPointOnTheCubeFace = arr.array('d', [0, 0, 0])
+
+                    # we can test:
+                    #case1: if unit north (0,-1,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+                    #case2: if unit ? (-1,0,0).(normalToFaceCenter) = 1 or -1 or if 0 test:
+                    #case3: if unit ? (0,0,-1).(normalToFaceCenter) = 1 or -1 or if 0 throw an error
+
+                    # caseX got their custom formulas to generate the points
+
+                    centroid_surface_lack_planetSized = arr.array('d', [2*planet_radius* (centroid_surface_lack_array[0]/2048),2*planet_radius* (centroid_surface_lack_array[1]/2048)])
+                    # print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
+
+                    if(i==0):
+                        intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+                        generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius])
+
+                    if(i==1):
+                        intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        generated_gps_point_on_cube = arr.array('d', [intX,-planet_radius, intZ,])
+
+                    if(i==2):
+                        intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
+                        generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
+
+                    if(i==3):
+                        # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,])
+
+                    if(i==4):
+                        # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        generated_gps_point_on_cube = arr.array('d', [-planet_radius,intY, intZ,])
+
+                    if(i==5):
+                        intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
+                        # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
+                        generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
+
+                    centroid_underground_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
+                    centroid_underground_lack_array = arr.array('d', [centroid_underground_lack[0],
+                                                                      centroid_underground_lack[1]])
+
+                    print("centroid_underground_lack_array1:", centroid_underground_lack_array)
+                    rounded_centroid_underground_lack_array = [int(round(centroid_underground_lack_array[0], 0)),
+                                                                   int(round(centroid_underground_lack_array[1], 0))]
+                    print("rounded_centroid_underground_lack_array1:", rounded_centroid_underground_lack_array)
+
+                    print(
+                        "data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]:",
+                        data_HM[
+                            rounded_centroid_underground_lack_array[0], rounded_centroid_underground_lack_array[1]])
+                    alt_adj = (data_HM[
+                        rounded_centroid_underground_lack_array[0], rounded_centroid_underground_lack_array[
+                            1]]) * 22
+
+                    computed_test_alt = planet_radius + alt_adj
+                    print("computed_test_alt:",computed_test_alt)
+
+
+                    generated_gps_point_on_planet = planet_radius * (
+                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
+                    # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                    # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
+
+                    GPSString = convertArraryToGPSString("Lack", generated_gps_point_on_planet)
+
+                    # if(centroid_surface_lack_array[1]>900):
+                    #     if(centroid_surface_lack_array[0]>900):
+                    #         print("lower right:")
+                    # print("i:",1)
+                    print(GPSString)
+
+                except NameError:
+                    print("tmpPointOnTheCubeFace computation failed")
+                    # printing stack trace
+                    traceback.print_exc()
 
             if(converted_to_bool_underground_array[j,k]==1):
+                continue
 
                 label = labeledOre[j, k]  # known pixel location
                 # print("label:",label)
@@ -332,6 +359,7 @@ for i in range(6):
                           data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]])
                     # alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]-constant_hm_lacks) * 39
                     alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 22
+                    # alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 18 + 1084
                     # alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 39
                     print("alt_adj:",alt_adj)
 
