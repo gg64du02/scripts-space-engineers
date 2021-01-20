@@ -330,7 +330,9 @@ for i in range(6):
                     # alt_adj = (data_HM[j,k]) * 19
                     print("data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]:",
                           data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]])
-                    alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 20
+                    # alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]-constant_hm_lacks) * 39
+                    alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 22
+                    # alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 39
                     print("alt_adj:",alt_adj)
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
