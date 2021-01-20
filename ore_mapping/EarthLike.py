@@ -319,9 +319,18 @@ for i in range(6):
                         intZ = -1*(- planet_radius+centroid_underground_lack_planetSized[0]*1)
                         generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
 
+                    print("centroid_underground_lack_array:",centroid_underground_lack_array)
+                    # rounded_centroid_underground_lack_array = [round(centroid_underground_lack_array[0],0),round(centroid_underground_lack_array[1],0)]
+                    rounded_centroid_underground_lack_array = [int(round(centroid_underground_lack_array[0],0)),int(round(centroid_underground_lack_array[1],0))]
+                    print("rounded_centroid_underground_lack_array:",rounded_centroid_underground_lack_array)
+
                     # alt_adj = (data_HM[j,k] - constant_hm_lacks) * 39
-                    print("data_HM[j,k]:",data_HM[j,k])
-                    alt_adj = (data_HM[j,k]) * 19
+                    # todo: adj constant value change ? or axis changing ? according to the one in the gps coords computing ?
+                    # print("data_HM[j,k]:",data_HM[j,k])
+                    # alt_adj = (data_HM[j,k]) * 19
+                    print("data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]:",
+                          data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]])
+                    alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 20
                     print("alt_adj:",alt_adj)
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
