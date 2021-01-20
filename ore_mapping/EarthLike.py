@@ -53,6 +53,9 @@ print("constant_hm_alt_adj:",constant_hm_alt_adj)
 # import module
 import traceback
 
+display_surface_lacks_bool = False
+display_ore_bool = True
+
 from skimage import measure
 for i in range(6):
     # print(i)
@@ -153,7 +156,8 @@ for i in range(6):
     for j in range(2048):
         for k in range(2048):
             # print("lol2")
-            if(converted_to_bool_surface_array[j,k]==1):
+
+            if((converted_to_bool_surface_array[j,k]==1) and (display_surface_lacks_bool == True)):
                 # pass
                 label = labeled[j, k]  # known pixel location
                 # print("label:",label)
@@ -234,7 +238,7 @@ for i in range(6):
                     # print("centroid_underground_lack_array1:", centroid_underground_lack_array)
                     rounded_centroid_underground_lack_array = [int(round(centroid_underground_lack_array[0], 0)),
                                                                    int(round(centroid_underground_lack_array[1], 0))]
-                    print("rounded_centroid_underground_lack_array1:", rounded_centroid_underground_lack_array)
+                    # print("rounded_centroid_underground_lack_array1:", rounded_centroid_underground_lack_array)
 
                     # print(
                     #     "data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]:",
@@ -242,7 +246,8 @@ for i in range(6):
                     #         rounded_centroid_underground_lack_array[0], rounded_centroid_underground_lack_array[1]])
                     alt_adj = (data_HM[
                         rounded_centroid_underground_lack_array[0], rounded_centroid_underground_lack_array[
-                            1]]) * 20
+                            1]]) * 23
+                    # print("alt_adj:",alt_adj)
 
                     computed_test_alt = planet_radius + alt_adj
                     # print("computed_test_alt:",computed_test_alt)
@@ -259,6 +264,7 @@ for i in range(6):
                     #     if(centroid_surface_lack_array[0]>900):
                     #         print("lower right:")
                     # print("i:",1)
+
                     print(GPSString)
 
                 except NameError:
@@ -266,8 +272,8 @@ for i in range(6):
                     # printing stack trace
                     traceback.print_exc()
 
-            if(converted_to_bool_underground_array[j,k]==1):
-                continue
+            if((converted_to_bool_underground_array[j,k]==1)and (display_ore_bool == True)):
+                # continue
 
                 label = labeledOre[j, k]  # known pixel location
                 # print("label:",label)
@@ -285,7 +291,7 @@ for i in range(6):
                 #     converted_to_bool_underground_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 # print("regionSize:",regionSize)
                 if( tmp_region_size != regionSize):
-                    print("regionSize:",regionSize)
+                    # print("regionSize:",regionSize)
                     tmp_region_size = regionSize
 
                 centroid_underground_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
