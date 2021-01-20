@@ -48,6 +48,7 @@ constant_hm_lacks = 3*16+13  # 3d
 constant_hm_mountains = 14*16+3  # e3
 
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
+print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
 from skimage import measure
 for i in range(6):
@@ -317,9 +318,11 @@ for i in range(6):
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_underground_lack_planetSized[0]*1)
                         generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
-                    2
-                    alt_adj = (data_HM[j,k] - constant_hm_lacks) * 3
-                    # print("alt_adj:",alt_adj)
+
+                    # alt_adj = (data_HM[j,k] - constant_hm_lacks) * 39
+                    print("data_HM[j,k]:",data_HM[j,k])
+                    alt_adj = (data_HM[j,k]) * 19
+                    print("alt_adj:",alt_adj)
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
