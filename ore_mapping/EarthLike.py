@@ -407,7 +407,7 @@ for i in range(6):
                         if(gpsNameOres.find(ptOreValueIs)<0):
                             gpsNameOres += whatOreThatValueIs(currentPointValue)
 
-                print("gpsNameOres:",gpsNameOres)
+                # print("gpsNameOres:",gpsNameOres)
 
                 pointsOfCurrentDetectedLackArray = props.coords
                 # for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
@@ -496,7 +496,8 @@ for i in range(6):
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
                     # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
-                    GPSString = convertArraryToGPSString("Ore", generated_gps_point_on_planet)
+                    # GPSString = convertArraryToGPSString("Ore", generated_gps_point_on_planet)
+                    GPSString = convertArraryToGPSString(gpsNameOres, generated_gps_point_on_planet)
 
                     # if(centroid_surface_lack_array[1]>900):
                     #     if(centroid_surface_lack_array[0]>900):
