@@ -93,11 +93,11 @@ for i in range(6):
 
     # load image as pixel array
     data = image.imread(filename)
-    dataHM = image.imread(filename)
+    dataHM = image.imread(filenameHeightmap)
 
     data_lack_layer = 255*data[:,:,0]
     data_ore_layer = 255*data[:,:,2]
-    data_HM = 255*data[:,:,0]
+    data_HM = 255*dataHM[:,:]
 
 
     # # summarize shape of the pixel array
@@ -317,9 +317,14 @@ for i in range(6):
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_underground_lack_planetSized[0]*1)
                         generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
+                    2
+                    alt_adj = (data_HM[j,k] - constant_hm_lacks) * 3
+                    # print("alt_adj:",alt_adj)
 
-                    generated_gps_point_on_planet = planet_radius * (
+                    generated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
+                    # generated_gps_point_on_planet = planet_radius * (
+                    #             generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
                     # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
