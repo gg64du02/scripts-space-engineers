@@ -1,3 +1,9 @@
+# This script needs those files:
+# files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
+# folder_planetsfiles = 'planets_files/EarthLike/'
+# file from https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/SpaceEngineers/Content/Data/PlanetGeneratorDefinitions.sbc
+# file PlanetGeneratorDefinitions.sbc
+
 # load and display an image with Matplotlib
 from matplotlib import image
 from matplotlib import pyplot
@@ -64,6 +70,7 @@ from skimage import measure
 
 import xml.etree.ElementTree as ET
 
+# file from https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/SpaceEngineers/Content/Data/PlanetGeneratorDefinitions.sbc
 mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
 myroot = mytree.getroot()
 # print(myroot)
@@ -167,6 +174,7 @@ def whatOreThatValueIs(valueInt):
 
 for i in range(6):
     # print(i)
+    # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
     folder_planetsfiles = 'planets_files/EarthLike/'
     if(i==0):
         continue
