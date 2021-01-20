@@ -159,7 +159,7 @@ def whatOreThatValueIs(valueInt):
         return "Ur"
     if(valueInt in AuValuesList):
         return "Au"
-    return ""
+    return "$"
 
 # =============================================
 # =============================================
@@ -382,6 +382,7 @@ for i in range(6):
 
             if((converted_to_bool_underground_array[j,k]==1)and (display_ore_bool == True)):
                 # continue
+                gpsNameOres = ""
 
                 label = labeledOre[j, k]  # known pixel location
                 # print("label:",label)
@@ -393,6 +394,20 @@ for i in range(6):
                 # props.image  # array matching the bbox sub-image
                 # print(len(props.coords))  # list of (row,col) pixel indices
                 regionSize = len(props.coords)
+
+                for pt in props.coords:
+                    # print("data_ore_layer[pt[0],pt[1]]:",data_ore_layer[pt[0],pt[1]]+128)
+                    currentPointValue = data_ore_layer[pt[0],pt[1]]+0
+                    # currentPointValue = data_ore_layer[pt[0],pt[1]]+128
+                    # print("currentPointValue:",currentPointValue)
+                    ptOreValueIs = whatOreThatValueIs(currentPointValue)
+                    # print("ptOreValueIs:",ptOreValueIs)
+                    if(ptOreValueIs!="$"):
+                        # print(gpsNameOres.find(ptOreValueIs))
+                        if(gpsNameOres.find(ptOreValueIs)<0):
+                            gpsNameOres += whatOreThatValueIs(currentPointValue)
+
+                print("gpsNameOres:",gpsNameOres)
 
                 pointsOfCurrentDetectedLackArray = props.coords
                 # for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
