@@ -1,13 +1,13 @@
 
 linkToXmlOreRules = "https://raw.githubusercontent.com/KeenSoftwareHouse/SpaceEngineers/master/Sources/SpaceEngineers/Content/Data/PlanetGeneratorDefinitions.sbc"
 
-print(linkToXmlOreRules)
+# print(linkToXmlOreRules)
 
 import xml.etree.ElementTree as ET
 
 mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
 myroot = mytree.getroot()
-print(myroot)
+# print(myroot)
 
 i = 0
 
@@ -21,13 +21,13 @@ UrValuesList = []
 AuValuesList = []
 
 for x in myroot[0]:
-    print(x.tag, x.attrib)
+    # print(x.tag, x.attrib)
     if(x.tag == "OreMappings"):
         pass
         for y in x:
             i += 1
             # print("i:",i)
-            print(y.tag, y.attrib)
+            # print(y.tag, y.attrib)
             # print(y.attrib["Value"])
             oreValue = int(y.attrib["Value"])
             oreTypeStr = y.attrib["Type"]
@@ -68,7 +68,7 @@ for x in myroot[0]:
                 oreAbrStr = "Au"
                 if(oreValue not in FeValuesList):
                     AuValuesList.append(oreValue)
-            print("oreAbrStr:",oreAbrStr)
+            # print("oreAbrStr:",oreAbrStr)
             # else:
             #     pass
             #     # print("nnn")
