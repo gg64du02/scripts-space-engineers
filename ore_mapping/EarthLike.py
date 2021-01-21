@@ -33,7 +33,13 @@ import array as arr
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
 planet_radius = 60000 #in meters
-center_of_planet = arr.array('d', [0, 0, 0])
+# EarthLike
+# center_of_planet = [0, 0, 0]
+# Gea
+# center_of_planet = [2489556.79290313, -937.726758119417, -4199.53763362007]
+
+
+center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
 
 # TODO: add the offset introduced by center of the planet
 # TODO: re factor points/coords generation for each faces
@@ -55,6 +61,9 @@ constant_hm_mountains = 14*16+3  # e3
 
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
+
+
+
 
 # import module
 import traceback
@@ -175,43 +184,45 @@ def whatOreThatValueIs(valueInt):
 for i in range(6):
     # print(i)
     # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-    folder_planetsfiles = 'planets_files/EarthLike/'
+    # folder_planetsfiles = 'planets_files/EarthLike/'
+    # folder_planetsfiles = 'planets_files/Pertam/'
+    folder_planetsfiles = 'planets_files/Gea/'
     if(i==0):
         continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'back.png')
         #verifie
-        centerFacePosition = arr.array('d', [0, 0, planet_radius])
+        centerFacePosition = arr.array('d', [0, 0, planet_radius]+center_of_planet)
     if(i==1):
         continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'down.png')
         #verifie
-        centerFacePosition = arr.array('d', [0, -planet_radius, 0])
+        centerFacePosition = arr.array('d', [0, -planet_radius, 0]+center_of_planet)
     if(i==2):
         continue
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'front.png')
         #verifie
-        centerFacePosition = arr.array('d', [0, 0, -planet_radius])
+        centerFacePosition = arr.array('d', [0, 0, -planet_radius]+center_of_planet)
     if(i==3):
         continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'left.png')
         #verifie
-        centerFacePosition = arr.array('d', [planet_radius, 0, 0])
+        centerFacePosition = arr.array('d', [planet_radius, 0, 0]+center_of_planet)
     if(i==4):
         continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'right.png')
         #verifie
-        centerFacePosition = arr.array('d', [-planet_radius, 0, 0])
+        centerFacePosition = arr.array('d', [-planet_radius, 0, 0]+center_of_planet)
     if(i==5):
         # continue
         filename = os.path.join(folder_planetsfiles,'up_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'up.png')
         #verifie
-        centerFacePosition = arr.array('d', [0, planet_radius, 0])
+        centerFacePosition = arr.array('d', [0, planet_radius, 0]+center_of_planet)
     print("filename:",filename)
 
     # load image as pixel array
@@ -315,37 +326,37 @@ for i in range(6):
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-                        generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius])
+                        generated_gps_point_on_cube = arr.array('d', [intX, intY,planet_radius]+center_of_planet)
 
                     if(i==1):
                         intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        generated_gps_point_on_cube = arr.array('d', [intX,-planet_radius, intZ,])
+                        generated_gps_point_on_cube = arr.array('d', [intX,-planet_radius, intZ,]+center_of_planet)
 
                     if(i==2):
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         # intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius
-                        generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius])
+                        generated_gps_point_on_cube = arr.array('d', [intX, intY,-planet_radius]+center_of_planet)
 
                     if(i==3):
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-                        generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,])
+                        generated_gps_point_on_cube = arr.array('d', [planet_radius,intY, intZ,]+center_of_planet)
 
                     if(i==4):
                         # intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
-                        generated_gps_point_on_cube = arr.array('d', [-planet_radius,intY, intZ,])
+                        generated_gps_point_on_cube = arr.array('d', [-planet_radius,intY, intZ,]+center_of_planet)
 
                     if(i==5):
                         intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1)
                         # intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
                         intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1)
-                        generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,])
+                        generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet)
 
                     centroid_underground_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
                     centroid_underground_lack_array = arr.array('d', [centroid_underground_lack[0],
@@ -370,7 +381,7 @@ for i in range(6):
 
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
-                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
+                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
                     # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
@@ -498,7 +509,7 @@ for i in range(6):
                     # print("alt_adj:",alt_adj)
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
-                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
+                                generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
                     # generated_gps_point_on_planet = planet_radius * (
                     #             generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
