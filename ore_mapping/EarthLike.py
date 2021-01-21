@@ -36,10 +36,10 @@ planet_radius = 60000 #in meters
 # EarthLike
 # center_of_planet = [0, 0, 0]
 # Gea
-# center_of_planet = [2489556.79290313, -937.726758119417, -4199.53763362007]
+center_of_planet = [2489556.79290313, -937.726758119417, -4199.53763362007]
 
 
-center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
+# center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
 
 # TODO: add the offset introduced by center of the planet
 # TODO: re factor points/coords generation for each faces
@@ -85,6 +85,7 @@ myroot = mytree.getroot()
 # print(myroot)
 
 i = 0
+previousGPScoords = [0,0,0]
 
 FeValuesList = []
 NiValuesList = []
@@ -223,11 +224,16 @@ for i in range(6):
         filenameHeightmap = os.path.join(folder_planetsfiles,'up.png')
         #verifie
         centerFacePosition = arr.array('d', [0, planet_radius, 0]+center_of_planet)
+    print("centerFacePosition",centerFacePosition)
     print("filename:",filename)
 
+    print("Trying to load:",filename)
     # load image as pixel array
     data = image.imread(filename)
+    print(filename,"loaded")
+    print("Trying to load:",filenameHeightmap)
     dataHM = image.imread(filenameHeightmap)
+    print(filenameHeightmap,"loaded")
 
     data_lack_layer = 255*data[:,:,0]
     data_ore_layer = 255*data[:,:,2]
@@ -522,7 +528,16 @@ for i in range(6):
                     #     if(centroid_surface_lack_array[0]>900):
                     #         print("lower right:")
                     # print("i:",1)
-                    print(GPSString)
+                    # if(previousGPSString != GPSString):
+                    #     previousGPSString = GPSString
+                    previousGPScoordsNpArray = np.asarray([previousGPScoords[0],previousGPScoords[1],previousGPScoords[2]])
+
+                    # if(previousGPScoordsNpArray.all()==generated_gps_point_on_planet.all()):
+                    # if(np.array_equal(previousGPScoordsNpArray,generated_gps_point_on_planet)==True):
+                    if(np.array_equal(previousGPScoordsNpArray,generated_gps_point_on_planet)==False):
+                        print(GPSString)
+
+                    previousGPScoords = generated_gps_point_on_planet
 
                 except NameError:
                     print("tmpPointOnTheCubeFace computation failed")
