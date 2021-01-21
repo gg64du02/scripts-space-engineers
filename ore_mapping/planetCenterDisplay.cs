@@ -34,14 +34,16 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
-	
-	
-	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
-	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
 
-	flightIndicatorsShipController = remoteControllers[0];
-            
-	
-	flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
-	Echo("vec3Dtarget:\n"+vec3Dtarget);
+
+    List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
+    GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
+
+    flightIndicatorsShipController = remoteControllers[0];
+
+
+    flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
+    Echo("vec3Dtarget:\n" + vec3Dtarget);
+
+    Me.CustomData = "" + vec3Dtarget;
 }
