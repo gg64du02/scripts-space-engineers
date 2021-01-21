@@ -32,7 +32,8 @@ import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
-planet_radius = 60000 #in meters
+# planet_radius = 60000 #in meters
+planet_radius = 39000 #in meters
 # EarthLike
 # center_of_planet = [0, 0, 0]
 # Gea
@@ -118,31 +119,31 @@ for x in myroot[0]:
                 # print("FeValuesList:",FeValuesList)
             if("Nickel" in oreTypeStr):
                 oreAbrStr = "Ni"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in NiValuesList):
                     NiValuesList.append(oreValue)
             if("Silicon" in oreTypeStr):
                 oreAbrStr = "Si"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in SiValuesList):
                     SiValuesList.append(oreValue)
             if("Cobalt" in oreTypeStr):
                 oreAbrStr = "Co"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in CoValuesList):
                     CoValuesList.append(oreValue)
             if("Silver" in oreTypeStr):
                 oreAbrStr = "Ag"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in AgValuesList):
                     AgValuesList.append(oreValue)
             if("Magnesium" in oreTypeStr):
                 oreAbrStr = "Mg"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in MgValuesList):
                     MgValuesList.append(oreValue)
             if("Uraninite" in oreTypeStr):
                 oreAbrStr = "Ur"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in UrValuesList):
                     UrValuesList.append(oreValue)
             if("Gold" in oreTypeStr):
                 oreAbrStr = "Au"
-                if(oreValue not in FeValuesList):
+                if(oreValue not in AuValuesList):
                     AuValuesList.append(oreValue)
             # print("oreAbrStr:",oreAbrStr)
             # else:
