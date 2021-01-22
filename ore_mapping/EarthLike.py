@@ -32,12 +32,15 @@ import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
-# planet_radius = 60000 #in meters
-planet_radius = 39000 #in meters
+planet_radius = 60000 #in meters
+# planet_radius = 39000 #in meters
 # EarthLike
 # center_of_planet = np.asarray([0, 0, 0])
 # Gea
-center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
+# center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
+# Gea test creative
+# X:-1202.48288485948 Y:54987.8083406917 Z:-44064.295969891
+center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
 
 
 # center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
@@ -186,9 +189,9 @@ def whatOreThatValueIs(valueInt):
 for i in range(6):
     # print(i)
     # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-    folder_planetsfiles = 'planets_files/EarthLike/'
+    # folder_planetsfiles = 'planets_files/EarthLike/'
     # folder_planetsfiles = 'planets_files/Pertam/'
-    # folder_planetsfiles = 'planets_files/Gea/'
+    folder_planetsfiles = 'planets_files/Gea/'
     if(i==0):
         # continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
@@ -411,8 +414,8 @@ for i in range(6):
                 # continue
                 gpsNameOres = ""
 
-                if(j<1500):
-                    continue
+                # if(j<1500):
+                #     continue
 
                 label = labeledOre[j, k]  # known pixel location
                 # print("label:",label)
@@ -505,7 +508,7 @@ for i in range(6):
                         intZ = -1*(- planet_radius+centroid_underground_lack_planetSized[0]*1)
                         generated_gps_point_on_cube = np.asarray([intX,planet_radius, intZ,])
 
-                    print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                    # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
 
                     # print("centroid_underground_lack_array:",centroid_underground_lack_array)
                     # rounded_centroid_underground_lack_array = [round(centroid_underground_lack_array[0],0),round(centroid_underground_lack_array[1],0)]
@@ -519,29 +522,33 @@ for i in range(6):
                     # print("data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]:",
                     #       data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]])
                     alt_adj = (data_HM[rounded_centroid_underground_lack_array[0],rounded_centroid_underground_lack_array[1]]) * 20
-                    print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                    print("alt_adj:",alt_adj)
-                    print("center_of_planet:",center_of_planet)
-                    print("planet_radius:",planet_radius)
+                    # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
+                    # print("alt_adj:",alt_adj)
+                    # print("center_of_planet:",center_of_planet)
+                    # print("planet_radius:",planet_radius)
 
                     generated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
                     # generated_gps_point_on_planet = planet_radius * (
                     #             generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
-                    print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
+                    # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
                     testThisGPSnpArray = np.asarray([2457313.69,19265.36,28541.93])
                     # testThisGPSnpArray = np.asarray([33800.69,35345.36,36823.93])
                     maximum_test_distancenpArray = np.subtract(generated_gps_point_on_planet,testThisGPSnpArray)
                     distanceToTestThis = np.linalg.norm(maximum_test_distancenpArray, ord=3)
-                    print("maximum_test_distancenpArray:",maximum_test_distancenpArray)
-                    print("j,k",j,k)
-                    print("distanceToTestThis:",distanceToTestThis)
+                    # print("maximum_test_distancenpArray:",maximum_test_distancenpArray)
+                    # print("j,k",j,k)
+                    # print("distanceToTestThis:",distanceToTestThis)
 
 
                     # GPSString = convertArraryToGPSString("Ore", generated_gps_point_on_planet)
                     GPSString = convertArraryToGPSString(gpsNameOres, generated_gps_point_on_planet)
+
+                    # if ("Ag" in oreTypeStr):
+                    if(iLackSurface == 551):
+                        print("j,k",j,k)
 
                     # if(centroid_surface_lack_array[1]>900):
                     #     if(centroid_surface_lack_array[0]>900):
@@ -561,6 +568,8 @@ for i in range(6):
 
                 except NameError:
                     print("tmpPointOnTheCubeFace computation failed")
+                    # printing stack trace
+                    traceback.print_exc()
 
 
 
