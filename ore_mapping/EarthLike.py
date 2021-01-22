@@ -181,7 +181,7 @@ def whatOreThatValueIs(valueInt):
     if(valueInt in AuValuesList):
         return "Au"
     return "$"
-
+print("checking xml lists")
 # =============================================
 # =============================================
 # =============================================
@@ -250,7 +250,9 @@ for i in range(6):
     # print(255*data[0,0,:])
     # change the dtype to 'float64'
     data_lack_layer = data_lack_layer.astype('int8')
-    data_ore_layer = data_ore_layer.astype('int8')
+    # data_ore_layer = data_ore_layer.astype('uint8')
+    # data_ore_layer = data_ore_layer.astype('int8')
+    data_ore_layer = data_ore_layer.astype('int16')
     # print(data_lack_layer.dtype)
     # print(data.dtype)
     # print(data.shape)
@@ -273,7 +275,8 @@ for i in range(6):
             if(data_lack_layer[j,k] == (constant_surface_lack)):
                 converted_to_bool_surface_array[j,k] = 1
             # print("data_ore_layer[j,k]",data_ore_layer[j,k])
-            if(data_ore_layer[j,k] == -1):
+            # if(data_ore_layer[j,k] == -1):
+            if(data_ore_layer[j,k] == 255):
                 converted_to_bool_underground_array[j, k] = 0
             else:
                 converted_to_bool_underground_array[j, k] = 1
@@ -307,8 +310,8 @@ for i in range(6):
                 # print(len(props.coords))  # list of (row,col) pixel indices
                 regionSize = len(props.coords)
                 pointsOfCurrentDetectedLackArray = props.coords
-                for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
-                    converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
+                # for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
+                #     converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 if( tmp_region_size != regionSize):
                     # print("regionSize:",regionSize)
                     tmp_region_size = regionSize
@@ -443,8 +446,8 @@ for i in range(6):
                 # print("gpsNameOres:",gpsNameOres)
 
                 pointsOfCurrentDetectedLackArray = props.coords
-                # for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
-                #     converted_to_bool_underground_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
+                for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
+                    converted_to_bool_underground_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 # print("regionSize:",regionSize)
                 if( tmp_region_size != regionSize):
                     # print("regionSize:",regionSize)
@@ -549,6 +552,8 @@ for i in range(6):
                     # if ("Ag" in oreTypeStr):
                     if(iLackSurface == 551):
                         print("j,k",j,k)
+                    if(k==36):
+                        print("data_HM:"+data_HM[j,k])
 
                     # if(centroid_surface_lack_array[1]>900):
                     #     if(centroid_surface_lack_array[0]>900):
