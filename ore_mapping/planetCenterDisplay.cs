@@ -56,7 +56,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	tmpStr += "\n# Me:\ntestThisGPSnpArray = np.asarray(["+ MePosition.X + "," + MePosition.Y + "," + MePosition.Z + "])";
 	
-	tmpStr += "\n\n"
+	tmpStr += "\n\n";
 	
 	//Echo("\n\ntestThisGPSnpArray = np.asarray(["+ MePosition.X + "," + MePosition.Y + "," + MePosition.Z + "])");
 
