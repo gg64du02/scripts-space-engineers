@@ -43,7 +43,15 @@ public void Main(string argument, UpdateType updateSource)
 
 
     flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
-    Echo("vec3Dtarget:\n" + vec3Dtarget);
+    //Echo("vec3Dtarget:\n" + vec3Dtarget);
 
-    Me.CustomData = "" + vec3Dtarget;
+    MyWaypointInfo planetCenter = new MyWaypointInfo("planetCenter", vec3Dtarget);
+
+    //Me.CustomData = "" + vec3Dtarget;
+    //Me.CustomData = "" + planetCenter.ToString();
+    //Me.CustomData = "" + planetCenter.ToString() + "\ncenter_of_planet = np.asarray([" + vec3Dtarget[0] + "," + vec3Dtarget[1] + "," + vec3Dtarget[2] + "])";
+    Me.CustomData = "" + planetCenter.ToString() + "\n\ncenter_of_planet = np.asarray([" + vec3Dtarget.X + "," + vec3Dtarget.Y + "," + vec3Dtarget.Z + "])";
+
+
+    Echo("" + planetCenter.ToString());
 }
