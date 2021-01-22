@@ -32,7 +32,9 @@ import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
-planet_radius = 60000 #in meters
+# planet_radius = 60000 #in meters
+# planet_radius = 58500 #in meters
+planet_radius = 58200 #in meters
 # planet_radius = 39000 #in meters
 # EarthLike
 # center_of_planet = np.asarray([0, 0, 0])
@@ -41,6 +43,17 @@ planet_radius = 60000 #in meters
 # Gea test creative
 # X:-1202.48288485948 Y:54987.8083406917 Z:-44064.295969891
 center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
+
+testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
+displayOnlyNearTestThisGPSnpArrayBool = False
+
+sanityCheckDistanceTestThisToPlanetCenter = np.subtract(testThisGPSnpArray,center_of_planet)
+lenghsanityCheckDistanceTestThisToPlanetCenter =  np.linalg.norm(sanityCheckDistanceTestThisToPlanetCenter, ord=3)
+print("lenghsanityCheckDistanceTestThisToPlanetCenter:",lenghsanityCheckDistanceTestThisToPlanetCenter)
+if(displayOnlyNearTestThisGPSnpArrayBool==True):
+    if(lenghsanityCheckDistanceTestThisToPlanetCenter> 70000):
+        print("\n\nplease check either/both GPS:\ntestThisGPSnpArray\n or \ncenter_of_planet\n\n")
+        exit()
 
 
 # center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
@@ -66,7 +79,7 @@ constant_hm_mountains = 14*16+3  # e3
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
-
+enableGPSOreAltAdj = False
 
 
 # import module
@@ -530,14 +543,18 @@ for i in range(6):
                     # print("center_of_planet:",center_of_planet)
                     # print("planet_radius:",planet_radius)
 
-                    generated_gps_point_on_planet = (planet_radius+alt_adj) * (
+                    if(enableGPSOreAltAdj== True):
+                        radiusWithOrWithoutAltAdj = planet_radius+alt_adj
+                    else:
+                        radiusWithOrWithoutAltAdj = planet_radius
+
+                    generated_gps_point_on_planet = (radiusWithOrWithoutAltAdj) * (
                                 generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
                     # generated_gps_point_on_planet = planet_radius * (
                     #             generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))
                     # print("generated_gps_point_on_cube:",generated_gps_point_on_cube)
                     # print("generated_gps_point_on_planet:",generated_gps_point_on_planet)
 
-                    testThisGPSnpArray = np.asarray([2457313.69,19265.36,28541.93])
                     # testThisGPSnpArray = np.asarray([33800.69,35345.36,36823.93])
                     maximum_test_distancenpArray = np.subtract(generated_gps_point_on_planet,testThisGPSnpArray)
                     distanceToTestThis = np.linalg.norm(maximum_test_distancenpArray, ord=3)
@@ -548,12 +565,6 @@ for i in range(6):
 
                     # GPSString = convertArraryToGPSString("Ore", generated_gps_point_on_planet)
                     GPSString = convertArraryToGPSString(gpsNameOres, generated_gps_point_on_planet)
-
-                    # if ("Ag" in oreTypeStr):
-                    if(iLackSurface == 551):
-                        print("j,k",j,k)
-                    if(k==36):
-                        print("data_HM:"+data_HM[j,k])
 
                     # if(centroid_surface_lack_array[1]>900):
                     #     if(centroid_surface_lack_array[0]>900):
@@ -566,8 +577,12 @@ for i in range(6):
                     # if(previousGPScoordsNpArray.all()==generated_gps_point_on_planet.all()):
                     # if(np.array_equal(previousGPScoordsNpArray,generated_gps_point_on_planet)==True):
                     if(np.array_equal(previousGPScoordsNpArray,generated_gps_point_on_planet)==False):
-                        # if(distanceToTestThis<10000):
-                        print(GPSString)
+                        if(displayOnlyNearTestThisGPSnpArrayBool == True):
+                            if(distanceToTestThis<10000):
+                                print(GPSString)
+                        else:
+                            print(GPSString)
+
 
                     previousGPScoords = generated_gps_point_on_planet
 
