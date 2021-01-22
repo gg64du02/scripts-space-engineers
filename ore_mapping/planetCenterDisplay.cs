@@ -49,9 +49,19 @@ public void Main(string argument, UpdateType updateSource)
 
     //Me.CustomData = "" + vec3Dtarget;
     //Me.CustomData = "" + planetCenter.ToString();
-    //Me.CustomData = "" + planetCenter.ToString() + "\ncenter_of_planet = np.asarray([" + vec3Dtarget[0] + "," + vec3Dtarget[1] + "," + vec3Dtarget[2] + "])";
-    Me.CustomData = "" + planetCenter.ToString() + "\n\ncenter_of_planet = np.asarray([" + vec3Dtarget.X + "," + vec3Dtarget.Y + "," + vec3Dtarget.Z + "])";
+	var tmpStr = "";
+	tmpStr = "" +planetCenter.ToString() + "\n\ncenter_of_planet = np.asarray([" + vec3Dtarget.X + "," + vec3Dtarget.Y + "," + vec3Dtarget.Z + "])";
+	
+	Vector3D MePosition = Me.GetPosition();
+	
+	tmpStr += "\n# Me:\ntestThisGPSnpArray = np.asarray(["+ MePosition.X + "," + MePosition.Y + "," + MePosition.Z + "])";
+	
+	tmpStr += "\n\n"
+	
+	//Echo("\n\ntestThisGPSnpArray = np.asarray(["+ MePosition.X + "," + MePosition.Y + "," + MePosition.Z + "])");
 
 
-    Echo("" + planetCenter.ToString());
+    Me.CustomData = tmpStr;
+	
+    Echo("" + tmpStr);
 }
