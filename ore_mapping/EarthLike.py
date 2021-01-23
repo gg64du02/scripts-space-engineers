@@ -32,19 +32,35 @@ import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
-# planet_radius = 60000 #in meters
+planet_radius = 60000 #in meters
 # planet_radius = 58500 #in meters
-planet_radius = 58200 #in meters
+# planet_radius = 58200 #in meters
 # planet_radius = 39000 #in meters
+# planet_radius = 37200 #in meters
 # EarthLike
-# center_of_planet = np.asarray([0, 0, 0])
+center_of_planet = np.asarray([0, 0, 0])
 # Gea
 # center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
 # Gea test creative
-# X:-1202.48288485948 Y:54987.8083406917 Z:-44064.295969891
-center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
+# # X:-1202.48288485948 Y:54987.8083406917 Z:-44064.295969891
+# center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
+#
+# testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
 
-testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
+#GPS:planetCenter:2489556.7929031258:-937.72675811941735:-4199.5376336200716:
+# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
+
+# center_of_planet = np.asarray([2489556.79290313,-937.726758119417,-4199.53763362007])
+# Me:
+# testThisGPSnpArray = np.asarray([2483312.84442635,19263.137311418,28544.69319673])
+# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
+# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
+# tea
+testThisGPSnpArray = np.asarray([2457313.84442635,20748.137311418,-2880.69319673])
+
+
+
+
 displayOnlyNearTestThisGPSnpArrayBool = False
 
 sanityCheckDistanceTestThisToPlanetCenter = np.subtract(testThisGPSnpArray,center_of_planet)
@@ -79,14 +95,16 @@ constant_hm_mountains = 14*16+3  # e3
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
-enableGPSOreAltAdj = False
+enableGPSOreAltAdj = True
 
 
 # import module
 import traceback
 
-display_surface_lacks_bool = False
-display_ore_bool = True
+# display_surface_lacks_bool = False
+# display_ore_bool = True
+display_surface_lacks_bool = True
+display_ore_bool = False
 
 from skimage import measure
 
@@ -202,9 +220,10 @@ print("checking xml lists")
 for i in range(6):
     # print(i)
     # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-    # folder_planetsfiles = 'planets_files/EarthLike/'
+    folder_planetsfiles = 'planets_files/EarthLike/'
     # folder_planetsfiles = 'planets_files/Pertam/'
-    folder_planetsfiles = 'planets_files/Gea/'
+    # folder_planetsfiles = 'planets_files/Gea/'
+    print("folder_planetsfiles:",folder_planetsfiles)
     if(i==0):
         # continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
@@ -212,31 +231,31 @@ for i in range(6):
         #verifie
         centerFacePosition = np.asarray([0, 0, planet_radius] )
     if(i==1):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'down.png')
         #verifie
         centerFacePosition = np.asarray([0, -planet_radius, 0] )
     if(i==2):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'front.png')
         #verifie
         centerFacePosition = np.asarray([0, 0, -planet_radius] )
     if(i==3):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'left.png')
         #verifie
         centerFacePosition = np.asarray([planet_radius, 0, 0] )
     if(i==4):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'right.png')
         #verifie
         centerFacePosition = np.asarray([-planet_radius, 0, 0] )
     if(i==5):
-        continue
+        # continue
         filename = os.path.join(folder_planetsfiles,'up_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'up.png')
         #verifie
@@ -262,7 +281,8 @@ for i in range(6):
     # print(1*data[0,0,:])
     # print(255*data[0,0,:])
     # change the dtype to 'float64'
-    data_lack_layer = data_lack_layer.astype('int8')
+    # data_lack_layer = data_lack_layer.astype('int8')
+    data_lack_layer = data_lack_layer.astype('int16')
     # data_ore_layer = data_ore_layer.astype('uint8')
     # data_ore_layer = data_ore_layer.astype('int8')
     data_ore_layer = data_ore_layer.astype('int16')
@@ -309,6 +329,7 @@ for i in range(6):
     for j in range(2048):
         for k in range(2048):
             # print("lol2")
+            # print("j,k",j,k)
 
             if((converted_to_bool_surface_array[j,k]==1) and (display_surface_lacks_bool == True)):
                 # pass
@@ -323,8 +344,8 @@ for i in range(6):
                 # print(len(props.coords))  # list of (row,col) pixel indices
                 regionSize = len(props.coords)
                 pointsOfCurrentDetectedLackArray = props.coords
-                # for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
-                #     converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
+                for iPoint in range(len(pointsOfCurrentDetectedLackArray)):
+                    converted_to_bool_surface_array[pointsOfCurrentDetectedLackArray[iPoint,0], pointsOfCurrentDetectedLackArray[iPoint,1]] = 0
                 if( tmp_region_size != regionSize):
                     # print("regionSize:",regionSize)
                     tmp_region_size = regionSize
@@ -579,7 +600,10 @@ for i in range(6):
                     if(np.array_equal(previousGPScoordsNpArray,generated_gps_point_on_planet)==False):
                         if(displayOnlyNearTestThisGPSnpArrayBool == True):
                             if(distanceToTestThis<10000):
-                                print(GPSString)
+                                if(distanceToTestThis>-10000):
+                                    print("j,k",j,k)
+                                    print("distanceToTestThis:",distanceToTestThis)
+                                    print(GPSString)
                         else:
                             print(GPSString)
 
