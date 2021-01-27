@@ -11,85 +11,32 @@ from matplotlib import pyplot
 import numpy as np
 import os
 
-def centeroidnp(arr):
-    length = arr.shape[0]
-    sum_x = np.sum(arr[:, 0])
-    sum_y = np.sum(arr[:, 1])
-    return sum_x/length, sum_y/length
-
-
-iLackSurface = 0
-
-def convertArraryToGPSString(prefix,arrayOfThree):
-    global iLackSurface
-    iLackSurface += 1
-    # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
-    tmpGpsString = "GPS: "+str(prefix)+"N" + str(iLackSurface) + ":" + str(round(arrayOfThree[0],1)) + ":" + \
-                   str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
-    return tmpGpsString
-
 import array as arr
-# planet_radius = 62000 #in meters
-# planet_radius = 60895 #in meters
-# planet_radius = 61000 #in meters
-# planet_radius = 60000 #in meters
-# planet_radius = 58500 #in meters
-# planet_radius = 58200 #in meters
-# planet_radius = 39000 #in meters
-# planet_radius = 37200 #in meters
+
+# ======================================
+# Set the script starting here
+# ======================================
+
 # EarthLike
-# center_of_planet = np.asarray([0, 0, 0])
+planet_radius = 58200 #in meters
+center_of_planet = np.asarray([0, 0, 0])
+testThisGPSnpArray = np.asarray([29963,1248,-52526])
+
 # Pertam stock ?
-planet_radius = 30000 #in meters
-center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+# planet_radius = 30000 #in meters
+# center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+
 # Gea
+# planet_radius = 58200 #in meters
 # center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
+
 # Gea test creative
-# # X:-1202.48288485948 Y:54987.8083406917 Z:-44064.295969891
+# planet_radius = 58200 #in meters
 # center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
 #
 # testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
 
-#GPS:planetCenter:2489556.7929031258:-937.72675811941735:-4199.5376336200716:
-# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
-
-# center_of_planet = np.asarray([2489556.79290313,-937.726758119417,-4199.53763362007])
-# Me:
-# testThisGPSnpArray = np.asarray([2483312.84442635,19263.137311418,28544.69319673])
-# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
-# GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
-# tea
-#testThisGPSnpArray = np.asarray([2457313.84442635,20748.137311418,-2880.69319673])
-testThisGPSnpArray = np.asarray([29963,1248,-52526])
-
-
-
-
 displayOnlyNearTestThisGPSnpArrayBool = False
-
-sanityCheckDistanceTestThisToPlanetCenter = np.subtract(testThisGPSnpArray,center_of_planet)
-lenghsanityCheckDistanceTestThisToPlanetCenter =  np.linalg.norm(sanityCheckDistanceTestThisToPlanetCenter, ord=3)
-print("lenghsanityCheckDistanceTestThisToPlanetCenter:",lenghsanityCheckDistanceTestThisToPlanetCenter)
-if(displayOnlyNearTestThisGPSnpArrayBool==True):
-    if(lenghsanityCheckDistanceTestThisToPlanetCenter> 70000):
-        print("\n\nplease check either/both GPS:\ntestThisGPSnpArray\n or \ncenter_of_planet\n\n")
-        exit()
-
-
-# center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
-
-# TODO: add the offset introduced by center of the planet
-# TODO: re factor points/coords generation for each faces
-# TODO: account for the heightmap of the planet
-# TODO. check PlanetGeneratorDefinitions.sbc to guess ore spots
-# TODO: find out the min and max altitude
-# lack on heigthmap : 3d3d3d 62.05km
-# mountain top : e3e3e3 5.17km 65.17km? GPS: OreN1:-85.8:43921.7:-40876.4:#F175DC: [1978-1,1027-1]
-
-# actual might be actually: 66.35km
-
-# lack - mountains = a6a6a6 = in dec 166 : 5170 / 166
-# lack - mountains = a6a6a6 = in dec 166 : 6635 / 166 between 32 - 39
 
 
 constant_hm_lacks = 3*16+13  # 3d
@@ -101,14 +48,62 @@ print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
 enableGPSOreAltAdj = True
 
+# center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
 
-# import module
-import traceback
+# TODO: add the offset introduced by center of the planet
+# TODO: re factor points/coords generation for each faces
+# DONE to be checked: account for the heightmap of the planet
+# DONE to be checked. check PlanetGeneratorDefinitions.sbc to guess ore spots
+# TODO: find out the min and max altitude
+# lack on heigthmap : 3d3d3d 62.05km
+# mountain top : e3e3e3 5.17km 65.17km? GPS: OreN1:-85.8:43921.7:-40876.4:#F175DC: [1978-1,1027-1]
+
+# actual might be actually: 66.35km
+
+# lack - mountains = a6a6a6 = in dec 166 : 5170 / 166
+# lack - mountains = a6a6a6 = in dec 166 : 6635 / 166 between 32 - 39
 
 # display_surface_lacks_bool = False
 # display_ore_bool = True
 display_surface_lacks_bool = False
 display_ore_bool = True
+
+# files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
+folder_planetsfiles = 'planets_files/EarthLike/'
+# folder_planetsfiles = 'planets_files/Pertam/'
+# folder_planetsfiles = 'planets_files/Gea/'
+
+# TODO: check for the distance and do a mock up run to figure which face is closer to the tested GPS
+# ======================================
+# Set the script ending here
+# ======================================
+
+def centeroidnp(arr):
+    length = arr.shape[0]
+    sum_x = np.sum(arr[:, 0])
+    sum_y = np.sum(arr[:, 1])
+    return sum_x/length, sum_y/length
+
+iLackSurface = 0
+
+def convertArraryToGPSString(prefix,arrayOfThree):
+    global iLackSurface
+    iLackSurface += 1
+    # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
+    tmpGpsString = "GPS: "+str(prefix)+"N" + str(iLackSurface) + ":" + str(round(arrayOfThree[0],1)) + ":" + \
+                   str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
+    return tmpGpsString
+
+sanityCheckDistanceTestThisToPlanetCenter = np.subtract(testThisGPSnpArray,center_of_planet)
+lenghsanityCheckDistanceTestThisToPlanetCenter =  np.linalg.norm(sanityCheckDistanceTestThisToPlanetCenter, ord=3)
+print("lenghsanityCheckDistanceTestThisToPlanetCenter:",lenghsanityCheckDistanceTestThisToPlanetCenter)
+if(displayOnlyNearTestThisGPSnpArrayBool==True):
+    if(lenghsanityCheckDistanceTestThisToPlanetCenter> 70000):
+        print("\n\nplease check either/both GPS:\ntestThisGPSnpArray\n or \ncenter_of_planet\n\n")
+        exit()
+
+# import module
+import traceback
 
 from skimage import measure
 
@@ -223,10 +218,6 @@ print("checking xml lists")
 
 for i in range(6):
     # print(i)
-    # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-    # folder_planetsfiles = 'planets_files/EarthLike/'
-    folder_planetsfiles = 'planets_files/Pertam/'
-    # folder_planetsfiles = 'planets_files/Gea/'
     print("folder_planetsfiles:",folder_planetsfiles)
     if(i==0):
         # continue
