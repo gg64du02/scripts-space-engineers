@@ -28,9 +28,16 @@ folder_planetsfiles = 'planets_files/Pertam/'
 # testThisGPSnpArray = np.asarray([29963,1248,-52526])
 
 # Pertam stock ?
-planet_radius = 30000 #in meters
-center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
-testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
+# planet_radius = 30000 #in meters
+# center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+# testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
+
+# Mars
+planet_radius = 58000 #in meters
+center_of_planet = np.asarray([1031072.5,131072.5,1631072.5])
+testThisGPSnpArray = np.asarray([1068558.11061507,161713.019643011,1669167.1047199])
+
+
 
 # Gea
 # planet_radius = 58200 #in meters
