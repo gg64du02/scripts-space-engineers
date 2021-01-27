@@ -17,22 +17,28 @@ import array as arr
 # Set the script starting here
 # ======================================
 
+# files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
+# folder_planetsfiles = 'planets_files/EarthLike/'
+folder_planetsfiles = 'planets_files/Pertam/'
+# folder_planetsfiles = 'planets_files/Gea/'
+
 # EarthLike
 # planet_radius = 58200 #in meters
 # center_of_planet = np.asarray([0, 0, 0])
-testThisGPSnpArray = np.asarray([29963,1248,-52526])
+# testThisGPSnpArray = np.asarray([29963,1248,-52526])
 
 # Pertam stock ?
-# planet_radius = 30000 #in meters
-# center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+planet_radius = 30000 #in meters
+center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
 
 # Gea
 # planet_radius = 58200 #in meters
 # center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
 
 # Gea test creative
-planet_radius = 58200 #in meters
-center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
+# planet_radius = 58200 #in meters
+# center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
 #
 # testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
 
@@ -62,13 +68,8 @@ enableGPSOreAltAdj = True
 display_surface_lacks_bool = False
 display_ore_bool = True
 
-# files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-folder_planetsfiles = 'planets_files/EarthLike/'
-# folder_planetsfiles = 'planets_files/Pertam/'
-# folder_planetsfiles = 'planets_files/Gea/'
-
 # DONE: check for the distance and do a mock up run to figure out which face is closer to the tested GPS
-display_face_centers_positions_only = True
+display_face_centers_positions_only = False
 
 # ======================================
 # Set the script ending here
@@ -81,6 +82,16 @@ def centeroidnp(arr):
     return sum_x/length, sum_y/length
 
 iLackSurface = 0
+
+
+def convertArraryToGPSStringFace(prefix,arrayOfThree):
+    global filename
+    hintFaceName = filename[-13:-8]
+    hintFaceName = hintFaceName.replace('/',' ')
+    # print(lol)
+    tmpGpsString = "GPS: "+str(prefix)+"N" +hintFaceName+":"+ str(round(arrayOfThree[0],1)) + ":" + \
+                   str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
+    return tmpGpsString
 
 def convertArraryToGPSString(prefix,arrayOfThree):
     global iLackSurface
@@ -260,6 +271,7 @@ for i in range(6):
         lenghsanityCheckDistanceTestThisToFaceCenter = round(np.linalg.norm(sanityCheckDistanceTestThisToFaceCenter,
                                                                         ord=3),0)
         print("lenghsanityCheckDistanceTestThisToFaceCenter:", lenghsanityCheckDistanceTestThisToFaceCenter)
+        print(convertArraryToGPSStringFace("Face",centerFacePosition))
         continue
 
     print("Trying to load:",filename)
