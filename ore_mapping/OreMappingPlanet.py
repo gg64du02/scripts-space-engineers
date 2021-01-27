@@ -38,33 +38,27 @@ center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.537633
 
 displayOnlyNearTestThisGPSnpArrayBool = False
 
-
+# adjusted for EarthLike
 constant_hm_lacks = 3*16+13  # 3d
-
 constant_hm_mountains = 14*16+3  # e3
-
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
 enableGPSOreAltAdj = True
 
-# center_of_planet = [-3621.40629439728 , -5601.65163748975, 7355.0256038004]
-
-# TODO: add the offset introduced by center of the planet
+# DONE: add the offset introduced by center of the planet
 # TODO: re factor points/coords generation for each faces
 # DONE to be checked: account for the heightmap of the planet
 # DONE to be checked. check PlanetGeneratorDefinitions.sbc to guess ore spots
 # TODO: find out the min and max altitude
+
+# (EarthLike)
 # lack on heigthmap : 3d3d3d 62.05km
-# mountain top : e3e3e3 5.17km 65.17km? GPS: OreN1:-85.8:43921.7:-40876.4:#F175DC: [1978-1,1027-1]
-
+# mountain top: e3e3e3 5.17km 65.17km? GPS: OreN1:-85.8:43921.7:-40876.4:#F175DC: [1978-1,1027-1]
 # actual might be actually: 66.35km
-
 # lack - mountains = a6a6a6 = in dec 166 : 5170 / 166
 # lack - mountains = a6a6a6 = in dec 166 : 6635 / 166 between 32 - 39
 
-# display_surface_lacks_bool = False
-# display_ore_bool = True
 display_surface_lacks_bool = False
 display_ore_bool = True
 
@@ -73,7 +67,7 @@ folder_planetsfiles = 'planets_files/EarthLike/'
 # folder_planetsfiles = 'planets_files/Pertam/'
 # folder_planetsfiles = 'planets_files/Gea/'
 
-# TODO: check for the distance and do a mock up run to figure out which face is closer to the tested GPS
+# DONE: check for the distance and do a mock up run to figure out which face is closer to the tested GPS
 display_face_centers_positions_only = True
 
 # ======================================
