@@ -32,13 +32,16 @@ import array as arr
 # planet_radius = 62000 #in meters
 # planet_radius = 60895 #in meters
 # planet_radius = 61000 #in meters
-planet_radius = 60000 #in meters
+# planet_radius = 60000 #in meters
 # planet_radius = 58500 #in meters
 # planet_radius = 58200 #in meters
 # planet_radius = 39000 #in meters
 # planet_radius = 37200 #in meters
 # EarthLike
-center_of_planet = np.asarray([0, 0, 0])
+# center_of_planet = np.asarray([0, 0, 0])
+# Pertam stock ?
+planet_radius = 30000 #in meters
+center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # Gea
 # center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
 # Gea test creative
@@ -56,7 +59,8 @@ center_of_planet = np.asarray([0, 0, 0])
 # GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
 # GPS:gea ur tea:2457313.69:20748.86:-2880.63:#FF75C9F1:
 # tea
-testThisGPSnpArray = np.asarray([2457313.84442635,20748.137311418,-2880.69319673])
+#testThisGPSnpArray = np.asarray([2457313.84442635,20748.137311418,-2880.69319673])
+testThisGPSnpArray = np.asarray([29963,1248,-52526])
 
 
 
@@ -103,8 +107,8 @@ import traceback
 
 # display_surface_lacks_bool = False
 # display_ore_bool = True
-display_surface_lacks_bool = True
-display_ore_bool = False
+display_surface_lacks_bool = False
+display_ore_bool = True
 
 from skimage import measure
 
@@ -220,8 +224,8 @@ print("checking xml lists")
 for i in range(6):
     # print(i)
     # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-    folder_planetsfiles = 'planets_files/EarthLike/'
-    # folder_planetsfiles = 'planets_files/Pertam/'
+    # folder_planetsfiles = 'planets_files/EarthLike/'
+    folder_planetsfiles = 'planets_files/Pertam/'
     # folder_planetsfiles = 'planets_files/Gea/'
     print("folder_planetsfiles:",folder_planetsfiles)
     if(i==0):
@@ -601,8 +605,8 @@ for i in range(6):
                         if(displayOnlyNearTestThisGPSnpArrayBool == True):
                             if(distanceToTestThis<10000):
                                 if(distanceToTestThis>-10000):
-                                    print("j,k",j,k)
-                                    print("distanceToTestThis:",distanceToTestThis)
+                                    # print("j,k",j,k)
+                                    # print("distanceToTestThis:",distanceToTestThis)
                                     print(GPSString)
                         else:
                             print(GPSString)
