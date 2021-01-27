@@ -18,8 +18,8 @@ import array as arr
 # ======================================
 
 # EarthLike
-planet_radius = 58200 #in meters
-center_of_planet = np.asarray([0, 0, 0])
+# planet_radius = 58200 #in meters
+# center_of_planet = np.asarray([0, 0, 0])
 testThisGPSnpArray = np.asarray([29963,1248,-52526])
 
 # Pertam stock ?
@@ -31,8 +31,8 @@ testThisGPSnpArray = np.asarray([29963,1248,-52526])
 # center_of_planet = np.asarray([2489556.79290313, -937.726758119417, -4199.53763362007])
 
 # Gea test creative
-# planet_radius = 58200 #in meters
-# center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
+planet_radius = 58200 #in meters
+center_of_planet = np.asarray([-1202.79290313, 54987.726758119417, -44064.53763362007])
 #
 # testThisGPSnpArray = np.asarray([2457313.69, 19265.36, 28541.93])
 
@@ -73,7 +73,9 @@ folder_planetsfiles = 'planets_files/EarthLike/'
 # folder_planetsfiles = 'planets_files/Pertam/'
 # folder_planetsfiles = 'planets_files/Gea/'
 
-# TODO: check for the distance and do a mock up run to figure which face is closer to the tested GPS
+# TODO: check for the distance and do a mock up run to figure out which face is closer to the tested GPS
+display_face_centers_positions_only = True
+
 # ======================================
 # Set the script ending here
 # ======================================
@@ -255,8 +257,16 @@ for i in range(6):
         filenameHeightmap = os.path.join(folder_planetsfiles,'up.png')
         #verifie
         centerFacePosition = np.asarray([0, planet_radius, 0] )
+    centerFacePosition = np.asarray(center_of_planet+centerFacePosition)
     print("centerFacePosition",centerFacePosition)
     print("filename:",filename)
+
+    if(display_face_centers_positions_only == True):
+        sanityCheckDistanceTestThisToFaceCenter = np.subtract(testThisGPSnpArray, centerFacePosition)
+        lenghsanityCheckDistanceTestThisToFaceCenter = round(np.linalg.norm(sanityCheckDistanceTestThisToFaceCenter,
+                                                                        ord=3),0)
+        print("lenghsanityCheckDistanceTestThisToFaceCenter:", lenghsanityCheckDistanceTestThisToFaceCenter)
+        continue
 
     print("Trying to load:",filename)
     # load image as pixel array
