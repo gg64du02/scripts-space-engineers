@@ -19,8 +19,11 @@ import array as arr
 
 # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
 # folder_planetsfiles = 'planets_files/EarthLike/'
-folder_planetsfiles = 'planets_files/Pertam/'
+# folder_planetsfiles = 'planets_files/Pertam/'
 # folder_planetsfiles = 'planets_files/Gea/'
+# folder_planetsfiles = 'planets_files/Mars/'
+# folder_planetsfiles = 'planets_files/Alien/'
+folder_planetsfiles = 'planets_files/Triton/'
 
 # EarthLike
 # planet_radius = 58200 #in meters
@@ -33,9 +36,20 @@ folder_planetsfiles = 'planets_files/Pertam/'
 # testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
 
 # Mars
-planet_radius = 58000 #in meters
-center_of_planet = np.asarray([1031072.5,131072.5,1631072.5])
-testThisGPSnpArray = np.asarray([1068558.11061507,161713.019643011,1669167.1047199])
+# planet_radius = 58000 #in meters
+# center_of_planet = np.asarray([1031072.5,131072.5,1631072.5])
+# testThisGPSnpArray = np.asarray([1068558.11061507,161713.019643011,1669167.1047199])
+
+# Alien
+# planet_radius = 60000 #in meters
+# center_of_planet = np.asarray([131072.5,131072.5,5731072.5])
+# testThisGPSnpArray = np.asarray([153575.803557999,165209.154024688,5776500.24429754])
+
+# Triton
+planet_radius = 38000 #in meters
+center_of_planet = np.asarray([-284463.5,-2434463.5,365536.5])
+testThisGPSnpArray = np.asarray([-283368.449761682,-2400056.0174512,348238.53512947])
+
 
 
 
