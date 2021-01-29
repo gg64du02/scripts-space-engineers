@@ -23,7 +23,8 @@ import array as arr
 # folder_planetsfiles = 'planets_files/Gea/'
 # folder_planetsfiles = 'planets_files/Mars/'
 # folder_planetsfiles = 'planets_files/Alien/'
-folder_planetsfiles = 'planets_files/Triton/'
+# folder_planetsfiles = 'planets_files/Triton/'
+folder_planetsfiles = 'planets_files/Moon/'
 
 # EarthLike
 # planet_radius = 58200 #in meters
@@ -46,10 +47,14 @@ folder_planetsfiles = 'planets_files/Triton/'
 # testThisGPSnpArray = np.asarray([153575.803557999,165209.154024688,5776500.24429754])
 
 # Triton
-planet_radius = 38000 #in meters
-center_of_planet = np.asarray([-284463.5,-2434463.5,365536.5])
-testThisGPSnpArray = np.asarray([-283368.449761682,-2400056.0174512,348238.53512947])
+# planet_radius = 38000 #in meters
+# center_of_planet = np.asarray([-284463.5,-2434463.5,365536.5])
+# testThisGPSnpArray = np.asarray([-283368.449761682,-2400056.0174512,348238.53512947])
 
+# Moon
+planet_radius = 8500 #in meters
+center_of_planet = np.asarray([16384.5,136384.5,-113615.5])
+testThisGPSnpArray = np.asarray([13006.69678417,145040.712265219,-115439.960197295])
 
 
 
