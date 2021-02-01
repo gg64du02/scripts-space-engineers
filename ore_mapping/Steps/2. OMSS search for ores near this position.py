@@ -46,7 +46,7 @@ def parseGPS(stringGps):
 
             positionPlanetCenter = np.asarray([intX, intY, intZ])
 
-            print(positionPlanetCenter)
+            # print(positionPlanetCenter)
 
             strPlanet = substrings[1]
 
@@ -80,3 +80,55 @@ for planetsGPSString in listOfPlanetsGPSString:
         print(planetCenterString + " should the detected planet")
         break
     print()
+
+print("planetsGPSString",planetsGPSString)
+
+
+print(folder_planetsfiles)
+if(planetCenterString == ""):
+    print("not near enough a planet")
+    exit()
+
+
+listOfOresOnThePlanet = []
+
+# print(os.path.join(folder_planetsfiles,planetCenterString,'Triton_ores.png'))
+filename = os.path.join(folder_planetsfiles,planetCenterString,'Triton_ores.txt')
+print("filename",filename)
+
+# f = open(filename, "r")
+# print(f.readline())
+# f.close()
+
+# populate the GPS String list
+f = open(filename, "r")
+# print(f.readline())
+for x in f:
+    # print(x)
+    tmpParsingArray,tmpStr = parseGPS(x)
+    if(tmpStr !=""):
+        listOfOresOnThePlanet.append(x)
+        pass
+    # else:
+    #     print(x)
+    pass
+f.close()
+
+
+rangeToCheckAt = 5000
+# range to check ORES
+listOfOresOnThePlanetNearMyPos = []
+for GPSString in listOfOresOnThePlanet:
+    tmpArray, tmpStr = parseGPS(GPSString)
+    diffBetweenMyPosAndOreGPS = np.subtract(tmpArray,myCurrentPosArray)
+    tmpDiffRangeChecking = np.linalg.norm(diffBetweenMyPosAndOreGPS, ord=3)
+    if(tmpDiffRangeChecking>-rangeToCheckAt):
+        if(tmpDiffRangeChecking<rangeToCheckAt):
+            # print("tmpDiffRangeChecking",tmpDiffRangeChecking)
+            listOfOresOnThePlanetNearMyPos.append(GPSString)
+    pass
+
+for GPSStringNearMyPos in listOfOresOnThePlanetNearMyPos:
+    # print("GPSStringNearMyPos",GPSStringNearMyPos)
+    print(GPSStringNearMyPos)
+
