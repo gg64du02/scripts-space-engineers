@@ -73,7 +73,7 @@ listOfPlanetsGPSString.append("GPS:Titan:36384.50:226384.50:5796384.50:")
 print()
 
 for planetsGPSString in listOfPlanetsGPSString:
-    print("planetsGPSString:",planetsGPSString)
+    print("planetsGPSString:",planetsGPSString.replace('\n',''))
     planetCenterArray,planetCenterString = parseGPS(planetsGPSString)
     diffmyCurrentPosArrayPlanetCenter = np.subtract(planetCenterArray,myCurrentPosArray)
     if(np.linalg.norm(diffmyCurrentPosArrayPlanetCenter, ord=3)<100000):
@@ -93,7 +93,8 @@ if(planetCenterString == ""):
 listOfOresOnThePlanet = []
 
 # print(os.path.join(folder_planetsfiles,planetCenterString,'Triton_ores.png'))
-filename = os.path.join(folder_planetsfiles,planetCenterString,'Triton_ores.txt')
+# filename = os.path.join(folder_planetsfiles,planetCenterString,'Triton_ores.txt')
+filename = os.path.join(folder_planetsfiles,planetCenterString,planetCenterString+'_ores.txt')
 print("filename",filename)
 
 # f = open(filename, "r")
@@ -115,7 +116,7 @@ for x in f:
 f.close()
 
 
-rangeToCheckAt = 5000
+rangeToCheckAt = 2000
 # range to check ORES
 listOfOresOnThePlanetNearMyPos = []
 for GPSString in listOfOresOnThePlanet:
@@ -130,5 +131,7 @@ for GPSString in listOfOresOnThePlanet:
 
 for GPSStringNearMyPos in listOfOresOnThePlanetNearMyPos:
     # print("GPSStringNearMyPos",GPSStringNearMyPos)
-    print(GPSStringNearMyPos)
+    # print(GPSStringNearMyPos)
+    print(GPSStringNearMyPos.replace('\n',''))
+    # pass
 
