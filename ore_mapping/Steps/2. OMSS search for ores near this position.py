@@ -14,10 +14,6 @@ folder_planetsfiles = '2. OSMS_data/star system stock'
 whichPlanetIsTheClosestStr = ""
 
 
-# Triton
-myCurrentPosArray =  np.asarray([-283368.449761682,-2400056.0174512,348238.53512947])
-# Moon
-# myCurrentPosArray =  np.asarray([13006.69678417,145040.712265219,-115439.960197295])
 
 def parseGPS(stringGps):
     # TODO
@@ -53,6 +49,12 @@ def parseGPS(stringGps):
 
     return positionPlanetCenter,strPlanet
 
+# Triton
+# myCurrentPosArray =  np.asarray([-283368.449761682,-2400056.0174512,348238.53512947])
+# Moon
+# myCurrentPosArray =  np.asarray([13006.69678417,145040.712265219,-115439.960197295])
+# MyPos
+myCurrentPosArray,_ =  parseGPS("GPS:#31:-36112.76:6750.47:49163.05:#FF75C9F1:")
 
 # Every stock planets center
 listOfPlanetsGPSString = []
