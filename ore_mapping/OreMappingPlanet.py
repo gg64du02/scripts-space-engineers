@@ -18,8 +18,9 @@ import array as arr
 # ======================================
 
 # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
-folder_planetsfiles = 'planets_files/Alien/'
+# folder_planetsfiles = 'planets_files/Alien/'
 # folder_planetsfiles = 'planets_files/EarthLike/'
+folder_planetsfiles = 'planets_files/Europa/'
 # folder_planetsfiles = 'planets_files/Mars/'
 # folder_planetsfiles = 'planets_files/Moon/'
 # folder_planetsfiles = 'planets_files/Pertam/'
@@ -27,14 +28,19 @@ folder_planetsfiles = 'planets_files/Alien/'
 # folder_planetsfiles = 'planets_files/Gea/'
 
 # Alien
-planet_radius = 60000 #in meters
-center_of_planet = np.asarray([131072.5,131072.5,5731072.5])
-testThisGPSnpArray = np.asarray([153575.803557999,165209.154024688,5776500.24429754])
+# planet_radius = 60000 #in meters
+# center_of_planet = np.asarray([131072.5,131072.5,5731072.5])
+# testThisGPSnpArray = np.asarray([153575.803557999,165209.154024688,5776500.24429754])
 
 # EarthLike
 # planet_radius = 58200 #in meters
 # center_of_planet = np.asarray([0, 0, 0])
 # testThisGPSnpArray = np.asarray([29963,1248,-52526])
+
+# Europa
+planet_radius = 8500 #in meters
+center_of_planet = np.asarray([916384.50, 16384.50, 1616384.50])
+testThisGPSnpArray = np.asarray([923894,22238,1615125])
 
 # Mars
 # planet_radius = 58000 #in meters
