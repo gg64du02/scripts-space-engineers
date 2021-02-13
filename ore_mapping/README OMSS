@@ -10,7 +10,7 @@ Tired of looking for ores on planets in the start system ? (stock)
 
 #Setting up:
 
-To use this you need to download or generate the files that conain all the ore to test for such as each planets on the Star System
+To use this you need to download or generate the files that contain all the ore to test for such as each planets on the Star System
 
 (you need to either generated or download the list of planets' ores.)
 
@@ -24,11 +24,38 @@ within folder: <planetName>/<planetName>_ores.txt
 A link to download all generated files might be provided sooon.
 
 
+Not mandatory but greatly advised: get all planets centers from my script:
+
+1. OMSS Planets center.cs
+
+or search for it on the steam workshop.
+
+
 
 #Use:
 
 Just paste you current GPS location in the parseGPS function that set the value named: myCurrentPosArray
 
-check the wanted range below in meters and within a few second you should get nearing ores coordinates.
+check the wanted range below in meters and within a few second you should get near ores coordinates.
+
+Once you get the coordinates copy and paste in your gps list and show it.
+
+Fly where designated and align it with the planet center to be sure that you are on the right place.
+
+Tip:you can fall back down on planet with gravity if the gps is straight above you should dig if you don't see anything, and after being down 50, nothing well false postive i guess.
 
 
+#False positives and further notes:
+
+The script is still a work in progress but it will most likely help you a great deal.
+
+But I use it also on custom planet like Gea and it is able to pin point where there is Ur there in creative.
+
+That being said you need to be aware that multiplayer server can have some thing that modify ores spots.
+
+The seed might have an impact on the very existence of some ores spots so sometimes you might find nothing.
+
+Also Ice as ore is not yet covered, but most likely GPSs without any element still conains something usually it is Ice.
+
+
+Anyway, I hope this thing would allow more people to engage more play time on planets to get way more pvp action (like having a n honeypot lying there).
