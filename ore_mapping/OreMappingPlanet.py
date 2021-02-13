@@ -20,10 +20,11 @@ import array as arr
 # files from C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Data\PlanetDataFiles
 # folder_planetsfiles = 'planets_files/Alien/'
 # folder_planetsfiles = 'planets_files/EarthLike/'
-folder_planetsfiles = 'planets_files/Europa/'
+# folder_planetsfiles = 'planets_files/Europa/'
 # folder_planetsfiles = 'planets_files/Mars/'
 # folder_planetsfiles = 'planets_files/Moon/'
 # folder_planetsfiles = 'planets_files/Pertam/'
+folder_planetsfiles = 'planets_files/Titan/'
 # folder_planetsfiles = 'planets_files/Triton/'
 # folder_planetsfiles = 'planets_files/Gea/'
 
@@ -38,9 +39,9 @@ folder_planetsfiles = 'planets_files/Europa/'
 # testThisGPSnpArray = np.asarray([29963,1248,-52526])
 
 # Europa
-planet_radius = 8500 #in meters
-center_of_planet = np.asarray([916384.50, 16384.50, 1616384.50])
-testThisGPSnpArray = np.asarray([923894,22238,1615125])
+# planet_radius = 9650 #in meters
+# center_of_planet = np.asarray([916384.50, 16384.50, 1616384.50])
+# testThisGPSnpArray = np.asarray([923894,22238,1615125])
 
 # Mars
 # planet_radius = 58000 #in meters
@@ -56,6 +57,11 @@ testThisGPSnpArray = np.asarray([923894,22238,1615125])
 # planet_radius = 30000 #in meters
 # center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
+
+# Titan
+planet_radius = 9300 #in meters
+center_of_planet = np.asarray([36384.50, 226384.50, 5796384.50])
+testThisGPSnpArray = np.asarray([33928,233308,5802166])
 
 # Triton
 # planet_radius = 38000 #in meters
@@ -82,7 +88,7 @@ constant_hm_mountains = 14*16+3  # e3
 constant_hm_alt_adj = constant_hm_mountains - constant_hm_lacks
 print("constant_hm_alt_adj:",constant_hm_alt_adj)
 
-enableGPSOreAltAdj = True
+enableGPSOreAltAdj = False
 
 # DONE: add the offset introduced by center of the planet
 # TODO: re factor points/coords generation for each faces
