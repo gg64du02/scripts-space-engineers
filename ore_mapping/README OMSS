@@ -1,0 +1,34 @@
+# OMSS
+Ore Mapping Star System:
+
+
+#Why:
+
+Tired of looking for ores on planets in the start system ? (stock)
+
+
+
+#Setting up:
+
+To use this you need to download or generate the files that conain all the ore to test for such as each planets on the Star System
+
+(you need to either generated or download the list of planets' ores.)
+
+How it is organized right now:
+
+file: The second step script
+folder: .\2. OSMS_data\star system stock
+
+within folder: <planetName>/<planetName>_ores.txt
+
+A link to download all generated files might be provided sooon.
+
+
+
+#Use:
+
+Just paste you current GPS location in the parseGPS function that set the value named: myCurrentPosArray
+
+check the wanted range below in meters and within a few second you should get nearing ores coordinates.
+
+
