@@ -249,7 +249,7 @@ for j in range(128):
             # List<int> numberList = new List<int>();
             # numberList.Add(32);
             # print("List<String> stringList = new List<String>();")
-            print("stringList.add("+"\""+str(centroid_underground_lack_array[0])+","+str(centroid_underground_lack_array[1])+","+gpsNameOres+"\");")
+            print("stringList.Add("+"\""+str(centroid_underground_lack_array[0])+","+str(centroid_underground_lack_array[1])+","+gpsNameOres+"\");")
 
 
         pass
