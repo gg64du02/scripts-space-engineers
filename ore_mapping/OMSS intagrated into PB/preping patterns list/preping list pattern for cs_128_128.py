@@ -33,6 +33,11 @@ data_ore_layer = 255 * data[:, :, 2]
 data_lack_layer = data_lack_layer.astype('int16')
 data_ore_layer = data_ore_layer.astype('int16')
 
+def centeroidnp(arr):
+    length = arr.shape[0]
+    sum_x = np.sum(arr[:, 0])
+    sum_y = np.sum(arr[:, 1])
+    return sum_x/length, sum_y/length
 
 
 converted_to_bool_surface_array = np.zeros_like(data_lack_layer)
@@ -102,10 +107,22 @@ for j in range(128):
                 # pixelWithValues.append([[
                 #     pointsOfCurrentDetectedLackArray[iPoint, 0], pointsOfCurrentDetectedLackArray[iPoint, 1]],[
                 #                        data_ore_layer[pointsOfCurrentDetectedLackArray[iPoint,0],pointsOfCurrentDetectedLackArray[iPoint,1]]]])
+                # pixelWithValues.append([[
+                #     pointsOfCurrentDetectedLackArray[iPoint, 0]-j, pointsOfCurrentDetectedLackArray[iPoint, 1]-k],[
+                #                        data_ore_layer[pointsOfCurrentDetectedLackArray[iPoint,0],pointsOfCurrentDetectedLackArray[iPoint,1]]]])
                 pixelWithValues.append([[
-                    pointsOfCurrentDetectedLackArray[iPoint, 0]-j, pointsOfCurrentDetectedLackArray[iPoint, 1]-k],[
+                    pointsOfCurrentDetectedLackArray[iPoint, 0], pointsOfCurrentDetectedLackArray[iPoint, 1]],[
                                        data_ore_layer[pointsOfCurrentDetectedLackArray[iPoint,0],pointsOfCurrentDetectedLackArray[iPoint,1]]]])
             print(pixelWithValues)
+
+            centroid_surface_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
+            centroid_surface_lack_array = arr.array('d', [centroid_surface_lack[0], centroid_surface_lack[1]])
+
+            centroid_underground_lack = centeroidnp(pointsOfCurrentDetectedLackArray)
+            centroid_underground_lack_array = arr.array('d',
+                                                        [centroid_underground_lack[0], centroid_underground_lack[1]])
+
+            print("centroid_underground_lack_array",centroid_underground_lack_array)
 
             patternNUmber += 1
             print("patternNUmber",patternNUmber)
