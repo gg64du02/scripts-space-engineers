@@ -80,4 +80,34 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
+
+
+
+    //Get the PB Position:
+    Vector3D myPos = Me.GetPosition();
+
+
+    //Don't change unless you know what you are doing: 128 * 16 = 2048
+    int constantNumbersOfSubPatternToGenerate = 16;
+
+    //Get any control capable block to get the planet center
+
+    //detect if it is a know planet
+
+    //choose the appropriate settings to use for the detected planet
+
+    //generate all coordinates to the cube planet
+
+    //get the first three closest faces.
+    
+    //try to get closer with the first ores in the subpattern infos? (quicker to run ?)
+
+    //then generated all ores nearby
+
+    //sort and write those closest in the Custom Data
+
+
+
+    //put the script output inside the customdata of the PB it is running onto
+    Me.CustomData = "";
 }
