@@ -90,9 +90,75 @@ public void Main(string argument, UpdateType updateSource)
     //Don't change unless you know what you are doing: 128 * 16 = 2048
     int constantNumbersOfSubPatternToGenerate = 16;
 
+	Vector3D vec3Dtarget = new Vector3D(0,0,0);
+	List<IMyShipController> shipsControllers = new List<IMyShipController>();
+	GridTerminalSystem.GetBlocksOfType<IMyShipController>(shipsControllers);
+	if(shipsControllers.Count==0){
+			Echo("This script need any kind of ship controller\n\na remote control, cockpit, ....");
+			return;
+	}
+	IMyShipController firstController = shipsControllers[0];
     //Get any control capable block to get the planet center
+	//using the expected remote control to give us the center of the current planet
+	bool planetCenterDetected = firstController.TryGetPlanetPosition(out vec3Dtarget);
+	
+	Echo("vec3Dtarget"+vec3Dtarget);
+	
+	if(planetCenterDetected){
+		
+		Echo("planet detected");
+		
+		
+		Echo("checking detected planet");
+		
+		
+		//Every stock planets center
+		List<String> listOfPlanetsGPSString = new List<String>();
 
-    //detect if it is a know planet
+		listOfPlanetsGPSString.Add("GPS:EarthLike:0.50:0.50:0.50:");
+		listOfPlanetsGPSString.Add("GPS:Moon:16384.50:136384.50:-113615.50:");
+
+		listOfPlanetsGPSString.Add("GPS:Mars:1031072.50:131072.50:1631072.50:");
+		listOfPlanetsGPSString.Add("GPS:Europa:916384.50:16384.50:1616384.50:");
+
+		listOfPlanetsGPSString.Add("GPS:Triton:-284463.50:-2434463.50:365536.50:");
+
+		listOfPlanetsGPSString.Add("GPS:Pertam:-3967231.50:-32231.50:-767231.50:");
+
+		listOfPlanetsGPSString.Add("GPS:Alien:131072.50:131072.50:5731072.50:");
+		listOfPlanetsGPSString.Add("GPS:Titan:36384.50:226384.50:5796384.50:");
+		
+		// if you want to use the ship controller for some reason
+		// myPos = firstController.GetPosition();
+		
+		Vector3D detectedPlanet = new Vector3D(0,0,0);
+		
+		foreach(string str in listOfPlanetsGPSString){
+			
+			MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+			MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
+			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
+			
+			Vector3D tmpVector3DplanetCenter = tmpTestPlanetCenter.Coords;
+			//Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
+			
+			 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
+			 
+			 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
+			Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
+			
+			if(distanceToPlanetCenter < 100000){
+				detectedPlanet = tmpVector3DplanetCenter;
+				break;
+			}
+		}
+		
+		if(detectedPlanet != new Vector3D(0,0,0)){
+			
+		}
+	}
+	
+    //detect if it is a known planet
 
     //choose the appropriate settings to use for the detected planet
 
