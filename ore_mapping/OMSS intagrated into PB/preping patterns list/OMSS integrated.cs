@@ -41,13 +41,13 @@ public Program()
 
     foreach(var str in stringList)
     {
-        Echo("str" + str);
 
         // using the method 
         String[] strlist = str.Split(',');
+        /*Echo("str" + str);
         Echo(strlist[0]);
         Echo(strlist[1]);
-        Echo(strlist[2]);
+        Echo(strlist[2]);*/
         float tmpx = float.Parse(strlist[0]);
         float tmpy = float.Parse(strlist[1]);
         /*int tmpx = 0;
@@ -58,6 +58,8 @@ public Program()
         oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
     }
     Echo(oreCoords2DSubPattern.Count+"");
+
+	Echo("lol4");
 
 }
 
@@ -82,6 +84,7 @@ public void Main(string argument, UpdateType updateSource)
     // can be removed if not needed.
 
 
+	Echo("lol3");
 
     //Get the PB Position:
     Vector3D myPos = Me.GetPosition();
@@ -103,6 +106,8 @@ public void Main(string argument, UpdateType updateSource)
 	bool planetCenterDetected = firstController.TryGetPlanetPosition(out vec3Dtarget);
 	
 	Echo("vec3Dtarget"+vec3Dtarget);
+	
+	Echo("lol2");
 	
 	if(planetCenterDetected){
 		
@@ -132,10 +137,14 @@ public void Main(string argument, UpdateType updateSource)
 		// myPos = firstController.GetPosition();
 		
 		Vector3D detectedPlanet = new Vector3D(0,0,0);
+		MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+		
+		Echo("lol1");
 		
 		foreach(string str in listOfPlanetsGPSString){
 			
-			MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+			//MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+			tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
 			MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
 			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
 			
@@ -153,14 +162,56 @@ public void Main(string argument, UpdateType updateSource)
 			}
 		}
 		
+		
+		//detect if it is a known planet
 		if(detectedPlanet != new Vector3D(0,0,0)){
+			Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
 			
+			string planetsName = tmpTestPlanetCenter.Name;
+			
+			Echo("planetsName: "+planetsName);
+			
+			Echo("detectedPlanet "+detectedPlanet);
+			Vector3D cubeCenter = detectedPlanet;
+			
+			//in meters
+			double planetRadius = 0;
+			
+			//choose the appropriate settings to use for the detected planet
+			//or adapt to local elevation of the firstController?
+			if(planetsName == "Alien"){
+				planetRadius = 60000;
+			}
+			if(planetsName == "EarthLike"){
+				planetRadius = 58200;
+			}
+			if(planetsName == "Europa"){
+				planetRadius = 9650;
+			}
+			if(planetsName == "Mars"){
+				planetRadius = 58000;
+			}
+			if(planetsName == "Moon"){
+				planetRadius = 8500;
+			}
+			if(planetsName == "Pertam"){
+				planetRadius = 30000;
+			}
+			if(planetsName == "Titan"){
+				planetRadius = 9300;
+			}
+			if(planetsName == "Triton"){
+				planetRadius = 38000;
+			}
+			
+		}
+		else {
+			Echo("unidentified planet");
+			return;
 		}
 	}
 	
-    //detect if it is a known planet
 
-    //choose the appropriate settings to use for the detected planet
 
     //generate all coordinates to the cube planet
 
