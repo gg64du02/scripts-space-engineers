@@ -175,35 +175,90 @@ public void Main(string argument, UpdateType updateSource)
 			Vector3D cubeCenter = detectedPlanet;
 			
 			//in meters
-			double planetRadius = 0;
+			double planet_radius = 0;
 			
 			//choose the appropriate settings to use for the detected planet
 			//or adapt to local elevation of the firstController?
 			if(planetsName == "Alien"){
-				planetRadius = 60000;
+				planet_radius = 60000;
 			}
 			if(planetsName == "EarthLike"){
-				planetRadius = 58200;
+				planet_radius = 58200;
 			}
 			if(planetsName == "Europa"){
-				planetRadius = 9650;
+				planet_radius = 9650;
 			}
 			if(planetsName == "Mars"){
-				planetRadius = 58000;
+				planet_radius = 58000;
 			}
 			if(planetsName == "Moon"){
-				planetRadius = 8500;
+				planet_radius = 8500;
 			}
 			if(planetsName == "Pertam"){
-				planetRadius = 30000;
+				planet_radius = 30000;
 			}
 			if(planetsName == "Titan"){
-				planetRadius = 9300;
+				planet_radius = 9300;
 			}
 			if(planetsName == "Triton"){
-				planetRadius = 38000;
+				planet_radius = 38000;
 			}
 			
+			List<int> intIndexFaces = new List<int>(6);
+			intIndexFaces.Add(0);
+			intIndexFaces.Add(1);
+			intIndexFaces.Add(2);
+			intIndexFaces.Add(3);
+			intIndexFaces.Add(4);
+			intIndexFaces.Add(5);
+			
+			Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
+			foreach(int intTmp in intIndexFaces){
+				Echo("intTmp "+intTmp);
+				if(intTmp == 0)
+				{
+					centerFacePositionOffset = new Vector3D(0, 0, planet_radius);
+				}
+				if(intTmp == 1)
+				{
+					centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
+				}
+				if(intTmp == 2)
+				{
+					centerFacePositionOffset = new Vector3D(0, 0, -planet_radius);
+				}
+				if(intTmp == 3)
+				{
+					centerFacePositionOffset = new Vector3D(planet_radius,0,0);
+				}
+				if(intTmp == 4)
+				{
+					centerFacePositionOffset = new Vector3D(-planet_radius,0,0);
+				}
+				if(intTmp == 5)
+				{
+					centerFacePositionOffset = new Vector3D(0, planet_radius,0);
+				}
+				Vector3D centerFacePosition = detectedPlanet + centerFacePositionOffset;
+				
+				Echo("centerFacePosition "+centerFacePosition);
+				
+				Vector3D vectorToFaceCenter = myPos - centerFacePosition;
+				
+				Echo("vectorToFaceCenter "+vectorToFaceCenter);
+				
+				double distanceToFaceCenter = vectorToFaceCenter.Length();
+				
+				Echo("distanceToFaceCenter "+distanceToFaceCenter);
+				
+				if(distanceToFaceCenter < 0.707 * planet_radius){
+					Echo("face close enough to try to generate");
+					
+					
+				}
+				
+				
+			}
 		}
 		else {
 			Echo("unidentified planet");
