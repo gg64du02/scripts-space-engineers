@@ -122,6 +122,10 @@ public void Main(string argument, UpdateType updateSource)
 	//using the expected remote control to give us the center of the current planet
 	bool planetCenterDetected = firstController.TryGetPlanetPosition(out vec3Dtarget);
 	
+	Echo("-You pressed Run you might want to check the content of CustomData\n");
+	
+	Echo("-The following is for debugging purpose:\n");
+	
 	Echo("vec3Dtarget"+vec3Dtarget);
 	
 	//Echo("lol2");
