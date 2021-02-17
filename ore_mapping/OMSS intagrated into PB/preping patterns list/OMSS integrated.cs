@@ -100,6 +100,8 @@ public void Main(string argument, UpdateType updateSource)
 
 
 	//Echo("lol3");
+	
+	string customDataStrBuild = "";
 
     //Get the PB Position:
     Vector3D myPos = Me.GetPosition();
@@ -173,6 +175,9 @@ public void Main(string argument, UpdateType updateSource)
 			
 			if(distanceToPlanetCenter < 100000){
 				detectedPlanet = tmpVector3DplanetCenter;
+				customDataStrBuild += "planet's center:\n\n";
+				customDataStrBuild += str;
+				customDataStrBuild += "\n\n\nalign this planet's center with one in the following list:\n";
 				break;
 			}
 		}
@@ -406,7 +411,6 @@ public void Main(string argument, UpdateType updateSource)
 		}
 	}
 	
-	string customDataStrBuild = "";
 	foreach(string stcTmp in generatedGPSs){
 		customDataStrBuild += "\n"+stcTmp;
 	}
