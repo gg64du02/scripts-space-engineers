@@ -286,49 +286,68 @@ public void Main(string argument, UpdateType updateSource)
 								centroid_surface_lack_planetSized[1] = (128 * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048);*/
 								centroid_surface_lack_planetSized[0] = Convert.ToSingle((128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048));
 								centroid_surface_lack_planetSized[1] = Convert.ToSingle((128 * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048));
+								
+								
+					
+								if(intTmp==0){
+									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+									generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
+								}
+								if(intTmp==1){
+									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									//intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
+								}
+								if(intTmp==2){
+									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+									generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
+								}
+								if(intTmp==3){
+									// intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
+								}
+								if(intTmp==4){
+									//intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
+								}
+								if(intTmp==5){
+									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
+									// intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
+									//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
+									generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
+								}
+					
+								Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
+								
+								Echo("generated_gps_point_on_cube"+generated_gps_point_on_cube);
+								//Echo(typeof(generated_gps_point_on_cube));
+								
+								Vector3D generated_gps_point_on_cube_norm = generated_gps_point_on_cube.Normalize();
+								
+								
+								//cho("typeof(generated_gps_point_on_cube)"+typeof(generated_gps_point_on_cube));
+								
+								//generated_gps_point_on_planet =  Vector3D(planet_radius* generated_gps_point_on_cube_norm)+ cubeCenter;
+								//generated_gps_point_on_planet =  planet_radius* generated_gps_point_on_cube_norm;
+								//generated_gps_point_on_planet = cubeCenter;
+								
+								//enerated_gps_point_on_planet = (planet_radius+alt_adj) * (
+                                //generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
+								
 							}
 							//oreCoords2DSubPattern
 						}
 					}
-					
-                    if(intTmp==0){
-                        intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        //intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-                        generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
-					}
-                    if(intTmp==1){
-                        intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        //intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
-					}
-                    if(intTmp==2){
-                        intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        //intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-                        generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
-					}
-                    if(intTmp==3){
-                        // intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
-					}
-                    if(intTmp==4){
-                        //intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
-					}
-                    if(intTmp==5){
-                        intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-                        // intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-                        intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-						//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
-                        generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
-					}
-					
 				}
 				
 				
