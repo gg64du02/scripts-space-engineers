@@ -1,4 +1,5 @@
 List<String> stringList = new List<String>();
+List<String> stringListOres = new List<String>();
 
 List<Vector2D> oreCoords2DSubPattern = new List<Vector2D>();
 
@@ -53,7 +54,8 @@ public Program()
         /*int tmpx = 0;
         int tmpy = 0;*/
         //string ores = "lol";
-        string ores = strlist[1];
+        string ores = strlist[2];
+		stringListOres.Add(ores);
         
         oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
     }
@@ -280,6 +282,7 @@ public void Main(string argument, UpdateType updateSource)
 						Echo("subXindex"+subXindex);
 						foreach(int subYindex in subIntSubPattern){
 							Echo("subYindex"+subYindex);	
+							int oreCoordSubPatternIndex = 0;
 							foreach(Vector2D oreCoordSubPattern in oreCoords2DSubPattern){
 								Echo("oreCoordSubPattern"+oreCoordSubPattern);
 								/*centroid_surface_lack_planetSized[0] = (128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048);
@@ -339,7 +342,12 @@ public void Main(string argument, UpdateType updateSource)
 								
 								Echo("generated_gps_point_on_planet"+generated_gps_point_on_planet);
 								
-								MyWaypointInfo tmpWPI  = new MyWaypointInfo("test", generated_gps_point_on_planet);
+								string oreNames = stringListOres[oreCoordSubPatternIndex];
+								
+								Echo("oreNames"+oreNames);
+								
+								//MyWaypointInfo tmpWPI  = new MyWaypointInfo("test", generated_gps_point_on_planet);
+								MyWaypointInfo tmpWPI  = new MyWaypointInfo(oreNames, generated_gps_point_on_planet);
 								
 								//Me.CustomData = "lol6";
 								Me.CustomData = tmpWPI.ToString();
@@ -347,6 +355,8 @@ public void Main(string argument, UpdateType updateSource)
 								//enerated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 //generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
 								
+								oreCoordSubPatternIndex +=1 ;
+								//return;
 							}
 							//oreCoords2DSubPattern
 						}
