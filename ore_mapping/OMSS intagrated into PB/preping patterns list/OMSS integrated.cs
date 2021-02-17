@@ -71,9 +71,10 @@ public Program()
         
         oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
     }
-    Echo(oreCoords2DSubPattern.Count+"");
+    Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
 
-	Echo("lol4");
+	//Echo("lol4");
+	Echo("-Click Run to generate the GPSs ore spots in the CustomData inside the PB\n");
 
 }
 
@@ -98,7 +99,7 @@ public void Main(string argument, UpdateType updateSource)
     // can be removed if not needed.
 
 
-	Echo("lol3");
+	//Echo("lol3");
 
     //Get the PB Position:
     Vector3D myPos = Me.GetPosition();
@@ -121,7 +122,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Echo("vec3Dtarget"+vec3Dtarget);
 	
-	Echo("lol2");
+	//Echo("lol2");
 	
 	if(planetCenterDetected){
 		
