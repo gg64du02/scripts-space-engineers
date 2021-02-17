@@ -13,21 +13,8 @@ double rangeToCheckForOres = 2000;
 //Script settings end here
 //=======================
 
-
-
-public Program()
-{
-    // The constructor, called only once every session and
-    // always before any other method is called. Use it to
-    // initialize your script. 
-    //     
-    // The constructor is optional and can be removed if not
-    // needed.
-    // 
-    // It's recommended to set RuntimeInfo.UpdateFrequency 
-    // here, which will allow your script to run itself without a 
-    // timer block.
-
+public void addEarthLikeAlienTritonSubPattern(){
+	
     stringList.Add("5.285714285714286,50.857142857142854,SiNiMg");
     stringList.Add("7.266666666666667,17.666666666666668,SiUrMg");
     stringList.Add("8.666666666666666,88.125,UrMgSi");
@@ -72,6 +59,29 @@ public Program()
         oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
     }
     Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
+}
+
+public void clearSubPattern(){
+	stringList = new List<String>();
+	stringListOres = new List<String>();
+	List<String> generatedGPSs = new List<String>();
+	oreCoords2DSubPattern = new List<Vector2D>();
+}
+	
+
+public Program()
+{
+    // The constructor, called only once every session and
+    // always before any other method is called. Use it to
+    // initialize your script. 
+    //     
+    // The constructor is optional and can be removed if not
+    // needed.
+    // 
+    // It's recommended to set RuntimeInfo.UpdateFrequency 
+    // here, which will allow your script to run itself without a 
+    // timer block.
+
 
 	//Echo("lol4");
 	Echo("-Click Run to generate the GPSs ore spots in the CustomData inside the PB\n");
@@ -100,6 +110,10 @@ public void Main(string argument, UpdateType updateSource)
 
 
 	//Echo("lol3");
+	
+	if(stringList.Count !=0){
+		clearSubPattern();
+	}
 	
 	string customDataStrBuild = "";
 
@@ -209,15 +223,15 @@ public void Main(string argument, UpdateType updateSource)
 			
 			planet_radius = distanceToCenter;
 			
-			/*
-			//choose the appropriate settings to use for the detected planet
+			
+			//choose the appropriate subpattern to use for the detected planet
 			//or adapt to local elevation of the firstController?
 			if(planetsName == "Alien"){
-				planet_radius = 60000;
+				addEarthLikeAlienTritonSubPattern();
 			}
 			if(planetsName == "EarthLike"){
-				planet_radius = 58200;
-			}
+				addEarthLikeAlienTritonSubPattern();
+			}/*
 			if(planetsName == "Europa"){
 				planet_radius = 9650;
 			}
@@ -232,10 +246,10 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			if(planetsName == "Titan"){
 				planet_radius = 9300;
-			}
-			if(planetsName == "Triton"){
-				planet_radius = 38000;
 			}*/
+			if(planetsName == "Triton"){
+				addEarthLikeAlienTritonSubPattern();
+			}
 			
 			List<int> intIndexFaces = new List<int>(6);
 			intIndexFaces.Add(0);
