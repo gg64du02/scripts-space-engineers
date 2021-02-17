@@ -1,6 +1,8 @@
 List<String> stringList = new List<String>();
 List<String> stringListOres = new List<String>();
 
+List<String> generatedGPSs = new List<String>();
+
 List<Vector2D> oreCoords2DSubPattern = new List<Vector2D>();
 
 public Program()
@@ -350,12 +352,26 @@ public void Main(string argument, UpdateType updateSource)
 								MyWaypointInfo tmpWPI  = new MyWaypointInfo(oreNames, generated_gps_point_on_planet);
 								
 								//Me.CustomData = "lol6";
-								Me.CustomData = tmpWPI.ToString();
+								//Me.CustomData = tmpWPI.ToString();
 								
 								//enerated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 //generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
 								
+								
+								
+								Vector3D vectorToGPSgenerated = tmpWPI.Coords - myPos;
+								
+								Echo("vectorToGPSgenerated"+vectorToGPSgenerated);
+								if(vectorToGPSgenerated.Length()<5000){
+									generatedGPSs.Add(tmpWPI.ToString());
+									Echo("LOL");
+								}
+								
+								
 								oreCoordSubPatternIndex +=1 ;
+								
+								
+								
 								//return;
 							}
 							//oreCoords2DSubPattern
@@ -371,6 +387,14 @@ public void Main(string argument, UpdateType updateSource)
 			return;
 		}
 	}
+	
+	string customDataStrBuild = "";
+	foreach(string stcTmp in generatedGPSs){
+		customDataStrBuild += "\n"+stcTmp;
+	}
+	
+	
+	Me.CustomData = customDataStrBuild;
 	
 
 
