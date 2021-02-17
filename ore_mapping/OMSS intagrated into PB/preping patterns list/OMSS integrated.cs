@@ -5,6 +5,16 @@ List<String> generatedGPSs = new List<String>();
 
 List<Vector2D> oreCoords2DSubPattern = new List<Vector2D>();
 
+//=======================
+//Script settings start here
+//=======================
+double rangeToCheckForOres = 2000;
+//=======================
+//Script settings end here
+//=======================
+
+
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -143,7 +153,7 @@ public void Main(string argument, UpdateType updateSource)
 		Vector3D detectedPlanet = new Vector3D(0,0,0);
 		MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
 		
-		Echo("lol1");
+		//Echo("lol1");
 		
 		foreach(string str in listOfPlanetsGPSString){
 			
@@ -158,7 +168,7 @@ public void Main(string argument, UpdateType updateSource)
 			 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
 			 
 			 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
-			Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
+			//Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
 			
 			if(distanceToPlanetCenter < 100000){
 				detectedPlanet = tmpVector3DplanetCenter;
@@ -169,7 +179,7 @@ public void Main(string argument, UpdateType updateSource)
 		
 		//detect if it is a known planet
 		if(detectedPlanet != new Vector3D(0,0,0)){
-			Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
+			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
 			
 			string planetsName = tmpTestPlanetCenter.Name;
 			
@@ -183,6 +193,13 @@ public void Main(string argument, UpdateType updateSource)
 			//width constant of sub pattern
 			int subPatternSize = 128;
 			
+			double distanceToCenter = (cubeCenter - myPos).Length();
+			
+			Echo("distanceToCenter"+distanceToCenter);
+			
+			planet_radius = distanceToCenter;
+			
+			/*
 			//choose the appropriate settings to use for the detected planet
 			//or adapt to local elevation of the firstController?
 			if(planetsName == "Alien"){
@@ -208,7 +225,7 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			if(planetsName == "Triton"){
 				planet_radius = 38000;
-			}
+			}*/
 			
 			List<int> intIndexFaces = new List<int>(6);
 			intIndexFaces.Add(0);
@@ -220,7 +237,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
 			foreach(int intTmp in intIndexFaces){
-				Echo("intTmp "+intTmp);
+				Echo("Checking planet face:"+intTmp);
 				if(intTmp == 0)
 				{
 					centerFacePositionOffset = new Vector3D(0, 0, planet_radius);
@@ -247,15 +264,15 @@ public void Main(string argument, UpdateType updateSource)
 				}
 				Vector3D centerFacePosition = detectedPlanet + centerFacePositionOffset;
 				
-				Echo("centerFacePosition "+centerFacePosition);
+				//Echo("centerFacePosition "+centerFacePosition);
 				
 				Vector3D vectorToFaceCenter = myPos - centerFacePosition;
 				
-				Echo("vectorToFaceCenter "+vectorToFaceCenter);
+				//Echo("vectorToFaceCenter "+vectorToFaceCenter);
 				
 				double distanceToFaceCenter = vectorToFaceCenter.Length();
 				
-				Echo("distanceToFaceCenter "+distanceToFaceCenter);
+				//Echo("distanceToFaceCenter "+distanceToFaceCenter);
 				
 				if(distanceToFaceCenter < 0.707 * planet_radius){
 					Echo("face close enough to try to generate");
@@ -281,12 +298,12 @@ public void Main(string argument, UpdateType updateSource)
                     // print("centroid_surface_lack_planetSized:",centroid_surface_lack_planetSized)
 					
 					foreach(int subXindex in subIntSubPattern){
-						Echo("subXindex"+subXindex);
+						//Echo("subXindex"+subXindex);
 						foreach(int subYindex in subIntSubPattern){
-							Echo("subYindex"+subYindex);	
+							//Echo("subYindex"+subYindex);	
 							int oreCoordSubPatternIndex = 0;
 							foreach(Vector2D oreCoordSubPattern in oreCoords2DSubPattern){
-								Echo("oreCoordSubPattern"+oreCoordSubPattern);
+								//Echo("oreCoordSubPattern"+oreCoordSubPattern);
 								/*centroid_surface_lack_planetSized[0] = (128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048);
 								centroid_surface_lack_planetSized[1] = (128 * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048);*/
 								centroid_surface_lack_planetSized[0] = Convert.ToSingle((128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048));
@@ -334,19 +351,19 @@ public void Main(string argument, UpdateType updateSource)
 					
 								Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
 								
-								Echo("generated_gps_point_on_cube"+generated_gps_point_on_cube);
-								//Echo(typeof(generated_gps_point_on_cube));
+								//Echo("generated_gps_point_on_cube"+generated_gps_point_on_cube);
+								
 								
 								Vector3D generated_gps_point_on_cube_norm = Vector3D.Normalize(generated_gps_point_on_cube);
 								
 								
 								generated_gps_point_on_planet =  planet_radius * Vector3D.Normalize(generated_gps_point_on_cube_norm)+ cubeCenter;
 								
-								Echo("generated_gps_point_on_planet"+generated_gps_point_on_planet);
+								//Echo("generated_gps_point_on_planet"+generated_gps_point_on_planet);
 								
 								string oreNames = stringListOres[oreCoordSubPatternIndex];
 								
-								Echo("oreNames"+oreNames);
+								//Echo("oreNames"+oreNames);
 								
 								//MyWaypointInfo tmpWPI  = new MyWaypointInfo("test", generated_gps_point_on_planet);
 								MyWaypointInfo tmpWPI  = new MyWaypointInfo(oreNames, generated_gps_point_on_planet);
@@ -361,10 +378,10 @@ public void Main(string argument, UpdateType updateSource)
 								
 								Vector3D vectorToGPSgenerated = tmpWPI.Coords - myPos;
 								
-								Echo("vectorToGPSgenerated"+vectorToGPSgenerated);
-								if(vectorToGPSgenerated.Length()<5000){
+								//Echo("vectorToGPSgenerated"+vectorToGPSgenerated);
+								if(vectorToGPSgenerated.Length()<rangeToCheckForOres){
 									generatedGPSs.Add(tmpWPI.ToString());
-									Echo("LOL");
+									Echo("one close enough");
 								}
 								
 								
