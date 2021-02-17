@@ -61,6 +61,69 @@ public void addEarthLikeAlienTritonSubPattern(){
     Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
 }
 
+
+public void addMarsSubPattern(){
+	
+	stringList.Add("5.285714285714286,50.857142857142854,SiNiMg");
+	stringList.Add("7.266666666666667,17.666666666666668,SiUrMg");
+	stringList.Add("8.666666666666666,88.125,UrMgSi");
+	stringList.Add("9.0,68.71428571428571,Ice?");
+	stringList.Add("10.785714285714286,112.14285714285714,AgAu");
+	stringList.Add("12.875,7.875,Ice?");
+	stringList.Add("23.434782608695652,49.08695652173913,UrAuFe");
+	stringList.Add("23.0,96.0,Ice?");
+	stringList.Add("26.785714285714285,76.14285714285714,AgAu");
+	stringList.Add("34.22857142857143,16.685714285714287,MgSiNi");
+	stringList.Add("34.125,60.875,Ice?");
+	stringList.Add("36.666666666666664,109.125,UrMgSi");
+	stringList.Add("42.833333333333336,42.333333333333336,FeNiCo");
+	stringList.Add("51.22857142857143,70.68571428571428,MgSiNi");
+	stringList.Add("48.84615384615385,90.76923076923077,Ice?");
+	stringList.Add("50.4,20.2,Ice?");
+	stringList.Add("60.56666666666667,7.033333333333333,FeNiCo");
+	stringList.Add("62.88235294117647,104.32352941176471,FeAuUr");
+	stringList.Add("63.0,43.25,Ice?");
+	stringList.Add("69.88235294117646,29.323529411764707,FeAuUr");
+	stringList.Add("70.78571428571429,55.142857142857146,AgAu");
+	stringList.Add("69.5,71.0,Ice?");
+	stringList.Add("78.26666666666667,79.66666666666667,SiUrMg");
+	stringList.Add("78.125,10.875,Ice?");
+	stringList.Add("81.66666666666667,95.22222222222223,Ice?");
+	stringList.Add("88.78571428571429,108.14285714285714,AgAu");
+	stringList.Add("90.66666666666667,13.125,UrMgSi");
+	stringList.Add("92.28571428571429,53.857142857142854,SiNiMg");
+	stringList.Add("96.66666666666667,82.125,UrMgSi");
+	stringList.Add("98.8,35.6,Ice?");
+	stringList.Add("106.0,66.5,Ice?");
+	stringList.Add("106.125,99.875,Ice?");
+	stringList.Add("107.8,10.4,Ice?");
+	stringList.Add("112.83333333333333,18.333333333333332,FeNiCo");
+	stringList.Add("114.70833333333333,83.66666666666667,UrAgCo");
+	stringList.Add("116.41666666666667,52.083333333333336,UrAgCo");
+	stringList.Add("115.26666666666667,112.66666666666667,SiUrMg");
+
+    foreach(var str in stringList)
+    {
+
+        // using the method 
+        String[] strlist = str.Split(',');
+        /*Echo("str" + str);
+        Echo(strlist[0]);
+        Echo(strlist[1]);
+        Echo(strlist[2]);*/
+        float tmpx = float.Parse(strlist[0]);
+        float tmpy = float.Parse(strlist[1]);
+        /*int tmpx = 0;
+        int tmpy = 0;*/
+        //string ores = "lol";
+        string ores = strlist[2];
+		stringListOres.Add(ores);
+        
+        oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
+    }
+    Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
+}
+
 public void clearSubPattern(){
 	stringList = new List<String>();
 	stringListOres = new List<String>();
@@ -234,10 +297,10 @@ public void Main(string argument, UpdateType updateSource)
 			}/*
 			if(planetsName == "Europa"){
 				planet_radius = 9650;
-			}
+			}*/
 			if(planetsName == "Mars"){
-				planet_radius = 58000;
-			}
+				addMarsSubPattern();
+			}/*
 			if(planetsName == "Moon"){
 				planet_radius = 8500;
 			}
