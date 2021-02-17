@@ -332,14 +332,17 @@ public void Main(string argument, UpdateType updateSource)
 								Echo("generated_gps_point_on_cube"+generated_gps_point_on_cube);
 								//Echo(typeof(generated_gps_point_on_cube));
 								
-								Vector3D generated_gps_point_on_cube_norm = generated_gps_point_on_cube.Normalize();
+								Vector3D generated_gps_point_on_cube_norm = Vector3D.Normalize(generated_gps_point_on_cube);
 								
 								
-								//cho("typeof(generated_gps_point_on_cube)"+typeof(generated_gps_point_on_cube));
+								generated_gps_point_on_planet =  planet_radius * Vector3D.Normalize(generated_gps_point_on_cube_norm)+ cubeCenter;
 								
-								//generated_gps_point_on_planet =  Vector3D(planet_radius* generated_gps_point_on_cube_norm)+ cubeCenter;
-								//generated_gps_point_on_planet =  planet_radius* generated_gps_point_on_cube_norm;
-								//generated_gps_point_on_planet = cubeCenter;
+								Echo("generated_gps_point_on_planet"+generated_gps_point_on_planet);
+								
+								MyWaypointInfo tmpWPI  = new MyWaypointInfo("test", generated_gps_point_on_planet);
+								
+								//Me.CustomData = "lol6";
+								Me.CustomData = tmpWPI.ToString();
 								
 								//enerated_gps_point_on_planet = (planet_radius+alt_adj) * (
                                 //generated_gps_point_on_cube / np.linalg.norm(generated_gps_point_on_cube))+center_of_planet
@@ -374,5 +377,5 @@ public void Main(string argument, UpdateType updateSource)
 
 
     //put the script output inside the customdata of the PB it is running onto
-    Me.CustomData = "";
+    //Me.CustomData = "";
 }
