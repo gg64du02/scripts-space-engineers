@@ -129,7 +129,7 @@ public void addMarsSubPattern(){
 }
 
 
-public void addMoonSubPattern(){
+public void addEuropaMoonSubPattern(){
 	
 	stringList.Add("29.272727272727273,158.86363636363637,UrMgSi");
 	stringList.Add("31.903846153846153,53.01923076923077,Ni");
@@ -334,16 +334,17 @@ public void Main(string argument, UpdateType updateSource)
 			if(planetsName == "EarthLike"){
 				addEarthLikeAlienTritonSubPattern();
 				subPatternSize = 128;
-			}/*
+			}
 			if(planetsName == "Europa"){
-				planet_radius = 9650;
-			}*/
+				addEuropaMoonSubPattern();
+				subPatternSize = 256;
+			}
 			if(planetsName == "Mars"){
 				addMarsSubPattern();
 				subPatternSize = 128;
 			}
 			if(planetsName == "Moon"){
-				addMoonSubPattern();
+				addEuropaMoonSubPattern();
 				subPatternSize = 256;
 			}/*
 			if(planetsName == "Pertam"){
