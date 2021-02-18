@@ -128,6 +128,42 @@ public void addMarsSubPattern(){
     Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
 }
 
+
+public void addMoonSubPattern(){
+	
+	stringList.Add("29.272727272727273,158.86363636363637,UrMgSi");
+	stringList.Add("31.903846153846153,53.01923076923077,Ni");
+	stringList.Add("74.16666666666667,215.16666666666666,FeNiCo");
+	stringList.Add("82.39041095890411,36.64383561643836,FeAuUr");
+	stringList.Add("104.07142857142857,144.78571428571428,AgAu");
+	stringList.Add("140.16666666666666,55.166666666666664,FeNiCo");
+	stringList.Add("168.5,131.09756097560975,Ni");
+	stringList.Add("204.7530864197531,42.333333333333336,UrAgCo");
+	stringList.Add("208.07142857142858,209.21428571428572,SiNiMg");
+
+    foreach(var str in stringList)
+    {
+
+        // using the method 
+        String[] strlist = str.Split(',');
+        /*Echo("str" + str);
+        Echo(strlist[0]);
+        Echo(strlist[1]);
+        Echo(strlist[2]);*/
+        float tmpx = float.Parse(strlist[0]);
+        float tmpy = float.Parse(strlist[1]);
+        /*int tmpx = 0;
+        int tmpy = 0;*/
+        //string ores = "lol";
+        string ores = strlist[2];
+		stringListOres.Add(ores);
+        
+        oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
+    }
+    Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
+}
+
+
 public void clearSubPattern(){
 	stringList = new List<String>();
 	stringListOres = new List<String>();
@@ -305,10 +341,11 @@ public void Main(string argument, UpdateType updateSource)
 			if(planetsName == "Mars"){
 				addMarsSubPattern();
 				subPatternSize = 128;
-			}/*
-			if(planetsName == "Moon"){
-				planet_radius = 8500;
 			}
+			if(planetsName == "Moon"){
+				addMoonSubPattern();
+				subPatternSize = 256;
+			}/*
 			if(planetsName == "Pertam"){
 				planet_radius = 30000;
 			}
