@@ -224,9 +224,6 @@ public void Main(string argument, UpdateType updateSource)
     Vector3D myPos = Me.GetPosition();
 
 
-    //Don't change unless you know what you are doing: 128 * 16 = 2048
-    int constantNumbersOfSubPatternToGenerate = 16;
-
 	Vector3D vec3Dtarget = new Vector3D(0,0,0);
 	List<IMyShipController> shipsControllers = new List<IMyShipController>();
 	GridTerminalSystem.GetBlocksOfType<IMyShipController>(shipsControllers);
@@ -358,7 +355,13 @@ public void Main(string argument, UpdateType updateSource)
 				addEarthLikeAlienTritonSubPattern();
 				subPatternSize = 128;
 			}
-			
+
+
+			//Don't change unless you know what you are doing: 128 * 16 = 2048
+			int constantNumbersOfSubPatternToGenerate = 16;
+			constantNumbersOfSubPatternToGenerate = 2048 / subPatternSize;
+			Echo("constantNumbersOfSubPatternToGenerate" + constantNumbersOfSubPatternToGenerate);
+
 			List<int> intIndexFaces = new List<int>(6);
 			intIndexFaces.Add(0);
 			intIndexFaces.Add(1);
@@ -412,7 +415,7 @@ public void Main(string argument, UpdateType updateSource)
 					int intXsubPattern = 0;
 					int intYsubPattern = 0;
 					
-					int[] subIntSubPattern = Enumerable.Range(0, 15).ToArray();
+					int[] subIntSubPattern = Enumerable.Range(0, constantNumbersOfSubPatternToGenerate-1).ToArray();
 					
 					double intX = 0;
 					double intY = 0;
