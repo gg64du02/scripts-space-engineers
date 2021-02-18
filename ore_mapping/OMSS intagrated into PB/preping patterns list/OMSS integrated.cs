@@ -406,11 +406,15 @@ public void Main(string argument, UpdateType updateSource)
 				//Echo("vectorToFaceCenter "+vectorToFaceCenter);
 				
 				double distanceToFaceCenter = vectorToFaceCenter.Length();
-				
+
 				//Echo("distanceToFaceCenter "+distanceToFaceCenter);
-				
-				if(distanceToFaceCenter < 0.707 * planet_radius){
-					Echo("face close enough to try to generate");
+
+				//sqrt(2)/2 was used for a 1D case
+				//Actually it would need about sqrt(2)*sqrt(1-sqrt(2)/2) in threshold for the 2D case
+				//Let s simplify the logic and just use one for the 3d
+				if (distanceToFaceCenter < 1 * planet_radius)
+				{
+						Echo("face close enough to try to generate");
 					
 					int intXsubPattern = 0;
 					int intYsubPattern = 0;
