@@ -5,6 +5,10 @@ List<String> generatedGPSs = new List<String>();
 
 List<Vector2D> oreCoords2DSubPattern = new List<Vector2D>();
 
+//width constant of sub pattern
+int subPatternSize = 0;
+
+
 //=======================
 //Script settings start here
 //=======================
@@ -277,8 +281,6 @@ public void Main(string argument, UpdateType updateSource)
 			
 			//in meters
 			double planet_radius = 0;
-			//width constant of sub pattern
-			int subPatternSize = 128;
 			
 			double distanceToCenter = (cubeCenter - myPos).Length();
 			
@@ -291,15 +293,18 @@ public void Main(string argument, UpdateType updateSource)
 			//or adapt to local elevation of the firstController?
 			if(planetsName == "Alien"){
 				addEarthLikeAlienTritonSubPattern();
+				subPatternSize = 128;
 			}
 			if(planetsName == "EarthLike"){
 				addEarthLikeAlienTritonSubPattern();
+				subPatternSize = 128;
 			}/*
 			if(planetsName == "Europa"){
 				planet_radius = 9650;
 			}*/
 			if(planetsName == "Mars"){
 				addMarsSubPattern();
+				subPatternSize = 128;
 			}/*
 			if(planetsName == "Moon"){
 				planet_radius = 8500;
@@ -312,6 +317,7 @@ public void Main(string argument, UpdateType updateSource)
 			}*/
 			if(planetsName == "Triton"){
 				addEarthLikeAlienTritonSubPattern();
+				subPatternSize = 128;
 			}
 			
 			List<int> intIndexFaces = new List<int>(6);
@@ -393,8 +399,8 @@ public void Main(string argument, UpdateType updateSource)
 								//Echo("oreCoordSubPattern"+oreCoordSubPattern);
 								/*centroid_surface_lack_planetSized[0] = (128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048);
 								centroid_surface_lack_planetSized[1] = (128 * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048);*/
-								centroid_surface_lack_planetSized[0] = Convert.ToSingle((128 * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048));
-								centroid_surface_lack_planetSized[1] = Convert.ToSingle((128 * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048));
+								centroid_surface_lack_planetSized[0] = Convert.ToSingle((subPatternSize * subXindex+oreCoordSubPattern.X) * (2*planet_radius/2048));
+								centroid_surface_lack_planetSized[1] = Convert.ToSingle((subPatternSize * subYindex+oreCoordSubPattern.Y) * (2*planet_radius/2048));
 								
 								
 					
