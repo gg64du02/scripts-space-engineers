@@ -1,3 +1,14 @@
+// This script is available at:
+// https://steamcommunity.com/sharedfiles/filedetails/?id=2399231983
+
+//=======================
+//Script settings start here
+//=======================
+double rangeToCheckForOres = 2000;
+//=======================
+//Script settings end here
+//=======================
+
 List<String> stringList = new List<String>();
 List<String> stringListOres = new List<String>();
 
@@ -7,15 +18,6 @@ List<Vector2D> oreCoords2DSubPattern = new List<Vector2D>();
 
 //width constant of sub pattern
 int subPatternSize = 0;
-
-
-//=======================
-//Script settings start here
-//=======================
-double rangeToCheckForOres = 2000;
-//=======================
-//Script settings end here
-//=======================
 
 public void addEarthLikeAlienTritonSubPattern(){
 	
@@ -343,10 +345,12 @@ public void Main(string argument, UpdateType updateSource)
 			if(planetsName == "Moon"){
 				addEuropaMoonTitanSubPattern();
 				subPatternSize = 256;
-			}/*
+			}
 			if(planetsName == "Pertam"){
-				planet_radius = 30000;
-			}*/
+			//	planet_radius = 30000;
+				customDataStrBuild += "Pertam is not yet supported\n";
+				Me.CustomData = customDataStrBuild;
+			}
 			if(planetsName == "Titan"){
 				addEuropaMoonTitanSubPattern();
 				subPatternSize = 256;
