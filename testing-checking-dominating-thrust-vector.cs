@@ -58,36 +58,49 @@ public void Main(string argument, UpdateType updateSource)
 	GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 	*/
 	
+	float constantNinetyNine = 0.98f;
+	
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
     foreach (var c in cs)
     {
         if (c.IsFunctional == true)
         {
+			Vector3D fowardThrust = c.WorldMatrix.Forward;
 			
-			Vector3D upThrust = c.WorldMatrix.Up;
+			Echo("fowardThrust"+fowardThrust);
 			
-			if(shipForwardVector.Dot(upThrust)==1){
+			Echo("shipForwardVector"+shipForwardVector);
+			Echo("shipLeftVector"+shipLeftVector);
+			Echo("shipDownVector"+shipDownVector);
+			Echo("shipBackwardVector"+shipBackwardVector);
+			Echo("shipRightVector"+shipRightVector);
+			Echo("shipUpVector"+shipUpVector);
+			
+			Echo(""+shipForwardVector.Dot(fowardThrust));
+			if(shipForwardVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustFoward += c.MaxEffectiveThrust;
 			}
 			
-			if(shipLeftVector.Dot(upThrust)==1){
+			//Echo(""+shipLeftVector.Dot(fowardThrust));
+			if(shipLeftVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustLeft += c.MaxEffectiveThrust;
 			}
 			
-			if(shipDownVector.Dot(upThrust)==1){
+			if(shipDownVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustDown += c.MaxEffectiveThrust;
 			}
 			
-			if(shipBackwardVector.Dot(upThrust)==1){
+			if(shipBackwardVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustBackward += c.MaxEffectiveThrust;
 			}
 			
-			if(shipRightVector.Dot(upThrust)==1){
+			Echo(""+shipRightVector.Dot(fowardThrust));
+			if(shipRightVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustRight += c.MaxEffectiveThrust;
 			}
 			
-			if(shipUpVector.Dot(upThrust)==1){
+			if(shipUpVector.Dot(fowardThrust)>constantNinetyNine){
 				MaxEffectiveThrustUp += c.MaxEffectiveThrust;
 			}
 			
