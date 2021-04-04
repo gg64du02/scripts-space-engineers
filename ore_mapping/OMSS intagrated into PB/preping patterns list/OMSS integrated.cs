@@ -134,12 +134,12 @@ public void addMarsSubPattern(){
 public void addEuropaMoonTitanSubPattern(){
 	
 	stringList.Add("29.272727272727273,158.86363636363637,IceMgSi");
-	stringList.Add("31.903846153846153,53.01923076923077,Ni");
+	stringList.Add("31.903846153846153,53.01923076923077,PtNi");
 	stringList.Add("74.16666666666667,215.16666666666666,FeNiCo");
 	stringList.Add("82.39041095890411,36.64383561643836,FeAuIce");
 	stringList.Add("104.07142857142857,144.78571428571428,AgAu");
 	stringList.Add("140.16666666666666,55.166666666666664,FeNiCo");
-	stringList.Add("168.5,131.09756097560975,Ni");
+	stringList.Add("168.5,131.09756097560975,PtNi");
 	stringList.Add("204.7530864197531,42.333333333333336,IceAgCo");
 	stringList.Add("208.07142857142858,209.21428571428572,SiNiMg");
 
@@ -1257,7 +1257,10 @@ public void Main(string argument, UpdateType updateSource)
 								
 								//Echo("vectorToGPSgenerated"+vectorToGPSgenerated);
 								if(vectorToGPSgenerated.Length()<rangeToCheckForOres){
+									//generatedGPSs.Add(oreCoordSubPattern.ToString());
+									//generatedGPSs.Add(generated_gps_point_on_cube.ToString());
 									generatedGPSs.Add(tmpWPI.ToString());
+									//generatedGPSs.Add("===========");
 									Echo("one close enough");
 								}
 								
