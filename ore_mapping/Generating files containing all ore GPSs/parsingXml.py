@@ -22,25 +22,9 @@ AgValuesList = []
 MgValuesList = []
 UrValuesList = []
 AuValuesList = []
-PtValuesList = []
 
-# print("myroot:",myroot[1])
-# print(myroot)
-
-# for explor in myroot:
-#     print("explor:",explor)
-#     for y in explor:
-#         print(y.tag, y.attrib)
-
-# myroot[0] is EarthLike ?
-# for x in myroot[0]:
-
-# myroot[5] is Titan line 3894
-for x in myroot[5]:
-    print(x.tag, x.attrib)
-    for y in x:
-        if(y.tag=="Ore"):
-            print(y.tag, y.attrib)
+for x in myroot[0]:
+    # print(x.tag, x.attrib)
     if(x.tag == "OreMappings"):
         pass
         for y in x:
@@ -87,12 +71,6 @@ for x in myroot[5]:
                 oreAbrStr = "Au"
                 if(oreValue not in AuValuesList):
                     AuValuesList.append(oreValue)
-            # print("oreTypeStr:",oreTypeStr)
-            if("Platinum" in oreTypeStr):
-                # print("Platinum")
-                oreAbrStr = "Pt"
-                if(oreValue not in PtValuesList):
-                    PtValuesList.append(oreValue)
             # print("oreAbrStr:",oreAbrStr)
             # else:
             #     pass
@@ -138,4 +116,3 @@ print("AgValuesList:",AgValuesList)
 print("MgValuesList:",MgValuesList)
 print("UrValuesList:",UrValuesList)
 print("AuValuesList:",AuValuesList)
-print("PtValuesList:",PtValuesList)
