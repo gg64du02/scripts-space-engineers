@@ -136,20 +136,33 @@ public void Main(string argument, UpdateType updateSource)
 	}
 
 	Echo("numberOfGPSs:"+numberOfGPSs);
+	Echo("furthestAwayGPSrangeKm:"+furthestAwayGPSrangeKm);
 
 	Vector3D weightedVector3Dsum = new Vector3D(0,0,0);
 	float weightsSum = 0f;
+	//==============================
+	//TODO: check : true range multilateration on the english wikipedia
+	//==============================
 	for (int i = 0; i < numberOfGPSs; i++)
 	{
+
 		float weightOfIndexedGPS = listOfWeightCorrespondingToGPSs[i];
 		weightsSum += weightOfIndexedGPS;
-		//weightedVector3Dsum += (furthestAwayGPSrangeKm-weightOfIndexedGPS)*listOfGPSvector3D[i];
-		
 		weightedVector3Dsum += (weightOfIndexedGPS)*listOfGPSvector3D[i];
-		
+
+/*
+		float weightOfIndexedGPS = listOfWeightCorrespondingToGPSs[i];
+		weightsSum += furthestAwayGPSrangeKm-weightOfIndexedGPS;
+		weightedVector3Dsum += (furthestAwayGPSrangeKm-weightOfIndexedGPS)
+*listOfGPSvector3D[i];
+		*/
 	}
 
 	Vector3D result = weightedVector3Dsum / weightsSum;
 	Echo("result:"+result);
+
+	MyWaypointInfo resultMWPI = new MyWaypointInfo("result", result);
+
+	Me.CustomData  = customDataRecoveredRaw + "\n" + resultMWPI.ToString();
 	
 }
