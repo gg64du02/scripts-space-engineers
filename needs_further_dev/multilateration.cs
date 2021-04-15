@@ -1,6 +1,8 @@
 List<string> listOfGPSstring = null;
 List<float> listOfGPSstringRangeFloat = null;
 List<Vector3D> listOfGPSvector3D = null;
+List<float> listOfWeightCorrespondingToGPSs = null;
+float furthestAwayGPSrangeKm = 0f;
 
 public Program()
 {
@@ -36,7 +38,6 @@ public void Main(string argument, UpdateType updateSource)
 	// The method itself is required, but the arguments above
 	// can be removed if not needed.
 
-
 	string customDataRecoveredRaw = Me.CustomData;
 
 	Echo("customDataRecoveredRaw " + customDataRecoveredRaw);
@@ -44,6 +45,12 @@ public void Main(string argument, UpdateType updateSource)
 	listOfGPSstring = new List<string>();
 
 	List<Vector3D> listOfGPSvector3D = new List<Vector3D>();
+	
+	listOfWeightCorrespondingToGPSs = new List<float>();
+
+	listOfGPSstringRangeFloat = new List<float>();
+
+	int numberOfGPSs = 0;
 
 	var customDataRecovered = customDataRecoveredRaw.Split('\n');
 
@@ -52,47 +59,97 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("============= ");
 		Echo("str " + str);
 
+		//Echo("str.Length:"+str.Length);
+		if(str.Length<5){
+			Echo("Line is too short, stopping to look for new GPSs");
+			break;
+		}
+
 		MyWaypointInfo myWaypointInfoGPSbeacon = new MyWaypointInfo("lol", 0, 0, 0);
+		
+		if (str.Contains(":#") == true)
+		{
+			Echo("if (str.Contains(:#) == true)");
+			MyWaypointInfo.TryParse(str.Substring(0, str.Length - 10), out myWaypointInfoGPSbeacon);
+		}
+		else
+		{
+			Echo("not if (str.Contains(:#) == true)");
+			MyWaypointInfo.TryParse(str, out myWaypointInfoGPSbeacon);
+		}
+		if (myWaypointInfoGPSbeacon.Coords != new Vector3D(0, 0, 0))
+		{
+			//x,y,z coords is global to remember between each loop
+			//vec3Dtarget = myWaypointInfoTarget.Coords;
+		}
+		/*
 		MyWaypointInfo.TryParse(str, out myWaypointInfoGPSbeacon);
 
 		Echo("myWaypointInfoGPSbeacon " + myWaypointInfoGPSbeacon.ToString());
+		*/
+		
 
+		Echo(myWaypointInfoGPSbeacon.Name);
+			
 		if (myWaypointInfoGPSbeacon.Name != "lol")
 		{
 			Echo("!= lol");
-			Echo("parse ok");
+			Echo("parseOk");
 
 			//extract the KMs
 			float rangeGPSstring = 0.0f;
 			string nameOfGps = myWaypointInfoGPSbeacon.Name;
 
-			float tryingToConvertIntoFloat = (float)Convert.ToDouble("4.1");
+			//Echo("lol1");
+			Echo(nameOfGps);
+			Echo("trying to parse name:"+nameOfGps);
+			//float tryingToConvertIntoFloat = (float)Convert.ToDouble("4.1");
+			float tryingToConvertIntoFloat = -1f;
+			//tryingToConvertIntoFloat = (float)Convert.ToDouble(nameOfGps);
+			tryingToConvertIntoFloat = float.Parse(nameOfGps);
 
-			if (nameOfGps.Contains("km") == true)
-            {
-				Echo("Contains km");
-				listOfGPSstring.Add(str);
-				listOfGPSstringRangeFloat.Add(tryingToConvertIntoFloat);
-				listOfGPSvector3D.Add(myWaypointInfoGPSbeacon.Coords);
-
+			Echo("lol11");
+			Echo("tryingToConvertIntoFloat:"+tryingToConvertIntoFloat);
+			if(tryingToConvertIntoFloat == null){
+				Echo("tryingToConvertIntoFloat=null");
+				//Echo("lol12");
 			}
-            else
-			{
-				Echo("!Contains km");
+			Echo("lol13");
+			listOfGPSstringRangeFloat.Add(tryingToConvertIntoFloat);
+			
+			//Echo("lol2");
+			
+			 
+			listOfGPSvector3D.Add(myWaypointInfoGPSbeacon.Coords);
+
+			listOfWeightCorrespondingToGPSs.Add(tryingToConvertIntoFloat);
+
+			numberOfGPSs += 1;
+				
+			//Echo("lol3");
+			if(tryingToConvertIntoFloat>furthestAwayGPSrangeKm){
+				furthestAwayGPSrangeKm = tryingToConvertIntoFloat;
 			}
 
-		}
-		else
-		{
-			Echo("== lol");
 		}
 
 	}
 
-	if (listOfGPSstringRangeFloat.Count() >= 3)
-    {
+	Echo("numberOfGPSs:"+numberOfGPSs);
 
-    }
+	Vector3D weightedVector3Dsum = new Vector3D(0,0,0);
+	float weightsSum = 0f;
+	for (int i = 0; i < numberOfGPSs; i++)
+	{
+		float weightOfIndexedGPS = listOfWeightCorrespondingToGPSs[i];
+		weightsSum += weightOfIndexedGPS;
+		//weightedVector3Dsum += (furthestAwayGPSrangeKm-weightOfIndexedGPS)*listOfGPSvector3D[i];
+		
+		weightedVector3Dsum += (weightOfIndexedGPS)*listOfGPSvector3D[i];
+		
+	}
 
-
+	Vector3D result = weightedVector3Dsum / weightsSum;
+	Echo("result:"+result);
+	
 }
