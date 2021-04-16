@@ -122,6 +122,7 @@ public void Main(string argument, UpdateType updateSource)
 			 
 			listOfGPSvector3D.Add(myWaypointInfoGPSbeacon.Coords);
 
+			tryingToConvertIntoFloat = 1000f * tryingToConvertIntoFloat;
 			listOfWeightCorrespondingToGPSs.Add(tryingToConvertIntoFloat);
 
 			numberOfGPSs += 1;
@@ -162,6 +163,8 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("result:"+result);
 
 	MyWaypointInfo resultMWPI = new MyWaypointInfo("result", result);
+	
+	//Me.CustomData  = customDataRecoveredRaw + "\n" + resultMWPI.ToString();
 
 
 	if(numberOfGPSs<3){
@@ -189,10 +192,23 @@ public void Main(string argument, UpdateType updateSource)
 	float V_x = 0f;
 	float V_y = 0f;
 	
+	V_x = (float) (Vector3D.Normalize((c_2-c_1))).Dot(c_3-c_1);
+	float V_y_abs =  (float) ((Vector3D.Normalize((c_2-c_1))).Cross(c_3-c_1)).Length();
+	
+	float V = (float) (c_3-c_1).Length();
+	float V_y_pyth =  (float) Math.Sqrt( (V*V - V_x*V_x) );
+	
+	V_y = -V_y_pyth;
+	
+	//float V_y_sign = (float) (((Vector3D.Normalize((c_2-c_1))).Cross(c_3-c_1))).Cross();
+	//V_y = (float) ((Vector3D.Normalize((c_2-c_1))).Cross(c_3-c_1));
+	
 	Echo("V_x:"+V_x);
 	Echo("V_y:"+V_y);
+	Echo("V_y_abs:"+V_y_abs);
+	Echo("V_y_pyth:"+V_y_pyth);
 	
-	float V = (float) Math.Sqrt(V_x*V_x + V_y*V_y);
+	//float V = (float) Math.Sqrt(V_x*V_x + V_y*V_y);
 	float V_squarred = V * V ;
 	
 	Echo("V:"+V);
@@ -206,6 +222,7 @@ public void Main(string argument, UpdateType updateSource)
 	/
 	(2*V_y);
 	
+	
 	float z_minus = 1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
 	float z_plus = -1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
 	
@@ -215,12 +232,30 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("z_minus:"+z_minus);
 	Echo("z_plus:"+z_plus);
 	
+	x = (float) Math.Round(x,0);
+	y = (float) Math.Round(y,0);
+	z_minus = (float) Math.Round(z_minus,0);
+	z_plus =(float)  Math.Round(z_plus,0);
+	
 	Vector3D result_minus = new Vector3D(x,y,z_minus);
 	Vector3D result_plus = new Vector3D(x,y,z_plus);
 	
 	Echo("result_minus:"+result_minus);
 	Echo("result_plus:"+result_plus);
+	
+	Vector3D checkThis_minus = c_1 + result_minus;
+	Vector3D checkThis_plus = c_1 + result_plus;
+	
 
-	//Me.CustomData  = customDataRecoveredRaw + "\n" + resultMWPI.ToString();
+	MyWaypointInfo resultMWPI_minus = 
+	new MyWaypointInfo("checkThis_minus", checkThis_minus);
+	MyWaypointInfo resultMWPI_plus = 
+	new MyWaypointInfo("checkThis_plus", checkThis_plus);
+	
+	Me.CustomData  = customDataRecoveredRaw 
+	+ "\n" + resultMWPI_minus.ToString()
+	+ "\n" + resultMWPI_plus.ToString()
+	;
+	
 	
 }
