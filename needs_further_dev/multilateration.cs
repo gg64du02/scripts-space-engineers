@@ -163,6 +163,64 @@ public void Main(string argument, UpdateType updateSource)
 
 	MyWaypointInfo resultMWPI = new MyWaypointInfo("result", result);
 
-	Me.CustomData  = customDataRecoveredRaw + "\n" + resultMWPI.ToString();
+
+	if(numberOfGPSs<3){
+			Echo("Not enough GPSs as inputs");
+	}
+	//===========
+	//working on  true range multilateration
+	float x = 0f;
+	float y = 0f;
+	float z = 0f;
+	
+	Vector3D c_1 = listOfGPSvector3D[0];
+	Vector3D c_2 = listOfGPSvector3D[1];
+	Vector3D c_3 = listOfGPSvector3D[2];
+	
+	
+	float r_1 = listOfWeightCorrespondingToGPSs[0];
+	float r_2 = listOfWeightCorrespondingToGPSs[1];
+	float r_3 = listOfWeightCorrespondingToGPSs[2];
+	
+	float U = (float)(c_1-c_2).Length();
+	Echo("U:"+U);
+
+	//TODO V_x V_y
+	float V_x = 0f;
+	float V_y = 0f;
+	
+	Echo("V_x:"+V_x);
+	Echo("V_y:"+V_y);
+	
+	float V = (float) Math.Sqrt(V_x*V_x + V_y*V_y);
+	float V_squarred = V * V ;
+	
+	Echo("V:"+V);
+	Echo("V_squarred:"+V_squarred);
+	
+	x = ( (r_1*r_1) - (r_2*r_2) + (U*U) ) 
+	/
+	(2*U);
+	
+	y = ( (r_1*r_1) - (r_3*r_3) + (V*V) - 2 * V_x * x ) 
+	/
+	(2*V_y);
+	
+	float z_minus = 1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
+	float z_plus = -1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
+	
+	Echo("x:"+x);
+	Echo("y:"+y);
+	Echo("z:"+z);
+	Echo("z_minus:"+z_minus);
+	Echo("z_plus:"+z_plus);
+	
+	Vector3D result_minus = new Vector3D(x,y,z_minus);
+	Vector3D result_plus = new Vector3D(x,y,z_plus);
+	
+	Echo("result_minus:"+result_minus);
+	Echo("result_plus:"+result_plus);
+
+	//Me.CustomData  = customDataRecoveredRaw + "\n" + resultMWPI.ToString();
 	
 }
