@@ -191,8 +191,8 @@ public void Main(string argument, UpdateType updateSource)
 	(2*V_y);
 	
 	
-	float z_minus = 1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
-	float z_plus = -1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) + (y*y) );
+	float z_minus = 1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) - (y*y) );
+	float z_plus = -1f * (float) Math.Sqrt( (r_1*r_1) - (x*x) - (y*y) );
 	
 	Echo("x:"+x);
 	Echo("y:"+y);
