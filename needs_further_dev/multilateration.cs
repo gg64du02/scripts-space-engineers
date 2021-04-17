@@ -228,7 +228,8 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Vector3D checkThis_minus = c_1 + result_minus;
 	Vector3D checkThis_plus = c_1 + result_plus;
-	
+	checkThis_minus = Vector3D.Round(checkThis_minus,1);
+	checkThis_plus = Vector3D.Round(checkThis_plus,1);
 
 	MyWaypointInfo resultMWPI_minus = 
 	new MyWaypointInfo("checkThis_minus", checkThis_minus);
