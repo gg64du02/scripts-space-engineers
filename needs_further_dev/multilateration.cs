@@ -1,3 +1,9 @@
+//TRUE RANGE multilateration applied by gg64du02 aka ///
+//This script is available at this link on the workshop
+//https://steamcommunity.com/sharedfiles/filedetails/?id=2460401823
+//==========================================
+
+
 List<string> listOfGPSstring = null;
 List<float> listOfGPSstringRangeFloat = null;
 List<Vector3D> listOfGPSvector3D = null;
