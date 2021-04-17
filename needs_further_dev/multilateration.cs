@@ -185,6 +185,10 @@ public void Main(string argument, UpdateType updateSource)
 	float r_2 = listOfWeightCorrespondingToGPSs[1];
 	float r_3 = listOfWeightCorrespondingToGPSs[2];
 	
+	Echo("r_1:"+r_1);
+	Echo("r_2:"+r_2);
+	Echo("r_3:"+r_3);
+	
 	float U = (float)(c_1-c_2).Length();
 	Echo("U:"+U);
 
@@ -198,7 +202,7 @@ public void Main(string argument, UpdateType updateSource)
 	float V = (float) (c_3-c_1).Length();
 	float V_y_pyth =  (float) Math.Sqrt( (V*V - V_x*V_x) );
 	
-	V_y = -V_y_pyth;
+	V_y = V_y_pyth;
 	
 	//float V_y_sign = (float) (((Vector3D.Normalize((c_2-c_1))).Cross(c_3-c_1))).Cross();
 	//V_y = (float) ((Vector3D.Normalize((c_2-c_1))).Cross(c_3-c_1));
@@ -237,8 +241,21 @@ public void Main(string argument, UpdateType updateSource)
 	z_minus = (float) Math.Round(z_minus,0);
 	z_plus =(float)  Math.Round(z_plus,0);
 	
+	//generating local (triedre) offset at c1 with x and y being included within the A and D vector
+	Vector3D A = Vector3D.Normalize(c_2-c_1);
+	Vector3D B = Vector3D.Normalize(c_3-c_1);
+	Vector3D D = Vector3D.Normalize(A.Cross(B));
+	Vector3D E = Vector3D.Normalize(D.Cross(A));
+	
+	//(c_1,Ax,Ey,+-zD)
+	
+	Vector3D result_minus = x*A+y*E+z_minus*D;
+	Vector3D result_plus = x*A+y*E+z_plus*D;
+	
+	/*
 	Vector3D result_minus = new Vector3D(x,y,z_minus);
 	Vector3D result_plus = new Vector3D(x,y,z_plus);
+	*/
 	
 	Echo("result_minus:"+result_minus);
 	Echo("result_plus:"+result_plus);
