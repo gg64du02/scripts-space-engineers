@@ -615,6 +615,51 @@ public void Main(string argument)
     //Echo("wantedSpeedRoll:" + wantedSpeedRoll);
     //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
     //Echo("speedRoll:" + speedRoll);
+	
+	vec3Dtarget = new Vector3D(0, 0, 0);
+	
+	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
+	/*
+	Vector3D V3DleftProj = VectorHelper.VectorProjection(V3Dgoal,shipLeftVector);
+	Vector3D V3DfowardProj = VectorHelper.VectorProjection(V3Dgoal,shipForwardVector);
+	*/
+	Vector3D V3DleftProj = VectorHelper.VectorProjection(Vector3D.Normalize(V3Dgoal),
+		shipLeftVector);
+	Vector3D V3DfowardProj = VectorHelper.VectorProjection(Vector3D.Normalize(V3Dgoal),
+		shipForwardVector);
+	
+	double leftSignProj = Vector3D.Dot(V3DleftProj,shipLeftVector)	;
+	double fowardSignProj = Vector3D.Dot(V3DfowardProj,shipForwardVector)	;
+	
+	Echo("leftSignProj"+Math.Round(leftSignProj,2));
+	Echo("fowardSignProj"+Math.Round(fowardSignProj,2));
+	
+	double angleRoll2 = Math.Acos(leftSignProj);
+	Echo("angleRoll2:"+Math.Round(angleRoll2,2));
+	 angleRoll=angleRoll2;
+	 
+	 
+	 //===================
+	 //space support WIP start
+    Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
+    Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
+    double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+    
+	Echo("distRoll2:"+Math.Round(distRoll2,2));
+	angleRoll = 57*distRoll2;
+	//===================
+	Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
+    Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
+    //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+    double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+	
+	Echo("distPitch2:"+Math.Round(distPitch2,2));
+	anglePitch = 57*distPitch2;
+	//space support WIP end
+	//===================
+	
+	//anglePitch=0; angleRoll=0;
+	
     Echo("anglePitch:" + Math.Round((anglePitch), 3));
     Echo("angleRoll:" + Math.Round((angleRoll), 3));
 
@@ -802,6 +847,7 @@ public void Main(string argument)
                 }
                 //Echo("temp_thr_n:" + temp_thr_n);
                 //Echo("remainingThrustToApply:" + remainingThrustToApply);
+				/*
                 if (temp_thr_n < 0)
                 {
                     c.ThrustOverride = Convert.ToSingle(200f);
@@ -810,6 +856,7 @@ public void Main(string argument)
                 {
                     c.ThrustOverride = Convert.ToSingle(temp_thr_n);
                 }
+				*/
             }
         }
     }
