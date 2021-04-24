@@ -619,25 +619,9 @@ public void Main(string argument)
 	vec3Dtarget = new Vector3D(0, 0, 0);
 	
 	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
-	/*
-	Vector3D V3DleftProj = VectorHelper.VectorProjection(V3Dgoal,shipLeftVector);
-	Vector3D V3DfowardProj = VectorHelper.VectorProjection(V3Dgoal,shipForwardVector);
-	*/
-	Vector3D V3DleftProj = VectorHelper.VectorProjection(Vector3D.Normalize(V3Dgoal),
-		shipLeftVector);
-	Vector3D V3DfowardProj = VectorHelper.VectorProjection(Vector3D.Normalize(V3Dgoal),
-		shipForwardVector);
-	
-	double leftSignProj = Vector3D.Dot(V3DleftProj,shipLeftVector)	;
-	double fowardSignProj = Vector3D.Dot(V3DfowardProj,shipForwardVector)	;
-	
-	Echo("leftSignProj"+Math.Round(leftSignProj,2));
-	Echo("fowardSignProj"+Math.Round(fowardSignProj,2));
-	
-	double angleRoll2 = Math.Acos(leftSignProj);
-	Echo("angleRoll2:"+Math.Round(angleRoll2,2));
-	 angleRoll=angleRoll2;
-	 
+	//V3Dgoal = (100*Vector3D.Normalize(V3Dgoal)-linearSpeedsShip);
+	//canceling the speed
+	 //V3Dgoal = linearSpeedsShip;
 	 
 	 //===================
 	 //space support WIP start
