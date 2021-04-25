@@ -618,11 +618,17 @@ public void Main(string argument)
 	
 	vec3Dtarget = new Vector3D(0, 0, 0);
 	
-	Vector3D V3Dgoal =(myPos - vec3Dtarget);
+	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 	//V3Dgoal = (100*Vector3D.Normalize(V3Dgoal)-linearSpeedsShip);
 	//canceling the speed
-	 //V3Dgoal = linearSpeedsShip;
-	 
+	// V3Dgoal = linearSpeedsShip;
+	
+	/*
+	Echo("distToTarget:"+distToTarget);
+	if(distToTarget<521000){
+		V3Dgoal = - V3Dgoal;
+	}
+	*/
 	 
 	 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
 	 
@@ -651,173 +657,188 @@ public void Main(string argument)
 	
 	if (gravityVector.LengthSquared() == 0)
 	{
-            Echo("In space ?");
-			//assuming the g_constant
-			g = 9.81;
-			thr_to_weight_ratio = maxEffectiveThrust_N / (physMass_kg * g);
-			Echo("thr_to_weight_ratioInSpace:"+thr_to_weight_ratio);
-			
-			//TODO control PID for thrust in space
-			control = 0.1;
-			
-			physMass_N = physMass_kg * g;
-			Echo("physMass_N:"+physMass_N);
-			
-			double remainingThrustToApply = -1;
-			double temp_thr_n = -1;
+		Echo("In space ?");
+		//assuming the g_constant
+		g = 9.81;
+		thr_to_weight_ratio = maxEffectiveThrust_N / (physMass_kg * g);
+		Echo("thr_to_weight_ratioInSpace:"+thr_to_weight_ratio);
+		
+		//TODO control PID for thrust in space
+		control = 0.1;
+		
+		physMass_N = physMass_kg * g;
+		Echo("physMass_N:"+physMass_N);
+		
+		double remainingThrustToApply = -1;
+		double temp_thr_n = -1;
 
-			foreach (var c in cs)
+		foreach (var c in cs)
+		{
+			if (c.IsFunctional == true)
 			{
-				if (c.IsFunctional == true)
+				if (c.IsSameConstructAs(flightIndicatorsShipController))
 				{
-					if (c.IsSameConstructAs(flightIndicatorsShipController))
-					{
-						Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
-						if(c.MaxEffectiveThrust == 0){
-							continue;
-						}
-						if (remainingThrustToApply == -1)
-						{
-							remainingThrustToApply = (physMass_N * control * 1);
-							Echo("remainingThrustToApply:"+remainingThrustToApply);
-						}
-						Echo("c.CustomName:"+c.CustomName);
-						// Echo("physMass_N" + physMass_N);
-						// Echo("c.MaxThrust"+c.MaxThrust);
-						// Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
-						//(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
-						if (c.MaxThrust < remainingThrustToApply)
-						{
-							temp_thr_n = c.MaxThrust;
-							remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
-						}
-						else
-						{
-							temp_thr_n = remainingThrustToApply;
-							remainingThrustToApply = 0;
-						}
-						//Echo("temp_thr_n:" + temp_thr_n);
-						//Echo("remainingThrustToApply:" + remainingThrustToApply);
-						
-						if (temp_thr_n < 0)
-						{
-							c.ThrustOverride = Convert.ToSingle(200f);
-						}
-						else
-						{
-							c.ThrustOverride = Convert.ToSingle(temp_thr_n);
-						}
-						
+					Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
+					if(c.MaxEffectiveThrust == 0){
+						continue;
 					}
+					if (remainingThrustToApply == -1)
+					{
+						remainingThrustToApply = (physMass_N * control * 1);
+						Echo("remainingThrustToApply:"+remainingThrustToApply);
+					}
+					Echo("c.CustomName:"+c.CustomName);
+					// Echo("physMass_N" + physMass_N);
+					// Echo("c.MaxThrust"+c.MaxThrust);
+					// Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+					//(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+					if (c.MaxThrust < remainingThrustToApply)
+					{
+						temp_thr_n = c.MaxThrust;
+						remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
+					}
+					else
+					{
+						temp_thr_n = remainingThrustToApply;
+						remainingThrustToApply = 0;
+					}
+					//Echo("temp_thr_n:" + temp_thr_n);
+					//Echo("remainingThrustToApply:" + remainingThrustToApply);
+					
+					if (temp_thr_n < 0)
+					{
+						c.ThrustOverride = Convert.ToSingle(200f);
+					}
+					else
+					{
+						c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+					}
+					
 				}
 			}
+		}
+			
+		//altitude management and downward speed management========================== end
+		if (Double.IsNaN(control) == true)
+		{
+			altRegulator.Reset();
+		}
+
+
+		bool stalizablePitch = true;
+		bool stalizableRoll = true;
+		bool stalizableYaw = false;
+
+		//+ pitch go foward
+		fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
+		fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
+		fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
+
+		// call this next line at each run
+		fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 	}
 	//space support WIP end
 	//===================
 	else{
-	
-	
-	//anglePitch=0; angleRoll=0;
-	
-    Echo("anglePitch:" + Math.Round((anglePitch), 3));
-    Echo("angleRoll:" + Math.Round((angleRoll), 3));
+		Echo("anglePitch:" + Math.Round((anglePitch), 3));
+		Echo("angleRoll:" + Math.Round((angleRoll), 3));
 
-    Vector3D gravityNormalized = totalGravityVect3Dnormalized;
+		Vector3D gravityNormalized = totalGravityVect3Dnormalized;
 
-    double scaleForThetaRegardingGravity = Vector3D.Dot(gravityNormalized, shipDownVector);
-    double thetaMustBe = 180 * Math.Acos(scaleForThetaRegardingGravity) / Math.PI;
-    Echo("thetaMustBe:" + Math.Round((thetaMustBe), 3));
-    Echo("wantedAltitude:" + Math.Round((wantedAltitude), 3));
-    Echo("altitudeError:" + Math.Round((altitudeError), 3));
+		double scaleForThetaRegardingGravity = Vector3D.Dot(gravityNormalized, shipDownVector);
+		double thetaMustBe = 180 * Math.Acos(scaleForThetaRegardingGravity) / Math.PI;
+		Echo("thetaMustBe:" + Math.Round((thetaMustBe), 3));
+		Echo("wantedAltitude:" + Math.Round((wantedAltitude), 3));
+		Echo("altitudeError:" + Math.Round((altitudeError), 3));
 
-    //altitude management and downward speed management========================== start
-    double wantedAlitudeSpeed = 0;
-    double altitudeSpeedError = 0;
-    double controlAltSpeed = 0;
+		//altitude management and downward speed management========================== start
+		double wantedAlitudeSpeed = 0;
+		double altitudeSpeedError = 0;
+		double controlAltSpeed = 0;
 
-    double V_max_altSpeed = 110;
-    double V_min_altSpeed = -100;
-    //wantedAltitude 
-    //change the wantedAltitude BEFORE THIS LINE
-    altitudeError = wantedAltitude - elev;
+		double V_max_altSpeed = 110;
+		double V_min_altSpeed = -100;
+		//wantedAltitude 
+		//change the wantedAltitude BEFORE THIS LINE
+		altitudeError = wantedAltitude - elev;
 
-    //double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length());
-    //compute the spare thrust to change the change of altitude speed, cap it at 1 to avoid "spectacular landing" aka ship crash if lag occurs
-    //it helps avoid hitting the ground quick while the ship is loaded with a 1 < thr_to_weight_ratio < 2
-    double spareThrustToWeightRatio = MyMath.Clamp(Convert.ToSingle(thr_to_weight_ratio - 1), Convert.ToSingle(0), Convert.ToSingle(1));
-    double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * g * spareThrustToWeightRatio);
-    Echo("h_max_alt:" + Math.Round((h_max_alt), 3));
+		//double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * gravityVector.Length());
+		//compute the spare thrust to change the change of altitude speed, cap it at 1 to avoid "spectacular landing" aka ship crash if lag occurs
+		//it helps avoid hitting the ground quick while the ship is loaded with a 1 < thr_to_weight_ratio < 2
+		double spareThrustToWeightRatio = MyMath.Clamp(Convert.ToSingle(thr_to_weight_ratio - 1), Convert.ToSingle(0), Convert.ToSingle(1));
+		double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * g * spareThrustToWeightRatio);
+		Echo("h_max_alt:" + Math.Round((h_max_alt), 3));
 
-    double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
-    Echo("clampAltError:" + Math.Round((clampAltError), 3));
+		double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
+		Echo("clampAltError:" + Math.Round((clampAltError), 3));
 
-    //TODO: make it asymetric
-    wantedAlitudeSpeed = (clampAltError / h_max_alt) * V_max_altSpeed;
-    Echo("wantedAlitudeSpeed:" + Math.Round((wantedAlitudeSpeed), 3));
+		//TODO: make it asymetric
+		wantedAlitudeSpeed = (clampAltError / h_max_alt) * V_max_altSpeed;
+		Echo("wantedAlitudeSpeed:" + Math.Round((wantedAlitudeSpeed), 3));
 
-    double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
+		double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
 
 
-    //wantedAlitudeSpeed = -10;
-    //if (elev < 50)
-    //{
-    //    wantedAlitudeSpeed = -1;
-    //}
-    //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-    altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-    Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+		//wantedAlitudeSpeed = -10;
+		//if (elev < 50)
+		//{
+		//    wantedAlitudeSpeed = -1;
+		//}
+		//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+		altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+		Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
 
-    controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-    Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+		controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+		Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
 
-    Echo("thr_to_weight_ratio:" + Math.Round((thr_to_weight_ratio), 3));
+		Echo("thr_to_weight_ratio:" + Math.Round((thr_to_weight_ratio), 3));
 
-    //feedback loop to counter the wrong speed
-    control = controlAltSpeed;
+		//feedback loop to counter the wrong speed
+		control = controlAltSpeed;
 
-    //double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
-    //double descSurfaceSpeed = 10;
-    //Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
+		//double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
+		//double descSurfaceSpeed = 10;
+		//Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
 
 
-    if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
-    {
-        wantedAltitude = 1500;
-    }
+		if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
+		{
+			wantedAltitude = 1500;
+		}
 
-    Echo("dts:" + dts);
-    if (Math.Abs(distPitch) < 1)
-    {
-        if (Math.Abs(distRoll) < 1)
-        {
-            if (dts > 0)
-            {
-                //if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
-                //{
-                wantedAltitude = 125;
+		Echo("dts:" + dts);
+		if (Math.Abs(distPitch) < 1)
+		{
+			if (Math.Abs(distRoll) < 1)
+			{
+				if (dts > 0)
+				{
+					//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
+					//{
+					wantedAltitude = 125;
 
-                if (elev < 140)
-                {
-                    clampWantedAlitudeSpeed = -5;
-                }
+					if (elev < 140)
+					{
+						clampWantedAlitudeSpeed = -5;
+					}
 
-                //wantedAlitudeSpeed = -10;
-                //if (elev < 50)
-                //{
-                //    wantedAlitudeSpeed = -1;
-                //}
-                //alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-                altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-                Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+					//wantedAlitudeSpeed = -10;
+					//if (elev < 50)
+					//{
+					//    wantedAlitudeSpeed = -1;
+					//}
+					//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+					Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
 
-                controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-                Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+					Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
 
-                //feedback loop to counter the wrong speed
-                control = controlAltSpeed;
-                //}
-            }
-        }
+					//feedback loop to counter the wrong speed
+					control = controlAltSpeed;
+					//}
+				}
+			}
     }
     //altitude management and downward speed management========================== end
 
