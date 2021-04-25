@@ -624,11 +624,10 @@ public void Main(string argument)
 	// V3Dgoal = linearSpeedsShip;
 	
 	/*
-	Echo("distToTarget:"+distToTarget);
-	if(distToTarget<521000){
-		V3Dgoal = - V3Dgoal;
+	if(distToTarget>623000){
+		V3Dgoal = -V3Dgoal;
 	}
-	*/
+	 */
 	 
 	 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
 	 
@@ -663,8 +662,33 @@ public void Main(string argument)
 		thr_to_weight_ratio = maxEffectiveThrust_N / (physMass_kg * g);
 		Echo("thr_to_weight_ratioInSpace:"+thr_to_weight_ratio);
 		
+		double max_g_space = maxEffectiveThrust_N / physMass_kg;
+		
+		Echo("max_g_space:"+max_g_space);
+		
+		//from 1 to inf
+		double safety_k = 2;
+		
+		Echo("safety_k:"+safety_k);
+		
+		double V_max_space = 100;
+		
+		 distWhenToStartBraking  = safety_k 
+		* (V_max_space * V_max_space) / ( 2 * max_g_space);
+		//double distWhenToStartBraking  = distToTarget * linearSpeedsShip.Length();
+		
+		Echo("distWhenToStartBraking:"+distWhenToStartBraking);
+		
+		
+		
+		
+		float V_space = MyMath.Clamp(0,0,(float) V_max_space);
+		
+		V3Dgoal = V_space*Vector3D.Normalize(V3Dgoal);
+		
+		
 		//TODO control PID for thrust in space
-		control = 0.1;
+		control = 0;
 		
 		physMass_N = physMass_kg * g;
 		Echo("physMass_N:"+physMass_N);
