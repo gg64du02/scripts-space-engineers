@@ -618,10 +618,15 @@ public void Main(string argument)
 	
 	vec3Dtarget = new Vector3D(0, 0, 0);
 	
-	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
+	Vector3D V3Dgoal =(myPos - vec3Dtarget);
 	//V3Dgoal = (100*Vector3D.Normalize(V3Dgoal)-linearSpeedsShip);
 	//canceling the speed
 	 //V3Dgoal = linearSpeedsShip;
+	 
+	 
+	 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
+	 
+	 Echo("negIfThrustIsOpp"+negIfThrustIsOpp);
 	 
 	 //===================
 	 //space support WIP start
@@ -639,8 +644,78 @@ public void Main(string argument)
 	
 	Echo("distPitch2:"+Math.Round(distPitch2,2));
 	anglePitch = 57*distPitch2;
+	if(negIfThrustIsOpp<0){
+		anglePitch*= 10;
+		angleRoll*= 10;
+	}
+	
+	if (gravityVector.LengthSquared() == 0)
+	{
+            Echo("In space ?");
+			//assuming the g_constant
+			g = 9.81;
+			thr_to_weight_ratio = maxEffectiveThrust_N / (physMass_kg * g);
+			Echo("thr_to_weight_ratioInSpace:"+thr_to_weight_ratio);
+			
+			//TODO control PID for thrust in space
+			control = 0.1;
+			
+			physMass_N = physMass_kg * g;
+			Echo("physMass_N:"+physMass_N);
+			
+			double remainingThrustToApply = -1;
+			double temp_thr_n = -1;
+
+			foreach (var c in cs)
+			{
+				if (c.IsFunctional == true)
+				{
+					if (c.IsSameConstructAs(flightIndicatorsShipController))
+					{
+						Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
+						if(c.MaxEffectiveThrust == 0){
+							continue;
+						}
+						if (remainingThrustToApply == -1)
+						{
+							remainingThrustToApply = (physMass_N * control * 1);
+							Echo("remainingThrustToApply:"+remainingThrustToApply);
+						}
+						Echo("c.CustomName:"+c.CustomName);
+						// Echo("physMass_N" + physMass_N);
+						// Echo("c.MaxThrust"+c.MaxThrust);
+						// Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+						//(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+						if (c.MaxThrust < remainingThrustToApply)
+						{
+							temp_thr_n = c.MaxThrust;
+							remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
+						}
+						else
+						{
+							temp_thr_n = remainingThrustToApply;
+							remainingThrustToApply = 0;
+						}
+						//Echo("temp_thr_n:" + temp_thr_n);
+						//Echo("remainingThrustToApply:" + remainingThrustToApply);
+						
+						if (temp_thr_n < 0)
+						{
+							c.ThrustOverride = Convert.ToSingle(200f);
+						}
+						else
+						{
+							c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+						}
+						
+					}
+				}
+			}
+	}
 	//space support WIP end
 	//===================
+	else{
+	
 	
 	//anglePitch=0; angleRoll=0;
 	
@@ -771,6 +846,7 @@ public void Main(string argument)
 
 
     //debug roll
+	/*
     var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
         + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
         + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
@@ -778,12 +854,15 @@ public void Main(string argument)
         + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
         + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
-    //str_to_display = "\n8|elev|" + Math.Round((elev), 0)
-    //    + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
-    //    + "\n10|" + Math.Round((0.0f), 0)
-    //    + "\n11|wAS|" + Math.Round((wantedAlitudeSpeed), 0)
-    //    + "\n12|wA|" + Math.Round((wantedAltitude), 0)
-    //    + "\n13|con|" + Math.Round((control), 0);
+*/
+    var str_to_display = "\n1|" + Math.Round((distPitch2), 3) + "|1|" + Math.Round((distRoll2), 3)
+        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+        + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+
     //var str_to_display = "lol";
     if (listAntenna.Count != 0)
     {
@@ -831,7 +910,7 @@ public void Main(string argument)
                 }
                 //Echo("temp_thr_n:" + temp_thr_n);
                 //Echo("remainingThrustToApply:" + remainingThrustToApply);
-				/*
+				
                 if (temp_thr_n < 0)
                 {
                     c.ThrustOverride = Convert.ToSingle(200f);
@@ -840,10 +919,12 @@ public void Main(string argument)
                 {
                     c.ThrustOverride = Convert.ToSingle(temp_thr_n);
                 }
-				*/
+				
             }
         }
     }
+	}
+	
 
 }
 
