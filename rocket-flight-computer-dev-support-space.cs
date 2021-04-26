@@ -636,7 +636,7 @@ public void Main(string argument)
 		
 		Echo("safety_k:"+safety_k);
 		
-		double V_max_space = 50;
+		double V_max_space = 100;
 		
 		 distWhenToStartBraking  = safety_k 
 		* (V_max_space * V_max_space) / ( 2 * max_g_space);
@@ -651,30 +651,45 @@ public void Main(string argument)
 		Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 		double distToGoal = V3Dgoal.Length();
 		
+		/*
 		if(distToGoal>distWhenToStartBraking)
 		{
 			V3Dgoal *= -1;
 		}
+		*/
 		
 		Vector3D V3Dgoal_speed = V_max_space*Vector3D.Normalize(V3Dgoal);
+		
+		Vector3D V3D_V_error_space = linearSpeedsShip-V3Dgoal_speed;
 		
 		double V_error_space = (linearSpeedsShip-V3Dgoal_speed).Length();
 		
 		double dot_linearSpeedsShip_V3Dgoal_speed = linearSpeedsShip.Dot(V3Dgoal_speed);
 		Echo("dot_linearSpeedsShip_V3Dgoal_speed:"+dot_linearSpeedsShip_V3Dgoal_speed);
 		
+		/*
 		if(dot_linearSpeedsShip_V3Dgoal_speed<0){
 			V_error_space *= -1;
 		}
-		
-		
-		control =  V_error_space;
+		*/
+		/*
+		if(distToGoal>distWhenToStartBraking)
+		{
+			if(dot_linearSpeedsShip_V3Dgoal_speed>0){
+				V_error_space *=-1;
+			}
+		}
+		*/
+		control =  0;
+		if(Math.Abs(V_error_space)>5){
+			control =  V_error_space;
+		}
 		
 		Echo("V_error_space:"+V_error_space);
 		//end thrust control
 		
 		 
-		 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
+		 double negIfThrustIsOpp = V3D_V_error_space.Dot(shipDownVector);
 		 
 		 Echo("negIfThrustIsOpp"+negIfThrustIsOpp);
 		 
@@ -682,7 +697,7 @@ public void Main(string argument)
 		 //space support WIP start
 		Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
 		Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
-		double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+		double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
 		
 		Echo("distRoll2:"+Math.Round(distRoll2,2));
 		angleRoll = 57*distRoll2;
@@ -690,7 +705,7 @@ public void Main(string argument)
 		Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
 		Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
 		//double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-		double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+		double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
 		
 		Echo("distPitch2:"+Math.Round(distPitch2,2));
 		anglePitch = 57*distPitch2;
