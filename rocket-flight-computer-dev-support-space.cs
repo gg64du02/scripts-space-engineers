@@ -616,46 +616,11 @@ public void Main(string argument)
     //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
     //Echo("speedRoll:" + speedRoll);
 	
-	vec3Dtarget = new Vector3D(0, 0, 0);
-	
-	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
-	//V3Dgoal = (100*Vector3D.Normalize(V3Dgoal)-linearSpeedsShip);
-	//canceling the speed
-	// V3Dgoal = linearSpeedsShip;
-	
-	/*
-	if(distToTarget>623000){
-		V3Dgoal = -V3Dgoal;
-	}
-	 */
-	 
-	 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
-	 
-	 Echo("negIfThrustIsOpp"+negIfThrustIsOpp);
-	 
-	 //===================
-	 //space support WIP start
-    Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
-    Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
-    double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
-    
-	Echo("distRoll2:"+Math.Round(distRoll2,2));
-	angleRoll = 57*distRoll2;
-	//===================
-	Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
-    Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
-    //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-    double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
-	
-	Echo("distPitch2:"+Math.Round(distPitch2,2));
-	anglePitch = 57*distPitch2;
-	if(negIfThrustIsOpp<0){
-		anglePitch*= 10;
-		angleRoll*= 10;
-	}
 	
 	if (gravityVector.LengthSquared() == 0)
 	{
+		
+		
 		Echo("In space ?");
 		//assuming the g_constant
 		g = 9.81;
@@ -679,13 +644,54 @@ public void Main(string argument)
 		
 		Echo("distWhenToStartBraking:"+distWhenToStartBraking);
 		
+		//vec3Dtarget = new Vector3D(0, 0, 0);
 		
 		
 		
-		float V_space = MyMath.Clamp(0,0,(float) V_max_space);
+		Vector3D V3Dgoal =-(myPos - vec3Dtarget);
+		double distToGoal = V3Dgoal.Length();
 		
-		V3Dgoal = V_space*Vector3D.Normalize(V3Dgoal);
+		if(distToGoal>distWhenToStartBraking)
+		{
+			V3Dgoal *= -1;
+		}
 		
+		// float V_space = MyMath.Clamp(0,0,(float) V_max_space);
+		// V3Dgoal = V_space*Vector3D.Normalize(V3Dgoal);
+		//V3Dgoal = (100*Vector3D.Normalize(V3Dgoal)-linearSpeedsShip);
+		//canceling the speed
+		// V3Dgoal = linearSpeedsShip;
+		
+		/*
+		if(distToTarget>623000){
+			V3Dgoal = -V3Dgoal;
+		}
+		 */
+		 
+		 double negIfThrustIsOpp = V3Dgoal.Dot(shipDownVector);
+		 
+		 Echo("negIfThrustIsOpp"+negIfThrustIsOpp);
+		 
+		 //===================
+		 //space support WIP start
+		Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
+		Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
+		double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+		
+		Echo("distRoll2:"+Math.Round(distRoll2,2));
+		angleRoll = 57*distRoll2;
+		//===================
+		Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
+		Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
+		//double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+		double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3Dgoal));
+		
+		Echo("distPitch2:"+Math.Round(distPitch2,2));
+		anglePitch = 57*distPitch2;
+		if(negIfThrustIsOpp<0){
+			anglePitch*= 10;
+			angleRoll*= 10;
+		}
 		
 		//TODO control PID for thrust in space
 		control = 0;
@@ -891,16 +897,8 @@ public void Main(string argument)
 
 
     //debug roll
-	/*
+
     var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
-        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
-        + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
-        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
-        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
-        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
-        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
-*/
-    var str_to_display = "\n1|" + Math.Round((distPitch2), 3) + "|1|" + Math.Round((distRoll2), 3)
         + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
         + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
         + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
