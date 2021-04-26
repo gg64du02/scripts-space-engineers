@@ -668,18 +668,13 @@ public void Main(string argument)
 		Echo("dot_linearSpeedsShip_V3Dgoal_speed:"+dot_linearSpeedsShip_V3Dgoal_speed);
 		
 		/*
-		if(dot_linearSpeedsShip_V3Dgoal_speed<0){
-			V_error_space *= -1;
-		}
-		*/
-		/*
-		if(distToGoal>distWhenToStartBraking)
+		//to start braking 
+		if(distToGoal<distWhenToStartBraking)
 		{
-			if(dot_linearSpeedsShip_V3Dgoal_speed>0){
-				V_error_space *=-1;
-			}
+			V3D_V_error_space *=-1;
 		}
 		*/
+		
 		control =  0;
 		if(Math.Abs(V_error_space)>5){
 			control =  V_error_space;
