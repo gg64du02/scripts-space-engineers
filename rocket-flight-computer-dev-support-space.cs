@@ -741,6 +741,15 @@ public void Main(string argument)
 			angleRoll = 20*distRoll2;
 			anglePitch = 20*distPitch2;
 		 }
+		 
+		 //stopping the thrust and 
+		 if(linearSpeedsShip.Length()<0.01){
+			 if(distToGoal<safety_k*distWhenToStartBraking){
+				 control = 0;
+				// release gyros when you stop stabilization
+				fightStabilizator.Release(); 
+			 }
+		 }
 		
 		Echo("tryToStop:"+tryToStop);
 		
