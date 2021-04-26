@@ -636,7 +636,7 @@ public void Main(string argument)
 		
 		Echo("safety_k:"+safety_k);
 		
-		double V_max_space = 100;
+		double V_max_space = 50;
 		
 		 distWhenToStartBraking  = safety_k 
 		* (V_max_space * V_max_space) / ( 2 * max_g_space);
@@ -651,10 +651,19 @@ public void Main(string argument)
 		Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 		double distToGoal = V3Dgoal.Length();
 		
+		Vector3D V3Dgoal_speed = V_max_space*Vector3D.Normalize(V3Dgoal);
+		
+		double V_error_space = (linearSpeedsShip-V3Dgoal_speed).Length();
+		
 		if(distToGoal>distWhenToStartBraking)
 		{
 			V3Dgoal *= -1;
 		}
+		
+		
+		control =  V_error_space;
+		
+		Echo("V_error_space:"+V_error_space);
 		
 		// float V_space = MyMath.Clamp(0,0,(float) V_max_space);
 		// V3Dgoal = V_space*Vector3D.Normalize(V3Dgoal);
@@ -694,7 +703,7 @@ public void Main(string argument)
 		}
 		
 		//TODO control PID for thrust in space
-		control = 0;
+		//control = 0;
 		
 		physMass_N = physMass_kg * g;
 		Echo("physMass_N:"+physMass_N);
@@ -708,7 +717,7 @@ public void Main(string argument)
 			{
 				if (c.IsSameConstructAs(flightIndicatorsShipController))
 				{
-					Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
+					//Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
 					if(c.MaxEffectiveThrust == 0){
 						continue;
 					}
