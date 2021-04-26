@@ -632,7 +632,7 @@ public void Main(string argument)
 		Echo("max_g_space:"+max_g_space);
 		
 		//from 1 to inf
-		double safety_k = 2;
+		double safety_k = 5;
 		
 		Echo("safety_k:"+safety_k);
 		
@@ -667,18 +667,20 @@ public void Main(string argument)
 		double dot_linearSpeedsShip_V3Dgoal_speed = linearSpeedsShip.Dot(V3Dgoal_speed);
 		Echo("dot_linearSpeedsShip_V3Dgoal_speed:"+dot_linearSpeedsShip_V3Dgoal_speed);
 		
-		/*
+		
 		//to start braking 
-		if(distToGoal<distWhenToStartBraking)
+		if(distToGoal<safety_k*distWhenToStartBraking)
 		{
 			V3D_V_error_space *=-1;
+		//	V3Dgoal_speed = (distToGoal/distWhenToStartBraking*V_max_space)*Vector3D.Normalize(V3Dgoal_speed);
 		}
-		*/
 		
+		/*
 		control =  0;
 		if(Math.Abs(V_error_space)>5){
-			control =  V_error_space;
+					control =  V_error_space;
 		}
+		*/
 		
 		Echo("V_error_space:"+V_error_space);
 		//end thrust control
@@ -695,7 +697,7 @@ public void Main(string argument)
 		double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
 		
 		Echo("distRoll2:"+Math.Round(distRoll2,2));
-		angleRoll = 57*distRoll2;
+		angleRoll = 20*distRoll2;
 		//===================
 		Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
 		Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
@@ -703,10 +705,27 @@ public void Main(string argument)
 		double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
 		
 		Echo("distPitch2:"+Math.Round(distPitch2,2));
-		anglePitch = 57*distPitch2;
+		anglePitch = 20*distPitch2;
 		if(negIfThrustIsOpp<0){
 			anglePitch*= 10;
 			angleRoll*= 10;
+		}
+		
+		//to start braking 
+		if(distToGoal<safety_k*distWhenToStartBraking)
+		{
+			anglePitch*=-1;
+			angleRoll*=-1;
+		}
+		
+		
+		control =  0;
+		if(Math.Abs(V_error_space)>5){
+			if(Math.Abs(anglePitch)<1){
+				if(Math.Abs(angleRoll)<1){
+					control =  V_error_space;
+				}
+			}
 		}
 		
 		//TODO control PID for thrust in space
@@ -731,9 +750,9 @@ public void Main(string argument)
 					if (remainingThrustToApply == -1)
 					{
 						remainingThrustToApply = (physMass_N * control * 1);
-						Echo("remainingThrustToApply:"+remainingThrustToApply);
+						//Echo("remainingThrustToApply:"+remainingThrustToApply);
 					}
-					Echo("c.CustomName:"+c.CustomName);
+					//Echo("c.CustomName:"+c.CustomName);
 					// Echo("physMass_N" + physMass_N);
 					// Echo("c.MaxThrust"+c.MaxThrust);
 					// Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
