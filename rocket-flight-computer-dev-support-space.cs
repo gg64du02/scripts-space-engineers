@@ -685,10 +685,19 @@ public void Main(string argument)
 		Echo("V_error_space:"+V_error_space);
 		//end thrust control
 		
+		bool tryToStop = false;
+		if(distToGoal<distWhenToStartBraking){
+			tryToStop = true;
+		}
+		
 		 
 		 double negIfThrustIsOpp = V3D_V_error_space.Dot(shipDownVector);
 		 
 		 Echo("negIfThrustIsOpp"+negIfThrustIsOpp);
+		 
+		 if(tryToStop == true){
+			 V3D_V_error_space = linearSpeedsShip;
+		 }
 		 
 		 //===================
 		 //space support WIP start
@@ -727,6 +736,13 @@ public void Main(string argument)
 				}
 			}
 		}
+		
+		 if(tryToStop == true){
+			angleRoll = 20*distRoll2;
+			anglePitch = 20*distPitch2;
+		 }
+		
+		Echo("tryToStop:"+tryToStop);
 		
 		//TODO control PID for thrust in space
 		//control = 0;
