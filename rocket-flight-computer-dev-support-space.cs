@@ -703,7 +703,10 @@ public void Main(string argument)
 				}
 			}
 		}
+		
+		//TODO: set 0,0,0 as a no action coords ?
 		 //stopping the thrust and 
+		 if(distToTarget<5){
 		 if(linearSpeedsShip.Length()<0.01){
 			 if(distToGoal<safety_k*distWhenToStartBraking){
 				 control = 0;
@@ -711,7 +714,7 @@ public void Main(string argument)
 				fightStabilizator.Release(); 
 			 }
 		 }
-		
+		 }
 		
 		//TODO control PID for thrust in space
 		//control = 0;
