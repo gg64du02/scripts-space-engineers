@@ -655,10 +655,11 @@ public void Main(string argument)
 		Vector3D V3Dgoal_speed = V_max_space*Vector3D.Normalize(V3Dgoal);
 		
 		double approachSpeed = 0f;
-		if(distToGoal<safety_k*distWhenToStartBraking){
+		//if(distToGoal<safety_k*distWhenToStartBraking){
 			 approachSpeed = ( distToGoal * V_max_space ) / distWhenToStartBraking;
+			 approachSpeed = MyMath.Clamp((float)approachSpeed, 0,(float)V_max_space);
 			V3Dgoal_speed = approachSpeed * Vector3D.Normalize(V3Dgoal_speed);
-		}
+		//}
 		Echo("approachSpeed:"+approachSpeed);
 		
 		Vector3D V3D_V_error_space = linearSpeedsShip-V3Dgoal_speed;
