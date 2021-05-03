@@ -646,6 +646,10 @@ public void Main(string argument)
 		
 		//vec3Dtarget = new Vector3D(0, 0, 0);
 		
+		if(vec3Dtarget == new Vector3D(0,0,0)){
+			vec3Dtarget = myPos;
+		}
+		
 		//start thrust control
 		Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 		double distToGoal = V3Dgoal.Length();
