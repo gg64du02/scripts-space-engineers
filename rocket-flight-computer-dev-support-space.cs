@@ -739,7 +739,7 @@ public void Main(string argument)
 					if (remainingThrustToApply == -1)
 					{
 						remainingThrustToApply = (physMass_N * control * 1);
-						//Echo("remainingThrustToApply:"+remainingThrustToApply);
+						Echo("spaceRemainingThrustToApply:"+remainingThrustToApply);
 					}
 					//Echo("c.CustomName:"+c.CustomName);
 					// Echo("physMass_N" + physMass_N);
@@ -957,9 +957,13 @@ public void Main(string argument)
         {
             if (c.IsSameConstructAs(flightIndicatorsShipController))
             {
+				if(c.MaxEffectiveThrust == 0){
+					continue;
+				}
                 if (remainingThrustToApply == -1)
                 {
                     remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
+					Echo("atmoRemainingThrustToApply:"+remainingThrustToApply);
                 }
                 //Echo("physMass_N" + physMass_N);
                 //Echo("c.MaxThrust"+c.MaxThrust);
