@@ -49,6 +49,8 @@ double last_alt_acc_ms_2 = 0f;
 double derivateDistToPlanetCenter = 0f;
 double lastDistToPlanetCenter = 0f;
 
+bool recompileButton = false;
+
 System.DateTime lastTime = System.DateTime.UtcNow;
 System.DateTime lastRunTs = System.DateTime.UtcNow;
 
@@ -199,11 +201,13 @@ public void Main(string argument)
             {
                 Echo("if (argument.Contains(:#) == true)");
                 MyWaypointInfo.TryParse(argument.Substring(0, argument.Length - 10), out myWaypointInfoTarget);
+				recompileButton = false;
             }
             else
             {
                 Echo("not if (argument.Contains(:#) == true)");
                 MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+				recompileButton = false;
             }
             if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
             {
@@ -217,6 +221,7 @@ public void Main(string argument)
     {
         //using the expected remote control to give us the center of the current planet
         flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
+		recompileButton = true;
     }
 
 
@@ -287,6 +292,7 @@ public void Main(string argument)
     Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
     Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
     double distToPlanetCenter = vecToPlanetCenter.Length();
+	Echo("distToPlanetCenter:"+distToPlanetCenter);
     //derivative of distance to planet center
     derivateDistToPlanetCenter = (distToPlanetCenter - lastDistToPlanetCenter) / dts;
     lastDistToPlanetCenter = distToPlanetCenter;
@@ -738,6 +744,7 @@ public void Main(string argument)
 				{
 					//Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
 					if(c.MaxEffectiveThrust == 0){
+						c.ThrustOverride = Convert.ToSingle(200f);
 						continue;
 					}
 					if (remainingThrustToApply == -1)
@@ -897,7 +904,51 @@ public void Main(string argument)
 					//}
 				}
 			}
-    }
+		}
+		
+		
+		Echo("distToTarget:"+distToTarget);
+		Echo("vec3Dtarget:"+vec3Dtarget);
+		if(recompileButton == false){
+			if(distToTarget>3500)
+			{
+				Echo("dts:" + dts);
+				if (Math.Abs(distPitch) < 500)
+				{
+					if (Math.Abs(distRoll) < 500)
+					{
+						if (dts > 0)
+						{
+							//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
+							//{
+							wantedAltitude = 41125;
+
+							if (elev > 140)
+							{
+								clampWantedAlitudeSpeed = 95;
+							}
+
+							//wantedAlitudeSpeed = -10;
+							//if (elev < 50)
+							//{
+							//    wantedAlitudeSpeed = -1;
+							//}
+							//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+							altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+							Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+
+							controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+							Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+
+							//feedback loop to counter the wrong speed
+							control = controlAltSpeed;
+							//}
+						}
+					}
+				}
+			}
+		}
+		
     //altitude management and downward speed management========================== end
 
     if (Double.IsNaN(controlAltSpeed) == true)
@@ -962,6 +1013,7 @@ public void Main(string argument)
             if (c.IsSameConstructAs(flightIndicatorsShipController))
             {
 				if(c.MaxEffectiveThrust == 0){
+					c.ThrustOverride = Convert.ToSingle(200f);
 					continue;
 				}
                 if (remainingThrustToApply == -1)
