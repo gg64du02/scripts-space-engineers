@@ -623,97 +623,6 @@ public void Main(string argument)
     //Echo("speedRoll:" + speedRoll);
 	
 	
-	//Every stock planets center
-	List<String> listOfPlanetsGPSString = new List<String>();
-	listOfPlanetsGPSString.Add("GPS:EarthLike:0.50:0.50:0.50:");
-	listOfPlanetsGPSString.Add("GPS:Moon:16384.50:136384.50:-113615.50:");
-	listOfPlanetsGPSString.Add("GPS:Mars:1031072.50:131072.50:1631072.50:");
-	listOfPlanetsGPSString.Add("GPS:Europa:916384.50:16384.50:1616384.50:");
-	listOfPlanetsGPSString.Add("GPS:Triton:-284463.50:-2434463.50:365536.50:");
-	listOfPlanetsGPSString.Add("GPS:Pertam:-3967231.50:-32231.50:-767231.50:");
-	listOfPlanetsGPSString.Add("GPS:Alien:131072.50:131072.50:5731072.50:");
-	listOfPlanetsGPSString.Add("GPS:Titan:36384.50:226384.50:5796384.50:");
-	MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
-	Vector3D detectedPlanet = new Vector3D(0,0,0);
-	foreach(string str in listOfPlanetsGPSString){
-		tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
-		MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
-		//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
-		Vector3D tmpVector3DplanetCenter = tmpTestPlanetCenter.Coords;
-		//Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
-		 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
-		 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
-		//Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
-		if(distanceToPlanetCenter < 100000){
-			detectedPlanet = tmpVector3DplanetCenter;
-			/*
-			customDataStrBuild += "planet's center:\n\n";
-			customDataStrBuild += str;
-			customDataStrBuild += "\n\n\nalign this planet's center with one in the following list:\n";
-			// */
-			break;
-		}
-	}
-	string planetsName = tmpTestPlanetCenter.Name;
-	Echo("planetsName: "+planetsName);
-	// https://www.spaceengineerswiki.com/Planet#Gravitational_Field
-	double minR = 0;
-	double maxR = 0;
-	double nominalGonGround = 0;
-	double atmosphereRadius = 0;
-	//choose the appropriate settings to use for the detected planet
-	//or adapt to local elevation of the firstController?
-	if(planetsName == "Alien"){
-		nominalGonGround = 1;
-		minR = 59400;
-		maxR = 67200;
-		atmosphereRadius = 105000;
-	}
-	if(planetsName == "EarthLike"){
-		nominalGonGround = 1;
-		minR = 59400;
-		maxR = 67200;
-		atmosphereRadius = 105000;
-	}
-	if(planetsName == "Europa"){
-		nominalGonGround = 0.25;
-		minR = 9215;
-		maxR = 10070;
-		atmosphereRadius = 16625;
-	}
-	if(planetsName == "Mars"){
-		nominalGonGround = 1;
-		minR = 59400;
-		maxR = 67200;
-		atmosphereRadius = 105000;
-	}
-	if(planetsName == "Moon"){
-		nominalGonGround = 0.25;
-		minR = 9215;
-		maxR = 9785;
-		atmosphereRadius = 16625;
-	}
-	if(planetsName == "Pertam"){
-		nominalGonGround = 1.2;
-		minR = 29314.8379;
-		maxR = 30818.1621;
-		atmosphereRadius = 52616.375;
-		//addPertamSubPattern();
-	}
-	if(planetsName == "Titan"){
-		nominalGonGround = 0.25;
-		minR = 9215;
-		maxR = 9785;
-		atmosphereRadius = 16625;
-		//addEuropaMoonTitanSubPattern();
-	}
-	if(planetsName == "Triton"){
-		nominalGonGround = 1;
-		minR = 38120.1758;
-		maxR = 48151.8;
-		atmosphereRadius = 70221.375;
-		//addEarthLikeAlienTritonSubPattern();
-	}
 	
 	
 	if (gravityVector.LengthSquared() == 0)
@@ -898,6 +807,107 @@ public void Main(string argument)
 	//space support WIP end
 	//===================
 	else{
+		
+		//Every stock planets center
+		List<String> listOfPlanetsGPSString = new List<String>();
+		listOfPlanetsGPSString.Add("GPS:EarthLike:0.50:0.50:0.50:");
+		listOfPlanetsGPSString.Add("GPS:Moon:16384.50:136384.50:-113615.50:");
+		listOfPlanetsGPSString.Add("GPS:Mars:1031072.50:131072.50:1631072.50:");
+		listOfPlanetsGPSString.Add("GPS:Europa:916384.50:16384.50:1616384.50:");
+		listOfPlanetsGPSString.Add("GPS:Triton:-284463.50:-2434463.50:365536.50:");
+		listOfPlanetsGPSString.Add("GPS:Pertam:-3967231.50:-32231.50:-767231.50:");
+		listOfPlanetsGPSString.Add("GPS:Alien:131072.50:131072.50:5731072.50:");
+		listOfPlanetsGPSString.Add("GPS:Titan:36384.50:226384.50:5796384.50:");
+		MyWaypointInfo tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+		Vector3D detectedPlanet = new Vector3D(0,0,0);
+		double centerToTargetLengh = 0 ;
+		foreach(string str in listOfPlanetsGPSString){
+			tmpTestPlanetCenter = new MyWaypointInfo("dnm", 0, 0, 0);
+			MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
+			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
+			Vector3D tmpVector3DplanetCenter = tmpTestPlanetCenter.Coords;
+			//Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
+			 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
+			 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
+			Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
+			Vector3D centerToTarget = (vec3Dtarget - tmpVector3DplanetCenter);
+			centerToTargetLengh = centerToTarget.Length();
+			Echo("centerToTargetLengh:"+centerToTargetLengh);
+			if(distanceToPlanetCenter < 100000){
+				detectedPlanet = tmpVector3DplanetCenter;
+				/*
+				customDataStrBuild += "planet's center:\n\n";
+				customDataStrBuild += str;
+				customDataStrBuild += "\n\n\nalign this planet's center with one in the following list:\n";
+				// */
+				break;
+			}
+		}
+		string planetsName = tmpTestPlanetCenter.Name;
+		Echo("planetsName: "+planetsName);
+		// https://www.spaceengineerswiki.com/Planet#Gravitational_Field
+		double minR = 0;
+		double maxR = 0;
+		double nominalGonGround = 0;
+		double atmosphereRadius = 0;
+		//choose the appropriate settings to use for the detected planet
+		//or adapt to local elevation of the firstController?
+		if(planetsName == "Alien"){
+			nominalGonGround = 1;
+			minR = 59400;
+			maxR = 67200;
+			//atmosphereRadius = 105000;
+			atmosphereRadius = 102000;
+		}
+		if(planetsName == "EarthLike"){
+			nominalGonGround = 1;
+			minR = 59400;
+			maxR = 67200;
+			//atmosphereRadius = 105000;
+			atmosphereRadius = 102000;
+		}
+		if(planetsName == "Europa"){
+			nominalGonGround = 0.25;
+			minR = 9215;
+			maxR = 10070;
+			atmosphereRadius = 16625;
+		}
+		if(planetsName == "Mars"){
+			nominalGonGround = 1;
+			minR = 59400;
+			maxR = 67200;
+			atmosphereRadius = 105000;
+		}
+		if(planetsName == "Moon"){
+			nominalGonGround = 0.25;
+			minR = 9215;
+			maxR = 9785;
+			atmosphereRadius = 16625;
+		}
+		if(planetsName == "Pertam"){
+			nominalGonGround = 1.2;
+			minR = 29314.8379;
+			maxR = 30818.1621;
+			atmosphereRadius = 52616.375;
+			//addPertamSubPattern();
+		}
+		if(planetsName == "Titan"){
+			nominalGonGround = 0.25;
+			minR = 9215;
+			maxR = 9785;
+			atmosphereRadius = 16625;
+			//addEuropaMoonTitanSubPattern();
+		}
+		if(planetsName == "Triton"){
+			nominalGonGround = 1;
+			minR = 38120.1758;
+			maxR = 48151.8;
+			atmosphereRadius = 70221.375;
+			//addEarthLikeAlienTritonSubPattern();
+		}
+		
+		
+		
 		Echo("anglePitch:" + Math.Round((anglePitch), 3));
 		Echo("angleRoll:" + Math.Round((angleRoll), 3));
 
@@ -959,52 +969,12 @@ public void Main(string argument)
 		//Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
 
 
-		if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
-		{
-			wantedAltitude = 1500;
-		}
-
-		Echo("dts:" + dts);
-		if (Math.Abs(distPitch) < 1)
-		{
-			if (Math.Abs(distRoll) < 1)
-			{
-				if (dts > 0)
-				{
-					//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
-					//{
-					wantedAltitude = 125;
-
-					if (elev < 140)
-					{
-						clampWantedAlitudeSpeed = -5;
-					}
-
-					//wantedAlitudeSpeed = -10;
-					//if (elev < 50)
-					//{
-					//    wantedAlitudeSpeed = -1;
-					//}
-					//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-					Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
-
-					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-					Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
-
-					//feedback loop to counter the wrong speed
-					control = controlAltSpeed;
-					//}
-				}
-			}
-		}
 		
 		
 		Echo("distToTarget:"+distToTarget);
 		Echo("vec3Dtarget:"+vec3Dtarget);
-		if(recompileButton == false){
-			if(distToTarget>3500)
-			{
+		if(atmosphereRadius<centerToTargetLengh){
+			if(recompileButton == false){
 				Echo("dts:" + dts);
 				if (Math.Abs(distPitch) < 500)
 				{
@@ -1037,6 +1007,49 @@ public void Main(string argument)
 							control = controlAltSpeed;
 							//}
 						}
+					}
+				}
+			}
+		}
+		else
+		{
+				
+			if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
+			{
+				wantedAltitude = 1500;
+			}
+
+			Echo("dts:" + dts);
+			if (Math.Abs(distPitch) < 1)
+			{
+				if (Math.Abs(distRoll) < 1)
+				{
+					if (dts > 0)
+					{
+						//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
+						//{
+						wantedAltitude = 125;
+
+						if (elev < 140)
+						{
+							clampWantedAlitudeSpeed = -5;
+						}
+
+						//wantedAlitudeSpeed = -10;
+						//if (elev < 50)
+						//{
+						//    wantedAlitudeSpeed = -1;
+						//}
+						//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
+						altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+						Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+
+						controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+						Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+
+						//feedback loop to counter the wrong speed
+						control = controlAltSpeed;
+						//}
 					}
 				}
 			}
