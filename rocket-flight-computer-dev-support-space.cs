@@ -808,6 +808,14 @@ public void Main(string argument)
 	//===================
 	else{
 		
+		//string planetsName = tmpTestPlanetCenter.Name;
+		string planetsName = "";
+		// https://www.spaceengineerswiki.com/Planet#Gravitational_Field
+		double minR = 0;
+		double maxR = 0;
+		double nominalGonGround = 0;
+		double atmosphereRadius = 0;
+		
 		//Every stock planets center
 		List<String> listOfPlanetsGPSString = new List<String>();
 		listOfPlanetsGPSString.Add("GPS:EarthLike:0.50:0.50:0.50:");
@@ -833,8 +841,66 @@ public void Main(string argument)
 			Vector3D centerToTarget = (vec3Dtarget - tmpVector3DplanetCenter);
 			centerToTargetLengh = centerToTarget.Length();
 			Echo("centerToTargetLengh:"+centerToTargetLengh);
-			if(distanceToPlanetCenter < 100000){
+			planetsName = tmpTestPlanetCenter.Name;
+			
+			//choose the appropriate settings to use for the detected planet
+			//or adapt to local elevation of the firstController?
+			if(planetsName == "Alien"){
+				nominalGonGround = 1;
+				minR = 59400;
+				maxR = 67200;
+				//atmosphereRadius = 105000;
+				atmosphereRadius = 102000;
+			}
+			if(planetsName == "EarthLike"){
+				nominalGonGround = 1;
+				minR = 59400;
+				maxR = 67200;
+				//atmosphereRadius = 105000;
+				atmosphereRadius = 102000;
+			}
+			if(planetsName == "Europa"){
+				nominalGonGround = 0.25;
+				minR = 9215;
+				maxR = 10070;
+				atmosphereRadius = 16625;
+			}
+			if(planetsName == "Mars"){
+				nominalGonGround = 1;
+				minR = 59400;
+				maxR = 67200;
+				atmosphereRadius = 105000;
+			}
+			if(planetsName == "Moon"){
+				nominalGonGround = 0.25;
+				minR = 9215;
+				maxR = 9785;
+				atmosphereRadius = 16625;
+			}
+			if(planetsName == "Pertam"){
+				nominalGonGround = 1.2;
+				minR = 29314.8379;
+				maxR = 30818.1621;
+				atmosphereRadius = 52616.375;
+				//addPertamSubPattern();
+			}
+			if(planetsName == "Titan"){
+				nominalGonGround = 0.25;
+				minR = 9215;
+				maxR = 9785;
+				atmosphereRadius = 16625;
+				//addEuropaMoonTitanSubPattern();
+			}
+			if(planetsName == "Triton"){
+				nominalGonGround = 1;
+				minR = 38120.1758;
+				maxR = 48151.8;
+				atmosphereRadius = 70221.375;
+				//addEarthLikeAlienTritonSubPattern();
+			}
+			if((centerToTargetLengh/2) < atmosphereRadius){
 				detectedPlanet = tmpVector3DplanetCenter;
+				Echo("detectedPlanet = tmpVector3DplanetCenter;");
 				/*
 				customDataStrBuild += "planet's center:\n\n";
 				customDataStrBuild += str;
@@ -843,68 +909,7 @@ public void Main(string argument)
 				break;
 			}
 		}
-		string planetsName = tmpTestPlanetCenter.Name;
 		Echo("planetsName: "+planetsName);
-		// https://www.spaceengineerswiki.com/Planet#Gravitational_Field
-		double minR = 0;
-		double maxR = 0;
-		double nominalGonGround = 0;
-		double atmosphereRadius = 0;
-		//choose the appropriate settings to use for the detected planet
-		//or adapt to local elevation of the firstController?
-		if(planetsName == "Alien"){
-			nominalGonGround = 1;
-			minR = 59400;
-			maxR = 67200;
-			//atmosphereRadius = 105000;
-			atmosphereRadius = 102000;
-		}
-		if(planetsName == "EarthLike"){
-			nominalGonGround = 1;
-			minR = 59400;
-			maxR = 67200;
-			//atmosphereRadius = 105000;
-			atmosphereRadius = 102000;
-		}
-		if(planetsName == "Europa"){
-			nominalGonGround = 0.25;
-			minR = 9215;
-			maxR = 10070;
-			atmosphereRadius = 16625;
-		}
-		if(planetsName == "Mars"){
-			nominalGonGround = 1;
-			minR = 59400;
-			maxR = 67200;
-			atmosphereRadius = 105000;
-		}
-		if(planetsName == "Moon"){
-			nominalGonGround = 0.25;
-			minR = 9215;
-			maxR = 9785;
-			atmosphereRadius = 16625;
-		}
-		if(planetsName == "Pertam"){
-			nominalGonGround = 1.2;
-			minR = 29314.8379;
-			maxR = 30818.1621;
-			atmosphereRadius = 52616.375;
-			//addPertamSubPattern();
-		}
-		if(planetsName == "Titan"){
-			nominalGonGround = 0.25;
-			minR = 9215;
-			maxR = 9785;
-			atmosphereRadius = 16625;
-			//addEuropaMoonTitanSubPattern();
-		}
-		if(planetsName == "Triton"){
-			nominalGonGround = 1;
-			minR = 38120.1758;
-			maxR = 48151.8;
-			atmosphereRadius = 70221.375;
-			//addEarthLikeAlienTritonSubPattern();
-		}
 		
 		
 		
@@ -915,9 +920,9 @@ public void Main(string argument)
 
 		double scaleForThetaRegardingGravity = Vector3D.Dot(gravityNormalized, shipDownVector);
 		double thetaMustBe = 180 * Math.Acos(scaleForThetaRegardingGravity) / Math.PI;
-		Echo("thetaMustBe:" + Math.Round((thetaMustBe), 3));
-		Echo("wantedAltitude:" + Math.Round((wantedAltitude), 3));
-		Echo("altitudeError:" + Math.Round((altitudeError), 3));
+		Echo("thetaMustBe3:" + Math.Round((thetaMustBe), 3));
+		Echo("wantedAltitude3:" + Math.Round((wantedAltitude), 3));
+		Echo("altitudeError3:" + Math.Round((altitudeError), 3));
 
 		//altitude management and downward speed management========================== start
 		double wantedAlitudeSpeed = 0;
@@ -935,14 +940,14 @@ public void Main(string argument)
 		//it helps avoid hitting the ground quick while the ship is loaded with a 1 < thr_to_weight_ratio < 2
 		double spareThrustToWeightRatio = MyMath.Clamp(Convert.ToSingle(thr_to_weight_ratio - 1), Convert.ToSingle(0), Convert.ToSingle(1));
 		double h_max_alt = (V_max_altSpeed * V_max_altSpeed) / (2 * g * spareThrustToWeightRatio);
-		Echo("h_max_alt:" + Math.Round((h_max_alt), 3));
+		Echo("h_max_alt3:" + Math.Round((h_max_alt), 3));
 
 		double clampAltError = MyMath.Clamp(Convert.ToSingle(altitudeError), Convert.ToSingle(-h_max_alt), Convert.ToSingle(h_max_alt));
-		Echo("clampAltError:" + Math.Round((clampAltError), 3));
+		Echo("clampAltError3:" + Math.Round((clampAltError), 3));
 
 		//TODO: make it asymetric
 		wantedAlitudeSpeed = (clampAltError / h_max_alt) * V_max_altSpeed;
-		Echo("wantedAlitudeSpeed:" + Math.Round((wantedAlitudeSpeed), 3));
+		Echo("wantedAlitudeSpeed3:" + Math.Round((wantedAlitudeSpeed), 3));
 
 		double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
 
@@ -973,6 +978,8 @@ public void Main(string argument)
 		
 		Echo("distToTarget:"+distToTarget);
 		Echo("vec3Dtarget:"+vec3Dtarget);
+		Echo("centerToTargetLengh:"+centerToTargetLengh);
+		Echo("atmosphereRadius:"+atmosphereRadius);
 		if(atmosphereRadius<centerToTargetLengh){
 			if(recompileButton == false){
 				Echo("dts:" + dts);
