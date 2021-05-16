@@ -843,7 +843,7 @@ public void Main(string argument)
 			//Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
 			Vector3D centerToTarget = (vec3Dtarget - tmpVector3DplanetCenter);
 			centerToTargetLengh = centerToTarget.Length();
-			//Echo("centerToTargetLengh:"+centerToTargetLengh);
+			Echo("centerToTargetLengh:"+centerToTargetLengh);
 			planetsName = tmpTestPlanetCenter.Name;
 			
 			//choose the appropriate settings to use for the detected planet
@@ -854,14 +854,14 @@ public void Main(string argument)
 				minR = 59400;
 				maxR = 67200;
 				//atmosphereRadius = 105000;
-				atmosphereRadius = 102000;
+				atmosphereRadius = 103100;
 			}
 			if(planetsName == "EarthLike"){
 				nominalGonGround = 1;
 				minR = 59400;
 				maxR = 67200;
 				//atmosphereRadius = 105000;
-				atmosphereRadius = 102000;
+				atmosphereRadius = 103100;
 			}
 			if(planetsName == "Europa"){
 				nominalGonGround = 0.25;
@@ -873,7 +873,8 @@ public void Main(string argument)
 				nominalGonGround = 1;
 				minR = 59400;
 				maxR = 67200;
-				atmosphereRadius = 105000;
+				//atmosphereRadius = 105000;
+				atmosphereRadius = 103100;
 			}
 			if(planetsName == "Moon"){
 				nominalGonGround = 0.25;
@@ -902,7 +903,7 @@ public void Main(string argument)
 				atmosphereRadius = 70221.375;
 				//addEarthLikeAlienTritonSubPattern();
 			}
-			if((centerToTargetLengh/2) < atmosphereRadius){
+			if((centerToTargetLengh) < atmosphereRadius){
 				detectedPlanet = tmpVector3DplanetCenter;
 				//Echo("detectedPlanet = tmpVector3DplanetCenter;");
 				break;
