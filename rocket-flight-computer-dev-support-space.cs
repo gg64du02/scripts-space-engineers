@@ -745,8 +745,8 @@ public void Main(string argument)
 				if (c.IsSameConstructAs(flightIndicatorsShipController))
 				{
 					//Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
+					c.ThrustOverride = Convert.ToSingle(200f);
 					if(c.MaxEffectiveThrust == 0){
-						c.ThrustOverride = Convert.ToSingle(200f);
 						continue;
 					}
 					if (remainingThrustToApply == -1)
@@ -826,7 +826,7 @@ public void Main(string argument)
 			MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
 			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
 			Vector3D tmpVector3DplanetCenter = tmpTestPlanetCenter.Coords;
-			//Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
+			Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
 			 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
 			 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
 			Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
@@ -976,11 +976,15 @@ public void Main(string argument)
 		if(atmosphereRadius<centerToTargetLengh){
 			if(recompileButton == false){
 				Echo("dts:" + dts);
-				if (Math.Abs(distPitch) < 500)
+				if (dts > 0)
 				{
-					if (Math.Abs(distRoll) < 500)
+					if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
 					{
-						if (dts > 0)
+						clampWantedAlitudeSpeed = 95;
+					}
+					if (Math.Abs(distPitch) < 500)
+					{
+						if (Math.Abs(distRoll) < 500)
 						{
 							//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
 							//{
@@ -990,7 +994,7 @@ public void Main(string argument)
 							{
 								clampWantedAlitudeSpeed = 95;
 							}
-
+/*
 							//wantedAlitudeSpeed = -10;
 							//if (elev < 50)
 							//{
@@ -1005,9 +1009,17 @@ public void Main(string argument)
 
 							//feedback loop to counter the wrong speed
 							control = controlAltSpeed;
-							//}
+							//}*/
 						}
 					}
+					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+					Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
+
+					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+					Echo("controlAltSpeed1:" + Math.Round((controlAltSpeed), 3));
+
+					//feedback loop to counter the wrong speed
+					control = controlAltSpeed;
 				}
 			}
 		}
@@ -1042,10 +1054,10 @@ public void Main(string argument)
 						//}
 						//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
 						altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-						Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
+						Echo("altitudeSpeedError2:" + Math.Round((altitudeSpeedError), 3));
 
 						controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-						Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
+						Echo("controlAltSpeed2:" + Math.Round((controlAltSpeed), 3));
 
 						//feedback loop to counter the wrong speed
 						control = controlAltSpeed;
@@ -1096,7 +1108,7 @@ public void Main(string argument)
     {
         listAntenna[0].HudText = str_to_display;
     }
-	Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
+	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
     // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
 			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
 	// }
@@ -1118,8 +1130,8 @@ public void Main(string argument)
         {
             if (c.IsSameConstructAs(flightIndicatorsShipController))
             {
+				c.ThrustOverride = Convert.ToSingle(200f);
 				if(c.MaxEffectiveThrust == 0){
-					c.ThrustOverride = Convert.ToSingle(200f);
 					continue;
 				}
                 if (remainingThrustToApply == -1)
