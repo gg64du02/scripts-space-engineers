@@ -834,17 +834,18 @@ public void Main(string argument)
 			MyWaypointInfo.TryParse(str, out tmpTestPlanetCenter);
 			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
 			Vector3D tmpVector3DplanetCenter = tmpTestPlanetCenter.Coords;
-			Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
+			//Echo("tmpVector3DplanetCenter"+tmpVector3DplanetCenter);
 			 Vector3D vector3DToPlanetCenter = tmpVector3DplanetCenter - myPos;
 			 double distanceToPlanetCenter = vector3DToPlanetCenter.Length();
-			Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
+			//Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
 			Vector3D centerToTarget = (vec3Dtarget - tmpVector3DplanetCenter);
 			centerToTargetLengh = centerToTarget.Length();
-			Echo("centerToTargetLengh:"+centerToTargetLengh);
+			//Echo("centerToTargetLengh:"+centerToTargetLengh);
 			planetsName = tmpTestPlanetCenter.Name;
 			
 			//choose the appropriate settings to use for the detected planet
 			//or adapt to local elevation of the firstController?
+			//those infos are from the sbs's file in: \SpaceEngineers\Content\CustomWorlds\Star System\SANDBOX_0_0_0_.sbs
 			if(planetsName == "Alien"){
 				nominalGonGround = 1;
 				minR = 59400;
@@ -900,12 +901,7 @@ public void Main(string argument)
 			}
 			if((centerToTargetLengh/2) < atmosphereRadius){
 				detectedPlanet = tmpVector3DplanetCenter;
-				Echo("detectedPlanet = tmpVector3DplanetCenter;");
-				/*
-				customDataStrBuild += "planet's center:\n\n";
-				customDataStrBuild += str;
-				customDataStrBuild += "\n\n\nalign this planet's center with one in the following list:\n";
-				// */
+				//Echo("detectedPlanet = tmpVector3DplanetCenter;");
 				break;
 			}
 		}
@@ -952,12 +948,6 @@ public void Main(string argument)
 		double clampWantedAlitudeSpeed = MyMath.Clamp(Convert.ToSingle(wantedAlitudeSpeed), Convert.ToSingle(V_min_altSpeed), Convert.ToSingle(V_max_altSpeed));
 
 
-		//wantedAlitudeSpeed = -10;
-		//if (elev < 50)
-		//{
-		//    wantedAlitudeSpeed = -1;
-		//}
-		//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
 		altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
 		Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
 
@@ -972,9 +962,6 @@ public void Main(string argument)
 		//double surfaceSpeedSquared = wantedSpeedPitch * wantedSpeedPitch + wantedSpeedRoll * wantedSpeedRoll;
 		//double descSurfaceSpeed = 10;
 		//Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
-
-
-		
 		
 		Echo("distToTarget:"+distToTarget);
 		Echo("vec3Dtarget:"+vec3Dtarget);
@@ -993,30 +980,18 @@ public void Main(string argument)
 					{
 						if (Math.Abs(distRoll) < 500)
 						{
-							//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
-							//{
 							wantedAltitude = 41125;
 
 							if (elev > 140)
 							{
 								clampWantedAlitudeSpeed = 95;
 							}
-/*
+
 							//wantedAlitudeSpeed = -10;
 							//if (elev < 50)
 							//{
 							//    wantedAlitudeSpeed = -1;
 							//}
-							//alt_speed_ms_1 is referenced to the actual ground elevation not the GPS marker elevation
-							altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-							Echo("altitudeSpeedError:" + Math.Round((altitudeSpeedError), 3));
-
-							controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-							Echo("controlAltSpeed:" + Math.Round((controlAltSpeed), 3));
-
-							//feedback loop to counter the wrong speed
-							control = controlAltSpeed;
-							//}*/
 						}
 					}
 					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
@@ -1045,8 +1020,6 @@ public void Main(string argument)
 				{
 					if (dts > 0)
 					{
-						//if (surfaceSpeedSquared < descSurfaceSpeed * descSurfaceSpeed)
-						//{
 						wantedAltitude = 125;
 
 						if (elev < 140)
