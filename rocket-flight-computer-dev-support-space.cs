@@ -749,6 +749,9 @@ public void Main(string argument)
 					if(c.MaxEffectiveThrust == 0){
 						continue;
 					}
+					if(c.Enabled==false){
+						continue;
+					}
 					if (remainingThrustToApply == -1)
 					{
 						remainingThrustToApply = (physMass_N * control * 1);
@@ -1112,6 +1115,9 @@ public void Main(string argument)
             {
 				c.ThrustOverride = Convert.ToSingle(200f);
 				if(c.MaxEffectiveThrust == 0){
+					continue;
+				}
+				if(c.Enabled==false){
 					continue;
 				}
                 if (remainingThrustToApply == -1)
