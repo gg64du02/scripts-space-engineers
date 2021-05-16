@@ -843,7 +843,7 @@ public void Main(string argument)
 			//Echo("distanceToPlanetCenter"+distanceToPlanetCenter);
 			Vector3D centerToTarget = (vec3Dtarget - tmpVector3DplanetCenter);
 			centerToTargetLengh = centerToTarget.Length();
-			Echo("centerToTargetLengh:"+centerToTargetLengh);
+			//Echo("centerToTargetLengh:"+centerToTargetLengh);
 			planetsName = tmpTestPlanetCenter.Name;
 			
 			//choose the appropriate settings to use for the detected planet
@@ -903,13 +903,19 @@ public void Main(string argument)
 				atmosphereRadius = 70221.375;
 				//addEarthLikeAlienTritonSubPattern();
 			}
-			if((centerToTargetLengh) < atmosphereRadius){
+			//Echo("atmosphereRadius:"+atmosphereRadius);
+			if(centerToTargetLengh < atmosphereRadius){
 				detectedPlanet = tmpVector3DplanetCenter;
 				//Echo("detectedPlanet = tmpVector3DplanetCenter;");
 				break;
 			}
 		}
-		Echo("planetsName: "+planetsName);
+		if(detectedPlanet != new Vector3D(0,0,0)){
+			Echo("planetsName: "+planetsName);
+		}
+		else{
+			Echo("targetIsInSpace");
+		}
 		
 		
 		
