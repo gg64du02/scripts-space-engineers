@@ -1048,7 +1048,8 @@ public void Main(string argument)
 		Echo("vec3Dtarget:"+vec3Dtarget);
 		Echo("centerToTargetLengh:"+centerToTargetLengh);
 		Echo("atmosphereRadius:"+atmosphereRadius);
-		if(atmosphereRadius<centerToTargetLengh){
+		//if(atmosphereRadius<centerToTargetLengh){
+		if(PlanetisTargetInTheSameGravityWheel == false){
 			if(recompileButton == false){
 				Echo("dts:" + dts);
 				if (dts > 0)
