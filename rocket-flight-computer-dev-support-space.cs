@@ -69,7 +69,6 @@ double PlanetmaxAtmoRadius = 0;
 double PlanetmaxR = 0; 
 double PlanetminR = 100000;
 double PlanetCurrentG = 0;
-double PlanetlastCurrentG =0;
 bool PlanetisTargetInTheSameGravityWheel = false;
 double PlanetMaxG = 0;
 	
@@ -300,7 +299,7 @@ public void Main(string argument)
     Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
     Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
     double distToPlanetCenter = vecToPlanetCenter.Length();
-	Echo("distToPlanetCenter:"+distToPlanetCenter);
+	//Echo("distToPlanetCenter:"+distToPlanetCenter);
     //derivative of distance to planet center
     derivateDistToPlanetCenter = (distToPlanetCenter - lastDistToPlanetCenter) / dts;
     lastDistToPlanetCenter = distToPlanetCenter;
@@ -763,7 +762,7 @@ public void Main(string argument)
 					if (remainingThrustToApply == -1)
 					{
 						remainingThrustToApply = (physMass_N * control * 1);
-						Echo("spaceRemainingThrustToApply:"+remainingThrustToApply);
+						Echo("spaceRemainingThrustToApply:"+Math.Round(remainingThrustToApply,3));
 					}
 					//Echo("c.CustomName:"+c.CustomName);
 					// Echo("physMass_N" + physMass_N);
@@ -819,7 +818,6 @@ public void Main(string argument)
 		 PlanetmaxR = 0; 
 		 PlanetminR = 100000;
 		 PlanetCurrentG = 0;
-		 PlanetlastCurrentG =0;
 		 PlanetisTargetInTheSameGravityWheel = false;
 		 PlanetMaxG = 0;
 	}
@@ -828,8 +826,8 @@ public void Main(string argument)
 	else{
 		
 		//gravity wheel parameters guessing start
-		Echo("VecPlanetCenter:"+Vector3D.Round(VecPlanetCenter,0));
-		Echo("distToPlanetCenter:"+distToPlanetCenter);
+		//Echo("VecPlanetCenter:"+Vector3D.Round(VecPlanetCenter,0));
+		//Echo("distToPlanetCenter:"+distToPlanetCenter);
 		
 		 PlanetCurrentG = 0.1*g;
 		 if( PlanetMaxG < g){
@@ -842,11 +840,7 @@ public void Main(string argument)
 			PlanetmaxR = distToPlanetCenter;
 		}
 		
-		//PlanetmaxAtmoRadius = PlanetCurrentG * Math.Pow(distToPlanetCenter/PlanetmaxR,7);
-		PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(0.05/PlanetMaxG,(1.0/7));
 		PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
-		//PlanetmaxAtmoRadius = (1.0/7);
-		PlanetlastCurrentG = PlanetCurrentG;
 		bool PlanetisTargetInTheSameGravityWheel = false;
 		if((VecPlanetCenter-vec3Dtarget).Length()<PlanetmaxAtmoRadius){
 			PlanetisTargetInTheSameGravityWheel = true;
@@ -855,11 +849,10 @@ public void Main(string argument)
 			PlanetisTargetInTheSameGravityWheel = false;
 		}
 		
-		Echo("PlanetmaxAtmoRadius:"+PlanetmaxAtmoRadius);
-		Echo("PlanetmaxR:"+PlanetmaxR);
-		Echo("PlanetminR:"+PlanetminR);
-		Echo("PlanetCurrentG:"+PlanetCurrentG);
-		Echo("PlanetlastCurrentG:"+PlanetlastCurrentG);
+		Echo("PlanetmaxAtmoRadius:"+Math.Round(PlanetmaxAtmoRadius,3));
+		Echo("PlanetmaxR:"+Math.Round(PlanetmaxR,3));
+		Echo("PlanetminR:"+Math.Round(PlanetminR,3));
+		Echo("PlanetCurrentG:"+Math.Round(PlanetCurrentG,3));
 		Echo("PlanetisTargetInTheSameGravityWheel:"+PlanetisTargetInTheSameGravityWheel);
 		//gravity wheel parameters guessing end
 		
@@ -918,8 +911,8 @@ public void Main(string argument)
 		//double descSurfaceSpeed = 10;
 		//Echo("surfaceSpeedSquared:" + surfaceSpeedSquared);
 		
-		Echo("distToTarget:"+distToTarget);
-		Echo("vec3Dtarget:"+vec3Dtarget);
+		//Echo("distToTarget:"+distToTarget);
+		//Echo("vec3Dtarget:"+vec3Dtarget);
 		if(PlanetisTargetInTheSameGravityWheel == false){
 			if(recompileButton == false){
 				Echo("dts:" + dts);
@@ -927,7 +920,7 @@ public void Main(string argument)
 				{
 					if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
 					{
-						clampWantedAlitudeSpeed = 95;
+						clampWantedAlitudeSpeed = 75;
 					}
 					if (Math.Abs(distPitch) < 500)
 					{
@@ -937,7 +930,7 @@ public void Main(string argument)
 
 							if (elev > 140)
 							{
-								clampWantedAlitudeSpeed = 95;
+								clampWantedAlitudeSpeed = 75;
 							}
 
 							//wantedAlitudeSpeed = -10;
@@ -1073,7 +1066,7 @@ public void Main(string argument)
                 if (remainingThrustToApply == -1)
                 {
                     remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
-					Echo("atmoRemainingThrustToApply:"+remainingThrustToApply);
+					Echo("atmoRemainingThrustToApply:"+Math.Round(remainingThrustToApply,3));
                 }
                 //Echo("physMass_N" + physMass_N);
                 //Echo("c.MaxThrust"+c.MaxThrust);
