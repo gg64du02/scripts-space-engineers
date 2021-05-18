@@ -827,30 +827,10 @@ public void Main(string argument)
 	//===================
 	else{
 		
-		/*
-		//everything necessary to know if it is underground (sign change will be used)
-		//derivative of elev
-		//known as alt_speed_ms_1
-		//generating a vector from the current position to the center of the planet
-		Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
-		flightIndicatorsShipController.TryGetPlanetPosition(out VecPlanetCenter);
-		Vector3D negateVecPlanetCenter = new Vector3D(0, 0, 0);
-		Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
-		Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
-		double distToPlanetCenter = vecToPlanetCenter.Length();
-		Echo("distToPlanetCenter:"+distToPlanetCenter);
-		*/
-		
+		//gravity wheel parameters guessing start
 		Echo("VecPlanetCenter:"+Vector3D.Round(VecPlanetCenter,0));
 		Echo("distToPlanetCenter:"+distToPlanetCenter);
-		/*
-		 PlanetmaxAtmoRadius = 0;
-		 PlanetmaxR = 0; 
-		 PlanetminR = 100000;
-		 PlanetCurrentG = 0;
-		 PlanetlastCurrentG =0;
-		 PlanetMaxG = 0;
-		 */
+		
 		 PlanetCurrentG = 0.1*g;
 		 if( PlanetMaxG < g){
 			 PlanetMaxG = PlanetCurrentG;
@@ -881,6 +861,7 @@ public void Main(string argument)
 		Echo("PlanetCurrentG:"+PlanetCurrentG);
 		Echo("PlanetlastCurrentG:"+PlanetlastCurrentG);
 		Echo("PlanetisTargetInTheSameGravityWheel:"+PlanetisTargetInTheSameGravityWheel);
+		//gravity wheel parameters guessing end
 		
 		
 		Echo("anglePitch:" + Math.Round((anglePitch), 3));
