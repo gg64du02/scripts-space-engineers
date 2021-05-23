@@ -629,8 +629,20 @@ public void Main(string argument)
     //Echo("AngleRollMaxAcc:" + AngleRollMaxAcc);
     //Echo("speedRoll:" + speedRoll);
 	
+	Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 	
 	
+	//detecting when going to space would allow the ship to not come into the current gravity if it uses thrusters in space
+	bool isTargetAboveTheHor = false;
+	double  angleTargetVsGravity = 0;
+	angleTargetVsGravity = VectorHelper.VectorAngleBetween(totalGravityVect3Dnormalized,V3Dgoal) * rad2deg;
+	Echo("angleTargetVsGravity:"+angleTargetVsGravity);
+	
+	if(angleTargetVsGravity>90){
+		isTargetAboveTheHor = true;
+	}
+	
+	Echo("isTargetAboveTheHor:"+isTargetAboveTheHor);
 	
 	if (gravityVector.LengthSquared() == 0)
 	{
@@ -666,7 +678,6 @@ public void Main(string argument)
 		}
 		
 		//start thrust control
-		Vector3D V3Dgoal =-(myPos - vec3Dtarget);
 		double distToGoal = V3Dgoal.Length();
 		
 		Echo("distToGoal:"+distToGoal);
@@ -918,36 +929,48 @@ public void Main(string argument)
 				Echo("dts:" + dts);
 				if (dts > 0)
 				{
-					if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
-					{
-						clampWantedAlitudeSpeed = 75;
-					}
-					if (Math.Abs(distPitch) < 500)
-					{
-						if (Math.Abs(distRoll) < 500)
+					if(isTargetAboveTheHor ==true){
+						if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
 						{
-							wantedAltitude = 41125;
-
-							if (elev > 140)
-							{
-								clampWantedAlitudeSpeed = 75;
-							}
-
-							//wantedAlitudeSpeed = -10;
-							//if (elev < 50)
-							//{
-							//    wantedAlitudeSpeed = -1;
-							//}
+							clampWantedAlitudeSpeed = 75;
 						}
+						if (Math.Abs(distPitch) < 500)
+						{
+							if (Math.Abs(distRoll) < 500)
+							{
+								wantedAltitude = 41125;
+
+								if (elev > 140)
+								{
+									clampWantedAlitudeSpeed = 75;
+								}
+
+								//wantedAlitudeSpeed = -10;
+								//if (elev < 50)
+								//{
+								//    wantedAlitudeSpeed = -1;
+								//}
+							}
+						}
+						altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+						Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
+
+						controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+						Echo("controlAltSpeed1:" + Math.Round((controlAltSpeed), 3));
+
+						//feedback loop to counter the wrong speed
+						control = controlAltSpeed;
 					}
-					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-					Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
+				}
+				else{
+					wantedAltitude = 1500;
 
 					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-					Echo("controlAltSpeed1:" + Math.Round((controlAltSpeed), 3));
+					Echo("controlAltSpeed2:" + Math.Round((controlAltSpeed), 3));
 
 					//feedback loop to counter the wrong speed
 					control = controlAltSpeed;
+					
 				}
 			}
 		}
