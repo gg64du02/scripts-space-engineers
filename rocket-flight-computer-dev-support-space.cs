@@ -71,6 +71,7 @@ double PlanetminR = 100000;
 double PlanetCurrentG = 0;
 bool PlanetisTargetInTheSameGravityWheel = false;
 double PlanetMaxG = 0;
+bool firstRunComingFromSpace = false;
 	
 public Program()
 {
@@ -831,6 +832,7 @@ public void Main(string argument)
 		 PlanetCurrentG = 0;
 		 PlanetisTargetInTheSameGravityWheel = false;
 		 PlanetMaxG = 0;
+		 firstRunComingFromSpace = true;
 	}
 	//space support WIP end
 	//===================
@@ -962,26 +964,22 @@ public void Main(string argument)
 						control = controlAltSpeed;
 					}
 				}
-				else{
-					wantedAltitude = 1500;
-
-					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-					Echo("controlAltSpeed2:" + Math.Round((controlAltSpeed), 3));
-
-					//feedback loop to counter the wrong speed
-					control = controlAltSpeed;
-					
-				}
 			}
 		}
 		else
 		{
+			
+			if( firstRunComingFromSpace == true){
+				wantedAltitude = 1500;
+				firstRunComingFromSpace = false;
+			}
 				
+			
 			if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
 			{
 				wantedAltitude = 1500;
 			}
-
+			
 			Echo("dts:" + dts);
 			if (Math.Abs(distPitch) < 1)
 			{
