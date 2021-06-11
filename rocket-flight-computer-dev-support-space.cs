@@ -72,6 +72,8 @@ double PlanetCurrentG = 0;
 bool PlanetisTargetInTheSameGravityWheel = false;
 double PlanetMaxG = 0;
 bool firstRunComingFromSpace = false;
+double maxAtmoAltComingFromSpace = 0;
+bool grabOncePlanetmaxAtmoRadius = false;
 	
 public Program()
 {
@@ -833,6 +835,8 @@ public void Main(string argument)
 		 PlanetisTargetInTheSameGravityWheel = false;
 		 PlanetMaxG = 0;
 		 firstRunComingFromSpace = true;
+		 maxAtmoAltComingFromSpace = 0.0;
+	     grabOncePlanetmaxAtmoRadius = false;
 	}
 	//space support WIP end
 	//===================
@@ -842,7 +846,8 @@ public void Main(string argument)
 		//Echo("VecPlanetCenter:"+Vector3D.Round(VecPlanetCenter,0));
 		//Echo("distToPlanetCenter:"+distToPlanetCenter);
 		
-		 PlanetCurrentG = 0.1*g;
+		 PlanetCurrentG = (1.0/9.81)*g;
+		 //PlanetCurrentG = (0.1)*g;
 		 if( PlanetMaxG < g){
 			 PlanetMaxG = PlanetCurrentG;
 		 }
@@ -853,8 +858,15 @@ public void Main(string argument)
 			PlanetmaxR = distToPlanetCenter;
 		}
 		
-		PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
+		if(grabOncePlanetmaxAtmoRadius == false){
+			PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
+		}
 		bool PlanetisTargetInTheSameGravityWheel = false;
+		if(maxAtmoAltComingFromSpace == 0.0){
+			grabOncePlanetmaxAtmoRadius = true;
+			maxAtmoAltComingFromSpace = distToPlanetCenter;
+			PlanetmaxAtmoRadius = maxAtmoAltComingFromSpace;
+		}
 		if((VecPlanetCenter-vec3Dtarget).Length()<PlanetmaxAtmoRadius){
 			PlanetisTargetInTheSameGravityWheel = true;
 		}
