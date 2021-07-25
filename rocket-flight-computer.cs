@@ -810,6 +810,10 @@ public void Main(string argument)
                 {
                     c.ThrustOverride = Convert.ToSingle(temp_thr_n);
                 }
+				
+				if(remainingThrustToApply==0){
+					c.ThrustOverridePercentage = 0.00001f;
+				}
             }
         }
     }
