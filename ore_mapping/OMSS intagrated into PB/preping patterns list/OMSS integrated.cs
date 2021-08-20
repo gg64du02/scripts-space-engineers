@@ -1236,6 +1236,8 @@ public void Main(string argument, UpdateType updateSource)
 								
 								generated_gps_point_on_planet =  planet_radius * Vector3D.Normalize(generated_gps_point_on_cube_norm)+ cubeCenter;
 								
+								generated_gps_point_on_planet = Vector3D.Round(generated_gps_point_on_planet,1);
+								
 								//Echo("generated_gps_point_on_planet"+generated_gps_point_on_planet);
 								
 								string oreNames = stringListOres[oreCoordSubPatternIndex];
