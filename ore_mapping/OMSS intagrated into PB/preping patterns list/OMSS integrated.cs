@@ -32,8 +32,8 @@ public void addEarthLikeAlienTritonSubPattern(){
     stringList.Add("42.83333,42.33333,FeNiCo");
     stringList.Add("51.2285,70.6857,MgSiNi");
     stringList.Add("60.5666,7.03333,FeNiCo");
-    stringList.Add("62.8823,104.3235,FeAuIce");
-    stringList.Add("69.8823,29.32352,FeAuIce");
+    stringList.Add("62.8823,104.3235,FeAuCo");
+    stringList.Add("69.8823,29.32352,FeAuCo");
     stringList.Add("70.7857,55.14285,AgAu");
     stringList.Add("78.2666,79.6666,SiIceMg");
     stringList.Add("88.7857,108.1428,AgAu");
