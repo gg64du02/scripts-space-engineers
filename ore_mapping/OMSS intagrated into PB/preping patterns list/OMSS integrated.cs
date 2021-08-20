@@ -21,29 +21,29 @@ int subPatternSize = 0;
 
 public void addEarthLikeAlienTritonSubPattern(){
 	
-    stringList.Add("5.285714285714286,50.857142857142854,SiNiMg");
-    stringList.Add("7.266666666666667,17.666666666666668,SiIceMg");
-    stringList.Add("8.666666666666666,88.125,IceMgSi");
-    stringList.Add("10.785714285714286,112.14285714285714,AgAu");
-    stringList.Add("23.434782608695652,49.08695652173913,IceAuFe");
-    stringList.Add("26.785714285714285,76.14285714285714,AgAu");
-    stringList.Add("34.22857142857143,16.685714285714287,MgSiNi");
-    stringList.Add("36.666666666666664,109.125,IceMgSi");
-    stringList.Add("42.833333333333336,42.333333333333336,FeNiCo");
-    stringList.Add("51.22857142857143,70.68571428571428,MgSiNi");
-    stringList.Add("60.56666666666667,7.033333333333333,FeNiCo");
-    stringList.Add("62.88235294117647,104.32352941176471,FeAuIce");
-    stringList.Add("69.88235294117646,29.323529411764707,FeAuIce");
-    stringList.Add("70.78571428571429,55.142857142857146,AgAu");
-    stringList.Add("78.26666666666667,79.66666666666667,SiIceMg");
-    stringList.Add("88.78571428571429,108.14285714285714,AgAu");
-    stringList.Add("90.66666666666667,13.125,IceMgSi");
-    stringList.Add("92.28571428571429,53.857142857142854,SiNiMg");
-    stringList.Add("96.66666666666667,82.125,IceMgSi");
-    stringList.Add("112.83333333333333,18.333333333333332,FeNiCo");
-    stringList.Add("114.70833333333333,83.66666666666667,IceAgCo");
-    stringList.Add("116.41666666666667,52.083333333333336,IceAgCo");
-    stringList.Add("115.26666666666667,112.66666666666667,SiIceMg");
+    stringList.Add("5.28571,50.85714,SiNiMg");
+    stringList.Add("7.26666,17.66666,SiIceMg");
+    stringList.Add("8.66666,88.125,IceMgSi");
+    stringList.Add("10.78571,112.1428,AgAu");
+    stringList.Add("23.43478,49.0869,IceAuFe");
+    stringList.Add("26.78571,76.1428,AgAu");
+    stringList.Add("34.2285,16.68571,MgSiNi");
+    stringList.Add("36.66666,109.125,IceMgSi");
+    stringList.Add("42.83333,42.33333,FeNiCo");
+    stringList.Add("51.2285,70.6857,MgSiNi");
+    stringList.Add("60.5666,7.03333,FeNiCo");
+    stringList.Add("62.8823,104.3235,FeAuIce");
+    stringList.Add("69.8823,29.32352,FeAuIce");
+    stringList.Add("70.7857,55.14285,AgAu");
+    stringList.Add("78.2666,79.6666,SiIceMg");
+    stringList.Add("88.7857,108.1428,AgAu");
+    stringList.Add("90.6666,13.125,IceMgSi");
+    stringList.Add("92.2857,53.85714,SiNiMg");
+    stringList.Add("96.6666,82.125,IceMgSi");
+    stringList.Add("112.8333,18.33333,FeNiCo");
+    stringList.Add("114.7083,83.6666,IceAgCo");
+    stringList.Add("116.4166,52.08333,IceAgCo");
+    stringList.Add("115.2666,112.6666,SiIceMg");
 
     foreach(var str in stringList)
     {
@@ -70,43 +70,43 @@ public void addEarthLikeAlienTritonSubPattern(){
 
 public void addMarsSubPattern(){
 	
-	stringList.Add("5.285714285714286,50.857142857142854,SiNiMg");
-	stringList.Add("7.266666666666667,17.666666666666668,SiIceMg");
-	stringList.Add("8.666666666666666,88.125,IceMgSi");
-	stringList.Add("9.0,68.71428571428571,Ice");
-	stringList.Add("10.785714285714286,112.14285714285714,AgAu");
+	stringList.Add("5.28571,50.85714,SiNiMg");
+	stringList.Add("7.26666,17.66666,SiIceMg");
+	stringList.Add("8.66666,88.125,IceMgSi");
+	stringList.Add("9.0,68.7142,Ice");
+	stringList.Add("10.78571,112.1428,AgAu");
 	stringList.Add("12.875,7.875,Ice");
-	stringList.Add("23.434782608695652,49.08695652173913,IceAuFe");
+	stringList.Add("23.43478,49.0869,IceAuFe");
 	stringList.Add("23.0,96.0,Ice");
-	stringList.Add("26.785714285714285,76.14285714285714,AgAu");
-	stringList.Add("34.22857142857143,16.685714285714287,MgSiNi");
+	stringList.Add("26.78571,76.1428,AgAu");
+	stringList.Add("34.2285,16.68571,MgSiNi");
 	stringList.Add("34.125,60.875,Ice");
-	stringList.Add("36.666666666666664,109.125,IceMgSi");
-	stringList.Add("42.833333333333336,42.333333333333336,FeNiCo");
-	stringList.Add("51.22857142857143,70.68571428571428,MgSiNi");
-	stringList.Add("48.84615384615385,90.76923076923077,Ice");
+	stringList.Add("36.66666,109.125,IceMgSi");
+	stringList.Add("42.83333,42.33333,FeNiCo");
+	stringList.Add("51.2285,70.6857,MgSiNi");
+	stringList.Add("48.8461,90.7692,Ice");
 	stringList.Add("50.4,20.2,Ice");
-	stringList.Add("60.56666666666667,7.033333333333333,FeNiCo");
-	stringList.Add("62.88235294117647,104.32352941176471,FeAuIce");
+	stringList.Add("60.5666,7.03333,FeNiCo");
+	stringList.Add("62.8823,104.3235,FeAuIce");
 	stringList.Add("63.0,43.25,Ice");
-	stringList.Add("69.88235294117646,29.323529411764707,FeAuIce");
-	stringList.Add("70.78571428571429,55.142857142857146,AgAu");
+	stringList.Add("69.8823,29.32352,FeAuIce");
+	stringList.Add("70.7857,55.14285,AgAu");
 	stringList.Add("69.5,71.0,Ice");
-	stringList.Add("78.26666666666667,79.66666666666667,SiIceMg");
+	stringList.Add("78.2666,79.6666,SiIceMg");
 	stringList.Add("78.125,10.875,Ice");
-	stringList.Add("81.66666666666667,95.22222222222223,Ice");
-	stringList.Add("88.78571428571429,108.14285714285714,AgAu");
-	stringList.Add("90.66666666666667,13.125,IceMgSi");
-	stringList.Add("92.28571428571429,53.857142857142854,SiNiMg");
-	stringList.Add("96.66666666666667,82.125,IceMgSi");
+	stringList.Add("81.6666,95.2222,Ice");
+	stringList.Add("88.7857,108.1428,AgAu");
+	stringList.Add("90.6666,13.125,IceMgSi");
+	stringList.Add("92.2857,53.85714,SiNiMg");
+	stringList.Add("96.6666,82.125,IceMgSi");
 	stringList.Add("98.8,35.6,Ice");
 	stringList.Add("106.0,66.5,Ice");
 	stringList.Add("106.125,99.875,Ice");
 	stringList.Add("107.8,10.4,Ice");
-	stringList.Add("112.83333333333333,18.333333333333332,FeNiCo");
-	stringList.Add("114.70833333333333,83.66666666666667,IceAgCo");
-	stringList.Add("116.41666666666667,52.083333333333336,IceAgCo");
-	stringList.Add("115.26666666666667,112.66666666666667,SiIceMg");
+	stringList.Add("112.8333,18.33333,FeNiCo");
+	stringList.Add("114.7083,83.6666,IceAgCo");
+	stringList.Add("116.4166,52.08333,IceAgCo");
+	stringList.Add("115.2666,112.6666,SiIceMg");
 
     foreach(var str in stringList)
     {
@@ -133,15 +133,15 @@ public void addMarsSubPattern(){
 
 public void addEuropaMoonTitanSubPattern(){
 	
-	stringList.Add("29.272727272727273,158.86363636363637,IceMgSi");
-	stringList.Add("31.903846153846153,53.01923076923077,PtNi");
-	stringList.Add("74.16666666666667,215.16666666666666,FeNiCo");
-	stringList.Add("82.39041095890411,36.64383561643836,FeAuIce");
-	stringList.Add("104.07142857142857,144.78571428571428,AgAu");
-	stringList.Add("140.16666666666666,55.166666666666664,FeNiCo");
-	stringList.Add("168.5,131.09756097560975,PtNi");
-	stringList.Add("204.7530864197531,42.333333333333336,IceAgCo");
-	stringList.Add("208.07142857142858,209.21428571428572,SiNiMg");
+	stringList.Add("29.27272,158.8636,IceMgSi");
+	stringList.Add("31.90384,53.0192,PtNi");
+	stringList.Add("74.1666,215.1666,FeNiCo");
+	stringList.Add("82.3904,36.6438,FeAuIce");
+	stringList.Add("104.0714,144.7857,AgAu");
+	stringList.Add("140.1666,55.16666,FeNiCo");
+	stringList.Add("168.5,131.0975,PtNi");
+	stringList.Add("204.753,42.33333,IceAgCo");
+	stringList.Add("208.0714,209.2142,SiNiMg");
 
     foreach(var str in stringList)
     {
@@ -206,7 +206,7 @@ public void addPertamSubPattern(){
 	stringList.Add("30.0,306.0,Fe");
 	stringList.Add("31.0,19.0,Fe");
 	stringList.Add("31.0,179.0,Si");
-	stringList.Add("31.333333333333332,291.3333333333333,SiCoNi");
+	stringList.Add("31.33333,291.333,SiCoNi");
 	stringList.Add("33.0,426.0,Fe");
 	stringList.Add("36.0,474.0,Co");
 	stringList.Add("37.0,57.0,Co");
@@ -228,7 +228,7 @@ public void addPertamSubPattern(){
 	stringList.Add("41.0,204.0,Fe");
 	stringList.Add("41.0,228.0,Si");
 	stringList.Add("41.0,349.0,Ag");
-	stringList.Add("42.666666666666664,384.3333333333333,CoSiNi");
+	stringList.Add("42.66666,384.333,CoSiNi");
 	stringList.Add("43.0,467.0,Fe");
 	stringList.Add("44.0,211.0,Co");
 	stringList.Add("44.0,363.0,Ni");
@@ -238,7 +238,7 @@ public void addPertamSubPattern(){
 	stringList.Add("46.0,125.0,Si");
 	stringList.Add("46.0,304.0,Fe");
 	stringList.Add("47.0,294.0,Co");
-	stringList.Add("48.333333333333336,246.33333333333334,SiCoNi");
+	stringList.Add("48.33333,246.3333,SiCoNi");
 	stringList.Add("48.0,264.0,Fe");
 	stringList.Add("48.0,379.0,Fe");
 	stringList.Add("49.0,190.0,Fe");
@@ -246,7 +246,7 @@ public void addPertamSubPattern(){
 	stringList.Add("51.0,509.0,Ni");
 	stringList.Add("53.0,508.0,Si");
 	stringList.Add("54.0,507.0,Fe");
-	stringList.Add("56.666666666666664,351.6666666666667,NiCoSi");
+	stringList.Add("56.66666,351.666,NiCoSi");
 	stringList.Add("57.0,280.0,Fe");
 	stringList.Add("57.0,495.0,Fe");
 	stringList.Add("58.0,63.0,Fe");
@@ -271,7 +271,7 @@ public void addPertamSubPattern(){
 	stringList.Add("71.0,216.0,Ni");
 	stringList.Add("73.0,284.5,NiSi");
 	stringList.Add("75.0,161.0,Ni");
-	stringList.Add("75.66666666666667,425.3333333333333,CoNiFe");
+	stringList.Add("75.6666,425.333,CoNiFe");
 	stringList.Add("76.0,360.0,Co");
 	stringList.Add("77.0,286.0,Au");
 	stringList.Add("77.0,385.0,Fe");
@@ -284,7 +284,7 @@ public void addPertamSubPattern(){
 	stringList.Add("82.0,214.0,Fe");
 	stringList.Add("83.5,310.0,CoSi");
 	stringList.Add("84.0,273.0,Si");
-	stringList.Add("85.66666666666667,96.66666666666667,FeCoNi");
+	stringList.Add("85.6666,96.6666,FeCoNi");
 	stringList.Add("85.0,202.0,Ni");
 	stringList.Add("85.0,221.0,Fe");
 	stringList.Add("85.0,408.0,Fe");
@@ -324,24 +324,24 @@ public void addPertamSubPattern(){
 	stringList.Add("110.0,378.0,Ni");
 	stringList.Add("110.0,386.0,Si");
 	stringList.Add("112.0,157.0,Ni");
-	stringList.Add("113.33333333333333,316.6666666666667,NiSiCo");
+	stringList.Add("113.3333,316.666,NiSiCo");
 	stringList.Add("116.0,174.0,Ni");
 	stringList.Add("118.0,125.0,Co");
-	stringList.Add("118.33333333333333,219.66666666666666,NiSiCo");
+	stringList.Add("118.3333,219.6666,NiSiCo");
 	stringList.Add("118.0,365.0,Fe");
 	stringList.Add("119.0,280.0,Co");
 	stringList.Add("121.0,408.0,Si");
 	stringList.Add("121.5,410.0,Fe");
 	stringList.Add("122.0,295.0,Fe");
 	stringList.Add("126.0,27.0,Co");
-	stringList.Add("126.66666666666667,63.666666666666664,NiCoSi");
+	stringList.Add("126.6666,63.66666,NiCoSi");
 	stringList.Add("126.0,394.0,Fe");
 	stringList.Add("127.0,494.0,Fe");
 	stringList.Add("128.0,272.0,Fe");
 	stringList.Add("130.0,374.0,Ni");
 	stringList.Add("131.0,375.0,Fe");
 	stringList.Add("131.0,489.0,Fe");
-	stringList.Add("132.33333333333334,52.333333333333336,SiCoNi");
+	stringList.Add("132.3333,52.33333,SiCoNi");
 	stringList.Add("135.0,433.0,Si");
 	stringList.Add("135.0,444.0,Fe");
 	stringList.Add("136.0,6.0,Co");
@@ -355,7 +355,7 @@ public void addPertamSubPattern(){
 	stringList.Add("138.0,274.0,Mg");
 	stringList.Add("138.0,470.0,Au");
 	stringList.Add("140.0,208.0,Si");
-	stringList.Add("141.66666666666666,273.3333333333333,CoSiNi");
+	stringList.Add("141.6666,273.333,CoSiNi");
 	stringList.Add("141.0,452.0,Ni");
 	stringList.Add("141.0,488.0,Co");
 	stringList.Add("142.0,227.0,Si");
@@ -375,12 +375,12 @@ public void addPertamSubPattern(){
 	stringList.Add("150.0,403.0,Co");
 	stringList.Add("151.0,299.0,Ni");
 	stringList.Add("153.0,69.0,Co");
-	stringList.Add("153.66666666666666,356.6666666666667,NiCoSi");
+	stringList.Add("153.6666,356.666,NiCoSi");
 	stringList.Add("154.0,497.0,Ni");
 	stringList.Add("155.0,197.0,Fe");
 	stringList.Add("158.0,354.0,Fe");
 	stringList.Add("159.0,156.0,Fe");
-	stringList.Add("159.33333333333334,345.3333333333333,SiCoNi");
+	stringList.Add("159.3333,345.333,SiCoNi");
 	stringList.Add("159.0,355.0,Si");
 	stringList.Add("159.0,427.0,Fe");
 	stringList.Add("159.0,498.0,Si");
@@ -427,11 +427,11 @@ public void addPertamSubPattern(){
 	stringList.Add("196.0,301.0,Mg");
 	stringList.Add("196.0,325.5,NiSi");
 	stringList.Add("197.0,394.0,Co");
-	stringList.Add("198.66666666666666,10.333333333333334,CoSiNi");
+	stringList.Add("198.6666,10.33333,CoSiNi");
 	stringList.Add("198.0,430.0,Au");
 	stringList.Add("199.0,3.0,Fe");
 	stringList.Add("200.5,75.0,Fe");
-	stringList.Add("200.33333333333334,312.3333333333333,NiCoFe");
+	stringList.Add("200.3333,312.333,NiCoFe");
 	stringList.Add("200.0,426.0,Fe");
 	stringList.Add("201.0,1.0,Fe");
 	stringList.Add("201.0,188.0,Fe");
@@ -466,7 +466,7 @@ public void addPertamSubPattern(){
 	stringList.Add("224.0,30.0,Si");
 	stringList.Add("227.0,489.0,Si");
 	stringList.Add("228.0,107.0,Si");
-	stringList.Add("229.33333333333334,57.333333333333336,SiCoNi");
+	stringList.Add("229.3333,57.33333,SiCoNi");
 	stringList.Add("229.0,135.0,Si");
 	stringList.Add("229.0,290.0,Ni");
 	stringList.Add("229.0,449.0,Ni");
@@ -475,7 +475,7 @@ public void addPertamSubPattern(){
 	stringList.Add("235.0,190.0,Co");
 	stringList.Add("235.0,404.0,Si");
 	stringList.Add("235.0,412.0,Ni");
-	stringList.Add("237.66666666666666,162.66666666666666,NiCoSi");
+	stringList.Add("237.6666,162.6666,NiCoSi");
 	stringList.Add("237.0,191.0,Ni");
 	stringList.Add("238.0,145.0,Fe");
 	stringList.Add("239.0,115.0,Co");
@@ -496,7 +496,7 @@ public void addPertamSubPattern(){
 	stringList.Add("249.0,185.0,Si");
 	stringList.Add("249.0,248.0,Fe");
 	stringList.Add("249.0,352.0,Co");
-	stringList.Add("250.33333333333334,151.66666666666666,NiSiCo");
+	stringList.Add("250.3333,151.6666,NiSiCo");
 	stringList.Add("251.0,244.0,Au");
 	stringList.Add("252.0,243.0,Fe");
 	stringList.Add("253.0,46.0,Fe");
@@ -561,11 +561,11 @@ public void addPertamSubPattern(){
 	stringList.Add("292.0,99.0,Ni");
 	stringList.Add("293.0,98.0,Fe");
 	stringList.Add("293.0,396.0,Co");
-	stringList.Add("294.3333333333333,348.3333333333333,SiCoNi");
+	stringList.Add("294.333,348.333,SiCoNi");
 	stringList.Add("295.0,177.0,Ni");
 	stringList.Add("296.0,93.0,Co");
 	stringList.Add("297.0,99.0,Ni");
-	stringList.Add("297.3333333333333,189.33333333333334,SiCoNi");
+	stringList.Add("297.333,189.3333,SiCoNi");
 	stringList.Add("297.0,407.0,Fe");
 	stringList.Add("298.0,375.0,Ni");
 	stringList.Add("299.0,422.0,Fe");
@@ -581,7 +581,7 @@ public void addPertamSubPattern(){
 	stringList.Add("304.0,473.0,");
 	stringList.Add("306.0,28.0,Fe");
 	stringList.Add("306.0,357.0,Fe");
-	stringList.Add("307.3333333333333,400.6666666666667,NiSiCo");
+	stringList.Add("307.333,400.666,NiSiCo");
 	stringList.Add("307.0,447.0,Si");
 	stringList.Add("307.0,475.5,Fe");
 	stringList.Add("308.0,222.0,Ni");
@@ -607,7 +607,7 @@ public void addPertamSubPattern(){
 	stringList.Add("329.0,107.0,Fe");
 	stringList.Add("329.0,364.0,Co");
 	stringList.Add("330.0,200.0,Fe");
-	stringList.Add("330.6666666666667,454.3333333333333,CoSiNi");
+	stringList.Add("330.666,454.333,CoSiNi");
 	stringList.Add("331.0,309.0,Fe");
 	stringList.Add("331.0,412.0,Fe");
 	stringList.Add("332.0,159.0,Fe");
@@ -616,7 +616,7 @@ public void addPertamSubPattern(){
 	stringList.Add("333.0,485.0,Fe");
 	stringList.Add("333.0,500.0,Ni");
 	stringList.Add("335.0,311.0,Si");
-	stringList.Add("335.6666666666667,357.3333333333333,CoSiNi");
+	stringList.Add("335.666,357.333,CoSiNi");
 	stringList.Add("336.0,208.0,Fe");
 	stringList.Add("336.0,213.0,Si");
 	stringList.Add("336.0,404.0,Fe");
@@ -668,7 +668,7 @@ public void addPertamSubPattern(){
 	stringList.Add("370.0,218.0,Co");
 	stringList.Add("371.0,50.0,Fe");
 	stringList.Add("371.0,488.0,Ni");
-	stringList.Add("373.3333333333333,248.66666666666666,FeNiCo");
+	stringList.Add("373.333,248.6666,FeNiCo");
 	stringList.Add("373.0,299.0,Si");
 	stringList.Add("373.0,314.0,Co");
 	stringList.Add("374.0,1.0,Ni");
@@ -710,7 +710,7 @@ public void addPertamSubPattern(){
 	stringList.Add("405.0,17.0,Fe");
 	stringList.Add("405.0,437.0,Fe");
 	stringList.Add("405.0,463.0,Co");
-	stringList.Add("406.3333333333333,289.6666666666667,NiSiCo");
+	stringList.Add("406.333,289.666,NiSiCo");
 	stringList.Add("407.0,332.0,Fe");
 	stringList.Add("408.0,36.0,Co");
 	stringList.Add("408.0,200.0,Fe");
@@ -826,7 +826,7 @@ public void addPertamSubPattern(){
 	stringList.Add("484.0,247.0,Fe");
 	stringList.Add("487.0,71.0,Si");
 	stringList.Add("487.0,103.0,Mg");
-	stringList.Add("487.6666666666667,473.6666666666667,Fe");
+	stringList.Add("487.666,473.666,Fe");
 	stringList.Add("488.0,290.0,Fe");
 	stringList.Add("488.0,479.0,Fe");
 	stringList.Add("490.0,192.0,Ni");
@@ -850,7 +850,7 @@ public void addPertamSubPattern(){
 	stringList.Add("497.0,496.0,Fe");
 	stringList.Add("498.0,344.0,Co");
 	stringList.Add("498.0,501.0,Fe");
-	stringList.Add("500.6666666666667,219.66666666666666,NiCoSi");
+	stringList.Add("500.666,219.6666,NiCoSi");
 	stringList.Add("501.0,2.0,Fe");
 	stringList.Add("502.0,222.0,Fe");
 	stringList.Add("502.0,420.0,Si");
