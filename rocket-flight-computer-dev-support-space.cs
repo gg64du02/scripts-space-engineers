@@ -639,13 +639,15 @@ public void Main(string argument)
 	bool isTargetAboveTheHor = false;
 	double  angleTargetVsGravity = 0;
 	angleTargetVsGravity = VectorHelper.VectorAngleBetween(totalGravityVect3Dnormalized,V3Dgoal) * rad2deg;
-	Echo("angleTargetVsGravity:"+angleTargetVsGravity);
+	Echo("angleTargetVsGravity:"+Math.Round(angleTargetVsGravity,3));
 	
 	if(angleTargetVsGravity>90){
 		isTargetAboveTheHor = true;
 	}
 	
+	Echo("AboveTheHor:"+isTargetAboveTheHor);
 	Echo("isTargetAboveTheHor:"+isTargetAboveTheHor);
+	Echo("AboveTheHor:"+isTargetAboveTheHor);
 	
 	if (gravityVector.LengthSquared() == 0)
 	{
@@ -776,7 +778,7 @@ public void Main(string argument)
 					if (remainingThrustToApply == -1)
 					{
 						remainingThrustToApply = (physMass_N * control * 1);
-						Echo("spaceRemainingThrustToApply:"+Math.Round(remainingThrustToApply,3));
+						Echo("spaceRemainThrust:"+Math.Round(remainingThrustToApply,3));
 					}
 					//Echo("c.CustomName:"+c.CustomName);
 					// Echo("physMass_N" + physMass_N);
@@ -874,11 +876,13 @@ public void Main(string argument)
 			PlanetisTargetInTheSameGravityWheel = false;
 		}
 		
-		Echo("PlanetmaxAtmoRadius:"+Math.Round(PlanetmaxAtmoRadius,3));
+		Echo("AtmoRadius:"+Math.Round(PlanetmaxAtmoRadius,3));
+		//Echo("PlanetmaxAtmoRadius:"+Math.Round(PlanetmaxAtmoRadius,3));
 		Echo("PlanetmaxR:"+Math.Round(PlanetmaxR,3));
 		Echo("PlanetminR:"+Math.Round(PlanetminR,3));
 		Echo("PlanetCurrentG:"+Math.Round(PlanetCurrentG,3));
-		Echo("PlanetisTargetInTheSameGravityWheel:"+PlanetisTargetInTheSameGravityWheel);
+		//Echo("PlanetisTargetInTheSameGravityWheel:"+PlanetisTargetInTheSameGravityWheel);
+		Echo("TargetSameGravityWheel:"+PlanetisTargetInTheSameGravityWheel);
 		//gravity wheel parameters guessing end
 		
 		
@@ -1099,7 +1103,7 @@ public void Main(string argument)
                 if (remainingThrustToApply == -1)
                 {
                     remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
-					Echo("atmoRemainingThrustToApply:"+Math.Round(remainingThrustToApply,3));
+					Echo("atmoRemainThrust:"+Math.Round(remainingThrustToApply,3));
                 }
                 //Echo("physMass_N" + physMass_N);
                 //Echo("c.MaxThrust"+c.MaxThrust);
@@ -1135,6 +1139,9 @@ public void Main(string argument)
         }
     }
 	}
+	
+	Echo("distRoll:"+Math.Round(distRoll,2));
+	Echo("distPitch:"+Math.Round(distPitch,2));
 	
 
 }
