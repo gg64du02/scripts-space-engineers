@@ -760,7 +760,7 @@ public void Main(string argument)
     {
         listAntenna[0].HudText = str_to_display;
     }
-	Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
+	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
     // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
 			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
 	// }
@@ -817,6 +817,9 @@ public void Main(string argument)
             }
         }
     }
+	
+	Echo("distRoll:"+Math.Round(distRoll,2));
+	Echo("distPitch:"+Math.Round(distPitch,2));
 
 }
 
