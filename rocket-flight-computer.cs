@@ -62,6 +62,8 @@ PIDController anglePitchPID = new PIDController(1f, 0f, 0f);
 IMyShipController myRemoteControl = null;
 
 List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
+
+IMyRadioAntenna theAntenna = null;
 	
 public Program()
 {
@@ -71,6 +73,15 @@ public Program()
     lcdHelper = new LCDHelper(basicLibrary, new Color(255, 255, 255), 1.5f);
 	
 	GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
+	
+	
+    if (listAntenna.Count != 0){
+		foreach (IMyRadioAntenna antenna in listAntenna){
+			if(antenna.IsSameConstructAs(Me)){
+				theAntenna = antenna;
+			}
+		}
+	}
 }
 
 public void Main(string argument)
@@ -756,14 +767,13 @@ public void Main(string argument)
     //    + "\n12|wA|" + Math.Round((wantedAltitude), 0)
     //    + "\n13|con|" + Math.Round((control), 0);
     //var str_to_display = "lol";
-    if (listAntenna.Count != 0)
-    {
-        listAntenna[0].HudText = str_to_display;
-    }
 	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
     // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
 			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
 	// }
+	if(theAntenna != null){
+		theAntenna.HudText = str_to_display;
+	}
 
     debugString += "\n" + "control:" + control;
     Echo("control:" + Math.Round((control), 2));
