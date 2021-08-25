@@ -33,18 +33,15 @@ Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1500;
 double altitudeError = 0f;
-bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
 
 PIDController downwardSpeedAltRegulator = new PIDController(1f, .00f, 0.0f);
-double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
 double alt_speed_ms_1 = 0f;
 double last_alt_speed_ms_1 = 0f;
 double alt_acc_ms_2 = 0f;
-double last_alt_acc_ms_2 = 0f;
 
 double derivateDistToPlanetCenter = 0f;
 double lastDistToPlanetCenter = 0f;
@@ -190,25 +187,6 @@ public void Main(string argument)
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
     //Echo("\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
-    //math pitch
-    //Echo("\n=====================================");
-    Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
-    //Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll : + clock wise | - clock wise 
-    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
-    //Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
-    //math yaw
-    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
-    //Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
-
-    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
-    double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
-    //Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-    double pitchTmp = pitchFowardOrBackward;
-    double rollTmp = rollLeftOrRight;
-    double yawTmp = yawCWOrAntiCW;
-
     double elev;
     myRemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
@@ -284,7 +262,7 @@ public void Main(string argument)
     Vector3D normVTTProjectUp = VectorHelper.VectorProjection(normVTT, gravityVector);
     Vector3D normVTTProjPlaneVector = normVTTProjectUp - normVTT;
 
-    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
+    double yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
     if (normVTT.Dot(relativeEastVector) < 0)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
@@ -537,8 +515,8 @@ public void Main(string argument)
 	}
 
 
-    pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
-    rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
+    double pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
+    double rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
 
     pitchFowardOrBackward *= 0.01f;
     rollLeftOrRight *= 0.01f;
