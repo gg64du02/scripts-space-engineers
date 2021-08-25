@@ -33,18 +33,15 @@ Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
 double wantedAltitude = 1500;
 double altitudeError = 0f;
-bool altSettingChanged = false;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
 
 PIDController downwardSpeedAltRegulator = new PIDController(1f, .00f, 0.0f);
-double g_constant = 9.8f;
 double alt = 0f;
 double last_alt = 0f;
 double alt_speed_ms_1 = 0f;
 double last_alt_speed_ms_1 = 0f;
 double alt_acc_ms_2 = 0f;
-double last_alt_acc_ms_2 = 0f;
 
 double derivateDistToPlanetCenter = 0f;
 double lastDistToPlanetCenter = 0f;
@@ -71,12 +68,12 @@ double PlanetmaxAtmoRadius = 0;
 double PlanetmaxR = 0; 
 double PlanetminR = 100000;
 double PlanetCurrentG = 0;
-bool PlanetisTargetInTheSameGravityWheel = false;
 double PlanetMaxG = 0;
 bool firstRunComingFromSpace = false;
 double maxAtmoAltComingFromSpace = 0;
 bool grabOncePlanetmaxAtmoRadius = false;
-	
+bool PlanetisTargetInTheSameGravityWheel = false;
+
 public Program()
 {
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
@@ -101,77 +98,24 @@ public void Main(string argument)
     {
         return;
     }
-
-    /*
-    BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizableRoll = true;
-    bool stalizablePitch = true;
-    bool stalizableYaw = false;
-
-    // PID values in case you want to ajust them, but you should not need to do it
-    const double pidP = 0.06f;
-    const double pidI = 0.0f;
-    const double pidD = 0.01f;
-
-    FightStabilizator fightStabilizator = new FightStabilizator(flightIndicators, controller, pidP, pidI, pidD, basicLibrary);
-
-    // optional : set desired angles
-    fightStabilizator.pitchDesiredAngle = 0f;
-    fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = 0f;
-
-    // reset before each new stabilization (for example after stopping stabilization and when you want to start a new one). DO NOT call it during stabilization
-    fightStabilizator.Reset();
-
-    // call this next line at each run
-    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
-
-    // release gyros when you stop stabilization
-    fightStabilizator.Release();
-    */
-
-    /*
-    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-    fightStabilizator.Reset();
-    flightIndicators.Compute();
-    fightStabilizator.Stabilize(true, true, stalizableYaw);
-    */
-
-
-
-    //if (argument != null && argument.ToLower().Equals("stabilize_on"))
-    /*
-    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-    fightStabilizator.Reset();
-    */
-
-    //USE aaa_needs_testing bp
-
-
+	
     System.DateTime now = System.DateTime.UtcNow;
-    Echo("now:" + now);
-
     var deltaTime = (float)(now - lastTime).Milliseconds / 1000f;
-    Echo("deltaTime = now - lastTime:" + deltaTime);
-
     lastTime = now;
-
-    Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
-
     DateTime d = new DateTime(1970, 01, 01);
     var temp = d.Ticks; // == 621355968000000000
-
-    //Echo("temp:" + temp);
-
     var temp2 = now.Ticks;
 
-    //Echo("temp2:" + temp2);
-
-    //Echo("temp2/10**6:" + (temp2 / 1000000f));
-
-    DateTime dt1970 = new DateTime(1970, 1, 1);
+	DateTime dt1970 = new DateTime(1970, 1, 1);
     DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
     TimeSpan span = current - dt1970;
+	
+    Echo("now:" + now);
+    Echo("deltaTime = now - lastTime:" + deltaTime);
+    Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
+    //Echo("temp:" + temp);
+    //Echo("temp2:" + temp2);
+    //Echo("temp2/10**6:" + (temp2 / 1000000f));
     Echo("span:" + span.TotalMilliseconds.ToString());
 
     if (flightIndicatorsShipController == null)
@@ -181,6 +125,7 @@ public void Main(string argument)
     {
         myRemoteControl = flightIndicatorsShipController;
     }
+	
     Vector3D totalGravityVect3D = myRemoteControl.GetTotalGravity();
     //Echo("\n\ntotalGravityVect3D:\n" + totalGravityVect3D);
     Vector3D totalGravityVect3Dnormalized = Vector3D.Normalize(totalGravityVect3D);
@@ -201,16 +146,12 @@ public void Main(string argument)
     Vector3D myPos = myRemoteControl.GetPosition();
     //Echo("myPos:\n" + myPos);
 
-
-
     //note:
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-
-
 
     if (argument != null)
     {
@@ -263,28 +204,6 @@ public void Main(string argument)
     Vector3D crossCurrentTargetGravityNormalized = Vector3D.Cross(targetGravityVectorNormalized, totalGravityVect3Dnormalized);
     //Echo("\ncrossCurrentTargetGravityNormalized:\n" + crossCurrentTargetGravityNormalized);
 
-    //math pitch
-    //Echo("\n=====================================");
-    //TODO:Check all axis one by one and then the signs.
-    //CHECKED: long range roll and pitch length and sign changes are ok
-    Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
-    //Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
-    //math roll : + clock wise | - clock wise 
-    Vector3D vectorRollCalcedSetting = Vector3D.Cross(shipLeftVector, crossCurrentTargetGravityNormalized);
-    //Echo("\nvectorRollCalcedSetting:\n" + vectorRollCalcedSetting);
-    //math yaw
-    Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
-    //Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
-
-
-    double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
-    double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
-    double yawCWOrAntiCW = (Vector3D.Dot(vectorYawCalcedSetting, shipLeftVector) < 0) ? -vectorYawCalcedSetting.Length() : vectorYawCalcedSetting.Length(); ;
-    //Echo("\npitchFowardOrBackward:\n" + pitchFowardOrBackward);
-    double pitchTmp = pitchFowardOrBackward;
-    double rollTmp = rollLeftOrRight;
-    double yawTmp = yawCWOrAntiCW;
-
     double elev;
     myRemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
@@ -294,11 +213,8 @@ public void Main(string argument)
     double dts2 = Runtime.LastRunTimeMs;
     Echo("dts2:" + dts2);
 
-    //var listLight = new List<IMyInteriorLight>();
-    //GridTerminalSystem.GetBlocksOfType(listLight);
     if (dts == 0)
     {
-        //listLight[0].Color = Color.DarkRed;
         return;
     }
 
@@ -364,7 +280,7 @@ public void Main(string argument)
     Vector3D normVTTProjectUp = VectorHelper.VectorProjection(normVTT, gravityVector);
     Vector3D normVTTProjPlaneVector = normVTTProjectUp - normVTT;
 
-    yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
+    double yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
     if (normVTT.Dot(relativeEastVector) < 0)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
@@ -617,8 +533,8 @@ public void Main(string argument)
 	}
 
 
-    pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
-    rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
+    double pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
+    double rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
 
     pitchFowardOrBackward *= 0.01f;
     rollLeftOrRight *= 0.01f;
@@ -661,8 +577,6 @@ public void Main(string argument)
 	
 	if (gravityVector.LengthSquared() == 0)
 	{
-		
-		
 		Echo("In space ?");
 		//assuming the g_constant
 		g = 9.81;
@@ -701,8 +615,8 @@ public void Main(string argument)
 		
 		double approachSpeed = 0f;
 		//if(distToGoal<safety_k*distWhenToStartBraking){
-			 approachSpeed = ( distToGoal * V_max_space ) / distWhenToStartBraking;
-			 approachSpeed = MyMath.Clamp((float)approachSpeed, 0,(float)V_max_space);
+			approachSpeed = ( distToGoal * V_max_space ) / distWhenToStartBraking;
+			approachSpeed = MyMath.Clamp((float)approachSpeed, 0,(float)V_max_space);
 			V3Dgoal_speed = approachSpeed * Vector3D.Normalize(V3Dgoal_speed);
 		//}
 		Echo("approachSpeed:"+approachSpeed);
@@ -853,7 +767,6 @@ public void Main(string argument)
 	//space support WIP end
 	//===================
 	else{
-		
 		//gravity wheel parameters guessing start
 		//Echo("VecPlanetCenter:"+Vector3D.Round(VecPlanetCenter,0));
 		//Echo("distToPlanetCenter:"+distToPlanetCenter);
@@ -873,7 +786,7 @@ public void Main(string argument)
 		if(grabOncePlanetmaxAtmoRadius == false){
 			PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
 		}
-		bool PlanetisTargetInTheSameGravityWheel = false;
+		PlanetisTargetInTheSameGravityWheel = false;
 		if(maxAtmoAltComingFromSpace == 0.0){
 			grabOncePlanetmaxAtmoRadius = true;
 			maxAtmoAltComingFromSpace = distToPlanetCenter;
@@ -1040,116 +953,101 @@ public void Main(string argument)
 			}
 		}
 		
-    //altitude management and downward speed management========================== end
+		//altitude management and downward speed management========================== end
 
-    if (Double.IsNaN(controlAltSpeed) == true)
-    {
-        downwardSpeedAltRegulator.Reset();
-    }
+		if (Double.IsNaN(controlAltSpeed) == true)
+		{
+			downwardSpeedAltRegulator.Reset();
+		}
 
-    if (Double.IsNaN(control) == true)
-    {
-        altRegulator.Reset();
-    }
-
-
-    bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
-
-    //+ pitch go foward
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
-    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
-
-    // call this next line at each run
-    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
+		if (Double.IsNaN(control) == true)
+		{
+			altRegulator.Reset();
+		}
 
 
-    //debug roll
+		bool stalizablePitch = true;
+		bool stalizableRoll = true;
+		bool stalizableYaw = false;
 
-    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
-        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
-        + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
-        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
-        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
-        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
-        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+		//+ pitch go foward
+		fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
+		fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
+		fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
 
-    //var str_to_display = "lol";
-	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
-    // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
-			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
-	// }
-	
-	
-	if(theAntenna != null){
-		theAntenna.HudText = str_to_display;
-	}
-	
+		// call this next line at each run
+		fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
-    debugString += "\n" + "control:" + control;
-    Echo("control:" + Math.Round((control), 2));
+		//debug roll
+		var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+			+ "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+			+ "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+			+ "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+			+ "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+			+ "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+			+ "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+		
+		if(theAntenna != null){
+			theAntenna.HudText = str_to_display;
+		}
+		
+		debugString += "\n" + "control:" + control;
+		Echo("control:" + Math.Round((control), 2));
 
-    //applying what the pid processed
-    //var cs = new List<IMyThrust>();
-    //GridTerminalSystem.GetBlocksOfType(cs);
-    //Echo(cs.ToString());
+		double remainingThrustToApply = -1;
+		double temp_thr_n = -1;
 
-    double remainingThrustToApply = -1;
-    double temp_thr_n = -1;
-
-    foreach (var c in cs)
-    {
-        if (c.IsFunctional == true)
-        {
-            if (c.IsSameConstructAs(flightIndicatorsShipController))
-            {
-				c.ThrustOverride = Convert.ToSingle(200f);
-				if(c.MaxEffectiveThrust == 0){
-					continue;
+		foreach (var c in cs)
+		{
+			if (c.IsFunctional == true)
+			{
+				if (c.IsSameConstructAs(flightIndicatorsShipController))
+				{
+					c.ThrustOverride = Convert.ToSingle(200f);
+					if(c.MaxEffectiveThrust == 0){
+						continue;
+					}
+					if(c.Enabled==false){
+						continue;
+					}
+					if (remainingThrustToApply == -1)
+					{
+						remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
+						Echo("atmoRemainThrust:"+Math.Round(remainingThrustToApply,3));
+					}
+					//Echo("physMass_N" + physMass_N);
+					//Echo("c.MaxThrust"+c.MaxThrust);
+					//Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+					//(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+					if (c.MaxThrust < remainingThrustToApply)
+					{
+						temp_thr_n = c.MaxThrust;
+						remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
+					}
+					else
+					{
+						temp_thr_n = remainingThrustToApply;
+						remainingThrustToApply = 0;
+					}
+					//Echo("temp_thr_n:" + temp_thr_n);
+					//Echo("remainingThrustToApply:" + remainingThrustToApply);
+					
+					if (temp_thr_n < 0)
+					{
+						c.ThrustOverride = Convert.ToSingle(200f);
+					}
+					else
+					{
+						c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+					}
+					
+					if(remainingThrustToApply==0){
+						c.ThrustOverridePercentage = 0.001f;
+					}
+					
 				}
-				if(c.Enabled==false){
-					continue;
-				}
-                if (remainingThrustToApply == -1)
-                {
-                    remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
-					Echo("atmoRemainThrust:"+Math.Round(remainingThrustToApply,3));
-                }
-                //Echo("physMass_N" + physMass_N);
-                //Echo("c.MaxThrust"+c.MaxThrust);
-                //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
-                //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
-                if (c.MaxThrust < remainingThrustToApply)
-                {
-                    temp_thr_n = c.MaxThrust;
-                    remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
-                }
-                else
-                {
-                    temp_thr_n = remainingThrustToApply;
-                    remainingThrustToApply = 0;
-                }
-                //Echo("temp_thr_n:" + temp_thr_n);
-                //Echo("remainingThrustToApply:" + remainingThrustToApply);
-				
-                if (temp_thr_n < 0)
-                {
-                    c.ThrustOverride = Convert.ToSingle(200f);
-                }
-                else
-                {
-                    c.ThrustOverride = Convert.ToSingle(temp_thr_n);
-                }
-				
-				if(remainingThrustToApply==0){
-					c.ThrustOverridePercentage = 0.001f;
-				}
-				
-            }
-        }
-    }
+			}
+		}
 	}
 	
 	Echo("distRoll:"+Math.Round(distRoll,2));
