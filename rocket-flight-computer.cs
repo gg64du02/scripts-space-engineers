@@ -91,76 +91,22 @@ public void Main(string argument)
         return;
     }
 
-    /*
-    BasicLibrary basicLibrary = new BasicLibrary(GridTerminalSystem, Echo);
-    bool stalizableRoll = true;
-    bool stalizablePitch = true;
-    bool stalizableYaw = false;
-
-    // PID values in case you want to ajust them, but you should not need to do it
-    const double pidP = 0.06f;
-    const double pidI = 0.0f;
-    const double pidD = 0.01f;
-
-    FightStabilizator fightStabilizator = new FightStabilizator(flightIndicators, controller, pidP, pidI, pidD, basicLibrary);
-
-    // optional : set desired angles
-    fightStabilizator.pitchDesiredAngle = 0f;
-    fightStabilizator.yawDesiredAngle = 0f;
-    fightStabilizator.rollDesiredAngle = 0f;
-
-    // reset before each new stabilization (for example after stopping stabilization and when you want to start a new one). DO NOT call it during stabilization
-    fightStabilizator.Reset();
-
-    // call this next line at each run
-    fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
-
-    // release gyros when you stop stabilization
-    fightStabilizator.Release();
-    */
-
-    /*
-    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-    fightStabilizator.Reset();
-    flightIndicators.Compute();
-    fightStabilizator.Stabilize(true, true, stalizableYaw);
-    */
-
-
-
-    //if (argument != null && argument.ToLower().Equals("stabilize_on"))
-    /*
-    flightIndicatorsFlightMode = FlightMode.STABILIZATION;
-    fightStabilizator.Reset();
-    */
-
-    //USE aaa_needs_testing bp
-
-
     System.DateTime now = System.DateTime.UtcNow;
-    Echo("now:" + now);
-
     var deltaTime = (float)(now - lastTime).Milliseconds / 1000f;
-    Echo("deltaTime = now - lastTime:" + deltaTime);
-
     lastTime = now;
-
-    Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
-
     DateTime d = new DateTime(1970, 01, 01);
     var temp = d.Ticks; // == 621355968000000000
-
-    //Echo("temp:" + temp);
-
     var temp2 = now.Ticks;
-
-    //Echo("temp2:" + temp2);
-
-    //Echo("temp2/10**6:" + (temp2 / 1000000f));
 
     DateTime dt1970 = new DateTime(1970, 1, 1);
     DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
     TimeSpan span = current - dt1970;
+	//Echo("temp:" + temp);
+    Echo("now:" + now);
+    Echo("deltaTime = now - lastTime:" + deltaTime);
+    Echo("now - lastRunTs:" + (now - lastRunTs).Milliseconds / 1000f);
+    //Echo("temp2:" + temp2);
+    //Echo("temp2/10**6:" + (temp2 / 1000000f));
     Echo("span:" + span.TotalMilliseconds.ToString());
 
     if (flightIndicatorsShipController == null)
@@ -190,16 +136,12 @@ public void Main(string argument)
     Vector3D myPos = myRemoteControl.GetPosition();
     //Echo("myPos:\n" + myPos);
 
-
-
     //note:
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
     //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-
-
 
     if (argument != null)
     {
@@ -230,7 +172,6 @@ public void Main(string argument)
         flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
     }
 
-
     //Echo("vec3Dtarget:" + vec3Dtarget);
 
     //targetGravityVectorNormalized
@@ -251,8 +192,6 @@ public void Main(string argument)
 
     //math pitch
     //Echo("\n=====================================");
-    //TODO:Check all axis one by one and then the signs.
-    //CHECKED: long range roll and pitch length and sign changes are ok
     Vector3D vectorPitchCalcedSetting = Vector3D.Cross(shipForwardVector, crossCurrentTargetGravityNormalized);
     //Echo("\nvectorPitchCalcedSetting:\n" + vectorPitchCalcedSetting);
     //math roll : + clock wise | - clock wise 
@@ -261,7 +200,6 @@ public void Main(string argument)
     //math yaw
     Vector3D vectorYawCalcedSetting = Vector3D.Cross(shipDownVector, crossCurrentTargetGravityNormalized);
     //Echo("\n\nvectorYawCalcedSetting:\n" + vectorYawCalcedSetting);
-
 
     double pitchFowardOrBackward = (Vector3D.Dot(vectorPitchCalcedSetting, shipDownVector) < 0) ? -vectorPitchCalcedSetting.Length() : vectorPitchCalcedSetting.Length();
     double rollLeftOrRight = (Vector3D.Dot(vectorRollCalcedSetting, shipForwardVector) > 0) ? -vectorRollCalcedSetting.Length() : vectorRollCalcedSetting.Length();
@@ -280,11 +218,8 @@ public void Main(string argument)
     double dts2 = Runtime.LastRunTimeMs;
     Echo("dts2:" + dts2);
 
-    //var listLight = new List<IMyInteriorLight>();
-    //GridTerminalSystem.GetBlocksOfType(listLight);
     if (dts == 0)
     {
-        //listLight[0].Color = Color.DarkRed;
         return;
     }
 
