@@ -1,5 +1,5 @@
-string[] lyrics = {"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-"Duis eu quam porttitor, condimentum felis ut, auctor erat.",
+string[] lyrics = {"Lorem ipsum dolor sit amet",
+"Duis eu quam porttitor",
 "Cras varius justo ut sapien bibendum malesuada.",
 "In tincidunt sem non eleifend feugiat.",
 "Fusce non quam id est egestas congue.",
@@ -39,6 +39,13 @@ public Program()
 
     GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 	
+        foreach (IMyRadioAntenna antenna in listAntenna)
+        {
+            if (antenna.IsSameConstructAs(Me))
+            {
+				theAntenna=antenna;
+			}
+		}
 }
 
 public void Save()
@@ -70,7 +77,10 @@ public void Main(string argument, UpdateType updateSource)
         {
             if (antenna.IsSameConstructAs(Me))
             {
-                theAntenna.HudText = lyrics[i%10];
+				Echo("i%lyrics.Length:"+i%lyrics.Length);
+				Echo("lyrics[i%lyrics.Length]:"+lyrics[i%lyrics.Length]);
+                //theAntenna.HudText = lyrics[i%lyrics.Length];
+                theAntenna.CustomName = lyrics[i%lyrics.Length];
             }
         }
     }
