@@ -26,7 +26,13 @@ for file in files:
     sobelx = cv.Sobel(img,cv.CV_64F,1,0,ksize=1)
     sobely = cv.Sobel(img,cv.CV_64F,0,1,ksize=1)
     sobelxy = np.add(sobelx , sobely)
-    plt.imshow(sobelxy,cmap='gray')
+
+    abs_sobelx = np.absolute(sobelx)
+    abs_sobely = np.absolute(sobely)
+    abs_sobelxy = np.add(abs_sobelx , abs_sobely)
+
+    # plt.imshow(sobelxy,cmap='gray')
+    plt.imshow(abs_sobelxy,cmap='gray')
     plt.show()
     # img.close()
     exit()
