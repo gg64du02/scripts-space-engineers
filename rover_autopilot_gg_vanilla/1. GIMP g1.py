@@ -16,6 +16,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 files = {"back.png"}
 # files = {"front.png","back.png"}
+# files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
 for file in files:
     print("file:",file)
     img = cv.imread(file,0)
