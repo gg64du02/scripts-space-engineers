@@ -32,8 +32,12 @@ for file in files:
     abs_sobely = np.absolute(sobely)
     abs_sobelxy = np.add(abs_sobelx , abs_sobely)
 
+    ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
+
     # plt.imshow(sobelxy,cmap='gray')
-    plt.imshow(abs_sobelxy,cmap='gray')
+    # plt.imshow(abs_sobelxy,cmap='gray')
+    # plt.imshow(thres_abs_sobelxy)
+    plt.imshow(thres_abs_sobelxy,cmap='gray')
     plt.show()
     # img.close()
     exit()
