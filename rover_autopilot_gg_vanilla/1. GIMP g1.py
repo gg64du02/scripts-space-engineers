@@ -14,6 +14,25 @@
 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
+
+# import os
+#
+# folderName = "E:/Github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/"
+#
+# if(os.path.exists(folderName)==True):
+#     print(folderName, "exists")
+# else:
+#     print(folderName, "does not exist")
+#
+# fileNamePath = folderName + "back.png"
+#
+# from pathlib import Path
+#
+# if(Path(fileNamePath).exists()==True):
+#     print(fileNamePath, "exists")
+# else:
+#     print(fileNamePath, "does not exist")
+
 files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
@@ -34,10 +53,24 @@ for file in files:
 
     ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
 
+    # for i in range(0,2048):
+    #     for j in range(0,2048):
+    #         if( i % 64==0):
+    #             if( j % 64==0):
+    #                 print("i",i,"j",j)
+    #                 thres_abs_sobelxy[i][j] = 255
+    #                 # diagonals
+    #                 cv.line(thres_abs_sobelxy,(i,j),(i+64,j+64),(255,255,255))
+    #                 # vertical lines
+    #                 cv.line(thres_abs_sobelxy,(i,j),(i,j+64),(255,255,255))
+    #                 # horizontals
+    #                 cv.line(thres_abs_sobelxy,(i,j),(i+64,j),(255,255,255))
+
     # plt.imshow(sobelxy,cmap='gray')
     # plt.imshow(abs_sobelxy,cmap='gray')
-    # plt.imshow(thres_abs_sobelxy)
-    plt.imshow(thres_abs_sobelxy,cmap='gray')
+    plt.imshow(thres_abs_sobelxy)
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
+
     plt.show()
     # img.close()
     exit()
