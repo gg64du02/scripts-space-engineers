@@ -24,8 +24,8 @@ for file in files:
             if( i % 32==0):
                 if( j % 32==0):
 
-                    # horizontals
-                    print("i",i,"j",j)
+                    # vertical lines
+                    # print("i",i,"j",j)
                     uninterruptedLine = True
                     for pixels in range(0,32):
                         if(img[i+pixels][j]==128):
@@ -35,6 +35,22 @@ for file in files:
                         # bug? for some reason cv.line switch the axis ?
                         cv.line(img,(j,i),(j,i+32),(255,255,255))
                     # print()
+
+
+
+                    # horizontal lines
+                    # print("i",i,"j",j)
+                    uninterruptedLine = True
+                    for pixels in range(0,32):
+                        if(img[i][j+pixels]==128):
+                            uninterruptedLine = False
+                    if(uninterruptedLine == True):
+                        # bug? for some reason cv.line switch the axis ?
+                        cv.line(img,(j,i),(j+32,i),(255,255,255))
+                    # print()
+
+
+
 
 
     plt.imshow(img,cmap='gray')
