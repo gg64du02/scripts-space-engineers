@@ -1,3 +1,8 @@
+
+	
+IMyShipController myRemoteControl = null;
+
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -11,6 +16,19 @@ public Program()
     // here, which will allow your script to run itself without a 
     // timer block.
 	
+	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
+	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
+
+	if (remoteControllers.Count != 0)
+	{
+		foreach (var sc in remoteControllers)
+		{
+			if (sc.IsSameConstructAs(Me))
+			{
+				myRemoteControl = (IMyShipController)sc;
+			}
+		}
+	}
 }
 
 public void Save()
@@ -21,6 +39,31 @@ public void Save()
     // 
     // This method is optional and can be removed if not
     // needed.
+}
+
+public List<Point> fourNextPoints(Point point, int distance, int max_range){
+	
+	List<Point> nextPoints=new List<Point>();
+	
+	Point pointUp = new Point(point.X,point.Y+distance);
+	Point pointDown = new Point(point.X,point.Y-distance);
+	Point pointRight = new Point(point.X+distance,point.Y);
+	Point pointLeft = new Point(point.X-distance,point.Y);
+	
+	if(pointUp.Y<max_range){
+		nextPoints.Add(pointUp);
+	}
+	if(pointDown.Y>0){
+		nextPoints.Add(pointDown);
+	}
+	if(pointRight.X<max_range){
+		nextPoints.Add(pointRight);
+	}
+	if(pointLeft.Y>0){
+		nextPoints.Add(pointLeft);
+	}
+	
+	return nextPoints;
 }
 
 public void Main(string argument, UpdateType updateSource)
@@ -36,4 +79,12 @@ public void Main(string argument, UpdateType updateSource)
 	//do a alogirthm in cs that can guess the face and pixel position on the face
 
     Echo("running...");
+	
+	Echo(myRemoteControl.Position+"");
+	List<Point> tmpTestNextPoints = fourNextPoints(new Point(1024,1024),512,2048);
+	
+	foreach	(Point point in tmpTestNextPoints){
+		Echo("point"+point);
+	}
+		
 }
