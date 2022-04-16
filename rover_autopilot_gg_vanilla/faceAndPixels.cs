@@ -27,7 +27,62 @@ public void Save()
     // needed.
 }
 
-public List<Point> fourNextPoints(Point point, int distance, int max_range){
+
+
+public Vector3D generated_gps_point_on_cube_function(Point pointPixel, int faceNumber, int planet_radius){
+		
+	double intX = 0;
+	double intY = 0;
+	double intZ = 0;
+		
+	if(pointPixel==null){
+		pointPixel =  new Point(0,0);
+	}
+	
+	Vector3D generated_gps_point_on_cube = new Vector3D(0,0,0);
+				
+	if(faceNumber==0){
+		intX = 1*(- planet_radius+pointPixel.Y*1);
+		intY = -1*(- planet_radius+pointPixel.X*1);
+		//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+		generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
+	}
+	if(faceNumber==1){
+		intX = 1*(- planet_radius+pointPixel.Y*1);
+		//intY = -1*(- planet_radius+pointPixel.X*1);
+		intZ = -1*(- planet_radius+pointPixel.X*1);
+		generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
+	}
+	if(faceNumber==2){
+		intX = -1*(- planet_radius+pointPixel.Y*1);
+		intY = -1*(- planet_radius+pointPixel.X*1);
+		//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+		generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
+	}
+	if(faceNumber==3){
+		// intX = 1*(- planet_radius+pointPixel.Y*1);
+		intY = -1*(- planet_radius+pointPixel.X*1);
+		intZ = -1*(- planet_radius+pointPixel.Y*1);
+		generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
+	}
+	if(faceNumber==4){
+		//intX = 1*(- planet_radius+pointPixel.Y*1);
+		intY = -1*(- planet_radius+pointPixel.X*1);
+		intZ = 1*(- planet_radius+pointPixel.Y*1);
+		generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
+	}
+	if(faceNumber==5){
+		intX = -1*(- planet_radius+pointPixel.Y*1);
+		// intY = -1*(- planet_radius+pointPixel.X*1);
+		intZ = -1*(- planet_radius+pointPixel.X*1);
+		//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
+		generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
+	}
+	return generated_gps_point_on_cube;
+}
+
+
+public List<Point> fourNextPointsFunction(Point point, int distance, int max_range){
 	
 	List<Point> nextPoints=new List<Point>();
 	
@@ -51,6 +106,15 @@ public List<Point> fourNextPoints(Point point, int distance, int max_range){
 	
 	return nextPoints;
 }
+
+public void echoFourNextPointsFunction(List<Point> points){
+	
+	foreach(Point point in points){
+		Echo("pointInPoints:"+point);
+	}
+}
+
+
 
 public void Main(string argument, UpdateType updateSource)
 {
@@ -85,18 +149,18 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Echo(Me.GetPosition()+"");
 	Vector3D myPos = Me.GetPosition();
-	List<Point> tmpTestNextPoints = fourNextPoints(new Point(1024,1024),512,2048);
+	List<Point> tmpTestNextPoints = fourNextPointsFunction(new Point(1024,1024),512,2048);
 	
 	
 	
-	foreach	(Point point in tmpTestNextPoints){
-		Echo("point"+point);
-	}
+	// foreach	(Point point in tmpTestNextPoints){
+		// Echo("point"+point);
+	// }
 	
 	List<int> intIndexFaces = new List<int>(6);
-	intIndexFaces.Add(0);
-	intIndexFaces.Add(1);
-	intIndexFaces.Add(2);
+	// intIndexFaces.Add(0);
+	// intIndexFaces.Add(1);
+	// intIndexFaces.Add(2);
 	intIndexFaces.Add(3);
 	intIndexFaces.Add(4);
 	intIndexFaces.Add(5);
@@ -104,86 +168,100 @@ public void Main(string argument, UpdateType updateSource)
 	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
 	int planet_radius = 60000;
 	foreach(int intTmp in intIndexFaces){
-		Echo("Checking planet face:"+intTmp);
+		//Echo("Checking planet face:"+intTmp);
 		if(intTmp == 0)
 		{
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, 0, planet_radius);
 		}
 		if(intTmp == 1)
 		{
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
 		}
 		if(intTmp == 2)
 		{
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, 0, -planet_radius);
 		}
 		if(intTmp == 3)
 		{
+			// continue;
 			centerFacePositionOffset = new Vector3D(planet_radius,0,0);
 		}
 		if(intTmp == 4)
 		{
+			continue;
 			centerFacePositionOffset = new Vector3D(-planet_radius,0,0);
 		}
 		if(intTmp == 5)
 		{
+			continue;
 			centerFacePositionOffset = new Vector3D(0, planet_radius,0);
 		}
 		//Vector3D centerFacePosition = detectedPlanet + centerFacePositionOffset;
 		Vector3D centerFacePosition = centerFacePositionOffset;
 		Vector3D difMyPosCFP = myPos - centerFacePosition;
-		Echo("difMyPosCFP.Length()"+difMyPosCFP.Length());
+		Echo("difMyPosCFP.Length():"+difMyPosCFP.Length());
 		
 		// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
 		
+		Point testPoint = new Point(0,0);
 		
 		
-		double intX = 0;
-		double intY = 0;
-		double intZ = 0;
+		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, 30000);
 		
-		List<float> centroid_surface_lack_planetSized = new List<float>();
-		centroid_surface_lack_planetSized.Add(0);
-		centroid_surface_lack_planetSized.Add(0);
+		Echo("intTmp:"+intTmp);
 		
-		Vector3D generated_gps_point_on_cube = new Vector3D(0,0,0);
-					
-		if(intTmp==0){
-			intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-			generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
-		}
-		if(intTmp==1){
-			intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			//intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
-		}
-		if(intTmp==2){
-			intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-			generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
-		}
-		if(intTmp==3){
-			// intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
-		}
-		if(intTmp==4){
-			//intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
-		}
-		if(intTmp==5){
-			intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-			// intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-			//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
-			generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
+		int currentDistanceGPS = 1000000;
+
+		Point currentPoint = new Point(1024,1024);
+
+		int currentDistancePoint = 512;
+
+		List<Point> fourNextPoints = new List<Point>();
+			
+		Vector3D cubeFaceCenterFormulaResultPoint = new Vector3D(0,0,0);
+		Vector3D cubeFaceCenterFormulaResultTmpClosestPoint = new Vector3D(0,0,0);
+
+		while(currentDistanceGPS>5000){
+			
+			//Vector3D cubeFaceCenter = see formulas;
+			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,30000);
+			
+			fourNextPoints = fourNextPointsFunction(currentPoint,currentDistancePoint,2048);
+			
+			// echoFourNextPointsFunction(fourNextPoints);
+			
+			Point tmpClosestPoint = new Point(1024,1024);
+			
+			float currentDistancePointLength = 1000000;
+			float currentDistanceClosestPointLength = 1000000;
+			
+			foreach (Point point in fourNextPoints){
+			
+				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,30000);
+				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPoint;
+				currentDistancePointLength = (float) difMyPosCFCPoint.Length();
+				
+				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,30000);
+				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPoint;
+				currentDistanceClosestPointLength = (float) difMyPosCFC.Length();
+				// Echo("currentDistancePL:"+currentDistancePointLength);
+				// Echo("currentDistanceCPL:"+currentDistanceClosestPointLength);
+				
+				
+				if(currentDistancePointLength<currentDistanceClosestPointLength){
+					tmpClosestPoint = point;
+				}
+			}
+			
+			currentDistancePoint = currentDistancePoint/2;
+			// Echo("currentDistancePoint:"+currentDistancePoint);
+			if(currentDistancePoint==1){
+				break;
+			}
+			
 		}
 
 		Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
