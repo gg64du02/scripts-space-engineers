@@ -39,6 +39,8 @@ public Vector3D generated_gps_point_on_cube_function(Point pointPixel, int faceN
 		pointPixel =  new Point(0,0);
 	}
 	
+	pointPixel = new Point((2*planet_radius/2048)*pointPixel.X,(2*planet_radius/2048)*pointPixel.Y);
+	
 	Vector3D generated_gps_point_on_cube = new Vector3D(0,0,0);
 				
 	if(faceNumber==0){
@@ -147,20 +149,20 @@ public void Main(string argument, UpdateType updateSource)
 
     Echo("running...");
 	
-	Echo(Me.GetPosition()+"");
+	// Echo(Me.GetPosition()+"");
 	Vector3D myPos = Me.GetPosition();
 	List<Point> tmpTestNextPoints = fourNextPointsFunction(new Point(1024,1024),512,2048);
 	
-	
+	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
 	
 	// foreach	(Point point in tmpTestNextPoints){
 		// Echo("point"+point);
 	// }
 	
 	List<int> intIndexFaces = new List<int>(6);
-	// intIndexFaces.Add(0);
-	// intIndexFaces.Add(1);
-	// intIndexFaces.Add(2);
+	intIndexFaces.Add(0);
+	intIndexFaces.Add(1);
+	intIndexFaces.Add(2);
 	intIndexFaces.Add(3);
 	intIndexFaces.Add(4);
 	intIndexFaces.Add(5);
@@ -171,17 +173,17 @@ public void Main(string argument, UpdateType updateSource)
 		//Echo("Checking planet face:"+intTmp);
 		if(intTmp == 0)
 		{
-			// continue;
+			continue;
 			centerFacePositionOffset = new Vector3D(0, 0, planet_radius);
 		}
 		if(intTmp == 1)
 		{
-			// continue;
+			continue;
 			centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
 		}
 		if(intTmp == 2)
 		{
-			// continue;
+			continue;
 			centerFacePositionOffset = new Vector3D(0, 0, -planet_radius);
 		}
 		if(intTmp == 3)
@@ -196,20 +198,21 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		if(intTmp == 5)
 		{
-			continue;
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, planet_radius,0);
 		}
 		//Vector3D centerFacePosition = detectedPlanet + centerFacePositionOffset;
 		Vector3D centerFacePosition = centerFacePositionOffset;
 		Vector3D difMyPosCFP = myPos - centerFacePosition;
-		Echo("difMyPosCFP.Length():"+difMyPosCFP.Length());
+		// // Echo("difMyPosCFP.Length():");
+		// Echo(""+difMyPosCFP.Length());
 		
 		// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
 		
 		Point testPoint = new Point(0,0);
 		
 		
-		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, 30000);
+		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, 60000);
 		
 		Echo("intTmp:"+intTmp);
 		
@@ -224,41 +227,55 @@ public void Main(string argument, UpdateType updateSource)
 		Vector3D cubeFaceCenterFormulaResultPoint = new Vector3D(0,0,0);
 		Vector3D cubeFaceCenterFormulaResultTmpClosestPoint = new Vector3D(0,0,0);
 
+			
+		Point tmpClosestPoint = new Point(1024,1024);
+		
 		while(currentDistanceGPS>5000){
 			
 			//Vector3D cubeFaceCenter = see formulas;
-			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,30000);
+			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,60000);
 			
 			fourNextPoints = fourNextPointsFunction(currentPoint,currentDistancePoint,2048);
 			
 			// echoFourNextPointsFunction(fourNextPoints);
 			
-			Point tmpClosestPoint = new Point(1024,1024);
-			
-			float currentDistancePointLength = 1000000;
-			float currentDistanceClosestPointLength = 1000000;
+			double currentDistancePointLength = 1000000;
+			double currentDistanceClosestPointLength = 1000000;
 			
 			foreach (Point point in fourNextPoints){
+				// Echo("=================");
+				// Echo("testing_tmpClosestPoint:");
+				// Echo(""+tmpClosestPoint);
 			
-				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,30000);
-				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPoint;
-				currentDistancePointLength = (float) difMyPosCFCPoint.Length();
+				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,60000);
+				Vector3D cubeFaceCenterFormulaResultPointNorm = 60000*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
+				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm;
+				currentDistancePointLength = difMyPosCFCPoint.Length();
 				
-				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,30000);
-				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPoint;
-				currentDistanceClosestPointLength = (float) difMyPosCFC.Length();
-				// Echo("currentDistancePL:"+currentDistancePointLength);
-				// Echo("currentDistanceCPL:"+currentDistanceClosestPointLength);
+				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,60000);
+				Vector3D cubeFaceCenterFormulaResultTmpClosestPointNorm = 60000*Vector3D.Normalize(cubeFaceCenterFormulaResultTmpClosestPoint);
+				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm;
+				currentDistanceClosestPointLength = difMyPosCFC.Length();
+				// Echo("cubeFaceCenterFormulaResultPoint:");
+				// Echo(""+cubeFaceCenterFormulaResultPoint);
+				// Echo("cubeFaceCenterFormulaResultTmpClosestPoint:");
+				// Echo(""+cubeFaceCenterFormulaResultTmpClosestPoint);
+				Echo("currentD_PL:"+currentDistancePointLength);
+				Echo("currentD_CPL:"+currentDistanceClosestPointLength);
 				
 				
 				if(currentDistancePointLength<currentDistanceClosestPointLength){
+					Echo("changing for point:"+point);
 					tmpClosestPoint = point;
+					currentPoint = tmpClosestPoint;
 				}
 			}
 			
 			currentDistancePoint = currentDistancePoint/2;
-			// Echo("currentDistancePoint:"+currentDistancePoint);
+			Echo("=================");
+			Echo("currentDistancePoint:"+currentDistancePoint);
 			if(currentDistancePoint==1){
+			// if(currentDistancePoint==128){
 				break;
 			}
 			
