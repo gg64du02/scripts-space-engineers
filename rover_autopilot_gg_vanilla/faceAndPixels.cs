@@ -129,8 +129,8 @@ public void Main(string argument, UpdateType updateSource)
 	
 	//do a alogirthm in cs that can guess the face and pixel position on the face
 
-/*
-	
+
+	/*
 	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
 	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
 
@@ -309,7 +309,7 @@ public void Main(string argument, UpdateType updateSource)
 		
 	}
 	*/
-				
+	
 	
 	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
 	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
@@ -324,7 +324,6 @@ public void Main(string argument, UpdateType updateSource)
 			}
 		}
 	}
-
 
     Echo("running...");
 	
@@ -346,7 +345,8 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Echo("planetCenter:"+planetCenter);
 	
-	planet_radius = (int) (planetCenter-myPos).Length();
+	// planet_radius = (int) (planetCenter-myPos).Length();
+	planet_radius = (int) (myPos-planetCenter).Length();
 	
 	Echo("planet_radius:"+planet_radius);
 	
@@ -361,7 +361,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	
 	
-	Vector3D sphereLocalVector = (planetCenter-myPos);
+	Vector3D sphereLocalVector = (myPos-planetCenter);
 	
 	Vector3D projectedSphereVector  = new Vector3D(0,0,0);
 	
@@ -380,8 +380,8 @@ public void Main(string argument, UpdateType updateSource)
 	if(myPosXAbs>myPosYAbs){
 		if(myPosXAbs>myPosZAbs){
 			projectedSphereVector = (planet_radius/myPosXAbs)*sphereLocalVector;
-			intY = sphereLocalVector.Y;
-			intZ = sphereLocalVector.Z;
+			intY = projectedSphereVector.Y;
+			intZ = projectedSphereVector.Z;
 			if(myPos.X>0){
 				faceNumber = 3;
 				extractionX_pointRL = planet_radius - intY;
@@ -398,8 +398,8 @@ public void Main(string argument, UpdateType updateSource)
 	if(myPosYAbs>myPosXAbs){
 		if(myPosYAbs>myPosZAbs){
 			projectedSphereVector = (planet_radius/myPosYAbs)*sphereLocalVector;
-			intX = sphereLocalVector.Y;
-			intZ = sphereLocalVector.X;
+			intX = projectedSphereVector.X;
+			intZ = projectedSphereVector.Z;
 			if(myPos.Y>0){
 				faceNumber = 5;
 				extractionY_pointRL = planet_radius - intX;
@@ -416,8 +416,8 @@ public void Main(string argument, UpdateType updateSource)
 	if(myPosZAbs>myPosXAbs){
 		if(myPosZAbs>myPosYAbs){
 			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
-			intX = sphereLocalVector.Y;
-			intY = sphereLocalVector.X;
+			intX = projectedSphereVector.Y;
+			intY = projectedSphereVector.X;
 			if(myPos.Z>0){
 				faceNumber = 0;
 				extractionY_pointRL = planet_radius + intX;
@@ -441,6 +441,10 @@ public void Main(string argument, UpdateType updateSource)
 	extractedPoint = new Point((int)tmpCalcX,(int)tmpCalcY);
 	
 	Echo("extractedPoint:"+extractedPoint);
+	Echo("faceNumber:"+faceNumber);
+	Echo("projectedSphereVector:"+projectedSphereVector);
+	
+	
 	
 	
 	
@@ -449,6 +453,5 @@ public void Main(string argument, UpdateType updateSource)
 	if(faceNumber==0){
 		
 	}
-	
 	
 }
