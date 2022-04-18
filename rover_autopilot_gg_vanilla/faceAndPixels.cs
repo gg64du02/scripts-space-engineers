@@ -367,44 +367,82 @@ public void Main(string argument, UpdateType updateSource)
 	
 	int faceNumber = -1;
 	
+	double pixelScalingToIGW = (2*planet_radius/2048);
+	
+	double intX = 0;
+	double intY = 0;
+	double intZ = 0;
+	
+	Point extractedPoint = new Point(0,0);
+	double extractionX_pointRL = 0;
+	double extractionY_pointRL = 0;
+	
 	if(myPosXAbs>myPosYAbs){
 		if(myPosXAbs>myPosZAbs){
+			projectedSphereVector = (planet_radius/myPosXAbs)*sphereLocalVector;
+			intY = sphereLocalVector.Y;
+			intZ = sphereLocalVector.Z;
 			if(myPos.X>0){
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.X)*sphereLocalVector;
+				faceNumber = 3;
+				extractionX_pointRL = planet_radius - intY;
+				extractionY_pointRL = planet_radius - intZ;
 			}
 			else{
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.X)*sphereLocalVector;
+				faceNumber = 4;
+				extractionX_pointRL = planet_radius - intY;
+				extractionY_pointRL = planet_radius + intZ;
 			}
 		}
 	}
 	
 	if(myPosYAbs>myPosXAbs){
 		if(myPosYAbs>myPosZAbs){
+			projectedSphereVector = (planet_radius/myPosYAbs)*sphereLocalVector;
+			intX = sphereLocalVector.Y;
+			intZ = sphereLocalVector.X;
 			if(myPos.Y>0){
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.Y)*sphereLocalVector;
+				faceNumber = 5;
+				extractionY_pointRL = planet_radius - intX;
+				extractionX_pointRL = planet_radius - intZ;
 			}
 			else{
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.Y)*sphereLocalVector;
+				faceNumber = 1;
+				extractionY_pointRL = planet_radius + intX ;
+				extractionX_pointRL = planet_radius - intZ ;
 			}
 		}
 	}
 	
 	if(myPosZAbs>myPosXAbs){
 		if(myPosZAbs>myPosYAbs){
+			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
+			intX = sphereLocalVector.Y;
+			intY = sphereLocalVector.X;
 			if(myPos.Z>0){
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.Z)*sphereLocalVector;
+				faceNumber = 0;
+				extractionY_pointRL = planet_radius + intX;
+				extractionX_pointRL = planet_radius - intY;
 			}
 			else{
-				faceNumber = -1;
-				projectedSphereVector = (planet_radius/myPos.Z)*sphereLocalVector;
+				faceNumber = 2;
+				extractionY_pointRL = planet_radius - intX;
+				extractionX_pointRL =  planet_radius - intY;
 			}
 		}
 	}
+	
+	if(extractionX_pointRL==0){return;}
+	
+	if(extractionY_pointRL==0){return;}
+	
+	double tmpCalcX = extractionX_pointRL / pixelScalingToIGW;
+	double tmpCalcY = extractionY_pointRL / pixelScalingToIGW;
+	
+	extractedPoint = new Point((int)tmpCalcX,(int)tmpCalcY);
+	
+	Echo("extractedPoint:"+extractedPoint);
+	
+	
 	
 	Point calculatedPoint = new Point(-1,-1);
 	
