@@ -1,4 +1,3 @@
-
 	
 IMyShipController myRemoteControl = null;
 
@@ -159,6 +158,7 @@ public void Main(string argument, UpdateType updateSource)
 		// Echo("point"+point);
 	// }
 	
+	
 	List<int> intIndexFaces = new List<int>(6);
 	intIndexFaces.Add(0);
 	intIndexFaces.Add(1);
@@ -169,6 +169,17 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
 	int planet_radius = 60000;
+	
+	Vector3D planetCenter = new Vector3D(0,0,0);
+
+	bool planetDetected = remoteControllers[0].TryGetPlanetPosition(out planetCenter);
+	
+	Echo("planetCenter:"+planetCenter);
+	
+	planet_radius = (int) (planetCenter-myPos).Length();
+	
+	Echo("planet_radius:"+planet_radius);
+	
 	foreach(int intTmp in intIndexFaces){
 		//Echo("Checking planet face:"+intTmp);
 		if(intTmp == 0)
@@ -212,7 +223,7 @@ public void Main(string argument, UpdateType updateSource)
 		Point testPoint = new Point(0,0);
 		
 		
-		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, 60000);
+		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, planet_radius);
 		
 		Echo("intTmp:"+intTmp);
 		
@@ -233,7 +244,7 @@ public void Main(string argument, UpdateType updateSource)
 		while(currentDistanceGPS>5000){
 			
 			//Vector3D cubeFaceCenter = see formulas;
-			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,60000);
+			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,planet_radius);
 			
 			fourNextPoints = fourNextPointsFunction(currentPoint,currentDistancePoint,2048);
 			
@@ -247,13 +258,13 @@ public void Main(string argument, UpdateType updateSource)
 				// Echo("testing_tmpClosestPoint:");
 				// Echo(""+tmpClosestPoint);
 			
-				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,60000);
-				Vector3D cubeFaceCenterFormulaResultPointNorm = 60000*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
+				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,planet_radius);
+				Vector3D cubeFaceCenterFormulaResultPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
 				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm;
 				currentDistancePointLength = difMyPosCFCPoint.Length();
 				
-				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,60000);
-				Vector3D cubeFaceCenterFormulaResultTmpClosestPointNorm = 60000*Vector3D.Normalize(cubeFaceCenterFormulaResultTmpClosestPoint);
+				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,planet_radius);
+				Vector3D cubeFaceCenterFormulaResultTmpClosestPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultTmpClosestPoint);
 				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm;
 				currentDistanceClosestPointLength = difMyPosCFC.Length();
 				// Echo("cubeFaceCenterFormulaResultPoint:");
@@ -274,7 +285,7 @@ public void Main(string argument, UpdateType updateSource)
 			currentDistancePoint = currentDistancePoint/2;
 			Echo("=================");
 			Echo("currentDistancePoint:"+currentDistancePoint);
-			if(currentDistancePoint==1){
+			if(currentDistancePoint==0){
 			// if(currentDistancePoint==128){
 				break;
 			}
