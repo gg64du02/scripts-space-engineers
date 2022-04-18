@@ -129,7 +129,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	//do a alogirthm in cs that can guess the face and pixel position on the face
 
-
+/*
 	
 	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
 	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
@@ -308,8 +308,109 @@ public void Main(string argument, UpdateType updateSource)
 		generated_gps_point_on_planet = Vector3D.Round(generated_gps_point_on_planet,1);
 		
 	}
-	
+	*/
 				
+	
+	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
+	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
+
+	if (remoteControllers.Count != 0)
+	{
+		foreach (var sc in remoteControllers)
+		{
+			if (sc.IsSameConstructAs(Me))
+			{
+				myRemoteControl = (IMyShipController)sc;
+			}
+		}
+	}
+
+
+    Echo("running...");
+	
+	// Echo(Me.GetPosition()+"");
+	Vector3D myPos = Me.GetPosition();
+	
+	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
+	
+	// foreach	(Point point in tmpTestNextPoints){
+		// Echo("point"+point);
+	// }
+	
+	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
+	int planet_radius = 60000;
+	
+	Vector3D planetCenter = new Vector3D(0,0,0);
+
+	bool planetDetected = remoteControllers[0].TryGetPlanetPosition(out planetCenter);
+	
+	Echo("planetCenter:"+planetCenter);
+	
+	planet_radius = (int) (planetCenter-myPos).Length();
+	
+	Echo("planet_radius:"+planet_radius);
+	
+	
+	double myPosXAbs = Math.Abs(myPos.X);
+	double myPosYAbs = Math.Abs(myPos.Y);
+	double myPosZAbs = Math.Abs(myPos.Z);
+	
+	Echo("myPosXAbs:"+myPosXAbs);
+	Echo("myPosYAbs:"+myPosYAbs);
+	Echo("myPosZAbs:"+myPosZAbs);
+	
+	
+	
+	Vector3D sphereLocalVector = (planetCenter-myPos);
+	
+	Vector3D projectedSphereVector  = new Vector3D(0,0,0);
+	
+	int faceNumber = -1;
+	
+	if(myPosXAbs>myPosYAbs){
+		if(myPosXAbs>myPosZAbs){
+			if(myPos.X>0){
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.X)*sphereLocalVector;
+			}
+			else{
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.X)*sphereLocalVector;
+			}
+		}
+	}
+	
+	if(myPosYAbs>myPosXAbs){
+		if(myPosYAbs>myPosZAbs){
+			if(myPos.Y>0){
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.Y)*sphereLocalVector;
+			}
+			else{
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.Y)*sphereLocalVector;
+			}
+		}
+	}
+	
+	if(myPosZAbs>myPosXAbs){
+		if(myPosZAbs>myPosYAbs){
+			if(myPos.Z>0){
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.Z)*sphereLocalVector;
+			}
+			else{
+				faceNumber = -1;
+				projectedSphereVector = (planet_radius/myPos.Z)*sphereLocalVector;
+			}
+		}
+	}
+	
+	Point calculatedPoint = new Point(-1,-1);
+	
+	if(faceNumber==0){
+		
+	}
 	
 	
 }
