@@ -1,5 +1,5 @@
 	
-IMyShipController myRemoteControl = null;
+IMyRemoteControl myRemoteControl = null;
 
 
 public Program()
@@ -115,6 +115,148 @@ public void echoFourNextPointsFunction(List<Point> points){
 	}
 }
 
+public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumber,out Point pixelPos){
+	
+	
+
+    Echo("running...");
+	
+	// Echo(Me.GetPosition()+"");
+	Vector3D myPos = sc.GetPosition();
+	
+	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
+	
+	// foreach	(Point point in tmpTestNextPoints){
+		// Echo("point"+point);
+	// }
+	
+	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
+	int planet_radius = 60000;
+	
+	Vector3D planetCenter = new Vector3D(0,0,0);
+
+	bool planetDetected = sc.TryGetPlanetPosition(out planetCenter);
+	
+	Echo("planetCenter:"+planetCenter);
+	
+	// planet_radius = (int) (planetCenter-myPos).Length();
+	planet_radius = (int) (myPos-planetCenter).Length();
+	
+	Echo("planet_radius:"+planet_radius);
+	
+	
+	double myPosXAbs = Math.Abs(myPos.X);
+	double myPosYAbs = Math.Abs(myPos.Y);
+	double myPosZAbs = Math.Abs(myPos.Z);
+	
+	Echo("myPosXAbs:"+myPosXAbs);
+	Echo("myPosYAbs:"+myPosYAbs);
+	Echo("myPosZAbs:"+myPosZAbs);
+	
+	
+	
+	Vector3D sphereLocalVector = (myPos-planetCenter);
+	
+	Vector3D projectedSphereVector  = new Vector3D(0,0,0);
+	
+	int faceNumber = -1;
+	
+	double pixelScalingToIGW = (2*planet_radius/2048);
+	
+	//shorter names formulas
+	double intX = 0;
+	double intY = 0;
+	double intZ = 0;
+	
+	Point extractedPoint = new Point(0,0);
+	double extractionX_pointRL = 0;
+	double extractionY_pointRL = 0;
+	
+	if(myPosXAbs>myPosYAbs){
+		if(myPosXAbs>myPosZAbs){
+			projectedSphereVector = (planet_radius/myPosXAbs)*sphereLocalVector;
+			intY = projectedSphereVector.Y;
+			intZ = projectedSphereVector.Z;
+			if(myPos.X>0){
+				faceNumber = 3;
+				extractionX_pointRL = planet_radius - intY;
+				extractionY_pointRL = planet_radius - intZ;
+			}
+			else{
+				faceNumber = 4;
+				extractionX_pointRL = planet_radius - intY;
+				extractionY_pointRL = planet_radius + intZ;
+			}
+		}
+	}
+	
+	if(myPosYAbs>myPosXAbs){
+		if(myPosYAbs>myPosZAbs){
+			projectedSphereVector = (planet_radius/myPosYAbs)*sphereLocalVector;
+			intX = projectedSphereVector.X;
+			intZ = projectedSphereVector.Z;
+			if(myPos.Y>0){
+				faceNumber = 5;
+				extractionY_pointRL = planet_radius - intX;
+				extractionX_pointRL = planet_radius - intZ;
+			}
+			else{
+				faceNumber = 1;
+				extractionY_pointRL = planet_radius + intX ;
+				extractionX_pointRL = planet_radius - intZ ;
+			}
+		}
+	}
+	
+	if(myPosZAbs>myPosXAbs){
+		if(myPosZAbs>myPosYAbs){
+			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
+			intX = projectedSphereVector.X;
+			intY = projectedSphereVector.Y;
+			if(myPos.Z>0){
+				faceNumber = 0;
+				extractionY_pointRL = planet_radius + intX;
+				extractionX_pointRL = planet_radius - intY;
+			}
+			else{
+				faceNumber = 2;
+				extractionY_pointRL = planet_radius - intX;
+				extractionX_pointRL =  planet_radius - intY;
+			}
+		}
+	}
+	
+	if(extractionX_pointRL==0){
+		//out-ing
+		facenumber =faceNumber;
+		pixelPos = new Point(0,0);
+		
+		return;}
+	
+	if(extractionY_pointRL==0){
+		
+		//out-ing
+		facenumber =faceNumber;
+		pixelPos = new Point(0,0);
+		return;}
+	
+	double tmpCalcX = extractionX_pointRL / pixelScalingToIGW;
+	double tmpCalcY = extractionY_pointRL / pixelScalingToIGW;
+	
+	extractedPoint = new Point((int)tmpCalcX,(int)tmpCalcY);
+	
+	Echo("extractedPoint:"+extractedPoint);
+	Echo("faceNumber:"+faceNumber);
+	Echo("projectedSphereVector:"+projectedSphereVector);
+	
+	Point calculatedPoint = new Point(-1,-1);
+	
+	
+	//out-ing
+	facenumber =faceNumber;
+	pixelPos =extractedPoint;
+	
+}
 
 
 public void Main(string argument, UpdateType updateSource)
@@ -310,7 +452,6 @@ public void Main(string argument, UpdateType updateSource)
 	}
 	*/
 	
-	
 	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
 	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
 
@@ -320,132 +461,17 @@ public void Main(string argument, UpdateType updateSource)
 		{
 			if (sc.IsSameConstructAs(Me))
 			{
-				myRemoteControl = (IMyShipController)sc;
-			}
-		}
-	}
-
-    Echo("running...");
-	
-	// Echo(Me.GetPosition()+"");
-	Vector3D myPos = Me.GetPosition();
-	
-	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
-	
-	// foreach	(Point point in tmpTestNextPoints){
-		// Echo("point"+point);
-	// }
-	
-	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
-	int planet_radius = 60000;
-	
-	Vector3D planetCenter = new Vector3D(0,0,0);
-
-	bool planetDetected = remoteControllers[0].TryGetPlanetPosition(out planetCenter);
-	
-	Echo("planetCenter:"+planetCenter);
-	
-	// planet_radius = (int) (planetCenter-myPos).Length();
-	planet_radius = (int) (myPos-planetCenter).Length();
-	
-	Echo("planet_radius:"+planet_radius);
-	
-	
-	double myPosXAbs = Math.Abs(myPos.X);
-	double myPosYAbs = Math.Abs(myPos.Y);
-	double myPosZAbs = Math.Abs(myPos.Z);
-	
-	Echo("myPosXAbs:"+myPosXAbs);
-	Echo("myPosYAbs:"+myPosYAbs);
-	Echo("myPosZAbs:"+myPosZAbs);
-	
-	
-	
-	Vector3D sphereLocalVector = (myPos-planetCenter);
-	
-	Vector3D projectedSphereVector  = new Vector3D(0,0,0);
-	
-	int faceNumber = -1;
-	
-	double pixelScalingToIGW = (2*planet_radius/2048);
-	
-	//shorter names formulas
-	double intX = 0;
-	double intY = 0;
-	double intZ = 0;
-	
-	Point extractedPoint = new Point(0,0);
-	double extractionX_pointRL = 0;
-	double extractionY_pointRL = 0;
-	
-	if(myPosXAbs>myPosYAbs){
-		if(myPosXAbs>myPosZAbs){
-			projectedSphereVector = (planet_radius/myPosXAbs)*sphereLocalVector;
-			intY = projectedSphereVector.Y;
-			intZ = projectedSphereVector.Z;
-			if(myPos.X>0){
-				faceNumber = 3;
-				extractionX_pointRL = planet_radius - intY;
-				extractionY_pointRL = planet_radius - intZ;
-			}
-			else{
-				faceNumber = 4;
-				extractionX_pointRL = planet_radius - intY;
-				extractionY_pointRL = planet_radius + intZ;
+				myRemoteControl = (IMyRemoteControl)sc;
 			}
 		}
 	}
 	
-	if(myPosYAbs>myPosXAbs){
-		if(myPosYAbs>myPosZAbs){
-			projectedSphereVector = (planet_radius/myPosYAbs)*sphereLocalVector;
-			intX = projectedSphereVector.X;
-			intZ = projectedSphereVector.Z;
-			if(myPos.Y>0){
-				faceNumber = 5;
-				extractionY_pointRL = planet_radius - intX;
-				extractionX_pointRL = planet_radius - intZ;
-			}
-			else{
-				faceNumber = 1;
-				extractionY_pointRL = planet_radius + intX ;
-				extractionX_pointRL = planet_radius - intZ ;
-			}
-		}
-	}
+	int facenumber = -1;
+	Point pixelPos = new Point(0,0);
+		
+	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumber,out pixelPos);
 	
-	if(myPosZAbs>myPosXAbs){
-		if(myPosZAbs>myPosYAbs){
-			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
-			intX = projectedSphereVector.X;
-			intY = projectedSphereVector.Y;
-			if(myPos.Z>0){
-				faceNumber = 0;
-				extractionY_pointRL = planet_radius + intX;
-				extractionX_pointRL = planet_radius - intY;
-			}
-			else{
-				faceNumber = 2;
-				extractionY_pointRL = planet_radius - intX;
-				extractionX_pointRL =  planet_radius - intY;
-			}
-		}
-	}
-	
-	if(extractionX_pointRL==0){return;}
-	
-	if(extractionY_pointRL==0){return;}
-	
-	double tmpCalcX = extractionX_pointRL / pixelScalingToIGW;
-	double tmpCalcY = extractionY_pointRL / pixelScalingToIGW;
-	
-	extractedPoint = new Point((int)tmpCalcX,(int)tmpCalcY);
-	
-	Echo("extractedPoint:"+extractedPoint);
-	Echo("faceNumber:"+faceNumber);
-	Echo("projectedSphereVector:"+projectedSphereVector);
-	
-	Point calculatedPoint = new Point(-1,-1);
-	
+	Echo("facenumberMain:"+facenumber);
+	Echo("pixelPosMain:"+pixelPos);
 	
 }
