@@ -369,6 +369,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	double pixelScalingToIGW = (2*planet_radius/2048);
 	
+	//shorter names formulas
 	double intX = 0;
 	double intY = 0;
 	double intZ = 0;
@@ -416,8 +417,8 @@ public void Main(string argument, UpdateType updateSource)
 	if(myPosZAbs>myPosXAbs){
 		if(myPosZAbs>myPosYAbs){
 			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
-			intX = projectedSphereVector.Y;
-			intY = projectedSphereVector.X;
+			intX = projectedSphereVector.X;
+			intY = projectedSphereVector.Y;
 			if(myPos.Z>0){
 				faceNumber = 0;
 				extractionY_pointRL = planet_radius + intX;
@@ -444,14 +445,7 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("faceNumber:"+faceNumber);
 	Echo("projectedSphereVector:"+projectedSphereVector);
 	
-	
-	
-	
-	
 	Point calculatedPoint = new Point(-1,-1);
 	
-	if(faceNumber==0){
-		
-	}
 	
 }
