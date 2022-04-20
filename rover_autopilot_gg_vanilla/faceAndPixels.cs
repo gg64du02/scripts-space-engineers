@@ -259,34 +259,9 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 }
 
 
-public void Main(string argument, UpdateType updateSource)
-{
-    // The main entry point of the script, invoked every time
-    // one of the programmable block s Run actions are invoked,
-    // or the script updates itself. The updateSource argument
-    // describes where the update came from.
-    // 
-    // The method itself is required, but the arguments above
-    // can be removed if not needed.
+public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumber,out Point pixelPos){
 	
-	//do a alogirthm in cs that can guess the face and pixel position on the face
-
-
-	/*
-	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
-	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
-
-	if (remoteControllers.Count != 0)
-	{
-		foreach (var sc in remoteControllers)
-		{
-			if (sc.IsSameConstructAs(Me))
-			{
-				myRemoteControl = (IMyShipController)sc;
-			}
-		}
-	}
-
+	
 
     Echo("running...");
 	
@@ -314,7 +289,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Vector3D planetCenter = new Vector3D(0,0,0);
 
-	bool planetDetected = remoteControllers[0].TryGetPlanetPosition(out planetCenter);
+	bool planetDetected = sc.TryGetPlanetPosition(out planetCenter);
 	
 	Echo("planetCenter:"+planetCenter);
 	
@@ -450,7 +425,33 @@ public void Main(string argument, UpdateType updateSource)
 		generated_gps_point_on_planet = Vector3D.Round(generated_gps_point_on_planet,1);
 		
 	}
-	*/
+	
+	//compiling complaince
+	facenumber = -1;
+	pixelPos = new Point(0,0);
+	
+	
+	
+	// //out-ing
+	// facenumber = intTmp;
+	// pixelPos = tmpClosestPoint;
+	
+}
+
+
+public void Main(string argument, UpdateType updateSource)
+{
+    // The main entry point of the script, invoked every time
+    // one of the programmable block s Run actions are invoked,
+    // or the script updates itself. The updateSource argument
+    // describes where the update came from.
+    // 
+    // The method itself is required, but the arguments above
+    // can be removed if not needed.
+	
+	//do a alogirthm in cs that can guess the face and pixel position on the face
+
+
 	
 	List<IMyRemoteControl> remoteControllers = new List<IMyRemoteControl>();
 	GridTerminalSystem.GetBlocksOfType<IMyRemoteControl>(remoteControllers);
