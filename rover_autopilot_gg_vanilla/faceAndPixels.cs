@@ -467,12 +467,21 @@ public void Main(string argument, UpdateType updateSource)
 		}
 	}
 	
-	int facenumber = -1;
-	Point pixelPos = new Point(0,0);
+	int facenumberCalculated = -1;
+	Point pixelPosCalculated = new Point(0,0);
 		
-	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumber,out pixelPos);
+	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated);
 	
-	Echo("facenumberMain:"+facenumber);
-	Echo("pixelPosMain:"+pixelPos);
+	Echo("facenumberMain:"+facenumberCalculated);
+	Echo("pixelPosMain:"+pixelPosCalculated);
+
+	
+	int facenumberConverging = -1;
+	Point pixelPosConverging = new Point(0,0);
+	
+	faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging);
+	
+	Echo("facenumberMain:"+facenumberConverging);
+	Echo("pixelPosMain:"+pixelPosConverging);
 	
 }
