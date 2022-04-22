@@ -119,7 +119,7 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	
 
-    Echo("running...");
+    //Echo("running...");
 	
 	// Echo(Me.GetPosition()+"");
 	Vector3D myPos = sc.GetPosition();
@@ -245,9 +245,9 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	extractedPoint = new Point((int)tmpCalcX,(int)tmpCalcY);
 	
-	Echo("extractedPoint:"+extractedPoint);
-	Echo("faceNumber:"+faceNumber);
-	Echo("projectedSphereVector:"+projectedSphereVector);
+	//Echo("extractedPoint:"+extractedPoint);
+	//Echo("faceNumber:"+faceNumber);
+	//Echo("projectedSphereVector:"+projectedSphereVector);
 	
 	Point calculatedPoint = new Point(-1,-1);
 	
@@ -263,7 +263,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	
 	
 
-    Echo("running...");
+    //Echo("running...");
 	
 	// Echo(Me.GetPosition()+"");
 	Vector3D myPos = Me.GetPosition();
@@ -274,6 +274,10 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	// foreach	(Point point in tmpTestNextPoints){
 		// Echo("point"+point);
 	// }
+	
+	//outputting tmp
+	int facenumberTmp = -1;
+	Point pixelPosTmp = new Point(-1,-1);
 	
 	
 	List<int> intIndexFaces = new List<int>(6);
@@ -297,21 +301,25 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	
 	Echo("planet_radius:"+planet_radius);
 	
+	double min_range = 1*(2*planet_radius/2048)*(1.414/2);
+	
+	Echo("min_range:"+min_range);
+	
 	foreach(int intTmp in intIndexFaces){
 		//Echo("Checking planet face:"+intTmp);
 		if(intTmp == 0)
 		{
-			continue;
+			//continue;
 			centerFacePositionOffset = new Vector3D(0, 0, planet_radius);
 		}
 		if(intTmp == 1)
 		{
-			continue;
+			//continue;
 			centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
 		}
 		if(intTmp == 2)
 		{
-			continue;
+			//continue;
 			centerFacePositionOffset = new Vector3D(0, 0, -planet_radius);
 		}
 		if(intTmp == 3)
@@ -321,7 +329,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		}
 		if(intTmp == 4)
 		{
-			continue;
+			//continue;
 			centerFacePositionOffset = new Vector3D(-planet_radius,0,0);
 		}
 		if(intTmp == 5)
@@ -342,7 +350,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		
 		Vector3D generated_gps_point_on_cube = generated_gps_point_on_cube_function(testPoint, intTmp, planet_radius);
 		
-		Echo("intTmp:"+intTmp);
+		// Echo("intTmp:"+intTmp);
 		
 		int currentDistanceGPS = 1000000;
 
@@ -388,20 +396,30 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 				// Echo(""+cubeFaceCenterFormulaResultPoint);
 				// Echo("cubeFaceCenterFormulaResultTmpClosestPoint:");
 				// Echo(""+cubeFaceCenterFormulaResultTmpClosestPoint);
-				Echo("currentD_PL:"+currentDistancePointLength);
-				Echo("currentD_CPL:"+currentDistanceClosestPointLength);
+				
+				// Echo("currentD_PL:"+currentDistancePointLength);
+				// Echo("currentD_CPL:"+currentDistanceClosestPointLength);
 				
 				
 				if(currentDistancePointLength<currentDistanceClosestPointLength){
-					Echo("changing for point:"+point);
+					//Echo("changing for point:"+point);
 					tmpClosestPoint = point;
 					currentPoint = tmpClosestPoint;
+					
+					if(currentDistancePointLength<min_range){
+						min_range=currentDistancePointLength;
+						//Echo("min_range:"+min_range);
+						//outputting tmp
+						facenumberTmp = intTmp;
+						pixelPosTmp = tmpClosestPoint;
+					}
 				}
+				
 			}
 			
 			currentDistancePoint = currentDistancePoint/2;
-			Echo("=================");
-			Echo("currentDistancePoint:"+currentDistancePoint);
+			// Echo("=================");
+			// Echo("currentDistancePoint:"+currentDistancePoint);
 			if(currentDistancePoint==0){
 			// if(currentDistancePoint==128){
 				break;
@@ -427,14 +445,24 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	}
 	
 	//compiling complaince
-	facenumber = -1;
-	pixelPos = new Point(0,0);
+	// facenumber = -1;
+	// pixelPos = new Point(0,0);
 	
 	
 	
 	// //out-ing
 	// facenumber = intTmp;
 	// pixelPos = tmpClosestPoint;
+	
+	
+	if(facenumberTmp == -1){
+		facenumber = -1;
+		pixelPos = new Point(0,0);
+	}
+	else{
+		facenumber = facenumberTmp;
+		pixelPos = pixelPosTmp;
+	}
 	
 }
 
@@ -472,8 +500,8 @@ public void Main(string argument, UpdateType updateSource)
 		
 	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated);
 	
-	Echo("facenumberMain:"+facenumberCalculated);
-	Echo("pixelPosMain:"+pixelPosCalculated);
+	Echo("facenumberMain1:"+facenumberCalculated);
+	Echo("pixelPosMain1:"+pixelPosCalculated);
 
 	
 	int facenumberConverging = -1;
@@ -481,7 +509,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging);
 	
-	Echo("facenumberMain:"+facenumberConverging);
-	Echo("pixelPosMain:"+pixelPosConverging);
+	Echo("facenumberMain2:"+facenumberConverging);
+	Echo("pixelPosMain2:"+pixelPosConverging);
 	
 }
