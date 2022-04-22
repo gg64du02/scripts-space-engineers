@@ -149,9 +149,9 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	double myPosYAbs = Math.Abs(myPos.Y);
 	double myPosZAbs = Math.Abs(myPos.Z);
 	
-	Echo("myPosXAbs:"+myPosXAbs);
-	Echo("myPosYAbs:"+myPosYAbs);
-	Echo("myPosZAbs:"+myPosZAbs);
+	// Echo("myPosXAbs:"+myPosXAbs);
+	// Echo("myPosYAbs:"+myPosYAbs);
+	// Echo("myPosZAbs:"+myPosZAbs);
 	
 	
 	
@@ -466,6 +466,43 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	
 }
 
+public void whichFileShouldIlook(int facenumber){
+	
+	string tmpStr = ""+facenumber+" is ";
+	
+	if(facenumber==0){
+		tmpStr += "back";
+	}
+	if(facenumber==1){
+		tmpStr += "down";
+	}
+	
+	if(facenumber==2){
+		tmpStr += "front";
+	}
+	if(facenumber==3){
+		tmpStr += "left";
+	}
+	
+	if(facenumber==4){
+		tmpStr += "right";
+	}
+	if(facenumber==5){
+		tmpStr += "up";
+	}
+	
+	Echo(tmpStr);
+	
+	// 0 is back
+	// 1 is down
+
+	// 2 is front
+	// 3 is left
+
+	// 4 is right
+	// 5 is up
+}
+
 
 public void Main(string argument, UpdateType updateSource)
 {
@@ -511,5 +548,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	Echo("facenumberMain2:"+facenumberConverging);
 	Echo("pixelPosMain2:"+pixelPosConverging);
+	
+	whichFileShouldIlook(facenumberCalculated);
 	
 }
