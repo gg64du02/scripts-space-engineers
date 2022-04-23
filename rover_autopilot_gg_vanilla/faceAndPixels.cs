@@ -551,4 +551,13 @@ public void Main(string argument, UpdateType updateSource)
 	
 	whichFileShouldIlook(facenumberCalculated);
 	
+	
+	// down x y switched on el calculated
+	// left x y switched on el calculated
+
+	// up x y switched on el calculated
+	// right x y switched on el calculated
+
+	// front x y switched on el calculated
+	// back x y switched on el calculated
 }
