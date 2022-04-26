@@ -82,6 +82,58 @@ public Vector3D generated_gps_point_on_cube_function(Point pointPixel, int faceN
 	return generated_gps_point_on_cube;
 }
 
+public List<Point> eightNextPointsFunction(Point point, int distance, int max_range){
+	
+	List<Point> nextPoints=new List<Point>();
+	
+	Point pointUp = new Point(point.X,point.Y+distance);
+	Point pointDown = new Point(point.X,point.Y-distance);
+	Point pointRight = new Point(point.X+distance,point.Y);
+	Point pointLeft = new Point(point.X-distance,point.Y);
+	
+	Point pointUpRight = new Point(point.X+distance,point.Y+distance);
+	Point pointDownRight = new Point(point.X+distance,point.Y-distance);
+	Point pointRightDown = new Point(point.X-distance,point.Y-distance);
+	Point pointLeftUp = new Point(point.X-distance,point.Y+distance);
+	
+	if(pointUp.Y<max_range){
+		nextPoints.Add(pointUp);
+	}
+	if(pointDown.Y>=0){
+		nextPoints.Add(pointDown);
+	}
+	if(pointRight.X<max_range){
+		nextPoints.Add(pointRight);
+	}
+	if(pointLeft.Y>=0){
+		nextPoints.Add(pointLeft);
+	}
+	
+	
+	
+	if(pointUpRight.Y<max_range){
+		if(pointUpRight.X<max_range){
+			nextPoints.Add(pointUpRight);
+		}
+	}
+	if(pointDownRight.Y>=0){
+		if(pointDownRight.X<max_range){
+			nextPoints.Add(pointDownRight);
+		}
+	}
+	if(pointRightDown.X<max_range){
+		if(pointRightDown.Y>=0){
+			nextPoints.Add(pointRightDown);
+		}
+	}
+	if(pointLeftUp.X>=0){
+		if(pointLeftUp.Y<max_range){
+			nextPoints.Add(pointLeftUp);
+		}
+	}
+	
+	return nextPoints;
+}
 
 public List<Point> fourNextPointsFunction(Point point, int distance, int max_range){
 	
@@ -95,13 +147,13 @@ public List<Point> fourNextPointsFunction(Point point, int distance, int max_ran
 	if(pointUp.Y<max_range){
 		nextPoints.Add(pointUp);
 	}
-	if(pointDown.Y>0){
+	if(pointDown.Y>=0){
 		nextPoints.Add(pointDown);
 	}
 	if(pointRight.X<max_range){
 		nextPoints.Add(pointRight);
 	}
-	if(pointLeft.Y>0){
+	if(pointLeft.Y>=0){
 		nextPoints.Add(pointLeft);
 	}
 	
@@ -301,7 +353,8 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	
 	Echo("planet_radius:"+planet_radius);
 	
-	double min_range = 1*(2*planet_radius/2048)*(1.414/2);
+	//double min_range = 1*(2*planet_radius/2048)*(1.414/2);
+	double min_range = 1*(2*planet_radius/2048)*(8);
 	
 	Echo("min_range:"+min_range);
 	
@@ -314,12 +367,13 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		}
 		if(intTmp == 1)
 		{
-			//continue;
+			break;
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
 		}
 		if(intTmp == 2)
 		{
-			//continue;
+			// continue;
 			centerFacePositionOffset = new Vector3D(0, 0, -planet_radius);
 		}
 		if(intTmp == 3)
@@ -329,7 +383,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		}
 		if(intTmp == 4)
 		{
-			//continue;
+			// continue;
 			centerFacePositionOffset = new Vector3D(-planet_radius,0,0);
 		}
 		if(intTmp == 5)
@@ -357,14 +411,19 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		Point currentPoint = new Point(1024,1024);
 
 		int currentDistancePoint = 512;
+		//int currentDistancePoint = 1024;
 
 		List<Point> fourNextPoints = new List<Point>();
+		List<Point> eightNextPoints = new List<Point>();
 			
 		Vector3D cubeFaceCenterFormulaResultPoint = new Vector3D(0,0,0);
 		Vector3D cubeFaceCenterFormulaResultTmpClosestPoint = new Vector3D(0,0,0);
 
 			
 		Point tmpClosestPoint = new Point(1024,1024);
+		// Point tmpClosestPoint = new Point(289,736);
+			
+		Echo("currentDistancePoint:"+currentDistancePoint);
 		
 		while(currentDistanceGPS>5000){
 			
@@ -372,16 +431,22 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 			Vector3D cubeFaceCenter = generated_gps_point_on_cube_function(currentPoint,intTmp,planet_radius);
 			
 			fourNextPoints = fourNextPointsFunction(currentPoint,currentDistancePoint,2048);
+			eightNextPoints = eightNextPointsFunction(currentPoint,currentDistancePoint,2048);
 			
 			// echoFourNextPointsFunction(fourNextPoints);
 			
 			double currentDistancePointLength = 1000000;
 			double currentDistanceClosestPointLength = 1000000;
 			
-			foreach (Point point in fourNextPoints){
+			
+			// foreach (Point point in fourNextPoints){
+			
+			foreach (Point point in eightNextPoints){
 				// Echo("=================");
 				// Echo("testing_tmpClosestPoint:");
 				// Echo(""+tmpClosestPoint);
+				// Echo("point:");
+				// Echo(""+point);
 			
 				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,planet_radius);
 				Vector3D cubeFaceCenterFormulaResultPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
@@ -402,13 +467,13 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 				
 				
 				if(currentDistancePointLength<currentDistanceClosestPointLength){
-					//Echo("changing for point:"+point);
+					Echo("changing for point:"+point);
 					tmpClosestPoint = point;
 					currentPoint = tmpClosestPoint;
 					
 					if(currentDistancePointLength<min_range){
 						min_range=currentDistancePointLength;
-						//Echo("min_range:"+min_range);
+						// Echo("min_range:"+min_range);
 						//outputting tmp
 						facenumberTmp = intTmp;
 						pixelPosTmp = tmpClosestPoint;
@@ -419,13 +484,16 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 			
 			currentDistancePoint = currentDistancePoint/2;
 			// Echo("=================");
-			// Echo("currentDistancePoint:"+currentDistancePoint);
+			Echo("currentDistancePoint:"+currentDistancePoint);
 			if(currentDistancePoint==0){
-			// if(currentDistancePoint==128){
+			// if(currentDistancePoint==256){
 				break;
 			}
 			
 		}
+		
+		// GPS:///  1:-19969.85:40533.41:41155.97:#FF75C9F1:
+		// TODO: negative X on this position
 
 		Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
 		
@@ -560,4 +628,11 @@ public void Main(string argument, UpdateType updateSource)
 
 	// front x y switched on el calculated
 	// back x y switched on el calculated
+	
+	// List<Point> testEightPoint = eightNextPointsFunction(new Point(1024,1024), 512,2048);
+	
+	// foreach (Point test in testEightPoint){
+		// Echo("test:");
+		// Echo(""+test);
+	// }
 }
