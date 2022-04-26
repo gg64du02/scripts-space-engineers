@@ -167,7 +167,7 @@ public void echoFourNextPointsFunction(List<Point> points){
 	}
 }
 
-public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumber,out Point pixelPos){
+public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumber,out Point pixelPos,bool debugMode,Vector3D testedV3D){
 	
 	
 
@@ -175,6 +175,9 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	// Echo(Me.GetPosition()+"");
 	Vector3D myPos = sc.GetPosition();
+	if(debugMode==true){
+		myPos = testedV3D;
+	}
 	
 	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
 	
@@ -311,7 +314,7 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 }
 
 
-public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumber,out Point pixelPos){
+public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumber,out Point pixelPos,bool debugMode, Vector3D testedV3D){
 	
 	
 
@@ -319,6 +322,10 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	
 	// Echo(Me.GetPosition()+"");
 	Vector3D myPos = Me.GetPosition();
+	if(debugMode==true){
+		myPos = testedV3D;
+	}
+	
 	List<Point> tmpTestNextPoints = fourNextPointsFunction(new Point(1024,1024),512,2048);
 	
 	// GPS:///  1:53546.14:-26699.61:11974.64:#FF75C9F1:
@@ -600,10 +607,11 @@ public void Main(string argument, UpdateType updateSource)
 		}
 	}
 	
+	/*
 	int facenumberCalculated = -1;
 	Point pixelPosCalculated = new Point(0,0);
 		
-	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated);
+	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated,false,"");
 	
 	Echo("facenumberMain1:"+facenumberCalculated);
 	Echo("pixelPosMain1:"+pixelPosCalculated);
@@ -612,12 +620,14 @@ public void Main(string argument, UpdateType updateSource)
 	int facenumberConverging = -1;
 	Point pixelPosConverging = new Point(0,0);
 	
-	faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging);
+	faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,false,"");
 	
 	Echo("facenumberMain2:"+facenumberConverging);
 	Echo("pixelPosMain2:"+pixelPosConverging);
 	
 	whichFileShouldIlook(facenumberCalculated);
+	*/
+	
 	
 	
 	// down x y switched on el calculated
@@ -634,4 +644,68 @@ public void Main(string argument, UpdateType updateSource)
 		// Echo("test:");
 		// Echo(""+test);
 	// }
+	List<string> GPSs = new List<string>();
+	
+	
+	GPSs.Add("GPS: LackN1:-20009.7:40711.0:41215.7:#F175DC:");
+	GPSs.Add("GPS: LackN18:-16604.1:-43004.8:40486.4:#F175DC:");
+	GPSs.Add("GPS: LackN28:-18683.9:37426.5:-45116.5:#F175DC:");
+	GPSs.Add("GPS: LackN45:39881.4:38263.0:26846.8:#F175DC:");
+	GPSs.Add("GPS: LackN60:-42312.8:41092.0:-17087.1:#F175DC:");
+	GPSs.Add("GPS: LackN76:-20243.8:41053.4:40759.2:#F175DC:");
+	
+	foreach(string gps in GPSs){
+		// Echo(gps);
+		
+		// Echo("gps:" + gps);
+		Vector3D testedV3D = new Vector3D(0,0,0);
+		
+		MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
+		
+		if (gps.Contains(":#") == true)
+		{
+			// Echo("if (gps.Contains(:#) == true)");
+			MyWaypointInfo.TryParse(gps.Substring(0, gps.Length - 8), out myWaypointInfoTarget);
+			// Echo(""+gps.Substring(0, gps.Length - 8));
+		}
+		else
+		{
+			// Echo("not if (gps.Contains(:#) == true)");
+			MyWaypointInfo.TryParse(gps, out myWaypointInfoTarget);
+		}
+		// Echo("LOL"+myWaypointInfoTarget);
+		if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
+		{
+			//x,y,z coords is global to remember between each loop
+			testedV3D = myWaypointInfoTarget.Coords;
+		}
+		
+		
+		
+		int facenumberCalculated = -1;
+		Point pixelPosCalculated = new Point(0,0);
+			
+		faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated,true,testedV3D);
+		
+		Echo("facenumberMain1:"+facenumberCalculated);
+		Echo("pixelPosMain1:"+pixelPosCalculated);
+
+		
+		int facenumberConverging = -1;
+		Point pixelPosConverging = new Point(0,0);
+		
+		faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,true,testedV3D);
+		
+		Echo("facenumberMain2:"+facenumberConverging);
+		Echo("pixelPosMain2:"+pixelPosConverging);
+		
+		whichFileShouldIlook(facenumberCalculated);
+	
+
+		
+	}
+
+
+
+	
 }
