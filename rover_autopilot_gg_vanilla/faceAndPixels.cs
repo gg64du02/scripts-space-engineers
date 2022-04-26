@@ -367,7 +367,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		}
 		if(intTmp == 1)
 		{
-			break;
+			// break;
 			// continue;
 			centerFacePositionOffset = new Vector3D(0, -planet_radius,0);
 		}
@@ -423,7 +423,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 		Point tmpClosestPoint = new Point(1024,1024);
 		// Point tmpClosestPoint = new Point(289,736);
 			
-		Echo("currentDistancePoint:"+currentDistancePoint);
+		// Echo("currentDistancePoint:"+currentDistancePoint);
 		
 		while(currentDistanceGPS>5000){
 			
@@ -467,7 +467,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 				
 				
 				if(currentDistancePointLength<currentDistanceClosestPointLength){
-					Echo("changing for point:"+point);
+					// Echo("changing for point:"+point);
 					tmpClosestPoint = point;
 					currentPoint = tmpClosestPoint;
 					
@@ -484,7 +484,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 			
 			currentDistancePoint = currentDistancePoint/2;
 			// Echo("=================");
-			Echo("currentDistancePoint:"+currentDistancePoint);
+			// Echo("currentDistancePoint:"+currentDistancePoint);
 			if(currentDistancePoint==0){
 			// if(currentDistancePoint==256){
 				break;
@@ -630,7 +630,6 @@ public void Main(string argument, UpdateType updateSource)
 	// back x y switched on el calculated
 	
 	// List<Point> testEightPoint = eightNextPointsFunction(new Point(1024,1024), 512,2048);
-	
 	// foreach (Point test in testEightPoint){
 		// Echo("test:");
 		// Echo(""+test);
