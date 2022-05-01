@@ -461,14 +461,14 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 			
 				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,planet_radius);
 				Vector3D cubeFaceCenterFormulaResultPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
-				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm;
-				// Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm-planetCenter;
+				// Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm;
+				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm-planetCenter;
 				currentDistancePointLength = difMyPosCFCPoint.Length();
 				
 				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,planet_radius);
 				Vector3D cubeFaceCenterFormulaResultTmpClosestPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultTmpClosestPoint);
-				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm;
-				// Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm-planetCenter;
+				// Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm;
+				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm-planetCenter;
 				currentDistanceClosestPointLength = difMyPosCFC.Length();
 				// Echo("cubeFaceCenterFormulaResultPoint:");
 				// Echo(""+cubeFaceCenterFormulaResultPoint);
@@ -673,14 +673,14 @@ public void Main(string argument, UpdateType updateSource)
 	// GPSs.Add("GPS: LackN69:110828.7:172125.9:5771831.7:#F175DC:");
 	
 	//testing Moon
-	GPSs.Add("GPS: UrMgSiN1:12187.9:141209.7:-108648.3:#F175DC:");
+	// GPSs.Add("GPS: UrMgSiN1:12187.9:141209.7:-108648.3:#F175DC:");
 	// GPSs.Add("GPS: UrMgSiN577:11992.3:131185.8:-108565.4:#F175DC:");
 	// GPSs.Add("GPS: UrMgSiN1153:21060.0:141760.3:-119149.5:#F175DC:");
 	// GPSs.Add("GPS:FeNiCo:23201.2:135451.4:-107166.1:#F175DC:");
 	// GPSs.Add("GPS: UrMgSiN2305:11107.4:141510.7:-118073.9:#F175DC:");
 	// GPSs.Add("GPS: UrMgSiN2881:20786.8:141595.2:-108553.7:#F175DC:");
 	
-	GPSs.Add("GPS:PtNi:23414.9:136985.2:-107485.2:#F175DC:");
+	// GPSs.Add("GPS:PtNi:23414.9:136985.2:-107485.2:#F175DC:");
 	GPSs.Add("GPS:PtNi:24245.2:135091:-108726.3:#F175DC:");
 	
 
@@ -725,13 +725,13 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("pixelPosMain1:"+pixelPosCalculated);
 
 		
-		// int facenumberConverging = -1;
-		// Point pixelPosConverging = new Point(0,0);
+		int facenumberConverging = -1;
+		Point pixelPosConverging = new Point(0,0);
 		
-		// faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,true,testedV3D);
+		faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,true,testedV3D);
 		
-		// Echo("facenumberMain2:"+facenumberConverging);
-		// Echo("pixelPosMain2:"+pixelPosConverging);
+		Echo("facenumberMain2:"+facenumberConverging);
+		Echo("pixelPosMain2:"+pixelPosConverging);
 		
 		whichFileShouldIlook(facenumberCalculated);
 	
