@@ -200,9 +200,13 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	Echo("planet_radius:"+planet_radius);
 	
 	
-	double myPosXAbs = Math.Abs(myPos.X);
-	double myPosYAbs = Math.Abs(myPos.Y);
-	double myPosZAbs = Math.Abs(myPos.Z);
+	double myPosXAbs = Math.Abs(myPos.X-planetCenter.X);
+	double myPosYAbs = Math.Abs(myPos.Y-planetCenter.Y);
+	double myPosZAbs = Math.Abs(myPos.Z-planetCenter.Z);
+	
+	// double myPosXAbs = Math.Abs(planetCenter.X-myPos.X);
+	// double myPosYAbs = Math.Abs(planetCenter.X-myPos.Y);
+	// double myPosZAbs = Math.Abs(planetCenter.Z-myPos.Z);
 	
 	// Echo("myPosXAbs:"+myPosXAbs);
 	// Echo("myPosYAbs:"+myPosYAbs);
@@ -458,11 +462,13 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 				cubeFaceCenterFormulaResultPoint = generated_gps_point_on_cube_function(point,intTmp,planet_radius);
 				Vector3D cubeFaceCenterFormulaResultPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultPoint);
 				Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm;
+				// Vector3D difMyPosCFCPoint = myPos - cubeFaceCenterFormulaResultPointNorm-planetCenter;
 				currentDistancePointLength = difMyPosCFCPoint.Length();
 				
 				cubeFaceCenterFormulaResultTmpClosestPoint = generated_gps_point_on_cube_function(tmpClosestPoint,intTmp,planet_radius);
 				Vector3D cubeFaceCenterFormulaResultTmpClosestPointNorm = planet_radius*Vector3D.Normalize(cubeFaceCenterFormulaResultTmpClosestPoint);
 				Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm;
+				// Vector3D difMyPosCFC = myPos - cubeFaceCenterFormulaResultTmpClosestPointNorm-planetCenter;
 				currentDistanceClosestPointLength = difMyPosCFC.Length();
 				// Echo("cubeFaceCenterFormulaResultPoint:");
 				// Echo(""+cubeFaceCenterFormulaResultPoint);
@@ -608,22 +614,24 @@ public void Main(string argument, UpdateType updateSource)
 	}
 	
 	/*
+	//TODO: test it on other planets in the stock star system
+	
 	int facenumberCalculated = -1;
 	Point pixelPosCalculated = new Point(0,0);
 		
-	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated,false,"");
+	faceAndPointOnPlanetsCalculated( myRemoteControl,out facenumberCalculated,out pixelPosCalculated,false,new Vector3D(0,0,0));
 	
 	Echo("facenumberMain1:"+facenumberCalculated);
 	Echo("pixelPosMain1:"+pixelPosCalculated);
 
 	
-	int facenumberConverging = -1;
-	Point pixelPosConverging = new Point(0,0);
+	// int facenumberConverging = -1;
+	// Point pixelPosConverging = new Point(0,0);
 	
-	faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,false,"");
+	// faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,false,new Vector3D(0,0,0));
 	
-	Echo("facenumberMain2:"+facenumberConverging);
-	Echo("pixelPosMain2:"+pixelPosConverging);
+	// Echo("facenumberMain2:"+facenumberConverging);
+	// Echo("pixelPosMain2:"+pixelPosConverging);
 	
 	whichFileShouldIlook(facenumberCalculated);
 	*/
@@ -644,20 +652,45 @@ public void Main(string argument, UpdateType updateSource)
 		// Echo("test:");
 		// Echo(""+test);
 	// }
+	
 	List<string> GPSs = new List<string>();
 	
+	//testing EL
+	// GPSs.Add("GPS: LackN1:-20009.7:40711.0:41215.7:#F175DC:");
+	// GPSs.Add("GPS: LackN18:-16604.1:-43004.8:40486.4:#F175DC:");
+	// GPSs.Add("GPS: LackN28:-18683.9:37426.5:-45116.5:#F175DC:");
+	// GPSs.Add("GPS: LackN45:39881.4:38263.0:26846.8:#F175DC:");
+	// GPSs.Add("GPS: LackN60:-42312.8:41092.0:-17087.1:#F175DC:");
+	// GPSs.Add("GPS: LackN76:-20243.8:41053.4:40759.2:#F175DC:");
 	
-	GPSs.Add("GPS: LackN1:-20009.7:40711.0:41215.7:#F175DC:");
-	GPSs.Add("GPS: LackN18:-16604.1:-43004.8:40486.4:#F175DC:");
-	GPSs.Add("GPS: LackN28:-18683.9:37426.5:-45116.5:#F175DC:");
-	GPSs.Add("GPS: LackN45:39881.4:38263.0:26846.8:#F175DC:");
-	GPSs.Add("GPS: LackN60:-42312.8:41092.0:-17087.1:#F175DC:");
-	GPSs.Add("GPS: LackN76:-20243.8:41053.4:40759.2:#F175DC:");
+	// //testing Alien
+	// //left is ok
+	// GPSs.Add("GPS: LackN1:111062.8:171783.5:5772288.2:#F175DC:");
+	// GPSs.Add("GPS: LackN17:114468.4:88067.7:5771558.9:#F175DC:");
+	// GPSs.Add("GPS: LackN27:112388.6:168499.0:5685956.0:#F175DC:");
+	// GPSs.Add("GPS: LackN44:170953.9:169335.5:5757919.3:#F175DC:");
+	// GPSs.Add("GPS: LackN53:88759.7:172164.5:5713985.4:#F175DC:");
+	// GPSs.Add("GPS: LackN69:110828.7:172125.9:5771831.7:#F175DC:");
+	
+	//testing Moon
+	GPSs.Add("GPS: UrMgSiN1:12187.9:141209.7:-108648.3:#F175DC:");
+	// GPSs.Add("GPS: UrMgSiN577:11992.3:131185.8:-108565.4:#F175DC:");
+	// GPSs.Add("GPS: UrMgSiN1153:21060.0:141760.3:-119149.5:#F175DC:");
+	// GPSs.Add("GPS:FeNiCo:23201.2:135451.4:-107166.1:#F175DC:");
+	// GPSs.Add("GPS: UrMgSiN2305:11107.4:141510.7:-118073.9:#F175DC:");
+	// GPSs.Add("GPS: UrMgSiN2881:20786.8:141595.2:-108553.7:#F175DC:");
+	
+	GPSs.Add("GPS:PtNi:23414.9:136985.2:-107485.2:#F175DC:");
+	GPSs.Add("GPS:PtNi:24245.2:135091:-108726.3:#F175DC:");
+	
+
+	
+
 	
 	foreach(string gps in GPSs){
 		// Echo(gps);
 		
-		// Echo("gps:" + gps);
+		Echo("gps:" + gps);
 		Vector3D testedV3D = new Vector3D(0,0,0);
 		
 		MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
@@ -674,12 +707,13 @@ public void Main(string argument, UpdateType updateSource)
 			MyWaypointInfo.TryParse(gps, out myWaypointInfoTarget);
 		}
 		// Echo("LOL"+myWaypointInfoTarget);
-		if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
-		{
+		// if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
+		// {
 			//x,y,z coords is global to remember between each loop
 			testedV3D = myWaypointInfoTarget.Coords;
-		}
+		// }
 		
+		Echo("testedV3D:" + testedV3D);
 		
 		
 		int facenumberCalculated = -1;
@@ -691,13 +725,13 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("pixelPosMain1:"+pixelPosCalculated);
 
 		
-		int facenumberConverging = -1;
-		Point pixelPosConverging = new Point(0,0);
+		// int facenumberConverging = -1;
+		// Point pixelPosConverging = new Point(0,0);
 		
-		faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,true,testedV3D);
+		// faceAndPointOnPlanetsConverging(myRemoteControl,out facenumberConverging,out pixelPosConverging,true,testedV3D);
 		
-		Echo("facenumberMain2:"+facenumberConverging);
-		Echo("pixelPosMain2:"+pixelPosConverging);
+		// Echo("facenumberMain2:"+facenumberConverging);
+		// Echo("pixelPosMain2:"+pixelPosConverging);
 		
 		whichFileShouldIlook(facenumberCalculated);
 	
