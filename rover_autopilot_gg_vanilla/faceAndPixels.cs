@@ -200,9 +200,8 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	Echo("planet_radius:"+planet_radius);
 	
 	
-	double myPosXAbs = Math.Abs(myPos.X-planetCenter.X);
-	double myPosYAbs = Math.Abs(myPos.Y-planetCenter.Y);
-	double myPosZAbs = Math.Abs(myPos.Z-planetCenter.Z);
+	
+	
 	
 	// double myPosXAbs = Math.Abs(planetCenter.X-myPos.X);
 	// double myPosYAbs = Math.Abs(planetCenter.X-myPos.Y);
@@ -214,7 +213,11 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	
 	
-	Vector3D sphereLocalVector = (myPos-planetCenter);
+	Vector3D myPosRelToCenter = (myPos-planetCenter);
+	
+	double myPosXAbs = Math.Abs(myPosRelToCenter.X);
+	double myPosYAbs = Math.Abs(myPosRelToCenter.Y);
+	double myPosZAbs = Math.Abs(myPosRelToCenter.Z);
 	
 	Vector3D projectedSphereVector  = new Vector3D(0,0,0);
 	
@@ -233,10 +236,10 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	if(myPosXAbs>myPosYAbs){
 		if(myPosXAbs>myPosZAbs){
-			projectedSphereVector = (planet_radius/myPosXAbs)*sphereLocalVector;
+			projectedSphereVector = (planet_radius/myPosXAbs)*myPosRelToCenter;
 			intY = projectedSphereVector.Y;
 			intZ = projectedSphereVector.Z;
-			if(myPos.X>0){
+			if(myPosRelToCenter.X>0){
 				faceNumber = 3;
 				extractionX_pointRL = planet_radius - intY;
 				extractionY_pointRL = planet_radius - intZ;
@@ -251,10 +254,10 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	if(myPosYAbs>myPosXAbs){
 		if(myPosYAbs>myPosZAbs){
-			projectedSphereVector = (planet_radius/myPosYAbs)*sphereLocalVector;
+			projectedSphereVector = (planet_radius/myPosYAbs)*myPosRelToCenter;
 			intX = projectedSphereVector.X;
 			intZ = projectedSphereVector.Z;
-			if(myPos.Y>0){
+			if(myPosRelToCenter.Y>0){
 				faceNumber = 5;
 				extractionY_pointRL = planet_radius - intX;
 				extractionX_pointRL = planet_radius - intZ;
@@ -269,10 +272,10 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	
 	if(myPosZAbs>myPosXAbs){
 		if(myPosZAbs>myPosYAbs){
-			projectedSphereVector = (planet_radius/myPosZAbs)*sphereLocalVector;
+			projectedSphereVector = (planet_radius/myPosZAbs)*myPosRelToCenter;
 			intX = projectedSphereVector.X;
 			intY = projectedSphereVector.Y;
-			if(myPos.Z>0){
+			if(myPosRelToCenter.Z>0){
 				faceNumber = 0;
 				extractionY_pointRL = planet_radius + intX;
 				extractionX_pointRL = planet_radius - intY;
@@ -358,7 +361,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 
 	bool planetDetected = sc.TryGetPlanetPosition(out planetCenter);
 	
-	Echo("planetCenter:"+planetCenter);
+	// Echo("planetCenter:"+planetCenter);
 	
 	planet_radius = (int) (planetCenter-myPos).Length();
 	
@@ -367,7 +370,7 @@ public void faceAndPointOnPlanetsConverging(IMyRemoteControl sc,out int facenumb
 	//double min_range = 1*(2*planet_radius/2048)*(1.414/2);
 	double min_range = 1*(2*planet_radius/2048)*(8);
 	
-	Echo("min_range:"+min_range);
+	// Echo("min_range:"+min_range);
 	
 	foreach(int intTmp in intIndexFaces){
 		//Echo("Checking planet face:"+intTmp);
@@ -672,16 +675,31 @@ public void Main(string argument, UpdateType updateSource)
 	// GPSs.Add("GPS: LackN53:88759.7:172164.5:5713985.4:#F175DC:");
 	// GPSs.Add("GPS: LackN69:110828.7:172125.9:5771831.7:#F175DC:");
 	
-	//testing Moon
-	// GPSs.Add("GPS: UrMgSiN1:12187.9:141209.7:-108648.3:#F175DC:");
-	// GPSs.Add("GPS: UrMgSiN577:11992.3:131185.8:-108565.4:#F175DC:");
-	// GPSs.Add("GPS: UrMgSiN1153:21060.0:141760.3:-119149.5:#F175DC:");
-	// GPSs.Add("GPS:FeNiCo:23201.2:135451.4:-107166.1:#F175DC:");
-	// GPSs.Add("GPS: UrMgSiN2305:11107.4:141510.7:-118073.9:#F175DC:");
-	// GPSs.Add("GPS: UrMgSiN2881:20786.8:141595.2:-108553.7:#F175DC:");
+	// testing Moon
+	//ok with converging ?
+	// TODO: off range
+	GPSs.Add("GPS: UrMgSiN1:12187.9:141209.7:-108648.3:#F175DC:");
 	
+	
+	// TODO: pixel missmatch face missmatch
+	GPSs.Add("GPS: UrMgSiN577:11992.3:131185.8:-108565.4:#F175DC:");
+	
+	// ok is front
+	GPSs.Add("GPS: UrMgSiN1153:21060.0:141760.3:-119149.5:#F175DC:");
+	
+	// ok is left
+	GPSs.Add("GPS:FeNiCo:23201.2:135451.4:-107166.1:#F175DC:");
+	
+	// TODO: pixel mismatch and diff faces
+	GPSs.Add("GPS: UrMgSiN2305:11107.4:141510.7:-118073.9:#F175DC:");
+	
+	// ok is up
+	GPSs.Add("GPS: UrMgSiN2881:20786.8:141595.2:-108553.7:#F175DC:");
+	
+	
+	// ok both on moon (both left)
 	// GPSs.Add("GPS:PtNi:23414.9:136985.2:-107485.2:#F175DC:");
-	GPSs.Add("GPS:PtNi:24245.2:135091:-108726.3:#F175DC:");
+	// GPSs.Add("GPS:PtNi:24245.2:135091:-108726.3:#F175DC:");
 	
 
 	
@@ -690,7 +708,7 @@ public void Main(string argument, UpdateType updateSource)
 	foreach(string gps in GPSs){
 		// Echo(gps);
 		
-		Echo("gps:" + gps);
+		// Echo("gps:" + gps);
 		Vector3D testedV3D = new Vector3D(0,0,0);
 		
 		MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
@@ -713,7 +731,7 @@ public void Main(string argument, UpdateType updateSource)
 			testedV3D = myWaypointInfoTarget.Coords;
 		// }
 		
-		Echo("testedV3D:" + testedV3D);
+		//Echo("testedV3D:" + testedV3D);
 		
 		
 		int facenumberCalculated = -1;
@@ -733,6 +751,7 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("facenumberMain2:"+facenumberConverging);
 		Echo("pixelPosMain2:"+pixelPosConverging);
 		
+		whichFileShouldIlook(facenumberConverging);
 		whichFileShouldIlook(facenumberCalculated);
 	
 
