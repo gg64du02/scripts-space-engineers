@@ -8,6 +8,9 @@ string flightIndicatorsControllerName = "";
 const bool stalizableYaw = false; // do you want to stablize yaw to 0°
 const bool isPlanetWorld = true; // this should be true for every easy start or star system scenario, false if no planet in your scenario
 
+
+double test_inc = 0;
+
 // end of config
 
 enum FlightMode { STABILIZATION, STANDY };
@@ -258,15 +261,25 @@ public void Main(string argument)
 
 
     //VTT: VectorToTarget
-    Vector3D normVTT = Vector3D.Normalize(VectToTarget);
+        // Vector3D relativeEastVector = gravityVector.Cross(absoluteNorthVector);
+        // Vector3D relativeNorthVector = relativeEastVector.Cross(gravityVector);
+		
+    Vector3D normVTT = Vector3D.Normalize(-VectToTarget);
+    // Vector3D normVTT = Vector3D.Normalize(shipForwardVector);
     Vector3D normVTTProjectUp = VectorHelper.VectorProjection(normVTT, gravityVector);
-    Vector3D normVTTProjPlaneVector = normVTTProjectUp - normVTT;
+    Vector3D normVTTProjPlaneVector = normVTT- normVTTProjectUp;
+	Echo("VectToTarget:"+VectToTarget);
+	Echo("normVTT:"+normVTT);
+	Echo("shipForwardVector:"+shipForwardVector);
 
     double yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
+	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
+	
     if (normVTT.Dot(relativeEastVector) < 0)
     {
         yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
     }
+	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
 
     if (firstMainLoop == true)
     {
@@ -652,27 +665,34 @@ public void Main(string argument)
     }
 
 
-    bool stalizablePitch = true;
-    bool stalizableRoll = true;
-    bool stalizableYaw = false;
+	test_inc+=1;
+	test_inc%=360;
+	
+	Echo("test_inc:"+test_inc);
+
+    bool stalizablePitch = false;
+    bool stalizableRoll = false;
+    bool stalizableYaw = true;
 
     //+ pitch go foward
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
-    fightStabilizator.rollDesiredAngle = Convert.ToSingle(angleRoll);
-    fightStabilizator.yawDesiredAngle = Convert.ToSingle(0f);
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(0);
+    fightStabilizator.rollDesiredAngle = Convert.ToSingle(0);
+    fightStabilizator.yawDesiredAngle = Convert.ToSingle(yawCWOrAntiCW);
+    // fightStabilizator.yawDesiredAngle = Convert.ToSingle(test_inc);
+    // fightStabilizator.yawDesiredAngle = Convert.ToSingle(60);
 
     // call this next line at each run
     fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
 
-    //debug roll
-    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
-        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
-        + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
-        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
-        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
-        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
-        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+    // //debug roll
+    // var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+        // + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+        // + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+        // + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+        // + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+        // + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+        // + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
     //str_to_display = "\n8|elev|" + Math.Round((elev), 0)
     //    + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
     //    + "\n10|" + Math.Round((0.0f), 0)
@@ -680,10 +700,17 @@ public void Main(string argument)
     //    + "\n12|wA|" + Math.Round((wantedAltitude), 0)
     //    + "\n13|con|" + Math.Round((control), 0);
     //var str_to_display = "lol";
+	
+	
+    //debug roll
+    var str_to_display = "\nyawCWOrAntiCW|" + Math.Round((yawCWOrAntiCW), 3);
+	
 	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
     // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
 			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
 	// }
+	
+	
 	if(theAntenna != null){
 		theAntenna.HudText = str_to_display;
 	}
@@ -698,7 +725,7 @@ public void Main(string argument)
 
     double remainingThrustToApply = -1;
     double temp_thr_n = -1;
-
+/*
     foreach (var c in cs)
     {
         if (c.IsFunctional == true)
@@ -740,7 +767,7 @@ public void Main(string argument)
             }
         }
     }
-	
+	*/
 	Echo("distRoll:"+Math.Round(distRoll,2));
 	Echo("distPitch:"+Math.Round(distPitch,2));
 
@@ -909,7 +936,8 @@ public class FightStabilizator
     bool firstRun = true;
     double lastTime = 0;
 
-    float gyroscopeMaximumGyroscopePower = 1.0f;
+    // float gyroscopeMaximumGyroscopePower = 1.0f;
+    float gyroscopeMaximumGyroscopePower = 0.1f;
     float gyroscopeMaximumErrorMargin = 0.001f;
 
     public float pitchDesiredAngle = 0;
@@ -964,11 +992,12 @@ public class FightStabilizator
 
         // center yaw at origin
         double originCenteredYaw = flightIndicators.Yaw;
+		/*
         if (originCenteredYaw > 180)
         {
             originCenteredYaw -= 360;
         }
-
+*/
         double currentTime = BasicLibrary.GetCurrentTimeInMs();
         double timeStep = currentTime - lastTime;
 
@@ -981,7 +1010,17 @@ public class FightStabilizator
         if (!firstRun)
         {
             double pitchCommand = (stabilizePitch) ? ComputeCommand(flightIndicators.Pitch - pitchDesiredAngle, pitchPid, timeStep, maxGyroValue) : 0;
-            double yawCommand = (stabilizeYaw) ? ComputeCommand(originCenteredYaw - yawDesiredAngle, yawPid, timeStep, maxGyroValue) : 0;
+            // double yawCommand = (stabilizeYaw) ? ComputeCommand(originCenteredYaw - yawDesiredAngle, yawPid, timeStep, maxGyroValue) : 0;
+			double tmpYawCommand = 0;
+			if(Math.Abs((originCenteredYaw - yawDesiredAngle))>180){
+				tmpYawCommand = - ( originCenteredYaw - yawDesiredAngle ) ;
+				
+			}
+			else{
+				tmpYawCommand = ( originCenteredYaw - yawDesiredAngle ) ;
+				}
+			double yawCommand = (stabilizeYaw) ? ComputeCommand(tmpYawCommand, yawPid, timeStep, maxGyroValue) : 0;
+			// double yawCommand = (stabilizeYaw) ? ComputeCommand(originCenteredYaw - yawDesiredAngle, yawPid, timeStep, maxGyroValue) : 0;
             double rollCommand = (stabilizeRoll) ? ComputeCommand(flightIndicators.Roll - rollDesiredAngle, rollPid, timeStep, maxGyroValue) : 0;
             // + rollCommand because of the way we compute it
             ApplyGyroOverride(-pitchCommand, -yawCommand, rollCommand, gyroscopes, shipController);
