@@ -34,7 +34,7 @@ FightStabilizator fightStabilizator;
 Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
 
 PIDController altRegulator = new PIDController(0.06f, .00f, 0.01f);
-double wantedAltitude = 1500;
+double wantedAltitude = 500;
 double altitudeError = 0f;
 Vector3D shipAcceleration = new Vector3D(0, 0, 0);
 Vector3D prevLinearSpeedsShip = new Vector3D(0, 0, 0);
@@ -264,23 +264,6 @@ public void Main(string argument)
         // Vector3D relativeEastVector = gravityVector.Cross(absoluteNorthVector);
         // Vector3D relativeNorthVector = relativeEastVector.Cross(gravityVector);
 		
-    Vector3D normVTT = Vector3D.Normalize(-VectToTarget);
-    // Vector3D normVTT = Vector3D.Normalize(shipForwardVector);
-    Vector3D normVTTProjectUp = VectorHelper.VectorProjection(normVTT, gravityVector);
-    Vector3D normVTTProjPlaneVector = normVTT- normVTTProjectUp;
-	Echo("VectToTarget:"+VectToTarget);
-	Echo("normVTT:"+normVTT);
-	Echo("shipForwardVector:"+shipForwardVector);
-
-    double yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
-	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
-	
-    if (normVTT.Dot(relativeEastVector) < 0)
-    {
-        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
-    }
-	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
-
     if (firstMainLoop == true)
     {
         flightIndicatorsFlightMode = FlightMode.STABILIZATION;
@@ -415,10 +398,11 @@ public void Main(string argument)
 
     //double TWR = 4.59;
     double TWR = thr_to_weight_ratio;
-    double V_max = 55;
+    double V_max = 75;
     //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 8;
-    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
-    //double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
+    // double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 2;
+    double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI ;
+    // double AngleRollMaxAcc = Math.Atan((TWR - 1) / 1) * 180 / Math.PI / 4;
 
     //double MaxSurfaceAcc = (TWR - 1) * g;
     double MaxSurfaceAcc = (Math.Sin(Math.PI * AngleRollMaxAcc / 180)) * g;
@@ -526,7 +510,44 @@ public void Main(string argument)
 			angleRoll = MyMath.Clamp(Convert.ToSingle(angleRoll), Convert.ToSingle(-AngleRollMaxAcc), Convert.ToSingle(AngleRollMaxAcc));
 		}
 	}
+	
+	//=========================
+    //******Yaw************start
+	//=========================
+    Vector3D normVTT = Vector3D.Normalize(-VectToTarget);
+	
+	
+    // Vector3D forwardProjectUp = VectorHelper.VectorProjection(shipForwardVector, gravityVector);
+		
+	Vector3D desiredPitchForwardSpeedV3D = normVTT;
+	Vector3D errorDesiredPitchForwardSpeedV3D = (VectorHelper.VectorProjection(linearSpeedsShipNormalized, gravityVector)-VectorHelper.VectorProjection(desiredPitchForwardSpeedV3D, gravityVector)*(Math.Abs(speedPitchError)));
+		// VectorHelper.VectorProjection(shipLeftVector, gravityVector)*(Math.Abs( MyMath.Clamp(speedRollError,-10,10))));
+	if(Math.Abs(distPitch)<500){
+		errorDesiredPitchForwardSpeedV3D=errorDesiredPitchForwardSpeedV3D - (VectorHelper.VectorProjection(shipLeftVector, gravityVector))*speedRollError;
+			// VectorHelper.VectorProjection(shipLeftVector, gravityVector)*(MyMath.Clamp(Convert.ToSingle(speedRollError),-10f,10f)));
+	}
+	
+	
+	 normVTT = errorDesiredPitchForwardSpeedV3D;
+	
+    // Vector3D normVTT = Vector3D.Normalize(shipForwardVector);
+    Vector3D normVTTProjectUp = VectorHelper.VectorProjection(normVTT, gravityVector);
+    Vector3D normVTTProjPlaneVector = normVTT- normVTTProjectUp;
+	Echo("VectToTarget:"+VectToTarget);
+	Echo("normVTT:"+normVTT);
+	Echo("shipForwardVector:"+shipForwardVector);
 
+    double yawCWOrAntiCW = VectorHelper.VectorAngleBetween(normVTTProjPlaneVector, relativeNorthVector) * rad2deg;
+	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
+	
+    if (normVTT.Dot(relativeEastVector) < 0)
+    {
+        yawCWOrAntiCW = 360.0d - yawCWOrAntiCW; //because of how the angle is measured                     
+    }
+	Echo("yawCWOrAntiCW:"+yawCWOrAntiCW);
+	//=========================
+    //******Yaw************end
+	//=========================
 
     double pitchFowardOrBackward = Vector3D.Dot(linearSpeedsShipNormalized, FowardPorMNormalized);
     double rollLeftOrRight = Vector3D.Dot(linearSpeedsShipNormalized, LeftPorMNormalized);
@@ -615,7 +636,7 @@ public void Main(string argument)
 
     if (distPitch * distPitch + distRoll * distRoll > 100 * 100)
     {
-        wantedAltitude = 1500;
+        wantedAltitude = 500;
     }
 
     Echo("dts:" + dts);
@@ -670,12 +691,14 @@ public void Main(string argument)
 	
 	Echo("test_inc:"+test_inc);
 
-    bool stalizablePitch = false;
+    bool stalizablePitch = true;
     bool stalizableRoll = false;
     bool stalizableYaw = true;
 
     //+ pitch go foward
-    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(0);
+    // fightStabilizator.pitchDesiredAngle = Convert.ToSingle(0);
+    fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-anglePitch);
+    // fightStabilizator.pitchDesiredAngle = Convert.ToSingle(-1anglePitch);
     fightStabilizator.rollDesiredAngle = Convert.ToSingle(0);
     fightStabilizator.yawDesiredAngle = Convert.ToSingle(yawCWOrAntiCW);
     // fightStabilizator.yawDesiredAngle = Convert.ToSingle(test_inc);
@@ -686,13 +709,13 @@ public void Main(string argument)
 
 
     // //debug roll
-    // var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
-        // + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
-        // + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
-        // + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
-        // + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
-        // + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
-        // + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+        + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+        + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+        + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+        + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+        + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+        + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
     //str_to_display = "\n8|elev|" + Math.Round((elev), 0)
     //    + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
     //    + "\n10|" + Math.Round((0.0f), 0)
@@ -703,7 +726,10 @@ public void Main(string argument)
 	
 	
     //debug roll
-    var str_to_display = "\nyawCWOrAntiCW|" + Math.Round((yawCWOrAntiCW), 3);
+    // var str_to_display = "\nyawCWOrAntiCW|" + Math.Round((yawCWOrAntiCW), 3);
+    // var str_to_display = "\ndistPitch|" + Math.Round((distPitch), 3);
+	
+	
 	
 	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
     // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
@@ -715,6 +741,14 @@ public void Main(string argument)
 		theAntenna.HudText = str_to_display;
 	}
 
+	// if(control<0.3){
+		// control = 0.3;
+	// }
+	
+	// if(control>1.1){
+		// control=1.1;
+	// }
+		
     debugString += "\n" + "control:" + control;
     Echo("control:" + Math.Round((control), 2));
 
@@ -725,7 +759,8 @@ public void Main(string argument)
 
     double remainingThrustToApply = -1;
     double temp_thr_n = -1;
-/*
+	
+
     foreach (var c in cs)
     {
         if (c.IsFunctional == true)
@@ -736,10 +771,10 @@ public void Main(string argument)
                 {
                     remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
                 }
-                //Echo("physMass_N" + physMass_N);
-                //Echo("c.MaxThrust"+c.MaxThrust);
-                //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
-                //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+                Echo("physMass_N" + physMass_N);
+                Echo("c.MaxThrust"+c.MaxThrust);
+                Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+                // (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
                 if (c.MaxThrust < remainingThrustToApply)
                 {
                     temp_thr_n = c.MaxThrust;
@@ -750,8 +785,8 @@ public void Main(string argument)
                     temp_thr_n = remainingThrustToApply;
                     remainingThrustToApply = 0;
                 }
-                //Echo("temp_thr_n:" + temp_thr_n);
-                //Echo("remainingThrustToApply:" + remainingThrustToApply);
+                Echo("temp_thr_n:" + temp_thr_n);
+                Echo("remainingThrustToApply:" + remainingThrustToApply);
                 if (temp_thr_n < 0)
                 {
                     c.ThrustOverride = Convert.ToSingle(200f);
@@ -767,7 +802,7 @@ public void Main(string argument)
             }
         }
     }
-	*/
+	
 	Echo("distRoll:"+Math.Round(distRoll,2));
 	Echo("distPitch:"+Math.Round(distPitch,2));
 
