@@ -9,6 +9,9 @@ public Vector3D myTerrainTarget = new Vector3D(0,0,0);
 
 MyWaypointInfo myWaypointInfoTerrainTarget = new MyWaypointInfo("target", 0, 0, 0);
 
+IMyRadioAntenna theAntenna = null;
+
+string str_to_display = "";
 		
 public Program()
 {
@@ -29,6 +32,8 @@ public Program()
 	RemoteControl = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRemoteControl) as IMyRemoteControl;
 	//Sensor = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMySensorBlock) as IMySensorBlock;
 
+	
+	theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
 
 	Runtime.UpdateFrequency = UpdateFrequency.Update10;
 	
@@ -54,6 +59,9 @@ public void Main(string argument, UpdateType updateSource)
     // The method itself is required, but the arguments above
     // can be removed if not needed.
 	
+	if(theAntenna != null){
+		theAntenna.HudText = str_to_display;
+	}
 	
     //note:
     //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
@@ -134,6 +142,53 @@ public void Main(string argument, UpdateType updateSource)
 		
 		whichFileShouldIlook(facenumberCalculatedTarget);
 		
+		//getting vectors to help with angles proposals
+		Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
+		Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
+		Vector3D shipDownVector = RemoteControl.WorldMatrix.Down;
+		
+		double steerOverride = 0;
+		// double steerOverride = shipForwardVector.Dot(Vector3D.Normalize(targetV3Dabs));
+		// steerOverride*=100;
+		// Echo("steerOverride:"+Math.Round(steerOverride,3));
+		
+		Vector3D targetV3Drel = RemoteControl.GetPosition()-targetV3Dabs;
+		
+		Vector3D crossForwardTT = shipForwardVector.Cross((targetV3Drel));
+		// Vector3D crossForwardTT = shipForwardVector.Cross(Vector3D.Normalize(targetV3Dabs));
+		double turnRightOrLeft = crossForwardTT.Dot(shipDownVector);
+		
+		Echo("turnRightOrLeft:"+Math.Round(turnRightOrLeft,3));
+		
+		str_to_display = ""+"turnRightOrLeft:"+Math.Round(turnRightOrLeft,3);
+		
+		//steerOverride = crossForwardTT.Length();
+		steerOverride = turnRightOrLeft;
+		
+		steerOverride*=-1;
+		
+		Echo("steerOverride:"+Math.Round(steerOverride,3));
+		
+		// if(turnRightOrLeft<0){
+			// steerOverride*= -1;
+		// }
+		
+		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
+
+		
+		
+		foreach (IMyMotorSuspension Wheel in Wheels)
+		{
+			double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
+			
+			Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
+			
+			if(areThisFrontWheel>0){
+				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
+				// Wheel.SetValue<Single>("Steer override", 1);
+				// Wheel.SetValue<float>("Propulsion override", 0);
+			}
+		}
 	}
 	
 	
@@ -312,3 +367,4 @@ public void whichFileShouldIlook(int facenumber){
 	// 4 is right
 	// 5 is up
 }
+
