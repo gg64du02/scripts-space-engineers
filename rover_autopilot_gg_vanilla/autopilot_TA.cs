@@ -175,20 +175,30 @@ public void Main(string argument, UpdateType updateSource)
 		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
 
 		
+		float SLerror = (float) (RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
+		
 		foreach (IMyMotorSuspension Wheel in Wheels)
 		{
 			double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
-			
 			Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
 			
+			float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
+			
+			// str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
+			// Echo(str_to_display);
+			
+			float localPO = -MultiplierPO * SLerror;
+				
 			if(areThisFrontWheel>0){
 				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
-				// Wheel.SetValue<Single>("Steer override", 1);
+				Wheel.SetValue<float>("Propulsion override", localPO);
+				
 			}
 			else{
-				
-				//Wheel.SetValue<float>("Propulsion override", 0.2f);
+				// Wheel.SetValue<Single>("Steer override", Convert.ToSingle(-steerOverride));
+				Wheel.SetValue<float>("Propulsion override", localPO);
 			}
+			
 		}
 	}
 	
