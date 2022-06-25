@@ -162,20 +162,18 @@ public void Main(string argument, UpdateType updateSource)
 		
 		str_to_display = ""+"turnRightOrLeft:"+Math.Round(turnRightOrLeft,3);
 		
-		//steerOverride = crossForwardTT.Length();
-		steerOverride = turnRightOrLeft;
+		
+		steerOverride = turnRightOrLeft/crossForwardTT.Length();
+		if(steerOverride<0.15){
+			steerOverride*=0.25;
+		}
 		
 		steerOverride*=-1;
-		
 		Echo("steerOverride:"+Math.Round(steerOverride,3));
 		
-		// if(turnRightOrLeft<0){
-			// steerOverride*= -1;
-		// }
 		
 		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
 
-		
 		
 		foreach (IMyMotorSuspension Wheel in Wheels)
 		{
@@ -186,7 +184,10 @@ public void Main(string argument, UpdateType updateSource)
 			if(areThisFrontWheel>0){
 				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
 				// Wheel.SetValue<Single>("Steer override", 1);
-				// Wheel.SetValue<float>("Propulsion override", 0);
+			}
+			else{
+				
+				//Wheel.SetValue<float>("Propulsion override", 0.2f);
 			}
 		}
 	}
