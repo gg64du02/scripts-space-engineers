@@ -105,6 +105,8 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("myTerrainTarget:"+Vector3D.Round(myTerrainTarget,3));
 	
 	
+	float SLerror = (float) (RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
+	
 	if(myTerrainTarget== new Vector3D(0,0,0)){
 		
 		foreach (IMyMotorSuspension Wheel in Wheels)
@@ -112,6 +114,35 @@ public void Main(string argument, UpdateType updateSource)
 			Wheel.SetValue<Single>("Steer override", 0);
 			Wheel.SetValue<float>("Propulsion override", 0);
 			Wheel.Brake = true;
+			
+			RemoteControl.HandBrake = true;
+			
+			/*
+			float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
+			
+			// str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
+			// Echo(str_to_display);
+			//SLerror = -0.2f;
+			
+			MyShipVelocities myShipVel = RemoteControl.GetShipVelocities();
+			Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
+			
+			
+			//SLerror =(float) (0 - RemoteControl.GetShipSpeed());
+			SLerror = (float) (-linearSpeedsShip.Dot(RemoteControl.WorldMatrix.Forward));
+			
+			float localPO = -MultiplierPO * SLerror;
+			
+			str_to_display = ""+"localPO:"+Math.Round(localPO,3);
+				
+			if(RemoteControl.GetShipSpeed()<1){
+				
+				Wheel.SetValue<float>("Propulsion override", 0);
+			}
+			else{
+				Wheel.SetValue<float>("Propulsion override", 0.25f*localPO);
+			}
+			*/
 		}
 		
 	}
@@ -172,14 +203,13 @@ public void Main(string argument, UpdateType updateSource)
 		// steerOverride*=0.25;
 		
 		steerOverride*=-1;
-		str_to_display = ""+"steerOverride:"+Math.Round(steerOverride,3);
+		// str_to_display = ""+"steerOverride:"+Math.Round(steerOverride,3);
 		Echo("steerOverride:"+Math.Round(steerOverride,3));
 		
 		
 		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
 
 		
-		float SLerror = (float) (RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
 		
 		foreach (IMyMotorSuspension Wheel in Wheels)
 		{
@@ -190,8 +220,11 @@ public void Main(string argument, UpdateType updateSource)
 			
 			// str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
 			// Echo(str_to_display);
+			//SLerror = -0.2f;
 			
 			float localPO = -MultiplierPO * SLerror;
+			
+			str_to_display = ""+"localPO:"+Math.Round(localPO,3);
 				
 			if(areThisFrontWheel>0){
 				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
