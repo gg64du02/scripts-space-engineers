@@ -160,15 +160,17 @@ public void Main(string argument, UpdateType updateSource)
 		
 		Echo("turnRightOrLeft:"+Math.Round(turnRightOrLeft,3));
 		
-		str_to_display = ""+"turnRightOrLeft:"+Math.Round(turnRightOrLeft,3);
+		// str_to_display = ""+"turnRightOrLeft:"+Math.Round(turnRightOrLeft,3);
 		
 		
 		steerOverride = turnRightOrLeft/crossForwardTT.Length();
-		if(steerOverride<0.15){
+		if(Math.Abs(steerOverride)<.98){
 			steerOverride*=0.25;
 		}
+		// steerOverride*=0.25;
 		
 		steerOverride*=-1;
+		str_to_display = ""+"steerOverride:"+Math.Round(steerOverride,3);
 		Echo("steerOverride:"+Math.Round(steerOverride,3));
 		
 		
@@ -200,6 +202,12 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			
 		}
+		
+		//stop when destination is reached
+		if(targetV3Drel.Length()<5){
+			myTerrainTarget = new Vector3D(0, 0, 0);
+		}
+		
 	}
 	
 	
