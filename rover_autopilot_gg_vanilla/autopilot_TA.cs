@@ -111,7 +111,9 @@ public void Main(string argument, UpdateType updateSource)
 		{
 			Wheel.SetValue<Single>("Steer override", 0);
 			Wheel.SetValue<float>("Propulsion override", 0);
+			Wheel.Brake = true;
 		}
+		
 	}
 	else
 	{
