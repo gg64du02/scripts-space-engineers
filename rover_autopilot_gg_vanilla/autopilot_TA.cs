@@ -175,6 +175,16 @@ public void Main(string argument, UpdateType updateSource)
 		
 		whichFileShouldIlook(facenumberCalculatedTarget);
 		
+		bool targetIsOnTheSameFace = false;
+		if(facenumberCalculatedTarget==facenumberCalculated){
+			targetIsOnTheSameFace = true;
+		}
+		else{
+			targetIsOnTheSameFace = false;
+		}
+		Echo("targetIsOnTheSameFace:"+targetIsOnTheSameFace);
+		
+		
 		//getting vectors to help with angles proposals
 		Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
 		Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
