@@ -4,3 +4,4 @@ ore_mapping/PlanetGeneratorDefinitions.sbc
 *.txt
 ore_mapping/Generating files containing all ore GPSs/PlanetGeneratorDefinitions.sbc
 .idea/*
+*.bak
