@@ -19,10 +19,12 @@ for file in files:
     ## plt.imshow(img)
     # plt.show()
 
+    countingLinks = 0
     for i in range(0,2048):
         for j in range(0,2048):
             if( i % 32==0):
                 if( j % 32==0):
+
 
                     # vertical lines
                     # print("i",i,"j",j)
@@ -34,6 +36,7 @@ for file in files:
                         # cv.line(img,(i,j),(i+32,j),(255,255,255))
                         # bug? for some reason cv.line switch the axis ?
                         cv.line(img,(j,i),(j,i+32),(255,255,255))
+                        countingLinks+=1
                     # print()
 
 
@@ -47,12 +50,13 @@ for file in files:
                     if(uninterruptedLine == True):
                         # bug? for some reason cv.line switch the axis ?
                         cv.line(img,(j,i),(j+32,i),(255,255,255))
+                        countingLinks+=1
                     # print()
+    print("countingLinks",countingLinks)
 
 
 
 
-
-    plt.imshow(img,cmap='gray')
-    ## plt.imshow(img)
-    plt.show()
+    # plt.imshow(img,cmap='gray')
+    # ## plt.imshow(img)
+    # plt.show()
