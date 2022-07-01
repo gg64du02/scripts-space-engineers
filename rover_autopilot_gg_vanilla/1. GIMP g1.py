@@ -15,30 +15,42 @@ import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 
-# import os
-#
-# folderName = "E:/Github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/"
-#
-# if(os.path.exists(folderName)==True):
-#     print(folderName, "exists")
+import os
+
+folderNameSource = "E:/Github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/EarthLike/"
+
+# folderNameTarget = "E:/Github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/EarthLikeProcessed/"
+
+if(os.path.exists(folderNameSource)==True):
+    print(folderNameSource, "exists")
+else:
+    print(folderNameSource, "does not exist")
+
+# if(os.path.exists(folderNameTarget)==True):
+#     print(folderNameTarget, "exists")
 # else:
-#     print(folderName, "does not exist")
-#
+#     print(folderNameTarget, "does not exist")
+
+from pathlib import Path
+
 # fileNamePath = folderName + "back.png"
-#
-# from pathlib import Path
 #
 # if(Path(fileNamePath).exists()==True):
 #     print(fileNamePath, "exists")
 # else:
 #     print(fileNamePath, "does not exist")
 
-files = {"back.png"}
+# files = {"back.png"}
 # files = {"front.png","back.png"}
-# files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
+files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
+full_files_path=[]
 for file in files:
-    print("file:",file)
-    img = cv.imread(file,0)
+    full_files_path.append(folderNameSource+file)
+print(full_files_path)
+# exit()
+for file_path in full_files_path:
+    print("file_path:",file_path)
+    img = cv.imread(file_path,0)
     # plt.imshow(img)
     # if(bool(img)!=None):
     #     print("img is empty: exiting")
@@ -68,10 +80,18 @@ for file in files:
 
     # plt.imshow(sobelxy,cmap='gray')
     # plt.imshow(abs_sobelxy,cmap='gray')
-    plt.imshow(thres_abs_sobelxy)
+    # plt.imshow(thres_abs_sobelxy)
     # plt.imshow(thres_abs_sobelxy,cmap='gray')
 
-    plt.show()
+    stringTmpSplitted = file_path.split(".")[0]
+    print("stringTmpSplitted",stringTmpSplitted)
+
+    fileNameTarget = stringTmpSplitted + "_thres_abs_sobelxy_step1" + ".png"
+
+    cv.imwrite(fileNameTarget,thres_abs_sobelxy)
+    print(fileNameTarget ,"wrote")
+
+    # plt.show()
     # img.close()
-    exit()
+    # exit()
     # img.delete()
