@@ -142,30 +142,50 @@ for file_path in full_files_path:
     print("map:finished putting the coords into a")
 
 
-    # if(y_0==0):
-    #     print("bounding box is on the left line")
-    #     for tmpK in range(2047,0,-1):
-    #         if(availiablePathRet[tmpK,0]==1):
-    #             if(left_bot==[]):
-    #                 left_bot=[tmpK,0]
-    # if(x_0==0):
-    #     print("bounding box is on the left line")
-    #     for tmpK in range(0,2048):
-    #         if(availiablePathRet[tmpK,0]==1):
-    #             if(left_top==[]):
-    #                 left_top=[tmpK,0]
-    # if(x_1==2048):
-    #     print("bounding box is on the bottom line")
-    #     for tmpK in range(2047,0,-1):
-    #         if(availiablePathRet[tmpK,0]==1):
-    #             if(right_bot==[]):
-    #                 right_bot=[tmpK,0]
-    # if(x_1==2048):
-    #     print("bounding box is on the right line")
-    #     for tmpK in range(0,2048):
-    #         if(availiablePathRet[tmpK,2047]==1):
-    #             if(right_top==[]):
-    #                 right_top=[tmpK,2047]
+    if(x_0==0):
+        print("bounding box is on the left line")
+        for tmpK in range(0,2048,1):
+            if(availiablePathRet[tmpK,0]==1):
+                if(left_top==[]):
+                    left_top=[tmpK,0]
+        for tmpK in range(2047,0,-1):
+            if(availiablePathRet[tmpK,0]==1):
+                if(left_bot==[]):
+                    left_bot=[tmpK,0]
+
+    if (x_1 == 2048):
+        print("bounding box is on the right line")
+        for tmpK in range(0, 2048, 1):
+            if (availiablePathRet[tmpK, 2047] == 1):
+                if (right_top == []):
+                    right_top = [tmpK, 2047]
+        for tmpK in range(2047, 0, -1):
+            if (availiablePathRet[tmpK, 2047] == 1):
+                if (right_bot == []):
+                    right_bot = [tmpK, 2047]
+
+    if(y_0==0):
+        print("bounding box is on the top line")
+        for tmpK in range(0, 2048, 1):
+            if (availiablePathRet[0, tmpK] == 1):
+                if (top_left == []):
+                    top_left = [0, tmpK]
+        for tmpK in range(2047,0,-1):
+            if(availiablePathRet[0, tmpK]==1):
+                if(top_right==[]):
+                    top_right=[0, tmpK]
+
+    if(y_1==2048):
+        print("bounding box is on the bottom line")
+        for tmpK in range(0, 2048, 1):
+            if (availiablePathRet[0, tmpK] == 1):
+                if (bot_left == []):
+                    bot_left = [0, tmpK]
+        for tmpK in range(2047,0,-1):
+            if(availiablePathRet[0, tmpK]==1):
+                if(bot_right==[]):
+                    bot_right=[0, tmpK]
+
 
     print("left_top:",left_top)
     print("left_bot:",left_bot)
