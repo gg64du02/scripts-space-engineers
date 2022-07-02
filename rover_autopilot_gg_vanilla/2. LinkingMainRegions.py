@@ -104,10 +104,15 @@ for file_path in full_files_path:
     # props.image[0, :] horizontal
     # props.image[:,2047]
 
-    left_top_most = []
-    left_bot_most = []
-    right_top_most = []
-    right_bot_most = []
+    left_top = []
+    left_bot = []
+    right_top = []
+    right_bot = []
+
+    bot_right = []
+    bot_left = []
+    top_right = []
+    top_left = []
 
     print("img[0,0]:",img[0,0])
     print("img_inverted[0,0]:",img_inverted[0,0])
@@ -137,25 +142,40 @@ for file_path in full_files_path:
     print("map:finished putting the coords into a")
 
 
-    if(y_0==0):
-        print("bounding box is on the top line")
-    if(x_0==0):
-        print("bounding box is on the left line")
-        for tmpK in range(0,2048):
-            if(availiablePathRet[tmpK,0]==1):
-                if(left_top_most==[]):
-                    left_top_most=[tmpK,0]
-    if(y_1==2048):
-        print("bounding box is on the bottom line")
-    if(x_1==2048):
-        print("bounding box is on the right line")
-        for tmpK in range(0,2048):
-            if(availiablePathRet[tmpK,2047]==1):
-                if(right_top_most==[]):
-                    right_top_most=[tmpK,2047]
+    # if(y_0==0):
+    #     print("bounding box is on the left line")
+    #     for tmpK in range(2047,0,-1):
+    #         if(availiablePathRet[tmpK,0]==1):
+    #             if(left_bot==[]):
+    #                 left_bot=[tmpK,0]
+    # if(x_0==0):
+    #     print("bounding box is on the left line")
+    #     for tmpK in range(0,2048):
+    #         if(availiablePathRet[tmpK,0]==1):
+    #             if(left_top==[]):
+    #                 left_top=[tmpK,0]
+    # if(x_1==2048):
+    #     print("bounding box is on the bottom line")
+    #     for tmpK in range(2047,0,-1):
+    #         if(availiablePathRet[tmpK,0]==1):
+    #             if(right_bot==[]):
+    #                 right_bot=[tmpK,0]
+    # if(x_1==2048):
+    #     print("bounding box is on the right line")
+    #     for tmpK in range(0,2048):
+    #         if(availiablePathRet[tmpK,2047]==1):
+    #             if(right_top==[]):
+    #                 right_top=[tmpK,2047]
 
-    print("left_top_most:",left_top_most)
-    print("right_top_most:",right_top_most)
+    print("left_top:",left_top)
+    print("left_bot:",left_bot)
+    print("right_top:",right_top)
+    print("right_bot:",right_bot)
+
+    print("bot_right:",bot_right)
+    print("bot_left:",bot_left)
+    print("top_right:",top_right)
+    print("top_left:",top_left)
 
     # TODO: generate data that can link region between faces
 
