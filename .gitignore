@@ -5,3 +5,4 @@ ore_mapping/PlanetGeneratorDefinitions.sbc
 ore_mapping/Generating files containing all ore GPSs/PlanetGeneratorDefinitions.sbc
 .idea/*
 *.bak
+rover_autopilot_gg_vanilla/.idea/*
