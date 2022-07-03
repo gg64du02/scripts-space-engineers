@@ -304,8 +304,23 @@ for file_path in full_files_path:
 
 
             # print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+            # removing empty list for the point list
             points_to_tests_for_regions_bounds=list(filter(lambda x: x, points_to_tests_for_regions_bounds))
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+
+            points_to_tests_for_regions_bounds_tmp = []
+            countTmp = 0
+            valueTmp = []
+
+            print(list(filter(lambda x: not x in points_to_tests_for_regions_bounds[:-1],points_to_tests_for_regions_bounds)))
+
+
+            for p in points_to_tests_for_regions_bounds:
+                if(p not in points_to_tests_for_regions_bounds_tmp):
+                    points_to_tests_for_regions_bounds_tmp.append(p)
+
+            print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
+            points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp
 
             planet_radius = 60000
 
@@ -320,7 +335,7 @@ for file_path in full_files_path:
                 #     print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
                 #     continue
                 # print("=================================")
-                print("point_to_convert:",point_to_convert)
+                # print("point_to_convert:",point_to_convert)
                 gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
                 # print("gen_ed_v3d:",gen_ed_v3d)
                 # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
