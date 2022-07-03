@@ -10,6 +10,8 @@ import os
 
 from skimage import measure
 
+import array as arr
+
 # folderNameSource = "E:/Github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/EarthLike/"
 
 folderNameSource = "C:/github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/game_data/SS/PlanetDataFiles/Pertam/"
@@ -50,6 +52,74 @@ for file in files:
 print(full_files_path)
 # exit()
 
+def generated_gps_point_on_cube_function(pointPixel, faceNumber, planet_radius):
+
+    intX = 0
+    intY = 0
+    intZ = 0
+
+    # if (pointPixel == null){
+    #     pointPixel =  new Point(0, 0);
+    # }
+
+    pointPixel = [(2 * planet_radius / 2048) * pointPixel[0], (2 * planet_radius / 2048) * pointPixel[1]];
+
+    generated_gps_point_on_cube = [0, 0, 0]
+
+    if (faceNumber == 0):
+        intX = 1 * (- planet_radius+pointPixel[1] * 1);
+        intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        # // intZ = planet_radius * (centroid_surface_lack[1]-2048 / 2) * planet_radius;
+        generated_gps_point_on_cube = [intX, intY, planet_radius]
+
+    if (faceNumber == 1):
+        intX = 1 * (- planet_radius+pointPixel[1] * 1);
+        # // intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        intZ = -1 * (- planet_radius+pointPixel[0] * 1);
+        generated_gps_point_on_cube = [intX, -planet_radius, intZ]
+
+    if (faceNumber == 2):
+        intX = -1 * (- planet_radius+pointPixel[1] * 1);
+        intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        # // intZ = planet_radius * (centroid_surface_lack[1]-2048 / 2) * planet_radius;
+        generated_gps_point_on_cube = [intX, intY, -planet_radius]
+
+    if (faceNumber == 3):
+        # // intX = 1 * (- planet_radius+pointPixel[1] * 1);
+        intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        intZ = -1 * (- planet_radius+pointPixel[1] * 1);
+        generated_gps_point_on_cube = [planet_radius, intY, intZ]
+
+    if (faceNumber == 4):
+        # // intX = 1 * (- planet_radius+pointPixel[1] * 1);
+        intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        intZ = 1 * (- planet_radius+pointPixel[1] * 1);
+        generated_gps_point_on_cube = [-planet_radius, intY, intZ]
+
+    if (faceNumber == 5):
+        intX = -1 * (- planet_radius+pointPixel[1] * 1);
+        # // intY = -1 * (- planet_radius+pointPixel[0] * 1);
+        intZ = -1 * (- planet_radius+pointPixel[0] * 1);
+        # // generated_gps_point_on_cube = arr.array('d', [intX, planet_radius, intZ, ]+center_of_planet);
+        generated_gps_point_on_cube = [intX, planet_radius, intZ]
+
+    generated_gps_point_on_cube = np.round(generated_gps_point_on_cube)
+
+    return generated_gps_point_on_cube
+
+def whichFaceIsIt(file_path):
+    numbersFaces = [0,1,2,3,4,5]
+    namesFaces = ["back","down", "front","left" , "right","up"]
+
+    faceNumber, faceName = -1,"None"
+    for faceIndex in range(0,len(numbersFaces)):
+        # print(namesFaces[faceIndex])
+        if(namesFaces[faceIndex] in file_path):
+            print(namesFaces[faceIndex])
+            faceNumber, faceName = faceIndex, namesFaces[faceIndex]
+
+    return faceNumber,faceName
+
 planetRegionIndexFace = 0;
 
 for file_path in full_files_path:
@@ -57,6 +127,16 @@ for file_path in full_files_path:
     img = cv.imread(file_path,0)
 
     img_inverted = np.invert(img)
+
+
+    # // 0 is back
+    # // 1 is down
+    #
+    # // 2 is front
+    # // 3 is left
+    #
+    # // 4 is right
+    # // 5 is up
 
 
     # # plt.imshow(img,cmap='gray')
@@ -197,6 +277,30 @@ for file_path in full_files_path:
     print("top_right:",top_right)
     print("top_left:",top_left)
 
+    # print(whichFaceIsIt(file_path))
+
+    points_to_tests_for_regions_bounds = [left_top,left_bot,
+                       right_top,right_bot,
+                       bot_right,bot_left,
+                       top_right,top_left
+                       ]
+
+    planet_radius = 60000
+
+    faceNumber,faceName = whichFaceIsIt(file_path)
+
+    print("faceNumber is:",faceNumber, " ,faceName is:",faceName)
+
+
+    for point_to_convert in points_to_tests_for_regions_bounds:
+        result_str = ""
+        print("=================================")
+        print("point_to_convert:",point_to_convert)
+        gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
+        print("gen_ed_v3d:",gen_ed_v3d)
+
+
+
     # TODO: generate data that can link region between faces
 
     # # possible values are 0 128 255
@@ -204,5 +308,4 @@ for file_path in full_files_path:
     #     if(img[m,m]==128):
     #         print("[m,m]:",[m,m])
     #         print("img[m,m]:",img[m,m])
-
 
