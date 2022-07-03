@@ -42,9 +42,9 @@ from pathlib import Path
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-files = {"back_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -208,10 +208,10 @@ for file_path in full_files_path:
             top_right = []
             top_left = []
 
-            print("img[0,0]:",img[0,0])
-            print("img[i,j]:",img[i,j])
-            print("img_inverted[0,0]:",img_inverted[0,0])
-            print("img_inverted[i,j]:",img_inverted[i,j])
+            # print("img[0,0]:",img[0,0])
+            # print("img[i,j]:",img[i,j])
+            # print("img_inverted[0,0]:",img_inverted[0,0])
+            # print("img_inverted[i,j]:",img_inverted[i,j])
 
             print("props.bbox:",props.bbox)
             # props.bbox: (1114, 0, 1405, 300)
@@ -300,7 +300,11 @@ for file_path in full_files_path:
                                bot_right,bot_left,
                                top_right,top_left
                                ]
+            # lst = [[1, 2, 3], [1, 2], [], [], [], [1, 2, 3, 4], [], []]
 
+
+            # print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+            points_to_tests_for_regions_bounds=list(filter(lambda x: x, points_to_tests_for_regions_bounds))
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
 
             planet_radius = 60000
@@ -311,11 +315,12 @@ for file_path in full_files_path:
 
 
             for point_to_convert in points_to_tests_for_regions_bounds:
-                if(point_to_convert==[]):
-                    points_to_tests_for_regions_bounds.remove(point_to_convert)
-                    continue
+                # if(point_to_convert==[]):
+                #     points_to_tests_for_regions_bounds.remove(point_to_convert)
+                #     print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+                #     continue
                 # print("=================================")
-                # print("point_to_convert:",point_to_convert)
+                print("point_to_convert:",point_to_convert)
                 gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
                 # print("gen_ed_v3d:",gen_ed_v3d)
                 # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
