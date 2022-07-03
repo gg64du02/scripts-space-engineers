@@ -108,6 +108,15 @@ def generated_gps_point_on_cube_function(pointPixel, faceNumber, planet_radius):
     return generated_gps_point_on_cube
 
 def whichFaceIsIt(file_path):
+
+    # // 0 is back
+    # // 1 is down
+    #
+    # // 2 is front
+    # // 3 is left
+    #
+    # // 4 is right
+    # // 5 is up
     numbersFaces = [0,1,2,3,4,5]
     namesFaces = ["back","down", "front","left" , "right","up"]
 
@@ -128,17 +137,6 @@ for file_path in full_files_path:
 
     img_inverted = np.invert(img)
 
-
-    # // 0 is back
-    # // 1 is down
-    #
-    # // 2 is front
-    # // 3 is left
-    #
-    # // 4 is right
-    # // 5 is up
-
-
     # # plt.imshow(img,cmap='gray')
     # plt.imshow(img_inverted,cmap='gray')
     # plt.show()
@@ -155,162 +153,185 @@ for file_path in full_files_path:
     # print(img_inverted[i][j])
     # print(img[i][j])
 
-    labeled = measure.label(img_inverted, background=False, connectivity=1)
-    # labeled = measure.label(img, background=False, connectivity=1)
+    # 32* 64 = 2048
+    # we don't need to test every pixel to detect regions
+    for i in range(0,64):
+        for j in range(0,64):
 
-    # label = labeled[i, j]
-    label = labeled[0, 0]
+            if(img_inverted[i*32,j*32]==0):
+                # print("pixel skipped")
+                continue
 
-    # y,x
-    # label = labeled[1245,91]
+            labeled = measure.label(img_inverted, background=False, connectivity=1)
+            # labeled = measure.label(img, background=False, connectivity=1)
 
-    rp = measure.regionprops(labeled)
-    # todo: debug(crash): check why: props = rp[label - 1]  # background is labeled 0, not in rp IndexError: list index out of range
-    props = rp[label - 1]  # background is labeled 0, not in rp
-    # props.bbox  # (min_row, min_col, max_row, max_col)
-    # props.image  # array matching the bbox sub-image
-    # print(len(props.coords))  # list of (row,col) pixel indices
-    regionSize = len(props.coords)
-    print("regionSize", regionSize)
+            label = labeled[i*32, j*32]
+            # label = labeled[j,j]
+            # label = labeled[0, 0]
 
-    print("props.bbox:",props.bbox)
+            # y,x
+            # label = labeled[1245,91]
 
-    # relevant infos for the TA auto pilot
-    print("props.centroid_local:",props.centroid_local)
-    planetRegionIndexFace += 1
-    print("planetRegionIndexFace:",planetRegionIndexFace)
+            rp = measure.regionprops(labeled)
+            # todo: debug(crash): check why: props = rp[label - 1]  # background is labeled 0, not in rp IndexError: list index out of range
+            props = rp[label - 1]  # background is labeled 0, not in rp
+            # props.bbox  # (min_row, min_col, max_row, max_col)
+            # props.image  # array matching the bbox sub-image
+            # print(len(props.coords))  # list of (row,col) pixel indices
+            regionSize = len(props.coords)
+            # print("regionSize", regionSize)
+            # print("[j, j]",[j, j])
 
-    # props.image[:, 0] vertical
-    # props.image[0, :] horizontal
-    # props.image[:,2047]
+            if(regionSize<10000):
+                for point in props.coords:
+                    img_inverted[point[0],point[1]] = 0;
+                continue
 
-    left_top = []
-    left_bot = []
-    right_top = []
-    right_bot = []
+            print("props.bbox:",props.bbox)
 
-    bot_right = []
-    bot_left = []
-    top_right = []
-    top_left = []
+            # relevant infos for the TA auto pilot
+            print("props.centroid_local:",props.centroid_local)
+            planetRegionIndexFace += 1
+            print("planetRegionIndexFace:",planetRegionIndexFace)
 
-    print("img[0,0]:",img[0,0])
-    print("img_inverted[0,0]:",img_inverted[0,0])
+            # props.image[:, 0] vertical
+            # props.image[0, :] horizontal
+            # props.image[:,2047]
 
-    print("props.bbox:",props.bbox)
-    # props.bbox: (1114, 0, 1405, 300)
-    # props.bbox: (y_0, x_0, y_1, x_1)
+            left_top = []
+            left_bot = []
+            right_top = []
+            right_bot = []
 
-    y_0 = props.bbox[0]
-    x_0 = props.bbox[1]
-    y_1 = props.bbox[2]
-    x_1 = props.bbox[3]
+            bot_right = []
+            bot_left = []
+            top_right = []
+            top_left = []
 
-    availiablePathRet = np.zeros((2048,2048))
+            print("img[0,0]:",img[0,0])
+            print("img[i,j]:",img[i,j])
+            print("img_inverted[0,0]:",img_inverted[0,0])
+            print("img_inverted[i,j]:",img_inverted[i,j])
 
-    print("map:putting the coords into a map")
+            print("props.bbox:",props.bbox)
+            # props.bbox: (1114, 0, 1405, 300)
+            # props.bbox: (y_0, x_0, y_1, x_1)
 
-    tmpI = 0
+            y_0 = props.bbox[0]
+            x_0 = props.bbox[1]
+            y_1 = props.bbox[2]
+            x_1 = props.bbox[3]
 
-    connectedCoords = props.coords
-    for coord in connectedCoords:
-        availiablePathRet[coord[0],coord[1]] = 1
-        # tmpI=tmpI+1
-        # if(tmpI%100000==0):
-        #     print(tmpI," done")
+            availiablePathRet = np.zeros((2048,2048))
 
-    print("map:finished putting the coords into a")
+            print("map:putting the coords into a map")
 
+            tmpI = 0
 
-    if(x_0==0):
-        print("bounding box is on the left line")
-        for tmpK in range(0,2048,1):
-            if(availiablePathRet[tmpK,0]==1):
-                if(left_top==[]):
-                    left_top=[tmpK,0]
-        for tmpK in range(2047,0,-1):
-            if(availiablePathRet[tmpK,0]==1):
-                if(left_bot==[]):
-                    left_bot=[tmpK,0]
+            connectedCoords = props.coords
+            for coord in connectedCoords:
+                availiablePathRet[coord[0],coord[1]] = 1
+                # tmpI=tmpI+1
+                # if(tmpI%100000==0):
+                #     print(tmpI," done")
 
-    if (x_1 == 2048):
-        print("bounding box is on the right line")
-        for tmpK in range(0, 2048, 1):
-            if (availiablePathRet[tmpK, 2047] == 1):
-                if (right_top == []):
-                    right_top = [tmpK, 2047]
-        for tmpK in range(2047, 0, -1):
-            if (availiablePathRet[tmpK, 2047] == 1):
-                if (right_bot == []):
-                    right_bot = [tmpK, 2047]
-
-    if(y_0==0):
-        print("bounding box is on the top line")
-        for tmpK in range(0, 2048, 1):
-            if (availiablePathRet[0, tmpK] == 1):
-                if (top_left == []):
-                    top_left = [0, tmpK]
-        for tmpK in range(2047,0,-1):
-            if(availiablePathRet[0, tmpK]==1):
-                if(top_right==[]):
-                    top_right=[0, tmpK]
-
-    if(y_1==2048):
-        print("bounding box is on the bottom line")
-        for tmpK in range(0, 2048, 1):
-            if (availiablePathRet[0, tmpK] == 1):
-                if (bot_left == []):
-                    bot_left = [0, tmpK]
-        for tmpK in range(2047,0,-1):
-            if(availiablePathRet[0, tmpK]==1):
-                if(bot_right==[]):
-                    bot_right=[0, tmpK]
+            print("map:finished putting the coords into a")
 
 
-    print("left_top:",left_top)
-    print("left_bot:",left_bot)
-    print("right_top:",right_top)
-    print("right_bot:",right_bot)
+            if(x_0==0):
+                print("bounding box is on the left line")
+                for tmpK in range(0,2048,1):
+                    if(availiablePathRet[tmpK,0]==1):
+                        if(left_top==[]):
+                            left_top=[tmpK,0]
+                for tmpK in range(2047,0,-1):
+                    if(availiablePathRet[tmpK,0]==1):
+                        if(left_bot==[]):
+                            left_bot=[tmpK,0]
 
-    print("bot_right:",bot_right)
-    print("bot_left:",bot_left)
-    print("top_right:",top_right)
-    print("top_left:",top_left)
+            if (x_1 == 2048):
+                print("bounding box is on the right line")
+                for tmpK in range(0, 2048, 1):
+                    if (availiablePathRet[tmpK, 2047] == 1):
+                        if (right_top == []):
+                            right_top = [tmpK, 2047]
+                for tmpK in range(2047, 0, -1):
+                    if (availiablePathRet[tmpK, 2047] == 1):
+                        if (right_bot == []):
+                            right_bot = [tmpK, 2047]
 
-    # print(whichFaceIsIt(file_path))
+            if(y_0==0):
+                print("bounding box is on the top line")
+                for tmpK in range(0, 2048, 1):
+                    if (availiablePathRet[0, tmpK] == 1):
+                        if (top_left == []):
+                            top_left = [0, tmpK]
+                for tmpK in range(2047,0,-1):
+                    if(availiablePathRet[0, tmpK]==1):
+                        if(top_right==[]):
+                            top_right=[0, tmpK]
 
-    points_to_tests_for_regions_bounds = [left_top,left_bot,
-                       right_top,right_bot,
-                       bot_right,bot_left,
-                       top_right,top_left
-                       ]
-
-    planet_radius = 60000
-
-    faceNumber,faceName = whichFaceIsIt(file_path)
-
-    print("faceNumber is:",faceNumber, " ,faceName is:",faceName)
-
-
-    for point_to_convert in points_to_tests_for_regions_bounds:
-        if(point_to_convert==[]):
-            points_to_tests_for_regions_bounds.remove(point_to_convert)
-            continue
-        # print("=================================")
-        # print("point_to_convert:",point_to_convert)
-        gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
-        # print("gen_ed_v3d:",gen_ed_v3d)
-        # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
-        result_str ="" + str(faceNumber) + "_" + str(planetRegionIndexFace)+"_"+str(gen_ed_v3d[0])+","+str(gen_ed_v3d[1])+","+str(gen_ed_v3d[2])
-        print(result_str)
+            if(y_1==2048):
+                print("bounding box is on the bottom line")
+                for tmpK in range(0, 2048, 1):
+                    if (availiablePathRet[0, tmpK] == 1):
+                        if (bot_left == []):
+                            bot_left = [0, tmpK]
+                for tmpK in range(2047,0,-1):
+                    if(availiablePathRet[0, tmpK]==1):
+                        if(bot_right==[]):
+                            bot_right=[0, tmpK]
 
 
+            # print("left_top:",left_top)
+            # print("left_bot:",left_bot)
+            # print("right_top:",right_top)
+            # print("right_bot:",right_bot)
+            #
+            # print("bot_right:",bot_right)
+            # print("bot_left:",bot_left)
+            # print("top_right:",top_right)
+            # print("top_left:",top_left)
 
-    # TODO: generate data that can link region between faces
+            # print(whichFaceIsIt(file_path))
 
-    # # possible values are 0 128 255
-    # for m in range(0,2048):
-    #     if(img[m,m]==128):
-    #         print("[m,m]:",[m,m])
-    #         print("img[m,m]:",img[m,m])
+            points_to_tests_for_regions_bounds = [left_top,left_bot,
+                               right_top,right_bot,
+                               bot_right,bot_left,
+                               top_right,top_left
+                               ]
+
+            print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+
+            planet_radius = 60000
+
+            faceNumber,faceName = whichFaceIsIt(file_path)
+
+            print("faceNumber is:",faceNumber, " ,faceName is:",faceName)
+
+
+            for point_to_convert in points_to_tests_for_regions_bounds:
+                if(point_to_convert==[]):
+                    points_to_tests_for_regions_bounds.remove(point_to_convert)
+                    continue
+                # print("=================================")
+                # print("point_to_convert:",point_to_convert)
+                gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
+                # print("gen_ed_v3d:",gen_ed_v3d)
+                # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
+                result_str ="" + str(faceNumber) + "_" + str(planetRegionIndexFace)+"_"+str(gen_ed_v3d[0])+","+str(gen_ed_v3d[1])+","+str(gen_ed_v3d[2])
+                print(result_str)
+
+            # cleaning the region
+            for point in props.coords:
+                img_inverted[point[0], point[1]] = 0;
+
+
+            # TODO: generate data that can link region between faces
+
+            # # possible values are 0 128 255
+            # for m in range(0,2048):
+            #     if(img[m,m]==128):
+            #         print("[m,m]:",[m,m])
+            #         print("img[m,m]:",img[m,m])
 
