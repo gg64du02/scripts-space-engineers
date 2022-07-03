@@ -293,11 +293,16 @@ for file_path in full_files_path:
 
 
     for point_to_convert in points_to_tests_for_regions_bounds:
-        result_str = ""
-        print("=================================")
-        print("point_to_convert:",point_to_convert)
+        if(point_to_convert==[]):
+            points_to_tests_for_regions_bounds.remove(point_to_convert)
+            continue
+        # print("=================================")
+        # print("point_to_convert:",point_to_convert)
         gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
-        print("gen_ed_v3d:",gen_ed_v3d)
+        # print("gen_ed_v3d:",gen_ed_v3d)
+        # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
+        result_str ="" + str(faceNumber) + "_" + str(planetRegionIndexFace)+"_"+str(gen_ed_v3d[0])+","+str(gen_ed_v3d[1])+","+str(gen_ed_v3d[2])
+        print(result_str)
 
 
 
