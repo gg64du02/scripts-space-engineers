@@ -39,6 +39,12 @@ from pathlib import Path
 #     print(fileNamePath, "does not exist")
 
 
+# Pertam stock ?
+# planet_radius = 30000 #in meters
+center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
+# testThisGPSnpArray = np.asarray([-3937194.48,-31541.38,-764329.95])
+
+
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
@@ -128,6 +134,12 @@ def whichFaceIsIt(file_path):
             faceNumber, faceName = faceIndex, namesFaces[faceIndex]
 
     return faceNumber,faceName
+
+def convertArraryToGPSString(name,arrayOfThree):
+    # GPS: eaDesert: 58189.34:-7111: -24526.78:  # FF75C9F1:
+    tmpGpsString = "GPS: "+str(name)+ ":" + str(round(arrayOfThree[0],1)) + ":" + \
+                   str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
+    return tmpGpsString
 
 planetRegionIndexFace = 0;
 
@@ -305,24 +317,20 @@ for file_path in full_files_path:
 
             # print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
             # removing empty list for the point list
-            points_to_tests_for_regions_bounds=list(filter(lambda x: x, points_to_tests_for_regions_bounds))
+            # points_to_tests_for_regions_bounds=list(filter(lambda x: x, points_to_tests_for_regions_bounds))
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
 
             points_to_tests_for_regions_bounds_tmp = []
-            countTmp = 0
-            valueTmp = []
-
-            print(list(filter(lambda x: not x in points_to_tests_for_regions_bounds[:-1],points_to_tests_for_regions_bounds)))
-
 
             for p in points_to_tests_for_regions_bounds:
                 if(p not in points_to_tests_for_regions_bounds_tmp):
                     points_to_tests_for_regions_bounds_tmp.append(p)
 
-            print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
+            # print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
             points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp
+            print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
 
-            planet_radius = 60000
+            planet_radius = 30000
 
             faceNumber,faceName = whichFaceIsIt(file_path)
 
@@ -330,17 +338,27 @@ for file_path in full_files_path:
 
 
             for point_to_convert in points_to_tests_for_regions_bounds:
-                # if(point_to_convert==[]):
-                #     points_to_tests_for_regions_bounds.remove(point_to_convert)
-                #     print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
-                #     continue
+                if(point_to_convert==[]):
+                    continue
                 # print("=================================")
                 # print("point_to_convert:",point_to_convert)
                 gen_ed_v3d = generated_gps_point_on_cube_function(point_to_convert,faceNumber,planet_radius)
                 # print("gen_ed_v3d:",gen_ed_v3d)
                 # print("" + str(faceNumber) + "_" + str(planetRegionIndexFace))
-                result_str ="" + str(faceNumber) + "_" + str(planetRegionIndexFace)+"_"+str(gen_ed_v3d[0])+","+str(gen_ed_v3d[1])+","+str(gen_ed_v3d[2])
-                print(result_str)
+                # result_str ="" + str(faceNumber) + "_region_" + str(planetRegionIndexFace)+"_"+str(gen_ed_v3d[0])+","+str(gen_ed_v3d[1])+","+str(gen_ed_v3d[2])
+                # print(result_str)
+                gen_ed_v3d = gen_ed_v3d + center_of_planet
+                name = str(faceNumber) + "_region_" + str(planetRegionIndexFace)
+                print(""+convertArraryToGPSString(name, gen_ed_v3d))
+
+            result_str_centroid = "" + str(faceNumber) + "_centroid_" + str(planetRegionIndexFace) + "_" + str( props.centroid_local[0]) + "," + str(props.centroid_local[1])
+            print(result_str_centroid)
+
+            # TODO: generate GPS to display them ingame to check the bounderies
+            # TODO: should region linking be generated through the string list ? (ingame or in py ?)
+            # ingame: upon script init
+            # this would allow to temper and add "bridge" regions
+            # py: making the generated list ?
 
             # cleaning the region
             for point in props.coords:
