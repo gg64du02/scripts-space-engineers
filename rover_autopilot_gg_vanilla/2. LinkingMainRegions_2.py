@@ -58,8 +58,19 @@ for line1 in lines:
         if(magnitude<50):
             if(line1!=line2):
                 # print("if(magnitude<50):")
-                print(line1,line2)
 
-        pass
+                substrings_line1 = name1.split("_")
+                region1_number = float(substrings_line1[2])
+                # print("region1_number:"+str(region1_number))
+
+                substrings_line2 = name2.split("_")
+                region2_number = float(substrings_line2[2])
+                # print("region2_number:"+str(region2_number))
+
+                if(region1_number>region2_number):
+                    # print(line1+line2)
+                    # print(name1, name2)
+                    # print(region1_number, region2_number)
+                    print(str(region1_number)+"->"+str(region2_number))
 
 
