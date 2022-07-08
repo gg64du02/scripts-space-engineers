@@ -40,6 +40,8 @@ with open('gpss_regions_pertam.txt') as f:
 
 f.close()
 
+linked_regions_str = []
+
 count = 0
 for line1 in lines:
     count += 1
@@ -71,6 +73,22 @@ for line1 in lines:
                     # print(line1+line2)
                     # print(name1, name2)
                     # print(region1_number, region2_number)
-                    print(str(region1_number)+"->"+str(region2_number))
 
+                    # print(str(region1_number)+"<->"+str(region2_number))
 
+                    tmp = str(region1_number)+"<->"+str(region2_number)
+
+                    if(tmp not in linked_regions_str):
+                        linked_regions_str.append(tmp)
+
+                    #TODO: sort and uniq
+
+# make a list of region linked list
+for p in linked_regions_str:
+    print(p)
+
+# make a polygon around a region
+
+# get the face and check the region existing within this face
+
+# detect if a point is within a polygon and get the region number
