@@ -48,9 +48,9 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-# files = {"back_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -149,14 +149,6 @@ for file_path in full_files_path:
 
     img_inverted = np.invert(img)
 
-    # # plt.imshow(img,cmap='gray')
-    # plt.imshow(img_inverted,cmap='gray')
-    # plt.show()
-    # img.close()
-    # exit()
-    # img.delete()
-    # continue
-
     # # top
     # for i in range(0,2048):
     #     j=0
@@ -164,6 +156,14 @@ for file_path in full_files_path:
 
     # print(img_inverted[i][j])
     # print(img[i][j])
+
+    # plt.imshow(img,cmap='gray')
+    # # plt.imshow(img_inverted,cmap='gray')
+    # plt.show()
+    # img.close()
+    # exit()
+    # # img.delete()
+    # # continue
 
     # 32* 64 = 2048
     # we don't need to test every pixel to detect regions
@@ -206,9 +206,30 @@ for file_path in full_files_path:
             planetRegionIndexFace += 1
             print("planetRegionIndexFace:",planetRegionIndexFace)
 
+            # skimage.measure.find_contours()
+
+            # test_approx = measure.approximate_polygon(props.coords,0.02)
+            #
+            # pass
+            # # for test_p in test_approx:
+            # #     print("test_p:"+test_p)
+            # print("test_p:")
+            # pass
+            #
+            # exit()
+
+
             # props.image[:, 0] vertical
             # props.image[0, :] horizontal
             # props.image[:,2047]
+
+            # plt.imshow(img,cmap='gray')
+            # # plt.imshow(img_inverted,cmap='gray')
+            # plt.show()
+            # img.close()
+            # exit()
+            # # img.delete()
+            # # continue
 
             left_top = []
             left_bot = []
@@ -307,10 +328,15 @@ for file_path in full_files_path:
 
             # print(whichFaceIsIt(file_path))
 
+            # points_to_tests_for_regions_bounds = [left_top,left_bot,
+            #                    right_top,right_bot,
+            #                    bot_right,bot_left,
+            #                    top_right,top_left
+            #                    ]
             points_to_tests_for_regions_bounds = [left_top,left_bot,
-                               right_top,right_bot,
-                               bot_right,bot_left,
-                               top_right,top_left
+                               bot_left,bot_right,
+                               right_bot,right_top,
+                               top_left,top_right
                                ]
             # lst = [[1, 2, 3], [1, 2], [], [], [], [1, 2, 3, 4], [], []]
 
@@ -324,11 +350,82 @@ for file_path in full_files_path:
 
             for p in points_to_tests_for_regions_bounds:
                 if(p not in points_to_tests_for_regions_bounds_tmp):
-                    points_to_tests_for_regions_bounds_tmp.append(p)
+                    if([] != p):
+                        points_to_tests_for_regions_bounds_tmp.append(p)
+            # if([] in points_to_tests_for_regions_bounds):
+            #     points_to_tests_for_regions_bounds.remove([])
 
             # print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
             points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
+
+            # Find contours at a constant value of 0.8
+            # contours = measure.find_contours(img, 0.8)
+            # Find contours at a constant value of 0.8
+            contours = measure.find_contours(img_inverted, 1)
+
+            print("len(contours):+"+str(len(contours)))
+
+            region_contour_points_list = []
+            points_to_test_in_region_contour = points_to_tests_for_regions_bounds
+
+            move_on_to_next_point = False
+
+            result_polygon_region = []
+            # result_polygon_region = [[0,0]]
+
+            # result_polygon_region = [[0,2047],[0,0]]
+            # result_polygon_region = [[0,2047],[0,0],[1130,0]]
+            # result_polygon_region = np.reshape(result_polygon_region,(3,2))
+            result_polygon_region = [[0,2047]]
+
+            for contour in contours:
+                if(len(contour)>200):
+                    # contour is an array of points (4k,2)
+                    pass
+                    for point in points_to_test_in_region_contour:
+                        # point are (2,)
+                        if(point!=[]):
+                            if(point in contour):
+                                pass
+                                print("matched point:"+str(point))
+                                print("len(contour):" + str(len(contour)))
+                                print("removing the point")
+                                points_to_tests_for_regions_bounds.remove(point)
+                                if(result_polygon_region==[]):
+                                    print("point:"+str(point))
+                                    result_polygon_region = np.reshape(point,(1,2))
+                                result_polygon_region = np.concatenate((result_polygon_region,contour),axis=0)
+                                break
+                                pass
+
+                            else:
+                                result_polygon_region = np.concatenate((result_polygon_region, np.reshape(point, (1, 2))),axis=0)
+
+            print("str(len(result_polygon_region)):"+str(len(result_polygon_region)))
+
+            # check the type of contour and make a merge with the same type
+
+            # for contour in contours:
+            #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
+            #     # if()
+            # for polyPoint in result_polygon_region:
+            if(len(result_polygon_region)>1):
+                # Display the image and plot all contours found
+                fig, ax = plt.subplots()
+                ax.imshow(img_inverted, cmap=plt.cm.gray)
+                # # debug
+                # result_polygon_region = points_to_tests_for_regions_bounds
+                ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=1)
+
+                ax.axis('image')
+                ax.set_xticks([])
+                ax.set_yticks([])
+                plt.show()
+
+            # exit()
+            #
+            # del contours
 
             planet_radius = 30000
 
