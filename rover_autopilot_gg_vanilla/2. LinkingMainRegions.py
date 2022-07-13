@@ -170,11 +170,17 @@ for file_path in full_files_path:
     for i in range(0,64):
         for j in range(0,64):
 
+            # img_inverted[1, 1] = 0
+            # img_inverted[2,2] = 127
+            # # # possible values are 0 128 255
+
             if(img_inverted[i*32,j*32]==0):
                 # print("pixel skipped")
                 continue
+                # break
 
             labeled = measure.label(img_inverted, background=False, connectivity=1)
+            # labeled = measure.label(img_inverted, background=0, connectivity=1)
             # labeled = measure.label(img, background=False, connectivity=1)
 
             label = labeled[i*32, j*32]
@@ -194,7 +200,8 @@ for file_path in full_files_path:
             # print("regionSize", regionSize)
             # print("[j, j]",[j, j])
 
-            if(regionSize<10000):
+            # if(regionSize<10000):
+            if(regionSize<52000):
                 for point in props.coords:
                     img_inverted[point[0],point[1]] = 0;
                 continue
@@ -327,7 +334,8 @@ for file_path in full_files_path:
             points_to_tests_for_regions_bounds = [left_top,left_bot,
                                bot_left,bot_right,
                                right_bot,right_top,
-                               top_left,top_right
+                               top_right,top_left
+                               # top_left,top_right
                                ]
 
             # print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
@@ -349,8 +357,11 @@ for file_path in full_files_path:
             # Find contours at a constant value of 0.8
             # contours = measure.find_contours(img, 0.8)
             # Find contours at a constant value of 0.8
-            contours = measure.find_contours(img_inverted, 1)
-            # contours = measure.find_contours(img, 1)
+            # contours = measure.find_contours(img_inverted, 1)
+            # contours = measure.find_contours(img_inverted, 255)
+            # contours = measure.find_contours(img_inverted, 0.9)
+            # contours = measure.find_contours(img_inverted, 10)
+            contours = measure.find_contours(img, 1)
 
             print("len(contours):+"+str(len(contours)))
 
@@ -381,7 +392,9 @@ for file_path in full_files_path:
             #         for point in points_to_test_in_region_contour:
             #             # point are (2,)
             #             if(point!=[]):
-            #                 if(point in contour):
+            #                 print("1str(contour[len(contour)-1]:"+str(contour[len(contour)-1]))
+            #                 if(point in np.round(contour,0)):
+            #                     print("2str(contour[len(contour)-1]:"+str(contour[len(contour)-1]))
             #                     pass
             #                     print("matched point:"+str(point))
             #                     print("len(contour):" + str(len(contour)))
@@ -391,10 +404,13 @@ for file_path in full_files_path:
             #                         print("point:"+str(point))
             #                         result_polygon_region = np.reshape(point,(1,2))
             #                     result_polygon_region = np.concatenate((result_polygon_region,contour),axis=0)
+            #                     # if(not(contour in result_polygon_region)):
+            #                     #     result_polygon_region = np.concatenate((result_polygon_region, contour), axis=0)
             #                     break
             #                     pass
             #
             #                 else:
+            #                     # not if(point in contour):
             #                     result_polygon_region = np.concatenate((result_polygon_region, np.reshape(point, (1, 2))),axis=0)
 
             for pi in points_to_tests_for_regions_bounds:
@@ -426,7 +442,7 @@ for file_path in full_files_path:
             #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
             #     # if()
             # for polyPoint in result_polygon_region:
-            if(len(result_polygon_region)>1):
+            if(len(result_polygon_region)>2):
                 # Display the image and plot all contours found
                 fig, ax = plt.subplots()
                 ax.imshow(img_inverted, cmap=plt.cm.gray)
