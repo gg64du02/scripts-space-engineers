@@ -149,21 +149,9 @@ for file_path in full_files_path:
 
     img_inverted = np.invert(img)
 
-    # # top
-    # for i in range(0,2048):
-    #     j=0
-    #     print("i,j:",i,j)
+    contours = measure.find_contours(img, 1)
 
-    # print(img_inverted[i][j])
-    # print(img[i][j])
-
-    # plt.imshow(img,cmap='gray')
-    # # plt.imshow(img_inverted,cmap='gray')
-    # plt.show()
-    # img.close()
-    # exit()
-    # # img.delete()
-    # # continue
+    print("len(contours):+" + str(len(contours)))
 
     # 32* 64 = 2048
     # we don't need to test every pixel to detect regions
@@ -212,10 +200,6 @@ for file_path in full_files_path:
             print("props.centroid_local:",props.centroid_local)
             planetRegionIndexFace += 1
             print("planetRegionIndexFace:",planetRegionIndexFace)
-
-            # skimage.measure.find_contours()
-
-
 
             # props.image[:, 0] vertical
             # props.image[0, :] horizontal
@@ -354,39 +338,19 @@ for file_path in full_files_path:
             points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
 
-            # Find contours at a constant value of 0.8
-            # contours = measure.find_contours(img, 0.8)
-            # Find contours at a constant value of 0.8
-            # contours = measure.find_contours(img_inverted, 1)
-            # contours = measure.find_contours(img_inverted, 255)
-            # contours = measure.find_contours(img_inverted, 0.9)
-            # contours = measure.find_contours(img_inverted, 10)
-            contours = measure.find_contours(img, 1)
-
-            print("len(contours):+"+str(len(contours)))
-
             region_contour_points_list = []
             points_to_test_in_region_contour = points_to_tests_for_regions_bounds
 
-            move_on_to_next_point = False
+            move_on_to_next_region = False
 
             # result_polygon_region = [[]]
             # result_polygon_region = [[0,0]]
-
-            # result_polygon_region = [[0,2047],[0,0]]
-            # result_polygon_region = [[0,2047],[0,0],[1130,0]]
-            # result_polygon_region = np.reshape(result_polygon_region,(3,2))
-            # result_polygon_region = [[0,2047]]
             # result_polygon_region = [[50,50]]
             result_polygon_region = [[50,50]]
             result_polygon_region = np.reshape(result_polygon_region,(1,2))
-            # result_polygon_region = np.delete([0,0],[])
-            # print(type(result_polygon_region))
-
-
 
             # for contour in contours:
-            #     if(len(contour)>200):
+            #     if(len(contour)>4000):
             #         # contour is an array of points (4k,2)
             #         pass
             #         for point in points_to_test_in_region_contour:
@@ -406,12 +370,18 @@ for file_path in full_files_path:
             #                     result_polygon_region = np.concatenate((result_polygon_region,contour),axis=0)
             #                     # if(not(contour in result_polygon_region)):
             #                     #     result_polygon_region = np.concatenate((result_polygon_region, contour), axis=0)
+            #                     move_on_to_next_region = True
+            #                     contours.remove(contour)
             #                     break
             #                     pass
             #
             #                 else:
             #                     # not if(point in contour):
             #                     result_polygon_region = np.concatenate((result_polygon_region, np.reshape(point, (1, 2))),axis=0)
+            #             if(move_on_to_next_region == True):
+            #                 break
+            #     if (move_on_to_next_region == True):
+            #         break
 
             for pi in points_to_tests_for_regions_bounds:
                 result_polygon_region = np.concatenate((result_polygon_region, np.reshape(pi, (1, 2))), axis=0)
@@ -457,8 +427,6 @@ for file_path in full_files_path:
                 plt.show()
 
             # exit()
-            #
-            # del contours
 
             planet_radius = 30000
 
