@@ -391,7 +391,9 @@ for file_path in full_files_path:
                     # print("2len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
                 contourTmp.remove(tmpContour)
 
-            # result_polygon_region = np.concatenate((result_polygon_region, np.reshape([512,512], (1, 2))), axis=0)
+            if(np.array_equal(result_polygon_region[0],[50,50])==True):
+                print("if(result_polygon_region[0]==[50,50]):")
+                result_polygon_region[0]=result_polygon_region[len(result_polygon_region)-1]
 
             print("str(len(result_polygon_region)):"+str(len(result_polygon_region)))
 
