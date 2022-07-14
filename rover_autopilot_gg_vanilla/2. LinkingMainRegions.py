@@ -141,6 +141,19 @@ def convertArraryToGPSString(name,arrayOfThree):
                    str(round(arrayOfThree[1],1)) + ":" + str(round(arrayOfThree[2],1)) + ":#F175DC:"
     return tmpGpsString
 
+def isThisPointNearThisContour(pointToTest,contourToTestAgainst):
+
+    for contourPoint in contourToTestAgainst:
+        tmpPointContour = [contourPoint[0],contourPoint[1]]
+        # aka l2 norm
+        distanceEuclidian = np.linalg.norm(contourPoint-pointToTest)
+        # print("distanceEuclidian:"+str(distanceEuclidian))
+        if(distanceEuclidian<5):
+            return True
+
+    return False
+
+
 planetRegionIndexFace = 0;
 
 for file_path in full_files_path:
@@ -335,11 +348,11 @@ for file_path in full_files_path:
                         points_to_tests_for_regions_bounds_tmp.append(p)
 
             # print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
-            points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp
+            points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp.copy()
             print("points_to_tests_for_regions_bounds",points_to_tests_for_regions_bounds)
 
             region_contour_points_list = []
-            points_to_test_in_region_contour = points_to_tests_for_regions_bounds
+            points_to_test_in_region_contour = points_to_tests_for_regions_bounds.copy()
 
             move_on_to_next_region = False
 
@@ -349,42 +362,34 @@ for file_path in full_files_path:
             result_polygon_region = [[50,50]]
             result_polygon_region = np.reshape(result_polygon_region,(1,2))
 
-            # for contour in contours:
-            #     if(len(contour)>4000):
-            #         # contour is an array of points (4k,2)
-            #         pass
-            #         for point in points_to_test_in_region_contour:
-            #             # point are (2,)
-            #             if(point!=[]):
-            #                 print("1str(contour[len(contour)-1]:"+str(contour[len(contour)-1]))
-            #                 if(point in np.round(contour,0)):
-            #                     print("2str(contour[len(contour)-1]:"+str(contour[len(contour)-1]))
-            #                     pass
-            #                     print("matched point:"+str(point))
-            #                     print("len(contour):" + str(len(contour)))
-            #                     print("removing the point")
-            #                     points_to_tests_for_regions_bounds.remove(point)
-            #                     if(result_polygon_region==[]):
-            #                         print("point:"+str(point))
-            #                         result_polygon_region = np.reshape(point,(1,2))
-            #                     result_polygon_region = np.concatenate((result_polygon_region,contour),axis=0)
-            #                     # if(not(contour in result_polygon_region)):
-            #                     #     result_polygon_region = np.concatenate((result_polygon_region, contour), axis=0)
-            #                     move_on_to_next_region = True
-            #                     contours.remove(contour)
-            #                     break
-            #                     pass
-            #
-            #                 else:
-            #                     # not if(point in contour):
-            #                     result_polygon_region = np.concatenate((result_polygon_region, np.reshape(point, (1, 2))),axis=0)
-            #             if(move_on_to_next_region == True):
-            #                 break
-            #     if (move_on_to_next_region == True):
-            #         break
+            contourTmp = contours.copy()
 
-            for pi in points_to_tests_for_regions_bounds:
-                result_polygon_region = np.concatenate((result_polygon_region, np.reshape(pi, (1, 2))), axis=0)
+            while(contourTmp):
+                tmpContour = contourTmp[0]
+                if(len(tmpContour)>2000):
+                    # contour is an array of points (4k,2)
+                    # print("len(tmpContour):"+str(len(tmpContour)))
+                    while(points_to_tests_for_regions_bounds):
+                        po = points_to_tests_for_regions_bounds[0]
+                        # print("1len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
+                        # print("1len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
+                        # if(po not in result_polygon_region):
+                        if(po!=[]):
+                            # isNear should be a bool
+                            # print("po:"+str(po))
+                            isNear = isThisPointNearThisContour(po,tmpContour)
+                            # print("isNear:"+str(isNear))
+                            if(isNear==True):
+                                print("if(isNear==True):")
+                                result_polygon_region = np.concatenate((result_polygon_region,tmpContour),axis=0)
+                            else:
+                                print("not if(isNear==True):")
+                                result_polygon_region = np.concatenate((result_polygon_region, np.reshape(po, (1, 2))), axis=0)
+                        points_to_tests_for_regions_bounds.remove(po)
+                    points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp.copy()
+                    print("2len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
+                    # print("2len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
+                contourTmp.remove(tmpContour)
 
             # result_polygon_region = np.concatenate((result_polygon_region, np.reshape(points_to_tests_for_regions_bounds[0], (1, 2))), axis=0)
             if(points_to_tests_for_regions_bounds!=[]):
@@ -418,7 +423,7 @@ for file_path in full_files_path:
                 ax.imshow(img_inverted, cmap=plt.cm.gray)
                 # # debug
                 # result_polygon_region = points_to_tests_for_regions_bounds
-                ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=1)
+                ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
                 # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
 
                 ax.axis('image')
