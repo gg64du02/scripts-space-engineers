@@ -368,33 +368,30 @@ for file_path in full_files_path:
                 tmpContour = contourTmp[0]
                 if(len(tmpContour)>2000):
                     # contour is an array of points (4k,2)
-                    # print("len(tmpContour):"+str(len(tmpContour)))
+                    print("len(tmpContour):"+str(len(tmpContour)))
                     while(points_to_tests_for_regions_bounds):
                         po = points_to_tests_for_regions_bounds[0]
-                        # print("1len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
+                        print("1len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
                         # print("1len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
-                        # if(po not in result_polygon_region):
                         if(po!=[]):
                             # isNear should be a bool
                             # print("po:"+str(po))
                             isNear = isThisPointNearThisContour(po,tmpContour)
                             # print("isNear:"+str(isNear))
                             if(isNear==True):
-                                print("if(isNear==True):")
+                                # print("if(isNear==True):")
                                 result_polygon_region = np.concatenate((result_polygon_region,tmpContour),axis=0)
                             else:
-                                print("not if(isNear==True):")
+                                pass
+                                # print("not if(isNear==True):")
                                 result_polygon_region = np.concatenate((result_polygon_region, np.reshape(po, (1, 2))), axis=0)
                         points_to_tests_for_regions_bounds.remove(po)
                     points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp.copy()
-                    print("2len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
+                    # print("2len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
                     # print("2len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
                 contourTmp.remove(tmpContour)
 
-            # result_polygon_region = np.concatenate((result_polygon_region, np.reshape(points_to_tests_for_regions_bounds[0], (1, 2))), axis=0)
-            if(points_to_tests_for_regions_bounds!=[]):
-                # result_polygon_region = np.concatenate((result_polygon_region, np.reshape(result_polygon_region[0], (1, 2))), axis=0)
-                result_polygon_region[0] = result_polygon_region[len(result_polygon_region)-1]
+            # result_polygon_region = np.concatenate((result_polygon_region, np.reshape([512,512], (1, 2))), axis=0)
 
             print("str(len(result_polygon_region)):"+str(len(result_polygon_region)))
 
