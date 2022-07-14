@@ -48,9 +48,9 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-files = {"back_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -363,33 +363,47 @@ for file_path in full_files_path:
             result_polygon_region = np.reshape(result_polygon_region,(1,2))
 
             contourTmp = contours.copy()
+            contourTmpThatCanStillBeAdded = contours.copy()
 
-            while(contourTmp):
-                tmpContour = contourTmp[0]
-                if(len(tmpContour)>2000):
-                    # contour is an array of points (4k,2)
-                    print("len(tmpContour):"+str(len(tmpContour)))
-                    while(points_to_tests_for_regions_bounds):
-                        po = points_to_tests_for_regions_bounds[0]
-                        print("1len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
-                        # print("1len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
-                        if(po!=[]):
+            while (points_to_tests_for_regions_bounds):
+                po = points_to_tests_for_regions_bounds[0]
+                print("1len(points_to_tests_for_regions_bounds):" + str(len(points_to_tests_for_regions_bounds)))
+                # print("1len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
+                isAnyPointCloseToAnyContour = False
+                if (po != []):
+                    while (contourTmp):
+                        tmpContour = contourTmp[0]
+                        if (len(tmpContour) > 2000):
+                            # contour is an array of points (4k,2)
+                            print("len(tmpContour):" + str(len(tmpContour)))
                             # isNear should be a bool
                             # print("po:"+str(po))
-                            isNear = isThisPointNearThisContour(po,tmpContour)
+                            isNear = isThisPointNearThisContour(po, tmpContour)
                             # print("isNear:"+str(isNear))
-                            if(isNear==True):
+                            if (isNear == True):
                                 # print("if(isNear==True):")
-                                result_polygon_region = np.concatenate((result_polygon_region,tmpContour),axis=0)
+                                # result_polygon_region = np.concatenate((result_polygon_region, tmpContour), axis=0)
+                                isAnyPointCloseToAnyContour = True
+                                break
                             else:
                                 pass
                                 # print("not if(isNear==True):")
-                                result_polygon_region = np.concatenate((result_polygon_region, np.reshape(po, (1, 2))), axis=0)
-                        points_to_tests_for_regions_bounds.remove(po)
-                    points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp.copy()
-                    # print("2len(points_to_tests_for_regions_bounds):"+str(len(points_to_tests_for_regions_bounds)))
-                    # print("2len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
-                contourTmp.remove(tmpContour)
+                                # result_polygon_region = np.concatenate((result_polygon_region, np.reshape(po, (1, 2))), axis=0)
+                        # if(isAnyPointCloseToAnyContour==True):
+                        #     result_polygon_region = np.concatenate((result_polygon_region, tmpContour), axis=0)
+                        contourTmp.remove(tmpContour)
+                    # contourTmp = contours.copy()
+                    contourTmp = contourTmpThatCanStillBeAdded
+                points_to_tests_for_regions_bounds.remove(po)
+
+                if (isAnyPointCloseToAnyContour == False):
+                    # no contour are around, we keep the point
+                    result_polygon_region = np.concatenate((result_polygon_region, np.reshape(po, (1, 2))), axis=0)
+                else:
+                    # one contour is around, we don't keep the point, we keep the contour
+                    result_polygon_region = np.concatenate((result_polygon_region, tmpContour), axis=0)
+                    contourTmpThatCanStillBeAdded.remove(tmpContour)
+
 
             if(np.array_equal(result_polygon_region[0],[50,50])==True):
                 print("if(result_polygon_region[0]==[50,50]):")
