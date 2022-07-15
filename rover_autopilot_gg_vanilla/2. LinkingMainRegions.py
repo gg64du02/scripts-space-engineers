@@ -48,9 +48,9 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-# files = {"back_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -424,6 +424,23 @@ for file_path in full_files_path:
 
             # exit()
 
+            result_polygon_region_processed =[[50,50]]
+            last_point = []
+            for processingPoint in result_polygon_region:
+                if(last_point==[]):
+                    last_point = processingPoint
+                distanceEuclidian = np.linalg.norm(last_point - processingPoint)
+                # print("distanceEuclidian:"+str(distanceEuclidian))
+                if(distanceEuclidian>16):
+                    last_point=processingPoint
+                    result_polygon_region_processed = np.concatenate((result_polygon_region_processed, np.reshape(processingPoint, (1, 2))), axis=0)
+
+            if (np.array_equal(result_polygon_region_processed[0], [50, 50]) == True):
+                print("if(result_polygon_region[0]==[50,50]):")
+                result_polygon_region_processed[0] = result_polygon_region_processed[len(result_polygon_region_processed) - 1]
+
+            print("str(len(result_polygon_region_processed)):"+str(len(result_polygon_region_processed)))
+
             # check the type of contour and make a merge with the same type
 
             # for contour in contours:
@@ -437,6 +454,7 @@ for file_path in full_files_path:
                 # # debug
                 # result_polygon_region = points_to_tests_for_regions_bounds
                 ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
+                ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
                 # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
 
                 ax.axis('image')
