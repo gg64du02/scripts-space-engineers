@@ -373,7 +373,7 @@ for file_path in full_files_path:
                 if (po != []):
                     while (contourTmp):
                         tmpContour = contourTmp[0]
-                        if (len(tmpContour) > 2000):
+                        if (len(tmpContour) > 500):
                             # contour is an array of points (4k,2)
                             print("len(tmpContour):" + str(len(tmpContour)))
                             # isNear should be a bool
@@ -384,6 +384,7 @@ for file_path in full_files_path:
                                 # print("if(isNear==True):")
                                 # result_polygon_region = np.concatenate((result_polygon_region, tmpContour), axis=0)
                                 isAnyPointCloseToAnyContour = True
+                                print("po:"+str(po))
                                 break
                             else:
                                 pass
@@ -431,7 +432,7 @@ for file_path in full_files_path:
                     last_point = processingPoint
                 distanceEuclidian = np.linalg.norm(last_point - processingPoint)
                 # print("distanceEuclidian:"+str(distanceEuclidian))
-                if(distanceEuclidian>16):
+                if(distanceEuclidian>64):
                     last_point=processingPoint
                     result_polygon_region_processed = np.concatenate((result_polygon_region_processed, np.reshape(processingPoint, (1, 2))), axis=0)
 
@@ -456,6 +457,12 @@ for file_path in full_files_path:
                 ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
                 ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
                 # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
+
+                # for contour in contours:
+                #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
+                #     if(contour[0,1]==1152):
+                #         print(contour[0])
+                #         print("oui")
 
                 ax.axis('image')
                 ax.set_xticks([])
