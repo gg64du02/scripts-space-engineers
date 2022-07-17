@@ -50,7 +50,8 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
 # files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-files = {"back_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png"}
+files = {"down_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -346,6 +347,11 @@ for file_path in full_files_path:
                 if(p not in points_to_tests_for_regions_bounds_tmp):
                     if([] != p):
                         points_to_tests_for_regions_bounds_tmp.append(p)
+
+
+            if(np.array_equal(points_to_tests_for_regions_bounds_tmp,[[0, 0], [2047, 0], [0, 2047], [2047, 2047]])==True):
+                print("Trapezoid bounding box")
+                points_to_tests_for_regions_bounds_tmp = [[0, 0], [2047, 0], [2047, 2047], [0, 2047]]
 
             # print("points_to_tests_for_regions_bounds_tmp",points_to_tests_for_regions_bounds_tmp)
             points_to_tests_for_regions_bounds = points_to_tests_for_regions_bounds_tmp.copy()
