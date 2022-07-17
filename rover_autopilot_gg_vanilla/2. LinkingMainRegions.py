@@ -48,10 +48,10 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
 # files = {"back_thres_abs_sobelxy_step1.png"}
-files = {"down_thres_abs_sobelxy_step1.png"}
+# files = {"down_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
 for file in files:
@@ -158,8 +158,15 @@ def isThisPointNearThisContour(pointToTest,contourToTestAgainst):
 planetRegionIndexFace = 0;
 
 for file_path in full_files_path:
+    print("======================================")
+    print("new file read")
     print("file_path:",file_path)
+    print("======================================")
     img = cv.imread(file_path,0)
+
+    faceNumber,faceName = whichFaceIsIt(file_path)
+
+    print("faceNumber is:",faceNumber, " ,faceName is:",faceName)
 
     img_inverted = np.invert(img)
 
@@ -373,7 +380,7 @@ for file_path in full_files_path:
 
             while (points_to_tests_for_regions_bounds):
                 po = points_to_tests_for_regions_bounds[0]
-                print("1len(points_to_tests_for_regions_bounds):" + str(len(points_to_tests_for_regions_bounds)))
+                # print("1len(points_to_tests_for_regions_bounds):" + str(len(points_to_tests_for_regions_bounds)))
                 # print("1len(points_to_tests_for_regions_bounds_tmp):"+str(len(points_to_tests_for_regions_bounds_tmp)))
                 isAnyPointCloseToAnyContour = False
                 if (po != []):
@@ -381,7 +388,7 @@ for file_path in full_files_path:
                         tmpContour = contourTmp[0]
                         if (len(tmpContour) > 500):
                             # contour is an array of points (4k,2)
-                            print("len(tmpContour):" + str(len(tmpContour)))
+                            # print("len(tmpContour):" + str(len(tmpContour)))
                             # isNear should be a bool
                             # print("po:"+str(po))
                             isNear = isThisPointNearThisContour(po, tmpContour)
@@ -390,7 +397,7 @@ for file_path in full_files_path:
                                 # print("if(isNear==True):")
                                 # result_polygon_region = np.concatenate((result_polygon_region, tmpContour), axis=0)
                                 isAnyPointCloseToAnyContour = True
-                                print("po:"+str(po))
+                                # print("po:"+str(po))
                                 break
                             else:
                                 pass
@@ -463,6 +470,8 @@ for file_path in full_files_path:
                 ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
                 ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
                 # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
+                ax.text(0.1, 0.5, faceName, horizontalalignment='center', verticalalignment='center',
+                         transform=ax.transAxes)
 
                 # for contour in contours:
                 #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
@@ -479,9 +488,6 @@ for file_path in full_files_path:
 
             planet_radius = 30000
 
-            faceNumber,faceName = whichFaceIsIt(file_path)
-
-            print("faceNumber is:",faceNumber, " ,faceName is:",faceName)
 
 
             for point_to_convert in points_to_tests_for_regions_bounds:
