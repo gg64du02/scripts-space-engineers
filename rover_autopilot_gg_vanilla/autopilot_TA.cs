@@ -432,3 +432,25 @@ public void whichFileShouldIlook(int facenumber){
 	// 5 is up
 }
 
+public class faceRegionPolygon {
+	
+	int faceNumber;
+	int regionNumber;
+	List<Vector2D> polygon;
+	Vector2D regionCentroid;
+	
+	public faceRegionPolygon(int faceNumber,int regionNumber,
+	List<Vector2D> polygon,Vector2D regionCentroid){
+		this.faceNumber = faceNumber;
+		this.regionNumber = regionNumber;
+		this.polygon = polygon;
+		this.regionCentroid = regionCentroid;
+	}
+	
+	public String ToString(){
+		return "face is:"+faceNumber + "\n" + "regionNumber is:" + regionNumber + "\n"
+		+ "regionCentroid is:" + regionCentroid;
+	}
+}
+	
+	
