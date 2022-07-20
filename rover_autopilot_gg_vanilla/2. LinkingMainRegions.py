@@ -560,3 +560,9 @@ for file_path in full_files_path:
 
 print(strPolygonCs)
 
+print("writing in txt file")
+f = open("InsertMeInProgram.txt", "a")
+# f.write("Now the file has more content!")
+f.write(strPolygonCs)
+f.close()
+print("writing done in txt file")
