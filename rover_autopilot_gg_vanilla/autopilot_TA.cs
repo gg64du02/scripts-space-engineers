@@ -255,6 +255,10 @@ public void Main(string argument, UpdateType updateSource)
 		
 	}
 	
+	List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();
+	
+
+	
 	
 	// if (!RemoteControl.IsAutoPilotEnabled) {
 	// }
@@ -439,8 +443,9 @@ public class faceRegionPolygon {
 	List<Point> polygon;
 	Point regionCentroid;
 	
-	public faceRegionPolygon(int faceNumber,int regionNumber,
-	List<Point> polygon,Point regionCentroid){
+	public faceRegionPolygon(int faceNumber,int regionNumber,Point regionCentroid,
+	List<Point> polygon
+	){
 		this.faceNumber = faceNumber;
 		this.regionNumber = regionNumber;
 		this.polygon = polygon;

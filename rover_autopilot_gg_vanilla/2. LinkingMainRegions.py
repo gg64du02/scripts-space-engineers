@@ -63,17 +63,20 @@ def generateCodeInLogAndTxtFile(faceNumber,regionNumber,regionCentroid,contourOf
     # take contourOfRegionSimplified (ndarray) and convert it
     # so it can be used in a c# code
 
-    tmpStr = ""
+    tmpStr = "//===========\n"
 
     tmpStr += "faceRegionPolygon faceRegionPolygon1 = null;\n"
 
     tmpStr += "List<Point> tmpPolygon = new List<Point>();\n"
 
     for polygonPoint in contourOfRegionSimplified:
-        tmpStr += "tmpPolygon.Add(new Point((int)"+str(polygonPoint[0])+",+(int)"+str(polygonPoint[1])+"));\n"
+        # polygonPoint = round()
+        tmpStr += "tmpPolygon.Add(new Point((int)"+str(round(polygonPoint[0],2))+",(int)"+str(round(polygonPoint[1],2))+"));\n"
 
 
-    tmpStr += "faceRegionPolygon faceRegionPolygon1 = new faceRegionPolygon("+str(faceNumber)+","+str(regionNumber)+",new Point("+str(regionCentroid[0])+","+str(regionCentroid[1])+"),tmpPolygon)\n"
+    tmpStr += "faceRegionPolygon1 = new faceRegionPolygon("+str(faceNumber)+","+str(regionNumber)+",new Point("+str(regionCentroid[0])+","+str(regionCentroid[1])+"),tmpPolygon);\n"
+
+    tmpStr += "//==========="
 
     print(tmpStr)
 
