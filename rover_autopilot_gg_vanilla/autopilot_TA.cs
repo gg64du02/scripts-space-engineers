@@ -436,11 +436,11 @@ public class faceRegionPolygon {
 	
 	int faceNumber;
 	int regionNumber;
-	List<Vector2D> polygon;
-	Vector2D regionCentroid;
+	List<Point> polygon;
+	Point regionCentroid;
 	
 	public faceRegionPolygon(int faceNumber,int regionNumber,
-	List<Vector2D> polygon,Vector2D regionCentroid){
+	List<Point> polygon,Point regionCentroid){
 		this.faceNumber = faceNumber;
 		this.regionNumber = regionNumber;
 		this.polygon = polygon;

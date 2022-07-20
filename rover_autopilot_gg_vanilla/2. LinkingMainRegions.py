@@ -48,9 +48,9 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-# files = {"back_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png"}
 # files = {"down_thres_abs_sobelxy_step1.png"}
 
 full_files_path=[]
@@ -58,6 +58,27 @@ for file in files:
     full_files_path.append(folderNameSource+file)
 print(full_files_path)
 # exit()
+
+def generateCodeInLogAndTxtFile(faceNumber,regionNumber,regionCentroid,contourOfRegionSimplified):
+    # take contourOfRegionSimplified (ndarray) and convert it
+    # so it can be used in a c# code
+
+    tmpStr = ""
+
+    tmpStr += "faceRegionPolygon faceRegionPolygon1 = null;\n"
+
+    tmpStr += "List<Point> tmpPolygon = new List<Point>();\n"
+
+    for polygonPoint in contourOfRegionSimplified:
+        tmpStr += "tmpPolygon.Add(new Point((int)"+str(polygonPoint[0])+",+(int)"+str(polygonPoint[1])+"));\n"
+
+
+    tmpStr += "faceRegionPolygon faceRegionPolygon1 = new faceRegionPolygon("+str(faceNumber)+","+str(regionNumber)+",new Point("+str(regionCentroid[0])+","+str(regionCentroid[1])+"),tmpPolygon)\n"
+
+    print(tmpStr)
+
+    return True
+
 
 def generated_gps_point_on_cube_function(pointPixel, faceNumber, planet_radius):
 
@@ -454,6 +475,10 @@ for file_path in full_files_path:
                 result_polygon_region_processed[0] = result_polygon_region_processed[len(result_polygon_region_processed) - 1]
 
             print("str(len(result_polygon_region_processed)):"+str(len(result_polygon_region_processed)))
+
+            # generateCodeInLogAndTxtFile(0,0,0,result_polygon_region_processed)
+            generateCodeInLogAndTxtFile(faceNumber,planetRegionIndexFace,props.centroid_local,result_polygon_region_processed)
+            # def generateCodeInLogAndTxtFile(faceNumber,regionNumber,regionCentroid,contourOfRegionSimplified):
 
             # check the type of contour and make a merge with the same type
 
