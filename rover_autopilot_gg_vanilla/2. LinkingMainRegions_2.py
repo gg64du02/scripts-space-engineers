@@ -35,7 +35,8 @@ def parseGPS(stringGps):
     return positionPlanetCenter,strPlanet
 
 
-with open('gpss_regions_pertam.txt') as f:
+# with open('gpss_regions_pertam.txt') as f:
+with open('InsertMeInProgram_region_bounds.txt') as f:
     lines = f.readlines()
 
 f.close()

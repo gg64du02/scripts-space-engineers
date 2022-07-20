@@ -48,14 +48,16 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 # files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-# files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
+files = {"back_thres_abs_sobelxy_step1.png","down_thres_abs_sobelxy_step1.png","front_thres_abs_sobelxy_step1.png","left_thres_abs_sobelxy_step1.png","right_thres_abs_sobelxy_step1.png","up_thres_abs_sobelxy_step1.png"}
 
-files = {"back_thres_abs_sobelxy_step1.png"}
+# files = {"back_thres_abs_sobelxy_step1.png"}
 # files = {"down_thres_abs_sobelxy_step1.png"}
 
 strPolygonCs = "List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();\n"
 strPolygonCs += "faceRegionPolygon faceRegionPolygon1 = null;\n"
 strPolygonCs += "List<Point> tmpPolygon = new List<Point>();\n"
+
+strRegionBounds = ""
 
 full_files_path=[]
 for file in files:
@@ -522,7 +524,7 @@ for file_path in full_files_path:
 
 
 
-            for point_to_convert in points_to_tests_for_regions_bounds:
+            for point_to_convert in points_to_test_in_region_contour:
                 if(point_to_convert==[]):
                     continue
                 # print("=================================")
@@ -535,6 +537,7 @@ for file_path in full_files_path:
                 gen_ed_v3d = gen_ed_v3d + center_of_planet
                 name = str(faceNumber) + "_region_" + str(planetRegionIndexFace)
                 print(""+convertArraryToGPSString(name, gen_ed_v3d))
+                strRegionBounds += ""+convertArraryToGPSString(name, gen_ed_v3d)+"\n"
 
             result_str_centroid = "" + str(faceNumber) + "_centroid_" + str(planetRegionIndexFace) + "_" + str( props.centroid_local[0]) + "," + str(props.centroid_local[1])
             print(result_str_centroid)
@@ -562,7 +565,13 @@ print(strPolygonCs)
 
 print("writing in txt file")
 f = open("InsertMeInProgram.txt", "a")
-# f.write("Now the file has more content!")
 f.write(strPolygonCs)
+f.close()
+print("writing done in txt file")
+
+
+print("writing in txt file")
+f = open("InsertMeInProgram_region_bounds.txt", "a")
+f.write(strRegionBounds)
 f.close()
 print("writing done in txt file")
