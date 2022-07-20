@@ -53,6 +53,10 @@ center_of_planet = np.asarray([-3967231.5,-32231.5,-767231.5])
 files = {"back_thres_abs_sobelxy_step1.png"}
 # files = {"down_thres_abs_sobelxy_step1.png"}
 
+strPolygonCs = "List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();\n"
+strPolygonCs += "faceRegionPolygon faceRegionPolygon1 = null;\n"
+strPolygonCs += "List<Point> tmpPolygon = new List<Point>();\n"
+
 full_files_path=[]
 for file in files:
     full_files_path.append(folderNameSource+file)
@@ -65,22 +69,22 @@ def generateCodeInLogAndTxtFile(faceNumber,regionNumber,regionCentroid,contourOf
 
     tmpStr = "//===========\n"
 
-    tmpStr += "faceRegionPolygon faceRegionPolygon1 = null;\n"
+    # tmpStr += "faceRegionPolygon faceRegionPolygon1 = null;\n"
 
-    tmpStr += "List<Point> tmpPolygon = new List<Point>();\n"
+    tmpStr += "tmpPolygon = new List<Point>();\n"
 
     for polygonPoint in contourOfRegionSimplified:
         # polygonPoint = round()
         tmpStr += "tmpPolygon.Add(new Point((int)"+str(round(polygonPoint[0],2))+",(int)"+str(round(polygonPoint[1],2))+"));\n"
 
 
-    tmpStr += "faceRegionPolygon1 = new faceRegionPolygon("+str(faceNumber)+","+str(regionNumber)+",new Point("+str(regionCentroid[0])+","+str(regionCentroid[1])+"),tmpPolygon);\n"
+    tmpStr += "faceRegionPolygon1 = new faceRegionPolygon("+str(faceNumber)+","+str(regionNumber)+",new Point((int)"+str(regionCentroid[0])+",(int)"+str(regionCentroid[1])+"),tmpPolygon);\n"
 
-    tmpStr += "//==========="
+    tmpStr += "//===========\n"
 
-    print(tmpStr)
+    # print(tmpStr)
 
-    return True
+    return tmpStr
 
 
 def generated_gps_point_on_cube_function(pointPixel, faceNumber, planet_radius):
@@ -479,9 +483,9 @@ for file_path in full_files_path:
 
             print("str(len(result_polygon_region_processed)):"+str(len(result_polygon_region_processed)))
 
-            # generateCodeInLogAndTxtFile(0,0,0,result_polygon_region_processed)
-            generateCodeInLogAndTxtFile(faceNumber,planetRegionIndexFace,props.centroid_local,result_polygon_region_processed)
-            # def generateCodeInLogAndTxtFile(faceNumber,regionNumber,regionCentroid,contourOfRegionSimplified):
+            strPolygonCs += generateCodeInLogAndTxtFile(faceNumber,planetRegionIndexFace,props.centroid_local,result_polygon_region_processed)
+
+            strPolygonCs +="faceRegionPolygonList.Add(faceRegionPolygon1);\n"
 
             # check the type of contour and make a merge with the same type
 
@@ -489,28 +493,28 @@ for file_path in full_files_path:
             #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
             #     # if()
             # for polyPoint in result_polygon_region:
-            if(len(result_polygon_region)>2):
-                # Display the image and plot all contours found
-                fig, ax = plt.subplots()
-                ax.imshow(img_inverted, cmap=plt.cm.gray)
-                # # debug
-                # result_polygon_region = points_to_tests_for_regions_bounds
-                ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
-                ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
-                # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
-                ax.text(0.1, 0.5, faceName, horizontalalignment='center', verticalalignment='center',
-                         transform=ax.transAxes)
-
-                # for contour in contours:
-                #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
-                #     if(contour[0,1]==1152):
-                #         print(contour[0])
-                #         print("oui")
-
-                ax.axis('image')
-                ax.set_xticks([])
-                ax.set_yticks([])
-                plt.show()
+            # if(len(result_polygon_region)>2):
+            #     # Display the image and plot all contours found
+            #     fig, ax = plt.subplots()
+            #     ax.imshow(img_inverted, cmap=plt.cm.gray)
+            #     # # debug
+            #     # result_polygon_region = points_to_tests_for_regions_bounds
+            #     ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
+            #     ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
+            #     # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
+            #     ax.text(0.1, 0.5, faceName, horizontalalignment='center', verticalalignment='center',
+            #              transform=ax.transAxes)
+            #
+            #     # for contour in contours:
+            #     #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
+            #     #     if(contour[0,1]==1152):
+            #     #         print(contour[0])
+            #     #         print("oui")
+            #
+            #     ax.axis('image')
+            #     ax.set_xticks([])
+            #     ax.set_yticks([])
+            #     plt.show()
 
             # exit()
 
@@ -553,4 +557,6 @@ for file_path in full_files_path:
             #     if(img[m,m]==128):
             #         print("[m,m]:",[m,m])
             #         print("img[m,m]:",img[m,m])
+
+print(strPolygonCs)
 
