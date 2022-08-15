@@ -669,8 +669,10 @@ faceRegionPolygonList.Add(faceRegionPolygon1);
 
 	Echo(""+faceRegionPolygonList.Count);
 
-
-	
+	// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
+	// foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
+		// isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
+	// }
 	
 	// if (!RemoteControl.IsAutoPilotEnabled) {
 	// }
@@ -850,9 +852,9 @@ public void whichFileShouldIlook(int facenumber){
 
 public class faceRegionPolygon {
 	
-	int faceNumber;
+	public int faceNumber;
 	int regionNumber;
-	List<Point> polygon;
+	public List<Point> polygon;
 	Point regionCentroid;
 	
 	public faceRegionPolygon(int faceNumber,int regionNumber,Point regionCentroid,
@@ -868,6 +870,47 @@ public class faceRegionPolygon {
 		return "face is:"+faceNumber + "\n" + "regionNumber is:" + regionNumber + "\n"
 		+ "regionCentroid is:" + regionCentroid;
 	}
+	
 }
 	
+public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP){
+	if(roverCurrentFaceNumber != fRP.faceNumber){
+		return false;
+	}
+	// TODO:implement this
+	bool testResultTmp = InsidePolygon(fRP.polygon, fRP.polygon.Count, currentRoverPosition);
+	Echo("testResultTmp:"+testResultTmp);
+	return testResultTmp;
+}
+
+// https://www.eecs.umich.edu/courses/eecs380/HANDOUTS/PROJ2/InsidePoly.html
+public bool InsidePolygon(List<Point> polygon,int N,Point p)
+{
+  int counter = 0;
+  int i;
+  double xinters;
+  Point p1,p2;
+
+  p1 = polygon[0];
+  for (i=1;i<=N;i++) {
+    p2 = polygon[i % N];
+    if (p.Y > Math.Min(p1.Y,p2.Y)) {
+      if (p.Y <= Math.Max(p1.Y,p2.Y)) {
+        if (p.X <= Math.Max(p1.X,p2.X)) {
+          if (p1.Y != p2.Y) {
+            xinters = (p.Y-p1.Y)*(p2.X-p1.X)/(p2.Y-p1.Y)+p1.X;
+            if (p1.X == p2.X || p.X <= xinters)
+              counter++;
+          }
+        }
+      }
+    }
+    p1 = p2;
+  }
+
+  if (counter % 2 == 0)
+    return(false);
+  else
+    return(true);
+}
 	
