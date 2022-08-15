@@ -664,6 +664,18 @@ public void Main(string argument, UpdateType updateSource)
 			myTerrainTarget = new Vector3D(0, 0, 0);
 		}
 		
+		
+		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
+		
+		Echo("faceRegionPolygonList.Count:"+faceRegionPolygonList.Count);
+		foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
+			int testedRegionNumber = faceRegionPolygonCT.regionNumber;
+			Echo("testedRegionNumber:"+testedRegionNumber);
+			bool tested = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
+			
+			
+		}
+		
 	}
 	
 
@@ -673,10 +685,6 @@ public void Main(string argument, UpdateType updateSource)
 
 	Echo(""+faceRegionPolygonList.Count);
 
-	// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
-	// foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
-		// isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
-	// }
 	
 	// if (!RemoteControl.IsAutoPilotEnabled) {
 	// }
@@ -857,7 +865,7 @@ public void whichFileShouldIlook(int facenumber){
 public class faceRegionPolygon {
 	
 	public int faceNumber;
-	int regionNumber;
+	public int regionNumber;
 	public List<Point> polygon;
 	Point regionCentroid;
 	
@@ -882,6 +890,9 @@ public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRov
 		return false;
 	}
 	// TODO:implement this
+	
+	Echo("fRP.polygon.Count:"+fRP.polygon.Count);
+	Echo("currentRoverPosition:"+currentRoverPosition);
 	bool testResultTmp = InsidePolygon(fRP.polygon, fRP.polygon.Count, currentRoverPosition);
 	Echo("testResultTmp:"+testResultTmp);
 	return testResultTmp;
@@ -894,6 +905,7 @@ public bool InsidePolygon(List<Point> polygon,int N,Point p)
   int i;
   double xinters;
   Point p1,p2;
+  
 
   p1 = polygon[0];
   for (i=1;i<=N;i++) {
@@ -911,6 +923,8 @@ public bool InsidePolygon(List<Point> polygon,int N,Point p)
     }
     p1 = p2;
   }
+  
+  Echo("counter:"+counter);
 
   if (counter % 2 == 0)
     return(false);
