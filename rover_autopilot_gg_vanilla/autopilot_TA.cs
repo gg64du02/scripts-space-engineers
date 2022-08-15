@@ -14,6 +14,8 @@ IMyRadioAntenna theAntenna = null;
 string str_to_display = "";
 
 List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();
+
+string planetRegionPolygonsLoaded = "Pertam";
 		
 public Program()
 {
@@ -581,8 +583,9 @@ public void Main(string argument, UpdateType updateSource)
 		faceAndPointOnPlanetsCalculated( RemoteControl,out facenumberCalculatedTarget,out pixelPosCalculatedTarget,true,targetV3Dabs);
 		
 		
-		Echo("facenumberCalculatedTarget:"+facenumberCalculatedTarget);
-		Echo("pixelPosCalculatedTarget:"+pixelPosCalculatedTarget);
+		// Echo("facenumberCalculatedTarget:"+facenumberCalculatedTarget);
+		Echo("FNCalculatedTarget:"+facenumberCalculatedTarget);
+		Echo("pixelPosCalcTarget:"+pixelPosCalculatedTarget);
 		
 		whichFileShouldIlook(facenumberCalculatedTarget);
 		
@@ -667,12 +670,17 @@ public void Main(string argument, UpdateType updateSource)
 		
 		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
 		
-		Echo("faceRegionPolygonList.Count:"+faceRegionPolygonList.Count);
+		Echo("faceRegionPolyList.Count:"+faceRegionPolygonList.Count);
 		foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
-			int testedRegionNumber = faceRegionPolygonCT.regionNumber;
-			Echo("testedRegionNumber:"+testedRegionNumber);
-			bool tested = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
-			
+			int RegionNumber = faceRegionPolygonCT.regionNumber;
+			bool testedRover = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
+			if(testedRover==true){
+				Echo("testedRover:RegNumber:"+RegionNumber);
+			}
+			bool testedTarget = isThisPointInThisRegion(facenumberCalculatedTarget, pixelPosCalculatedTarget, faceRegionPolygonCT);
+			if(testedTarget==true){
+				Echo("testedTarget:RegNumber:"+RegionNumber);
+			}
 			
 		}
 		
@@ -684,6 +692,9 @@ public void Main(string argument, UpdateType updateSource)
 
 
 	Echo(""+faceRegionPolygonList.Count);
+	
+	
+	Echo("planetRegionPolynsLd:"+planetRegionPolygonsLoaded);
 
 	
 	// if (!RemoteControl.IsAutoPilotEnabled) {
@@ -885,15 +896,15 @@ public class faceRegionPolygon {
 	
 }
 	
-public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP){
+public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentPointT, faceRegionPolygon fRP){
 	if(roverCurrentFaceNumber != fRP.faceNumber){
 		return false;
 	}
 	// TODO:implement this
 	
 	Echo("fRP.polygon.Count:"+fRP.polygon.Count);
-	Echo("currentRoverPosition:"+currentRoverPosition);
-	bool testResultTmp = InsidePolygon(fRP.polygon, fRP.polygon.Count, currentRoverPosition);
+	Echo("currentPointT:"+currentPointT);
+	bool testResultTmp = InsidePolygon(fRP.polygon, fRP.polygon.Count, currentPointT);
 	Echo("testResultTmp:"+testResultTmp);
 	return testResultTmp;
 }
@@ -924,7 +935,7 @@ public bool InsidePolygon(List<Point> polygon,int N,Point p)
     p1 = p2;
   }
   
-  Echo("counter:"+counter);
+  // Echo("counter:"+counter);
 
   if (counter % 2 == 0)
     return(false);
