@@ -599,6 +599,39 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("targetIsOnTheSameFace:"+targetIsOnTheSameFace);
 		
 		
+		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
+		
+		int currentRegionN = -1;
+		int targetRegionN = -1;
+		
+		Echo("faceRegionPolyList.Count:"+faceRegionPolygonList.Count);
+		foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
+			int RegionNumber = faceRegionPolygonCT.regionNumber;
+			bool testedRover = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
+			if(testedRover==true){
+				Echo("testedRover:RegNumber:"+RegionNumber);
+				currentRegionN = RegionNumber;
+			}
+			bool testedTarget = isThisPointInThisRegion(facenumberCalculatedTarget, pixelPosCalculatedTarget, faceRegionPolygonCT);
+			if(testedTarget==true){
+				Echo("testedTarget:RegNumber:"+RegionNumber);
+				targetRegionN = RegionNumber;
+			}
+		}
+		Echo("currentRegionN:"+currentRegionN);
+		Echo("targetRegionN:"+targetRegionN);
+		
+		
+		bool targetIsOnTheSameRegion = false;
+		if(currentRegionN==targetRegionN){
+			targetIsOnTheSameRegion = true;
+		}
+		else{
+			targetIsOnTheSameRegion = false;
+		}
+		Echo("targetIsSameRegion:"+targetIsOnTheSameRegion);
+		
+		
 		//getting vectors to help with angles proposals
 		Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
 		Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
@@ -668,21 +701,6 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		
 		
-		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
-		
-		Echo("faceRegionPolyList.Count:"+faceRegionPolygonList.Count);
-		foreach(faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList){
-			int RegionNumber = faceRegionPolygonCT.regionNumber;
-			bool testedRover = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
-			if(testedRover==true){
-				Echo("testedRover:RegNumber:"+RegionNumber);
-			}
-			bool testedTarget = isThisPointInThisRegion(facenumberCalculatedTarget, pixelPosCalculatedTarget, faceRegionPolygonCT);
-			if(testedTarget==true){
-				Echo("testedTarget:RegNumber:"+RegionNumber);
-			}
-			
-		}
 		
 	}
 	
@@ -691,7 +709,7 @@ public void Main(string argument, UpdateType updateSource)
 
 
 
-	Echo(""+faceRegionPolygonList.Count);
+	// Echo(""+faceRegionPolygonList.Count);
 	
 	
 	Echo("planetRegionPolynsLd:"+planetRegionPolygonsLoaded);
@@ -902,10 +920,10 @@ public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentPoi
 	}
 	// TODO:implement this
 	
-	Echo("fRP.polygon.Count:"+fRP.polygon.Count);
+	// Echo("fRP.polygon.Count:"+fRP.polygon.Count);
 	Echo("currentPointT:"+currentPointT);
 	bool testResultTmp = InsidePolygon(fRP.polygon, fRP.polygon.Count, currentPointT);
-	Echo("testResultTmp:"+testResultTmp);
+	// Echo("testResultTmp:"+testResultTmp);
 	return testResultTmp;
 }
 
