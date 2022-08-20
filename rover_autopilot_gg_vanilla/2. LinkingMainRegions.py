@@ -495,34 +495,38 @@ for file_path in full_files_path:
             #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
             #     # if()
             # for polyPoint in result_polygon_region:
-            # if(len(result_polygon_region)>2):
-            #     # Display the image and plot all contours found
-            #     fig, ax = plt.subplots()
-            #     ax.imshow(img_inverted, cmap=plt.cm.gray)
-            #     # # debug
-            #     # result_polygon_region = points_to_tests_for_regions_bounds
-            #     ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
-            #     ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
-            #     # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
-            #     ax.text(0.1, 0.5, faceName, horizontalalignment='center', verticalalignment='center',
-            #              transform=ax.transAxes)
-            #
-            #     # for contour in contours:
-            #     #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
-            #     #     if(contour[0,1]==1152):
-            #     #         print(contour[0])
-            #     #         print("oui")
-            #
-            #     ax.axis('image')
-            #     ax.set_xticks([])
-            #     ax.set_yticks([])
-            #     plt.show()
+            if(len(result_polygon_region)>2):
+                # Display the image and plot all contours found
+                fig, ax = plt.subplots()
+                ax.imshow(img_inverted, cmap=plt.cm.gray)
+                # # debug
+                # result_polygon_region = points_to_tests_for_regions_bounds
+                ax.plot(result_polygon_region[:,1], result_polygon_region[:,0], linewidth=5)
+                ax.plot(result_polygon_region_processed[:,1], result_polygon_region_processed[:,0], linewidth=5)
+                # ax.plot(test_approx[:,1], test_approx[:,0], linewidth=1)
+                ax.text(0.1, 0.5, faceName, horizontalalignment='center', verticalalignment='center',
+                         transform=ax.transAxes)
+
+                # for contour in contours:
+                #     ax.plot(contour[:, 1], contour[:, 0], linewidth=1)
+                #     if(contour[0,1]==1152):
+                #         print(contour[0])
+                #         print("oui")
+
+                ax.axis('image')
+                ax.set_xticks([])
+                ax.set_yticks([])
+                tmpSavefigFilePath = folderNameSource + str(planetRegionIndexFace) + ".png"
+                plt.savefig(tmpSavefigFilePath)
+                # plt.show()
+            # else:
+
 
             # exit()
 
             planet_radius = 30000
 
-
+            print("str(len(points_to_test_in_region_contour)):" + str(len(points_to_test_in_region_contour)))
 
             for point_to_convert in points_to_test_in_region_contour:
                 if(point_to_convert==[]):
@@ -536,6 +540,8 @@ for file_path in full_files_path:
                 # print(result_str)
                 gen_ed_v3d = gen_ed_v3d + center_of_planet
                 name = str(faceNumber) + "_region_" + str(planetRegionIndexFace)
+                if(planetRegionIndexFace==12):
+                    pass
                 print(""+convertArraryToGPSString(name, gen_ed_v3d))
                 strRegionBounds += ""+convertArraryToGPSString(name, gen_ed_v3d)+"\n"
 
@@ -563,15 +569,18 @@ for file_path in full_files_path:
 
 print(strPolygonCs)
 
-print("writing in txt file")
-f = open("InsertMeInProgram.txt", "a")
-f.write(strPolygonCs)
-f.close()
-print("writing done in txt file")
+# print("writing in txt file")
+# f = open("InsertMeInProgram.txt", "a")
+# f.write(strPolygonCs)
+# f.close()
+# print("writing done in txt file")
+#
+#
+# print("writing in txt file")
+# f = open("InsertMeInProgram_region_bounds.txt", "a")
+# f.write(strRegionBounds)
+# f.close()
+# print("writing done in txt file")
 
 
-print("writing in txt file")
-f = open("InsertMeInProgram_region_bounds.txt", "a")
-f.write(strRegionBounds)
-f.close()
-print("writing done in txt file")
+print(strRegionBounds)
