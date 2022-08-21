@@ -681,6 +681,19 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		Echo("targetIsSameRegion:"+targetIsOnTheSameRegion);
 		
+		if(targetIsOnTheSameRegion==false){
+			List<Point> testNeighrover = getAllConnectedRegions(currentRegionN);
+			
+			List<Point> testNeightarget = getAllConnectedRegions(targetRegionN);
+			
+			foreach(Point neigborRegRover in testNeighrover){
+				Echo("neigborRegRover:"+neigborRegRover);
+			}
+			
+			foreach(Point neigborRegTarget in testNeightarget){
+				Echo("neigborRegTarget:"+neigborRegTarget);
+			}
+		}
 		// TODO:implement
 		// what to do when the target and rover are not in the same region
 		
@@ -760,6 +773,8 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("regionLinkCount:" + testPointRegionsLinked.Count );
 	
 	Echo("planetRegionPolynsLd:"+planetRegionPolygonsLoaded);
+	
+	
 
 	
 	// if (!RemoteControl.IsAutoPilotEnabled) {
@@ -1006,4 +1021,18 @@ public bool InsidePolygon(List<Point> polygon,int N,Point p)
     return(false);
   else
     return(true);
+}
+
+public List<Point> getAllConnectedRegions(int regionNumber){
+	List<Point> resultNodes = new List<Point>();
+	//TODO:implement
+	foreach(Point node in testPointRegionsLinked){
+		if(node.X == regionNumber){
+			resultNodes.Add(node);
+		}
+		if(node.Y == regionNumber){
+			resultNodes.Add(node);
+		}
+	}
+	return resultNodes;
 }
