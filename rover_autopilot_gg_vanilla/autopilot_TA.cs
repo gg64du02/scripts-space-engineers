@@ -59,6 +59,141 @@ public Program()
 	tmpPolygon = new List<Point>();
 	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
 	tmpPolygon.Add(new Point((int)0.0,(int)0.0));
+	tmpPolygon.Add(new Point((int)1121.01,(int)0.0));
+	tmpPolygon.Add(new Point((int)1101.01,(int)61.0));
+	tmpPolygon.Add(new Point((int)1104.01,(int)125.0));
+	tmpPolygon.Add(new Point((int)1118.0,(int)187.99));
+	tmpPolygon.Add(new Point((int)1135.01,(int)250.0));
+	tmpPolygon.Add(new Point((int)1095.01,(int)300.0));
+	tmpPolygon.Add(new Point((int)1091.01,(int)364.0));
+	tmpPolygon.Add(new Point((int)1112.0,(int)424.99));
+	tmpPolygon.Add(new Point((int)1120.01,(int)489.0));
+	tmpPolygon.Add(new Point((int)1088.01,(int)545.0));
+	tmpPolygon.Add(new Point((int)1072.01,(int)607.0));
+	tmpPolygon.Add(new Point((int)1016.01,(int)640.0));
+	tmpPolygon.Add(new Point((int)969.0,(int)684.01));
+	tmpPolygon.Add(new Point((int)943.0,(int)742.99));
+	tmpPolygon.Add(new Point((int)935.01,(int)807.0));
+	tmpPolygon.Add(new Point((int)927.01,(int)871.0));
+	tmpPolygon.Add(new Point((int)905.01,(int)932.0));
+	tmpPolygon.Add(new Point((int)897.01,(int)996.0));
+	tmpPolygon.Add(new Point((int)928.01,(int)1052.0));
+	tmpPolygon.Add(new Point((int)976.01,(int)1095.0));
+	tmpPolygon.Add(new Point((int)1030.99,(int)1128.0));
+	tmpPolygon.Add(new Point((int)1063.01,(int)1184.0));
+	tmpPolygon.Add(new Point((int)1061.01,(int)1248.0));
+	tmpPolygon.Add(new Point((int)1066.0,(int)1311.99));
+	tmpPolygon.Add(new Point((int)1064.0,(int)1375.99));
+	tmpPolygon.Add(new Point((int)1079.01,(int)1439.0));
+	tmpPolygon.Add(new Point((int)1111.01,(int)1495.0));
+	tmpPolygon.Add(new Point((int)1091.01,(int)1556.0));
+	tmpPolygon.Add(new Point((int)1082.01,(int)1620.0));
+	tmpPolygon.Add(new Point((int)1096.01,(int)1683.0));
+	tmpPolygon.Add(new Point((int)1104.01,(int)1747.0));
+	tmpPolygon.Add(new Point((int)1078.01,(int)1806.0));
+	tmpPolygon.Add(new Point((int)1071.01,(int)1870.0));
+	tmpPolygon.Add(new Point((int)1070.0,(int)1933.99));
+	tmpPolygon.Add(new Point((int)1052.0,(int)1995.99));
+	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
+	faceRegionPolygon1 = new faceRegionPolygon(0,2,new Point((int)529.5453943056494,(int)1038.7349670487329),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)1043.0,(int)2047.0));
+	tmpPolygon.Add(new Point((int)1075.99,(int)1992.0));
+	tmpPolygon.Add(new Point((int)1083.99,(int)1928.0));
+	tmpPolygon.Add(new Point((int)1083.0,(int)1863.01));
+	tmpPolygon.Add(new Point((int)1094.99,(int)1800.0));
+	tmpPolygon.Add(new Point((int)1125.99,(int)1744.0));
+	tmpPolygon.Add(new Point((int)1118.0,(int)1680.01));
+	tmpPolygon.Add(new Point((int)1094.99,(int)1620.0));
+	tmpPolygon.Add(new Point((int)1104.99,(int)1556.0));
+	tmpPolygon.Add(new Point((int)1127.99,(int)1496.0));
+	tmpPolygon.Add(new Point((int)1100.0,(int)1438.01));
+	tmpPolygon.Add(new Point((int)1090.0,(int)1374.01));
+	tmpPolygon.Add(new Point((int)1081.0,(int)1310.01));
+	tmpPolygon.Add(new Point((int)1089.99,(int)1246.0));
+	tmpPolygon.Add(new Point((int)1081.0,(int)1182.01));
+	tmpPolygon.Add(new Point((int)1043.99,(int)1129.0));
+	tmpPolygon.Add(new Point((int)1000.0,(int)1081.01));
+	tmpPolygon.Add(new Point((int)947.0,(int)1045.01));
+	tmpPolygon.Add(new Point((int)922.0,(int)986.01));
+	tmpPolygon.Add(new Point((int)947.0,(int)927.01));
+	tmpPolygon.Add(new Point((int)938.0,(int)863.01));
+	tmpPolygon.Add(new Point((int)945.0,(int)799.01));
+	tmpPolygon.Add(new Point((int)955.0,(int)735.01));
+	tmpPolygon.Add(new Point((int)988.0,(int)680.01));
+	tmpPolygon.Add(new Point((int)1048.99,(int)659.0));
+	tmpPolygon.Add(new Point((int)1087.99,(int)608.0));
+	tmpPolygon.Add(new Point((int)1114.0,(int)549.01));
+	tmpPolygon.Add(new Point((int)1130.99,(int)487.0));
+	tmpPolygon.Add(new Point((int)1128.0,(int)423.01));
+	tmpPolygon.Add(new Point((int)1104.99,(int)363.0));
+	tmpPolygon.Add(new Point((int)1112.99,(int)299.0));
+	tmpPolygon.Add(new Point((int)1159.99,(int)254.0));
+	tmpPolygon.Add(new Point((int)1223.0,(int)266.99));
+	tmpPolygon.Add(new Point((int)1261.0,(int)318.99));
+	tmpPolygon.Add(new Point((int)1319.99,(int)292.0));
+	tmpPolygon.Add(new Point((int)1369.99,(int)252.0));
+	tmpPolygon.Add(new Point((int)1382.99,(int)189.0));
+	tmpPolygon.Add(new Point((int)1403.0,(int)127.99));
+	tmpPolygon.Add(new Point((int)1383.0,(int)67.01));
+	tmpPolygon.Add(new Point((int)1344.0,(int)16.01));
+	tmpPolygon.Add(new Point((int)2047.0,(int)0.0));
+	tmpPolygon.Add(new Point((int)2047.0,(int)2047.0));
+	tmpPolygon.Add(new Point((int)1043.0,(int)2047.0));
+	faceRegionPolygon1 = new faceRegionPolygon(0,3,new Point((int)648.8865636587907,(int)1061.6263019142325),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)1275.0,(int)0.0));
+	tmpPolygon.Add(new Point((int)1324.0,(int)42.99));
+	tmpPolygon.Add(new Point((int)1375.0,(int)81.99));
+	tmpPolygon.Add(new Point((int)1372.01,(int)146.0));
+	tmpPolygon.Add(new Point((int)1351.01,(int)207.0));
+	tmpPolygon.Add(new Point((int)1327.01,(int)267.0));
+	tmpPolygon.Add(new Point((int)1269.0,(int)295.01));
+	tmpPolygon.Add(new Point((int)1227.0,(int)245.01));
+	tmpPolygon.Add(new Point((int)1168.01,(int)219.0));
+	tmpPolygon.Add(new Point((int)1131.99,(int)166.0));
+	tmpPolygon.Add(new Point((int)1115.0,(int)104.01));
+	tmpPolygon.Add(new Point((int)1131.0,(int)42.01));
+	tmpPolygon.Add(new Point((int)1275.0,(int)0.0));
+	faceRegionPolygon1 = new faceRegionPolygon(0,4,new Point((int)137.41628772219926,(int)132.52623254309182),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)0,(int)2047));
+	tmpPolygon.Add(new Point((int)0,(int)0));
+	tmpPolygon.Add(new Point((int)2047,(int)0));
+	tmpPolygon.Add(new Point((int)2047,(int)2047));
+	tmpPolygon.Add(new Point((int)0,(int)2047));
+	faceRegionPolygon1 = new faceRegionPolygon(1,5,new Point((int)1026.8545143752206,(int)1023.7872403211838),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)0,(int)2047));
+	tmpPolygon.Add(new Point((int)0,(int)0));
+	tmpPolygon.Add(new Point((int)2047,(int)0));
+	tmpPolygon.Add(new Point((int)2047,(int)2047));
+	tmpPolygon.Add(new Point((int)0,(int)2047));
+	faceRegionPolygon1 = new faceRegionPolygon(4,6,new Point((int)1026.48198125909,(int)1017.539811192641),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)160,(int)160));
+	faceRegionPolygon1 = new faceRegionPolygon(4,7,new Point((int)348.52316448198604,(int)391.51294069171536),tmpPolygon);
+	//===========
+	faceRegionPolygonList.Add(faceRegionPolygon1);
+	//===========
+	tmpPolygon = new List<Point>();
+	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
+	tmpPolygon.Add(new Point((int)0.0,(int)0.0));
 	tmpPolygon.Add(new Point((int)1030.01,(int)0.0));
 	tmpPolygon.Add(new Point((int)1057.01,(int)59.0));
 	tmpPolygon.Add(new Point((int)1066.01,(int)123.0));
@@ -108,7 +243,7 @@ public Program()
 	tmpPolygon.Add(new Point((int)713.01,(int)1945.0));
 	tmpPolygon.Add(new Point((int)718.01,(int)2009.0));
 	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(3,2,new Point((int)545.8768435332956,(int)973.7314479533823),tmpPolygon);
+	faceRegionPolygon1 = new faceRegionPolygon(3,8,new Point((int)545.8768435332956,(int)973.7314479533823),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
@@ -204,7 +339,7 @@ public Program()
 	tmpPolygon.Add(new Point((int)1065.0,(int)38.01));
 	tmpPolygon.Add(new Point((int)1344.0,(int)2047.0));
 	tmpPolygon.Add(new Point((int)701.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(3,3,new Point((int)472.9548859955224,(int)1183.7082535989894),tmpPolygon);
+	faceRegionPolygon1 = new faceRegionPolygon(3,9,new Point((int)472.9548859955224,(int)1183.7082535989894),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
@@ -240,7 +375,7 @@ public Program()
 	tmpPolygon.Add(new Point((int)1313.01,(int)1923.0));
 	tmpPolygon.Add(new Point((int)1317.01,(int)1987.0));
 	tmpPolygon.Add(new Point((int)707.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(3,4,new Point((int)377.41486417253014,(int)343.1128606377722),tmpPolygon);
+	faceRegionPolygon1 = new faceRegionPolygon(3,10,new Point((int)377.41486417253014,(int)343.1128606377722),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
@@ -288,128 +423,19 @@ public Program()
 	tmpPolygon.Add(new Point((int)2047.0,(int)0.0));
 	tmpPolygon.Add(new Point((int)2047.0,(int)2047.0));
 	tmpPolygon.Add(new Point((int)1345.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(3,5,new Point((int)610.857566581086,(int)978.9165251292854),tmpPolygon);
+	faceRegionPolygon1 = new faceRegionPolygon(3,11,new Point((int)610.857566581086,(int)978.9165251292854),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
 	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)50,(int)50));
-	faceRegionPolygon1 = new faceRegionPolygon(3,6,new Point((int)116.29726278468841,(int)250.41804879514453),tmpPolygon);
+	tmpPolygon.Add(new Point((int)160,(int)160));
+	faceRegionPolygon1 = new faceRegionPolygon(3,12,new Point((int)116.29726278468841,(int)250.41804879514453),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
 	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)50,(int)50));
-	faceRegionPolygon1 = new faceRegionPolygon(3,7,new Point((int)254.42292544500816,(int)181.88698942299425),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
-	tmpPolygon.Add(new Point((int)0.0,(int)0.0));
-	tmpPolygon.Add(new Point((int)1121.01,(int)0.0));
-	tmpPolygon.Add(new Point((int)1101.01,(int)61.0));
-	tmpPolygon.Add(new Point((int)1104.01,(int)125.0));
-	tmpPolygon.Add(new Point((int)1118.0,(int)187.99));
-	tmpPolygon.Add(new Point((int)1135.01,(int)250.0));
-	tmpPolygon.Add(new Point((int)1095.01,(int)300.0));
-	tmpPolygon.Add(new Point((int)1091.01,(int)364.0));
-	tmpPolygon.Add(new Point((int)1112.0,(int)424.99));
-	tmpPolygon.Add(new Point((int)1120.01,(int)489.0));
-	tmpPolygon.Add(new Point((int)1088.01,(int)545.0));
-	tmpPolygon.Add(new Point((int)1072.01,(int)607.0));
-	tmpPolygon.Add(new Point((int)1016.01,(int)640.0));
-	tmpPolygon.Add(new Point((int)969.0,(int)684.01));
-	tmpPolygon.Add(new Point((int)943.0,(int)742.99));
-	tmpPolygon.Add(new Point((int)935.01,(int)807.0));
-	tmpPolygon.Add(new Point((int)927.01,(int)871.0));
-	tmpPolygon.Add(new Point((int)905.01,(int)932.0));
-	tmpPolygon.Add(new Point((int)897.01,(int)996.0));
-	tmpPolygon.Add(new Point((int)928.01,(int)1052.0));
-	tmpPolygon.Add(new Point((int)976.01,(int)1095.0));
-	tmpPolygon.Add(new Point((int)1030.99,(int)1128.0));
-	tmpPolygon.Add(new Point((int)1063.01,(int)1184.0));
-	tmpPolygon.Add(new Point((int)1061.01,(int)1248.0));
-	tmpPolygon.Add(new Point((int)1066.0,(int)1311.99));
-	tmpPolygon.Add(new Point((int)1064.0,(int)1375.99));
-	tmpPolygon.Add(new Point((int)1079.01,(int)1439.0));
-	tmpPolygon.Add(new Point((int)1111.01,(int)1495.0));
-	tmpPolygon.Add(new Point((int)1091.01,(int)1556.0));
-	tmpPolygon.Add(new Point((int)1082.01,(int)1620.0));
-	tmpPolygon.Add(new Point((int)1096.01,(int)1683.0));
-	tmpPolygon.Add(new Point((int)1104.01,(int)1747.0));
-	tmpPolygon.Add(new Point((int)1078.01,(int)1806.0));
-	tmpPolygon.Add(new Point((int)1071.01,(int)1870.0));
-	tmpPolygon.Add(new Point((int)1070.0,(int)1933.99));
-	tmpPolygon.Add(new Point((int)1052.0,(int)1995.99));
-	tmpPolygon.Add(new Point((int)0.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(0,8,new Point((int)529.5453943056494,(int)1038.7349670487329),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)1043.0,(int)2047.0));
-	tmpPolygon.Add(new Point((int)1075.99,(int)1992.0));
-	tmpPolygon.Add(new Point((int)1083.99,(int)1928.0));
-	tmpPolygon.Add(new Point((int)1083.0,(int)1863.01));
-	tmpPolygon.Add(new Point((int)1094.99,(int)1800.0));
-	tmpPolygon.Add(new Point((int)1125.99,(int)1744.0));
-	tmpPolygon.Add(new Point((int)1118.0,(int)1680.01));
-	tmpPolygon.Add(new Point((int)1094.99,(int)1620.0));
-	tmpPolygon.Add(new Point((int)1104.99,(int)1556.0));
-	tmpPolygon.Add(new Point((int)1127.99,(int)1496.0));
-	tmpPolygon.Add(new Point((int)1100.0,(int)1438.01));
-	tmpPolygon.Add(new Point((int)1090.0,(int)1374.01));
-	tmpPolygon.Add(new Point((int)1081.0,(int)1310.01));
-	tmpPolygon.Add(new Point((int)1089.99,(int)1246.0));
-	tmpPolygon.Add(new Point((int)1081.0,(int)1182.01));
-	tmpPolygon.Add(new Point((int)1043.99,(int)1129.0));
-	tmpPolygon.Add(new Point((int)1000.0,(int)1081.01));
-	tmpPolygon.Add(new Point((int)947.0,(int)1045.01));
-	tmpPolygon.Add(new Point((int)922.0,(int)986.01));
-	tmpPolygon.Add(new Point((int)947.0,(int)927.01));
-	tmpPolygon.Add(new Point((int)938.0,(int)863.01));
-	tmpPolygon.Add(new Point((int)945.0,(int)799.01));
-	tmpPolygon.Add(new Point((int)955.0,(int)735.01));
-	tmpPolygon.Add(new Point((int)988.0,(int)680.01));
-	tmpPolygon.Add(new Point((int)1048.99,(int)659.0));
-	tmpPolygon.Add(new Point((int)1087.99,(int)608.0));
-	tmpPolygon.Add(new Point((int)1114.0,(int)549.01));
-	tmpPolygon.Add(new Point((int)1130.99,(int)487.0));
-	tmpPolygon.Add(new Point((int)1128.0,(int)423.01));
-	tmpPolygon.Add(new Point((int)1104.99,(int)363.0));
-	tmpPolygon.Add(new Point((int)1112.99,(int)299.0));
-	tmpPolygon.Add(new Point((int)1159.99,(int)254.0));
-	tmpPolygon.Add(new Point((int)1223.0,(int)266.99));
-	tmpPolygon.Add(new Point((int)1261.0,(int)318.99));
-	tmpPolygon.Add(new Point((int)1319.99,(int)292.0));
-	tmpPolygon.Add(new Point((int)1369.99,(int)252.0));
-	tmpPolygon.Add(new Point((int)1382.99,(int)189.0));
-	tmpPolygon.Add(new Point((int)1403.0,(int)127.99));
-	tmpPolygon.Add(new Point((int)1383.0,(int)67.01));
-	tmpPolygon.Add(new Point((int)1344.0,(int)16.01));
-	tmpPolygon.Add(new Point((int)2047.0,(int)0.0));
-	tmpPolygon.Add(new Point((int)2047.0,(int)2047.0));
-	tmpPolygon.Add(new Point((int)1043.0,(int)2047.0));
-	faceRegionPolygon1 = new faceRegionPolygon(0,9,new Point((int)648.8865636587907,(int)1061.6263019142325),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)1275.0,(int)0.0));
-	tmpPolygon.Add(new Point((int)1324.0,(int)42.99));
-	tmpPolygon.Add(new Point((int)1375.0,(int)81.99));
-	tmpPolygon.Add(new Point((int)1372.01,(int)146.0));
-	tmpPolygon.Add(new Point((int)1351.01,(int)207.0));
-	tmpPolygon.Add(new Point((int)1327.01,(int)267.0));
-	tmpPolygon.Add(new Point((int)1269.0,(int)295.01));
-	tmpPolygon.Add(new Point((int)1227.0,(int)245.01));
-	tmpPolygon.Add(new Point((int)1168.01,(int)219.0));
-	tmpPolygon.Add(new Point((int)1131.99,(int)166.0));
-	tmpPolygon.Add(new Point((int)1115.0,(int)104.01));
-	tmpPolygon.Add(new Point((int)1131.0,(int)42.01));
-	tmpPolygon.Add(new Point((int)1275.0,(int)0.0));
-	faceRegionPolygon1 = new faceRegionPolygon(0,10,new Point((int)137.41628772219926,(int)132.52623254309182),tmpPolygon);
+	tmpPolygon.Add(new Point((int)160,(int)160));
+	faceRegionPolygon1 = new faceRegionPolygon(3,13,new Point((int)254.42292544500816,(int)181.88698942299425),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 	//===========
@@ -419,33 +445,7 @@ public Program()
 	tmpPolygon.Add(new Point((int)2047,(int)0));
 	tmpPolygon.Add(new Point((int)2047,(int)2047));
 	tmpPolygon.Add(new Point((int)0,(int)2047));
-	faceRegionPolygon1 = new faceRegionPolygon(1,11,new Point((int)1026.8545143752206,(int)1023.7872403211838),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)0,(int)2047));
-	tmpPolygon.Add(new Point((int)0,(int)0));
-	tmpPolygon.Add(new Point((int)2047,(int)0));
-	tmpPolygon.Add(new Point((int)2047,(int)2047));
-	tmpPolygon.Add(new Point((int)0,(int)2047));
-	faceRegionPolygon1 = new faceRegionPolygon(2,12,new Point((int)1023.6554673114691,(int)1025.6056052487309),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)0,(int)2047));
-	tmpPolygon.Add(new Point((int)0,(int)0));
-	tmpPolygon.Add(new Point((int)2047,(int)0));
-	tmpPolygon.Add(new Point((int)2047,(int)2047));
-	tmpPolygon.Add(new Point((int)0,(int)2047));
-	faceRegionPolygon1 = new faceRegionPolygon(4,13,new Point((int)1026.48198125909,(int)1017.539811192641),tmpPolygon);
-	//===========
-	faceRegionPolygonList.Add(faceRegionPolygon1);
-	//===========
-	tmpPolygon = new List<Point>();
-	tmpPolygon.Add(new Point((int)50,(int)50));
-	faceRegionPolygon1 = new faceRegionPolygon(4,14,new Point((int)348.52316448198604,(int)391.51294069171536),tmpPolygon);
+	faceRegionPolygon1 = new faceRegionPolygon(2,14,new Point((int)1023.6554673114691,(int)1025.6056052487309),tmpPolygon);
 	//===========
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 
