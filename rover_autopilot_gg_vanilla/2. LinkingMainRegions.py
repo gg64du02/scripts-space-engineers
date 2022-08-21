@@ -570,14 +570,14 @@ for file_path in full_files_path:
 print(strPolygonCs)
 
 print("writing in txt file")
-f = open("InsertMeInProgram.txt", "a")
+f = open("InsertMeInProgram.txt", "w")
 f.write(strPolygonCs)
 f.close()
 print("writing done in txt file")
 
 
 print("writing in txt file")
-f = open("InsertMeInProgram_region_bounds.txt", "a")
+f = open("InsertMeInProgram_region_bounds.txt", "w")
 f.write(strRegionBounds)
 f.close()
 print("writing done in txt file")
