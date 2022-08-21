@@ -17,6 +17,8 @@ List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();
 
 string planetRegionPolygonsLoaded = "Pertam";
 		
+List<Point> testPointRegionsLinked =  new List<Point>();
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -450,6 +452,54 @@ public Program()
 	faceRegionPolygonList.Add(faceRegionPolygon1);
 
 	
+
+	testPointRegionsLinked =  new List<Point>();
+	// testPointRegionsLinked.Add((int)1016.01,(int)640.0);
+
+	testPointRegionsLinked.Add(new Point(3,1));
+	testPointRegionsLinked.Add(new Point(3,2));
+	testPointRegionsLinked.Add(new Point(4,3));
+	testPointRegionsLinked.Add(new Point(4,1));
+	testPointRegionsLinked.Add(new Point(4,2));
+	testPointRegionsLinked.Add(new Point(5,4));
+	testPointRegionsLinked.Add(new Point(6,1));
+	testPointRegionsLinked.Add(new Point(6,4));
+	testPointRegionsLinked.Add(new Point(6,3));
+	testPointRegionsLinked.Add(new Point(6,5));
+	testPointRegionsLinked.Add(new Point(8,3));
+	testPointRegionsLinked.Add(new Point(8,2));
+	testPointRegionsLinked.Add(new Point(8,5));
+	testPointRegionsLinked.Add(new Point(8,6));
+	testPointRegionsLinked.Add(new Point(8,1)); 
+	testPointRegionsLinked.Add(new Point(10,8));
+	testPointRegionsLinked.Add(new Point(10,3));
+	testPointRegionsLinked.Add(new Point(11,4));
+	testPointRegionsLinked.Add(new Point(11,3));
+	testPointRegionsLinked.Add(new Point(11,2));
+	testPointRegionsLinked.Add(new Point(11,8));
+	testPointRegionsLinked.Add(new Point(11,6));
+	testPointRegionsLinked.Add(new Point(11,5));
+	testPointRegionsLinked.Add(new Point(11,1));
+	testPointRegionsLinked.Add(new Point(14,3));
+	testPointRegionsLinked.Add(new Point(14,8));
+	testPointRegionsLinked.Add(new Point(14,2));
+	testPointRegionsLinked.Add(new Point(14,5));
+	testPointRegionsLinked.Add(new Point(14,6));
+	testPointRegionsLinked.Add(new Point(14,1));
+	testPointRegionsLinked.Add(new Point(14,10));
+	testPointRegionsLinked.Add(new Point(2,1));
+	testPointRegionsLinked.Add(new Point(5,3));
+	testPointRegionsLinked.Add(new Point(5,2));
+	testPointRegionsLinked.Add(new Point(5,1));
+	testPointRegionsLinked.Add(new Point(6,2));
+	testPointRegionsLinked.Add(new Point(14,4));
+	testPointRegionsLinked.Add(new Point(14,11));
+	testPointRegionsLinked.Add(new Point(8,4));
+	testPointRegionsLinked.Add(new Point(10,2));
+	testPointRegionsLinked.Add(new Point(10,5));
+	testPointRegionsLinked.Add(new Point(10,6));
+	testPointRegionsLinked.Add(new Point(10,1));
+	
 }
 
 public void Save()
@@ -707,13 +757,7 @@ public void Main(string argument, UpdateType updateSource)
 		
 	}
 	
-
-
-
-
-
-	// Echo(""+faceRegionPolygonList.Count);
-	
+	Echo("regionLinkCount:" + testPointRegionsLinked.Count );
 	
 	Echo("planetRegionPolynsLd:"+planetRegionPolygonsLoaded);
 
@@ -963,4 +1007,3 @@ public bool InsidePolygon(List<Point> polygon,int N,Point p)
   else
     return(true);
 }
-	
