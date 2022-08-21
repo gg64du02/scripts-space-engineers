@@ -631,6 +631,9 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		Echo("targetIsSameRegion:"+targetIsOnTheSameRegion);
 		
+		// TODO:implement
+		// what to do when the target and rover are not in the same region
+		
 		
 		//getting vectors to help with angles proposals
 		Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
