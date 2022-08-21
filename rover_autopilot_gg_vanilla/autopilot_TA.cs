@@ -686,13 +686,20 @@ public void Main(string argument, UpdateType updateSource)
 			
 			List<Point> testNeightarget = getAllConnectedRegions(targetRegionN);
 			
+			bool isThereADirectNeighbor = false;
+			
 			foreach(Point neigborRegRover in testNeighrover){
 				Echo("neigborRegRover:"+neigborRegRover);
+				if(areThoseRegionsConnected(neigborRegRover,targetRegionN,currentRegionN)==true){
+					isThereADirectNeighbor = true;
+				}
 			}
-			
 			foreach(Point neigborRegTarget in testNeightarget){
-				Echo("neigborRegTarget:"+neigborRegTarget);
+				if(areThoseRegionsConnected(neigborRegTarget,targetRegionN,currentRegionN)==true){
+					isThereADirectNeighbor = true;
+				}
 			}
+			Echo("isThereADirectNeighbor:"+isThereADirectNeighbor);
 		}
 		// TODO:implement
 		// what to do when the target and rover are not in the same region
@@ -1035,4 +1042,16 @@ public List<Point> getAllConnectedRegions(int regionNumber){
 		}
 	}
 	return resultNodes;
+}
+
+
+public bool areThoseRegionsConnected(Point node, int node1reg, int node2reg){
+	bool tmpNode = false;
+	if((node.X == node2reg) && (node.Y == node1reg)){
+		tmpNode = true;
+	}
+	if((node.X == node1reg) && (node.Y == node2reg)){
+		tmpNode = true;
+	}
+	return tmpNode;
 }
