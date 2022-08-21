@@ -671,6 +671,10 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("currentRegionN:"+currentRegionN);
 		Echo("targetRegionN:"+targetRegionN);
 		
+		Echo("If any of the two is -1 the script won't run");
+		if(currentRegionN==-1||targetRegionN==-1){
+			return;
+		}
 		
 		bool targetIsOnTheSameRegion = false;
 		if(currentRegionN==targetRegionN){
@@ -686,6 +690,9 @@ public void Main(string argument, UpdateType updateSource)
 			
 			List<Point> testNeightarget = getAllConnectedRegions(targetRegionN);
 			
+			Echo("testNeighrover.C:"+testNeighrover.Count);
+			Echo("testNeightarget.C:"+testNeightarget.Count);
+			
 			bool isThereADirectNeighbor = false;
 			
 			foreach(Point neigborRegRover in testNeighrover){
@@ -695,6 +702,7 @@ public void Main(string argument, UpdateType updateSource)
 				}
 			}
 			foreach(Point neigborRegTarget in testNeightarget){
+				Echo("neigborRegTarget:"+neigborRegTarget);
 				if(areThoseRegionsConnected(neigborRegTarget,targetRegionN,currentRegionN)==true){
 					isThereADirectNeighbor = true;
 				}
