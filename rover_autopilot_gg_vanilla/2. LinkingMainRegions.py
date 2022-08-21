@@ -401,8 +401,8 @@ for file_path in full_files_path:
 
             # result_polygon_region = [[]]
             # result_polygon_region = [[0,0]]
-            # result_polygon_region = [[50,50]]
-            result_polygon_region = [[50,50]]
+            # result_polygon_region = [[160,160]]
+            result_polygon_region = [[160,160]]
             result_polygon_region = np.reshape(result_polygon_region,(1,2))
 
             contourTmp = contours.copy()
@@ -449,8 +449,8 @@ for file_path in full_files_path:
                     contourTmpThatCanStillBeAdded.remove(tmpContour)
 
 
-            if(np.array_equal(result_polygon_region[0],[50,50])==True):
-                print("if(result_polygon_region[0]==[50,50]):")
+            if(np.array_equal(result_polygon_region[0],[160,160])==True):
+                print("if(result_polygon_region[0]==[160,160]):")
                 result_polygon_region[0]=result_polygon_region[len(result_polygon_region)-1]
 
             print("str(len(result_polygon_region)):"+str(len(result_polygon_region)))
@@ -468,7 +468,7 @@ for file_path in full_files_path:
 
             # exit()
 
-            result_polygon_region_processed =[[50,50]]
+            result_polygon_region_processed =[[160,160]]
             last_point = []
             for processingPoint in result_polygon_region:
                 if(last_point==[]):
@@ -479,8 +479,8 @@ for file_path in full_files_path:
                     last_point=processingPoint
                     result_polygon_region_processed = np.concatenate((result_polygon_region_processed, np.reshape(processingPoint, (1, 2))), axis=0)
 
-            if (np.array_equal(result_polygon_region_processed[0], [50, 50]) == True):
-                print("if(result_polygon_region[0]==[50,50]):")
+            if (np.array_equal(result_polygon_region_processed[0], [160, 160]) == True):
+                print("if(result_polygon_region[0]==[160,160]):")
                 result_polygon_region_processed[0] = result_polygon_region_processed[len(result_polygon_region_processed) - 1]
 
             print("str(len(result_polygon_region_processed)):"+str(len(result_polygon_region_processed)))
@@ -569,18 +569,18 @@ for file_path in full_files_path:
 
 print(strPolygonCs)
 
-# print("writing in txt file")
-# f = open("InsertMeInProgram.txt", "a")
-# f.write(strPolygonCs)
-# f.close()
-# print("writing done in txt file")
-#
-#
-# print("writing in txt file")
-# f = open("InsertMeInProgram_region_bounds.txt", "a")
-# f.write(strRegionBounds)
-# f.close()
-# print("writing done in txt file")
+print("writing in txt file")
+f = open("InsertMeInProgram.txt", "a")
+f.write(strPolygonCs)
+f.close()
+print("writing done in txt file")
+
+
+print("writing in txt file")
+f = open("InsertMeInProgram_region_bounds.txt", "a")
+f.write(strRegionBounds)
+f.close()
+print("writing done in txt file")
 
 
 print(strRegionBounds)
