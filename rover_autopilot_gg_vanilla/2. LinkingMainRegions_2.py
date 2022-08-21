@@ -37,6 +37,7 @@ def parseGPS(stringGps):
 
 # with open('gpss_regions_pertam.txt') as f:
 with open('InsertMeInProgram_region_bounds.txt') as f:
+# with open('bounds_pertam.txt') as f:
     lines = f.readlines()
 
 f.close()
@@ -57,9 +58,12 @@ for line1 in lines:
 
         magnitude = np.linalg.norm(gps_diff)
         # print("magnitude:"+str(magnitude))
+        # print(line1,line2)
 
         if(magnitude<50):
             if(line1!=line2):
+                # print("magnitude:"+str(magnitude))
+                # print(line1,line2)
                 # print("if(magnitude<50):")
 
                 substrings_line1 = name1.split("_")
