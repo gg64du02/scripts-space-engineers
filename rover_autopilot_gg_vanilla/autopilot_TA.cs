@@ -456,50 +456,21 @@ public Program()
 	testPointRegionsLinked =  new List<Point>();
 	// testPointRegionsLinked.Add((int)1016.01,(int)640.0);
 
-	testPointRegionsLinked.Add(new Point(3,1));
-	testPointRegionsLinked.Add(new Point(3,2));
-	testPointRegionsLinked.Add(new Point(4,3));
-	testPointRegionsLinked.Add(new Point(4,1));
-	testPointRegionsLinked.Add(new Point(4,2));
-	testPointRegionsLinked.Add(new Point(5,4));
-	testPointRegionsLinked.Add(new Point(6,1));
-	testPointRegionsLinked.Add(new Point(6,4));
-	testPointRegionsLinked.Add(new Point(6,3));
-	testPointRegionsLinked.Add(new Point(6,5));
-	testPointRegionsLinked.Add(new Point(8,3));
-	testPointRegionsLinked.Add(new Point(8,2));
-	testPointRegionsLinked.Add(new Point(8,5));
-	testPointRegionsLinked.Add(new Point(8,6));
-	testPointRegionsLinked.Add(new Point(8,1)); 
-	testPointRegionsLinked.Add(new Point(10,8));
-	testPointRegionsLinked.Add(new Point(10,3));
-	testPointRegionsLinked.Add(new Point(11,4));
-	testPointRegionsLinked.Add(new Point(11,3));
-	testPointRegionsLinked.Add(new Point(11,2));
-	testPointRegionsLinked.Add(new Point(11,8));
-	testPointRegionsLinked.Add(new Point(11,6));
-	testPointRegionsLinked.Add(new Point(11,5));
-	testPointRegionsLinked.Add(new Point(11,1));
-	testPointRegionsLinked.Add(new Point(14,3));
-	testPointRegionsLinked.Add(new Point(14,8));
-	testPointRegionsLinked.Add(new Point(14,2));
-	testPointRegionsLinked.Add(new Point(14,5));
-	testPointRegionsLinked.Add(new Point(14,6));
-	testPointRegionsLinked.Add(new Point(14,1));
-	testPointRegionsLinked.Add(new Point(14,10));
 	testPointRegionsLinked.Add(new Point(2,1));
 	testPointRegionsLinked.Add(new Point(5,3));
-	testPointRegionsLinked.Add(new Point(5,2));
-	testPointRegionsLinked.Add(new Point(5,1));
+	testPointRegionsLinked.Add(new Point(6,1));
+	testPointRegionsLinked.Add(new Point(6,5));
+	testPointRegionsLinked.Add(new Point(6,3));
 	testPointRegionsLinked.Add(new Point(6,2));
-	testPointRegionsLinked.Add(new Point(14,4));
+	testPointRegionsLinked.Add(new Point(8,1));
+	testPointRegionsLinked.Add(new Point(8,2));
+	testPointRegionsLinked.Add(new Point(11,3));
+	testPointRegionsLinked.Add(new Point(11,9));
+	testPointRegionsLinked.Add(new Point(11,5));
+	testPointRegionsLinked.Add(new Point(14,1));
+	testPointRegionsLinked.Add(new Point(14,8));
 	testPointRegionsLinked.Add(new Point(14,11));
-	testPointRegionsLinked.Add(new Point(8,4));
-	testPointRegionsLinked.Add(new Point(10,2));
-	testPointRegionsLinked.Add(new Point(10,5));
-	testPointRegionsLinked.Add(new Point(10,6));
-	testPointRegionsLinked.Add(new Point(10,1));
-	
+	testPointRegionsLinked.Add(new Point(14,6));
 }
 
 public void Save()
@@ -685,6 +656,8 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		Echo("targetIsSameRegion:"+targetIsOnTheSameRegion);
 		
+		bool isThereADirectNeighbor = false;
+		
 		if(targetIsOnTheSameRegion==false){
 			List<Point> testNeighrover = getAllConnectedRegions(currentRegionN);
 			
@@ -693,7 +666,6 @@ public void Main(string argument, UpdateType updateSource)
 			Echo("testNeighrover.C:"+testNeighrover.Count);
 			Echo("testNeightarget.C:"+testNeightarget.Count);
 			
-			bool isThereADirectNeighbor = false;
 			
 			foreach(Point neigborRegRover in testNeighrover){
 				Echo("neigborRegRover:"+neigborRegRover);
@@ -721,7 +693,26 @@ public void Main(string argument, UpdateType updateSource)
 		double steerOverride = 0;
 		// double steerOverride = shipForwardVector.Dot(Vector3D.Normalize(targetV3Dabs));
 		// steerOverride*=100;
-		// Echo("steerOverride:"+Math.Round(steerOverride,3));
+		// Echo("steerOverride:"+Math.Round(steerOverride,3))
+		// ;
+		Point testGetCen1 = getCentroidPointForThisRegion(currentRegionN);
+		Echo("testGetCen1:"+testGetCen1);
+		
+		if(isThereADirectNeighbor==true){
+			//TODO:do nothing ?
+		}
+		else{
+			if(targetIsOnTheSameRegion==false){
+				//TODO: implement this
+				//getting centroid from any region
+				Point testGetCen2 = getCentroidPointForThisRegion(currentRegionN);
+				Echo("testGetCen2:"+testGetCen2);
+			}
+			else{
+				//do nothing
+			}
+		}
+		
 		
 		Vector3D targetV3Drel = RemoteControl.GetPosition()-targetV3Dabs;
 		
@@ -973,7 +964,7 @@ public class faceRegionPolygon {
 	public int faceNumber;
 	public int regionNumber;
 	public List<Point> polygon;
-	Point regionCentroid;
+	public Point regionCentroid;
 	
 	public faceRegionPolygon(int faceNumber,int regionNumber,Point regionCentroid,
 	List<Point> polygon
@@ -1062,4 +1053,14 @@ public bool areThoseRegionsConnected(Point node, int node1reg, int node2reg){
 		tmpNode = true;
 	}
 	return tmpNode;
+}
+
+public Point getCentroidPointForThisRegion(int regionNumberPar){
+	Point tmpPoint = new Point(-1,-1);
+	foreach( faceRegionPolygon faceRegionPolygon2 in faceRegionPolygonList){
+		if(faceRegionPolygon2.regionNumber == regionNumberPar){
+			tmpPoint = faceRegionPolygon2.regionCentroid;
+		}
+	}
+	return tmpPoint;
 }
