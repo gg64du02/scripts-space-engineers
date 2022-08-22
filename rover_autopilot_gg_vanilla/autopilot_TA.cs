@@ -658,6 +658,10 @@ public void Main(string argument, UpdateType updateSource)
 		
 		bool isThereADirectNeighbor = false;
 		
+		List<int> testSpaceRegionNumberCommon = new List<int>();
+		
+		int intermediateRegionNumber = -1;
+		
 		if(targetIsOnTheSameRegion==false){
 			List<Point> testNeighrover = getAllConnectedRegions(currentRegionN);
 			
@@ -672,13 +676,36 @@ public void Main(string argument, UpdateType updateSource)
 				if(areThoseRegionsConnected(neigborRegRover,targetRegionN,currentRegionN)==true){
 					isThereADirectNeighbor = true;
 				}
+				if(neigborRegRover.X != currentRegionN){
+					testSpaceRegionNumberCommon.Add(neigborRegRover.X);
+				}
+				if(neigborRegRover.Y != currentRegionN){
+					testSpaceRegionNumberCommon.Add(neigborRegRover.Y);
+				}
 			}
 			foreach(Point neigborRegTarget in testNeightarget){
 				Echo("neigborRegTarget:"+neigborRegTarget);
 				if(areThoseRegionsConnected(neigborRegTarget,targetRegionN,currentRegionN)==true){
 					isThereADirectNeighbor = true;
 				}
+				if(neigborRegTarget.X != targetRegionN){
+					testSpaceRegionNumberCommon.Add(neigborRegTarget.X);
+				}
+				if(neigborRegTarget.Y != targetRegionN){
+					testSpaceRegionNumberCommon.Add(neigborRegTarget.Y);
+				}
 			}
+			// Echo("testSpaceRegionNumberCommon.C:"+testSpaceRegionNumberCommon.Count);
+			foreach(int regionNumber in testSpaceRegionNumberCommon){
+				// Echo("regionNumber:"+regionNumber);
+				int count = testSpaceRegionNumberCommon.Where(x => x.Equals(regionNumber)).Count();
+				// Echo("count:"+count);
+				if(count>1){
+					intermediateRegionNumber = regionNumber;
+				}
+			}
+			
+			Echo("intermediateRegionNumber:"+intermediateRegionNumber);
 			Echo("isThereADirectNeighbor:"+isThereADirectNeighbor);
 		}
 		// TODO:implement
@@ -707,6 +734,16 @@ public void Main(string argument, UpdateType updateSource)
 				//getting centroid from any region
 				Point testGetCen2 = getCentroidPointForThisRegion(currentRegionN);
 				Echo("testGetCen2:"+testGetCen2);
+				
+				int thisRegionIsInter = -1;
+				
+				Echo("testSpaceRegionNumberCommon.C:"+testSpaceRegionNumberCommon.Count);
+				foreach(int regionInt in testSpaceRegionNumberCommon){
+					if(testSpaceRegionNumberCommon.Contains(regionInt)==true){
+						thisRegionIsInter = regionInt;
+					}
+				}
+				Echo("thisRegionIsInter:"+thisRegionIsInter);
 			}
 			else{
 				//do nothing
