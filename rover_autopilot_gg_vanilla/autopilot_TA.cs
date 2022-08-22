@@ -735,15 +735,27 @@ public void Main(string argument, UpdateType updateSource)
 				Point testGetCen2 = getCentroidPointForThisRegion(currentRegionN);
 				Echo("testGetCen2:"+testGetCen2);
 				
-				int thisRegionIsInter = -1;
 				
-				Echo("testSpaceRegionNumberCommon.C:"+testSpaceRegionNumberCommon.Count);
-				foreach(int regionInt in testSpaceRegionNumberCommon){
-					if(testSpaceRegionNumberCommon.Contains(regionInt)==true){
-						thisRegionIsInter = regionInt;
+				Point testGetCenInter = getCentroidPointForThisRegion(intermediateRegionNumber);
+				Echo("testGetCenInter:"+testGetCenInter);
+				
+				int facenumberCalculatedIntermediate = -1;
+				
+				foreach(faceRegionPolygon faceRegionPolygon3 in faceRegionPolygonList){
+					if(faceRegionPolygon3.regionNumber == intermediateRegionNumber){
+						facenumberCalculatedIntermediate = faceRegionPolygon3.faceNumber;
 					}
 				}
-				Echo("thisRegionIsInter:"+thisRegionIsInter);
+				
+				
+				//facenumberCalculatedIntermediate ?
+				if(facenumberCalculatedIntermediate!=-1){
+					Vector3D rconvertPointToV3D = convertPointToV3D(RemoteControl , facenumberCalculatedIntermediate, testGetCenInter);
+					Echo("rconvertPointToV3D:"+rconvertPointToV3D);
+				}
+				
+				// faceAndPointOnPlanetsCalculated(sc,?,testGetCenInter, true, 
+				//TODO:implement here, convert point to gps
 			}
 			else{
 				//do nothing
@@ -1100,4 +1112,97 @@ public Point getCentroidPointForThisRegion(int regionNumberPar){
 		}
 	}
 	return tmpPoint;
+}
+
+public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
+	Vector3D resultV3D = new Vector3D(0,0,0);
+	
+	// Vector3D cubeCenter = detectedPlanet;
+	
+	double intX = 0;
+	double intY = 0;
+	double intZ = 0;
+	
+	Vector3D generated_gps_point_on_cube = new Vector3D(0,0,0);
+					
+	
+	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
+	double planet_radius = 60000;
+	
+	
+    //Get the PB Position:
+    Vector3D myPos = Me.GetPosition();
+	
+	Vector3D planetCenter = new Vector3D(0,0,0);
+
+	bool planetDetected = sc.TryGetPlanetPosition(out planetCenter);
+	
+	Vector3D cubeCenter = planetCenter;
+	
+	double distanceToCenter = (cubeCenter - myPos).Length();
+	
+	planet_radius = distanceToCenter;
+	
+	Point surface_face_offset = new Point(0,0);
+	
+	// surface_face_offset.X = Convert.ToSingle((int)(pointToV3D.X * 2*planet_radius/2048));
+	// surface_face_offset.Y = Convert.ToSingle((int)(pointToV3D.Y * 2*planet_radius/2048));
+	surface_face_offset.X = (int)(pointToV3D.X * 2*planet_radius/2048);
+	surface_face_offset.Y = (int)(pointToV3D.Y * 2*planet_radius/2048);
+	
+	
+
+	if(faceNumber==0){
+		intX = 1*(- planet_radius+surface_face_offset.Y*1);
+		intY = -1*(- planet_radius+surface_face_offset.X*1);
+		//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+		generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
+	}
+	if(faceNumber==1){
+		intX = 1*(- planet_radius+surface_face_offset.Y*1);
+		//intY = -1*(- planet_radius+surface_face_offset.X*1);
+		intZ = -1*(- planet_radius+surface_face_offset.X*1);
+		generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
+	}
+	if(faceNumber==2){
+		intX = -1*(- planet_radius+surface_face_offset.Y*1);
+		intY = -1*(- planet_radius+surface_face_offset.X*1);
+		//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
+		generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
+	}
+	if(faceNumber==3){
+		// intX = 1*(- planet_radius+surface_face_offset.Y*1);
+		intY = -1*(- planet_radius+surface_face_offset.X*1);
+		intZ = -1*(- planet_radius+surface_face_offset.Y*1);
+		generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
+	}
+	if(faceNumber==4){
+		//intX = 1*(- planet_radius+surface_face_offset.Y*1);
+		intY = -1*(- planet_radius+surface_face_offset.X*1);
+		intZ = 1*(- planet_radius+surface_face_offset.Y*1);
+		generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
+	}
+	if(faceNumber==5){
+		intX = -1*(- planet_radius+surface_face_offset.Y*1);
+		// intY = -1*(- planet_radius+surface_face_offset.X*1);
+		intZ = -1*(- planet_radius+surface_face_offset.X*1);
+		//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
+		generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
+	}
+
+	Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
+	
+	//Echo("generated_gps_point_on_cube"+generated_gps_point_on_cube);
+	
+	
+	Vector3D generated_gps_point_on_cube_norm = Vector3D.Normalize(generated_gps_point_on_cube);
+	
+	
+	generated_gps_point_on_planet =  planet_radius * Vector3D.Normalize(generated_gps_point_on_cube_norm)+ cubeCenter;
+	
+	generated_gps_point_on_planet = Vector3D.Round(generated_gps_point_on_planet,1);
+					
+	resultV3D = generated_gps_point_on_planet;
+	
+	return resultV3D;
 }
