@@ -644,6 +644,7 @@ public void Main(string argument, UpdateType updateSource)
 		
 		Echo("If any of the two is -1 the script won't run");
 		if(currentRegionN==-1||targetRegionN==-1){
+			str_to_display = "target or rover not in region";
 			return;
 		}
 		
@@ -752,6 +753,12 @@ public void Main(string argument, UpdateType updateSource)
 				if(facenumberCalculatedIntermediate!=-1){
 					Vector3D rconvertPointToV3D = convertPointToV3D(RemoteControl , facenumberCalculatedIntermediate, testGetCenInter);
 					Echo("rconvertPointToV3D:"+rconvertPointToV3D);
+					
+					MyWaypointInfo tmpWPI  = new MyWaypointInfo("inter", rconvertPointToV3D);
+					
+					Me.CustomData = tmpWPI.ToString();
+					
+					targetV3Dabs = rconvertPointToV3D;
 				}
 				
 				// faceAndPointOnPlanetsCalculated(sc,?,testGetCenInter, true, 
@@ -775,6 +782,13 @@ public void Main(string argument, UpdateType updateSource)
 		
 		
 		steerOverride = turnRightOrLeft/crossForwardTT.Length();
+		
+		Echo("targetV3Drel.L:"+targetV3Drel.Length());
+		
+		if(targetV3Drel.Length()>10000){
+			steerOverride *=10;
+		}
+		
 		if(Math.Abs(steerOverride)<.98){
 			steerOverride*=0.25;
 		}
@@ -786,7 +800,6 @@ public void Main(string argument, UpdateType updateSource)
 		
 		
 		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
-
 		
 		
 		foreach (IMyMotorSuspension Wheel in Wheels)
