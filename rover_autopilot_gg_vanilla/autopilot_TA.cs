@@ -497,8 +497,6 @@ public void Main(string argument, UpdateType updateSource)
 		theAntenna.HudText = str_to_display;
 	}
 	
-    //note:
-    //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
     //var targetGpsString = "";
     //Echo("targetGpsString:" + targetGpsString);
     MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
@@ -1057,7 +1055,7 @@ public bool isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentPoi
 	return testResultTmp;
 }
 
-// https://www.eecs.umich.edu/courses/eecs380/HANDOUTS/PROJ2/InsidePoly.html
+// eecs umich insidepoly
 public bool InsidePolygon(List<Point> polygon,int N,Point p)
 {
   int counter = 0;
