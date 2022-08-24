@@ -275,7 +275,7 @@ public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc,out int facenumb
 	// }
 	
 	Vector3D centerFacePositionOffset = new Vector3D(0,0,0);
-	int planet_radius = 60000;
+	double planet_radius = 60000;
 	
 	Vector3D planetCenter = new Vector3D(0,0,0);
 
