@@ -42,42 +42,42 @@ def generateDiamondList(point, distance):
         tmpPoint = [point[0]-(distance-i1), point[1]+i1]
         if(isThisInBounds(tmpPoint)==True):
             resultList.append(tmpPoint)
-            print("tmpPoint:"+str(tmpPoint))
+            # print("tmpPoint:"+str(tmpPoint))
         # left going down
         tmpPoint = [point[0]-(distance-i1), point[1]-i1]
         if(isThisInBounds(tmpPoint)==True):
             resultList.append(tmpPoint)
-            print("tmpPoint:"+str(tmpPoint))
+            # print("tmpPoint:"+str(tmpPoint))
 
     tmpPoint = [point[0], point[1] - distance]
     if (isThisInBounds(tmpPoint) == True):
         resultList.append(tmpPoint)
-        print("tmpPoint:" + str(tmpPoint))
+        # print("tmpPoint:" + str(tmpPoint))
     tmpPoint = [point[0], point[1] + distance]
     if (isThisInBounds(tmpPoint) == True):
         resultList.append(tmpPoint)
-        print("tmpPoint:" + str(tmpPoint))
+        # print("tmpPoint:" + str(tmpPoint))
 
     for i1 in range(0,distance):
         # right going up
         tmpPoint = [point[0]+(distance-i1), point[1]+i1]
         if(isThisInBounds(tmpPoint)==True):
             resultList.append(tmpPoint)
-            print("tmpPoint:"+str(tmpPoint))
+            # print("tmpPoint:"+str(tmpPoint))
         # right going down
         tmpPoint = [point[0]+(distance-i1), point[1]-i1]
         if(isThisInBounds(tmpPoint)==True):
             resultList.append(tmpPoint)
-            print("tmpPoint:"+str(tmpPoint))
+            # print("tmpPoint:"+str(tmpPoint))
 
     return resultList
 
 def isThisInBounds(point):
-    if(point[0] > 2048):
+    if(point[0] >= 2048):
         return False
     if(point[0] < 0):
         return False
-    if(point[1] > 2048):
+    if(point[1] >= 2048):
         return False
     if(point[1] < 0):
         return False
@@ -144,36 +144,47 @@ for file_path in full_files_path:
     print(fileNameTarget ,"wrote")
 
     # plt.imshow(img,cmap='gray')
-    # plt.show()
+    plt.show()
 
     # npAccumalator
     npAccumalator = np.zeros_like(img)
 
-    # # TODO: do a diamond generator
-    # # 128 0
-    # for x in range(0,200):
-    #     print("line x:"+str(x))
-    #     for y in range(0,200):
-    #         # print("line y:"+str(y))
-    #         if(thres_abs_sobelxy[x,y]==0):
-    #             # print(thres_abs_sobelxy[x,y])
-    #             npAccumalator[x, y] = 2*250
-    #             for xi in range(0, 200):
-    #                 for yi in range(0, 200):
-    #                     if(thres_abs_sobelxy[xi,yi]==128):
-    #                         if npAccumalator[x,y]>np.linalg.norm([x-xi,y-yi],ord=2):
-    #                             npAccumalator[x,y]=np.linalg.norm([x-xi,y-yi],ord=2)
-    #                             # print("updated to"+str(np.linalg.norm([x-xi,y-yi],ord=2)))
-    #         else:
-    #             npAccumalator[x,y] = 0
+    # # debugging
+    # testListingDiamond = generateDiamondList([64,64], 3)
+    # npAccumalator[64,64] = 100
+    # for point in testListingDiamond:
+    #     print(point[0],point[1])
+    #     npAccumalator[point[0],point[1]] = 50
 
-    testListingDiamond = generateDiamondList([64,64], 3)
+    # TODO: do a diamond generator
+    # 128 0
+    for x in range(500,800):
+    # for x in range(0,2048):
+        print("line x:"+str(x))
+        for y in range(500,800):
+        # for y in range(0,2048):
+            # print("line y:"+str(y))
+            if(thres_abs_sobelxy[x,y]==0):
+                # print(thres_abs_sobelxy[x,y])
+                for iDistance in range(0,2048):
+                    positiveHit = False
+                    testListingDiamond = generateDiamondList([x, y], iDistance)
+                    for pTT in testListingDiamond:
+                        # print(thres_abs_sobelxy[x,y])
+                        if(thres_abs_sobelxy[pTT[0],pTT[1]]==128):
+                            positiveHit = True
+                            npAccumalator[x,y]=iDistance
+                            # print("iDistance:"+str(iDistance))
+                        if(positiveHit ==True):
+                            break
+                    if(positiveHit ==True):
+                        break
+                # print("iDistance:"+str(iDistance))
+        # if(x%20==0):
+        #     plt.imshow(npAccumalator, cmap='gray')
+        #     plt.show()
 
-    npAccumalator[64,64] = 100
 
-    for point in testListingDiamond:
-        print(point[0],point[1])
-        npAccumalator[point[0],point[1]] = 50
 
 
     plt.imshow(npAccumalator,cmap='gray')
