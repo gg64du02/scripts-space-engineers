@@ -48,6 +48,16 @@ def generateDiamondList(point, distance):
         if(isThisInBounds(tmpPoint)==True):
             resultList.append(tmpPoint)
             print("tmpPoint:"+str(tmpPoint))
+
+    tmpPoint = [point[0], point[1] - distance]
+    if (isThisInBounds(tmpPoint) == True):
+        resultList.append(tmpPoint)
+        print("tmpPoint:" + str(tmpPoint))
+    tmpPoint = [point[0], point[1] + distance]
+    if (isThisInBounds(tmpPoint) == True):
+        resultList.append(tmpPoint)
+        print("tmpPoint:" + str(tmpPoint))
+
     for i1 in range(0,distance):
         # right going up
         tmpPoint = [point[0]+(distance-i1), point[1]+i1]
