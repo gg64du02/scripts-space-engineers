@@ -140,10 +140,6 @@ def isThisInBounds(point):
         return False
     return True
 
-
-
-
-
 files = {"back.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
@@ -168,23 +164,10 @@ for file_path in full_files_path:
     abs_sobely = np.absolute(sobely)
     abs_sobelxy = np.add(abs_sobelx , abs_sobely)
 
-    ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
+    # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
     # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 1 , 128,cv.THRESH_BINARY)
     # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 12 , 256,cv.THRESH_BINARY)
-    # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 6 , 128,cv.THRESH_BINARY)
-
-    # for i in range(0,2048):
-    #     for j in range(0,2048):
-    #         if( i % 64==0):
-    #             if( j % 64==0):
-    #                 print("i",i,"j",j)
-    #                 thres_abs_sobelxy[i][j] = 255
-    #                 # diagonals
-    #                 cv.line(thres_abs_sobelxy,(i,j),(i+64,j+64),(255,255,255))
-    #                 # vertical lines
-    #                 cv.line(thres_abs_sobelxy,(i,j),(i,j+64),(255,255,255))
-    #                 # horizontals
-    #                 cv.line(thres_abs_sobelxy,(i,j),(i+64,j),(255,255,255))
+    ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 6 , 128,cv.THRESH_BINARY)
 
     # plt.imshow(sobelxy,cmap='gray')
     # plt.imshow(abs_sobelxy,cmap='gray')
@@ -211,96 +194,6 @@ for file_path in full_files_path:
     #     npAccumalator[point[0],point[1]] = 50
 
 
-
-
-    # # TODO: do a diamond generator
-    # # 128 0
-    # # for x in range(500,800):
-    # for x in range(0,2048):
-    #     print("line x:"+str(x))
-    #     # for y in range(500,800):
-    #     for y in range(0,2048):
-    #         # print("line y:"+str(y))
-    #         if(thres_abs_sobelxy[x,y]==0):
-    #             # print(thres_abs_sobelxy[x,y])
-    #             for iDistance in range(0,2048):
-    #                 positiveHit = False
-    #                 testListingDiamond = generateDiamondList([x, y], iDistance)
-    #                 for pTT in testListingDiamond:
-    #                     # print(thres_abs_sobelxy[x,y])
-    #                     if(thres_abs_sobelxy[pTT[0],pTT[1]]==128):
-    #                         positiveHit = True
-    #                         npAccumalator[x,y]=iDistance
-    #                         # print("iDistance:"+str(iDistance))
-    #                     if(positiveHit ==True):
-    #                         break
-    #                 if(positiveHit ==True):
-    #                     break
-    #             # print("iDistance:"+str(iDistance))
-    #     # if(x%20==0):
-    #     #     plt.imshow(npAccumalator, cmap='gray')
-    #     #     plt.show()
-
-
-
-    # npAccumalator = npAccumalator.astype('float64')
-    #
-    # listOfPointsToTestAgainst =[]
-    #
-    # for x in range(0,2048):
-    #     for y in range(0,2048):
-    #         if thres_abs_sobelxy[x,y]==128:
-    #             listOfPointsToTestAgainst.append([x,y])
-    #             # pass
-    #
-    # print("len(listOfPointsToTestAgainst):"+str(len(listOfPointsToTestAgainst)))
-    #
-    # tmpRedux = []
-    # for i in range(0,30000):
-    #     tmpRedux.append(listOfPointsToTestAgainst[i])
-    #
-    # listOfPointsToTestAgainst = tmpRedux
-    # print("len(tmpRedux):"+str(len(tmpRedux)))
-    #
-    # for x in range(0,500):
-    #     for y in range(0,1):
-    #
-    #         # y=x
-    #         closestPoint = [50000,50000]
-    #         cpDistance = 1000000
-    #         # closestPoint = listOfPointsToTestAgainst[0]
-    #         # cpDistance = np.linalg.norm(np.subtract(closestPoint,[x,y]),ord=2)
-    #         iTmpIndex = 0
-    #         for point in listOfPointsToTestAgainst:
-    #             # print("=================")
-    #             currentTestedDistance =np.linalg.norm(np.subtract(closestPoint,[x,y]),ord=2)
-    #             # if iTmpIndex % 20000 == 0:
-    #             # print("currentTestedDistance:"+str(currentTestedDistance))
-    #             if currentTestedDistance<cpDistance:
-    #                 # print("YES if currentTestedDistance<cpDistance:")
-    #                 closestPoint = point
-    #                 cpDistance = currentTestedDistance
-    #                 # print("closestPoint:"+str(closestPoint))
-    #             else:
-    #                 pass
-    #                 # print("NOT if currentTestedDistance<cpDistance:")
-    #             # print("cpDistance:" + str(cpDistance))
-    #         # npAccumalator[x,y]=int(cpDistance)
-    #         npAccumalator[x,y]=cpDistance
-    #         print(cpDistance)
-    #     # if x%10==0:
-    #     print("x:"+str(x))
-    #
-    #
-    #         # print(cpDistance)
-    #
-    # plt.imshow(npAccumalator)
-    # plt.show()
-
-
-
-
-
 #     # plt.imshow(npAccumalator,cmap='gray')
 #     plt.show()
 #     plt.close()
@@ -311,145 +204,33 @@ for file_path in full_files_path:
 
 if __name__ == '__main__':
 
-    # # if we divide in chunk of 256 size: that would make 8 * 8 sub-area to process
-    # subImageIndex = 0
-    #
-    # # for subImageIndex in range(3000,3500):
-    # for subImageIndex in range(0,4):
-    # # for subImageIndex in range(0,1):
-    #     # iStart = subImageIndex % 8
-    #     # iEnd = subImageIndex % 8 + 1
-    #     # jStart = subImageIndex // 8
-    #     # jEnd = subImageIndex // 8 + 1
-    #
-    #     # iStart = subImageIndex % 64
-    #     # iEnd = subImageIndex % 64 + 1
-    #     # jStart = subImageIndex // 64
-    #     # jEnd = subImageIndex // 64 + 1
-    #     print("==============")
-    #     print("subImageIndex"+str(subImageIndex))
-    #     iStart = subImageIndex
-    #     iEnd = subImageIndex + 1
-    #     # print("iStart"+str(iStart))
-    #     # print("iEnd"+str(iEnd))
-    #     # print("jStart"+str(jStart))
-    #     # print("jEnd"+str(jEnd))
-    #
-    # # exit()
-    #
-    #     p = Pool(processes = 16)
-    #     # points =  [[i,j] for i in range(0,5) for j in range(0,4)]
-    #     # points =  [[i,j] for i in range(500,800) for j in range(500,800)]
-    #     # points =  [[i,j] for i in range(500,1000) for j in range(500,1000)]
-    #     # points =  [[i,j] for i in range(512,1536) for j in range(512,1536)]
-    #     # points =  [[i,j] for i in range(0,512) for j in range(512,1024)]
-    #     # points =  [[i,j] for i in range(0,1536) for j in range(512,1536)]
-    #     points =  [[i,j] for i in range(0,2048) for j in range(iStart*512,iEnd*512)]
-    #     # points =  [[i,j] for i in range(500,1000) for j in range(0,500)]
-    #     # points =  [[i,j] for i in range(0,500) for j in range(0,500)]
-    #     # points =  [[i,j] for i in range(1500,2047) for j in range(0,1024)]
-    #     # points =  [[i,j] for i in range(768,1024) for j in range(768,1024)]
-    #     # points =  [[i,j] for i in range(0,2048) for j in range(0,2048)]
-    #     # points =  [[i,j] for i in range(0,256) for j in range(0,256)]
-    #     # points =  [[i,j] for i in range(iStart*256,iEnd*256) for j in range(jStart*256,jEnd*256)]
-    #     # points =  [[i,j] for i in range(iStart*32,iEnd*32) for j in range(jStart*32,jEnd*32)]
-    #     data = p.map(processThisPoint , points)
-    #     for dataPoint in data:
-    #         # print("dataPoint:"+str(dataPoint))
-    #         xData = dataPoint[0][0]
-    #         yData = dataPoint[0][1]
-    #         iDistanceData = dataPoint[1]
-    #         npAccumalator[xData,yData]=iDistanceData
-    #
-    # plt.imshow(npAccumalator,cmap='gray')
-    # plt.show()
-    # # p.start()
-    # # p.join()
-    # p.close()
-    # # print(data)
-    #
-    # fileNameTarget = stringTmpSplitted + "_mk3_step1" + ".png"
-    #
-    # cv.imwrite(fileNameTarget,npAccumalator)
-    # print(fileNameTarget ,"wrote")
+    p = Pool(processes = 16)
 
+    lines =  [[[i,j] for i in range(k,k+1) for j in range(0,2048)] for k in range(0,2048)]
 
+    data = p.map(processThisPoints , lines)
+    for dataPoint in data:
+        pixels = dataPoint[0]
+        iDistances = dataPoint[1]
+        # print("pixels"+str(pixels))
+        # print("iDistances"+str(iDistances))
+        for iPixels in range(0,len(pixels)):
+            # print("iPixels"+str(iPixels))
+            # if(iPixels==2046):
+            #     pass
+            xData = pixels[iPixels][0]
+            yData = pixels[iPixels][1]
+            # print("xData"+str(xData))
+            # print("yData"+str(yData))
+            # print("len(iDistances)"+str(len(iDistances)))
+            # print("len(pixels)"+str(len(pixels)))
+            # print("len(iDistances)"+str(len(iDistances)))
+            iDistance = iDistances[iPixels]
+            # print("iDistance"+str(iDistance))
+            npAccumalator[xData,yData]=iDistance
 
-    # if we divide in chunk of 256 size: that would make 8 * 8 sub-area to process
-    subImageIndex = 0
-
-    # for subImageIndex in range(3000,3500):
-    for subImageIndex in range(0,1):
-    # for subImageIndex in range(0,1):
-        # iStart = subImageIndex % 8
-        # iEnd = subImageIndex % 8 + 1
-        # jStart = subImageIndex // 8
-        # jEnd = subImageIndex // 8 + 1
-
-        # iStart = subImageIndex % 64
-        # iEnd = subImageIndex % 64 + 1
-        # jStart = subImageIndex // 64
-        # jEnd = subImageIndex // 64 + 1
-        print("==============")
-        print("subImageIndex"+str(subImageIndex))
-        iStart = subImageIndex
-        iEnd = subImageIndex + 1
-        # print("iStart"+str(iStart))
-        # print("iEnd"+str(iEnd))
-        # print("jStart"+str(jStart))
-        # print("jEnd"+str(jEnd))
-
-    # exit()
-
-        p = Pool(processes = 16)
-        # points =  [[i,j] for i in range(0,5) for j in range(0,4)]
-        # points =  [[i,j] for i in range(500,800) for j in range(500,800)]
-        # points =  [[i,j] for i in range(500,1000) for j in range(500,1000)]
-        # points =  [[i,j] for i in range(512,1536) for j in range(512,1536)]
-        # points =  [[i,j] for i in range(0,512) for j in range(512,1024)]
-        # points =  [[i,j] for i in range(0,1536) for j in range(512,1536)]
-        # points =  [[i,j] for i in range(0,2048) for j in range(iStart*512,iEnd*512)]
-        # lines =  [[i,j] for i in range(subImageIndex,subImageIndex+1) for j in range(0,10)]
-        # lines =  [[[i,j] for i in range(subImageIndex,subImageIndex+1) for j in range(0,10)] for k in range(0,1)]
-        # lines =  [[[i,j] for i in range(k,k+1) for j in range(0,2048)] for k in range(0,500)]
-        lines =  [[[i,j] for i in range(k,k+1) for j in range(0,2048)] for k in range(0,2048)]
-        # lines =  [[[i,j] for i in range(k*4,k*(4+1)) for j in range(0,2048)] for k in range(0,10)]
-        # lines =  [[[i,j] for i in range(k,k+1) for j in range(0,512)] for k in range(0,512)]
-        # lines =  [(k,[i,j]) for i in range(subImageIndex,subImageIndex+1) for j in range(0,10) for k in range(10)]
-        # for iLinesIndex in range(0,3):
-        #     lines = lines + [[i,j] for i in range(iLinesIndex,iLinesIndex+1) for j in range(0,10)]
-        # points =  [[i,j] for i in range(500,1000) for j in range(0,500)]
-        # points =  [[i,j] for i in range(0,500) for j in range(0,500)]
-        # points =  [[i,j] for i in range(1500,2047) for j in range(0,1024)]
-        # points =  [[i,j] for i in range(768,1024) for j in range(768,1024)]
-        # points =  [[i,j] for i in range(0,2048) for j in range(0,2048)]
-        # points =  [[i,j] for i in range(0,256) for j in range(0,256)]
-        # points =  [[i,j] for i in range(iStart*256,iEnd*256) for j in range(jStart*256,jEnd*256)]
-        # points =  [[i,j] for i in range(iStart*32,iEnd*32) for j in range(jStart*32,jEnd*32)]
-        # print("lines_main:"+str(lines))
-        data = p.map(processThisPoints , lines)
-        for dataPoint in data:
-            pixels = dataPoint[0]
-            iDistances = dataPoint[1]
-            # print("pixels"+str(pixels))
-            # print("iDistances"+str(iDistances))
-            for iPixels in range(0,len(pixels)):
-                # print("iPixels"+str(iPixels))
-                if(iPixels==2046):
-                    pass
-                xData = pixels[iPixels][0]
-                yData = pixels[iPixels][1]
-                # print("xData"+str(xData))
-                # print("yData"+str(yData))
-                # print("len(iDistances)"+str(len(iDistances)))
-                # print("len(pixels)"+str(len(pixels)))
-                # print("len(iDistances)"+str(len(iDistances)))
-                iDistance = iDistances[iPixels]
-                # print("iDistance"+str(iDistance))
-                npAccumalator[xData,yData]=iDistance
-
-            # iDistanceData = dataPoint[1]
-            # npAccumalator[xData,yData]=iDistanceData
+        # iDistanceData = dataPoint[1]
+        # npAccumalator[xData,yData]=iDistanceData
 
     # for debbuging purposes
     # for x in range(0, 2048):
@@ -464,9 +245,9 @@ if __name__ == '__main__':
     p.close()
     # print(data)
 
-    # fileNameTarget = stringTmpSplitted + "_mk3_step1" + ".png"
-    #
-    # cv.imwrite(fileNameTarget,npAccumalator)
-    # print(fileNameTarget ,"wrote")
+    fileNameTarget = stringTmpSplitted + "_mk3_step1" + ".png"
+
+    cv.imwrite(fileNameTarget,npAccumalator)
+    print(fileNameTarget ,"wrote")
 
 
