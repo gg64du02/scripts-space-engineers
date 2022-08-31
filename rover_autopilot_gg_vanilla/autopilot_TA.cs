@@ -784,7 +784,7 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("targetV3Drel.L:"+targetV3Drel.Length());
 		
 		if(targetV3Drel.Length()>10000){
-			steerOverride *=10;
+			steerOverride *=4;
 		}
 		
 		if(Math.Abs(steerOverride)<.98){
@@ -827,9 +827,17 @@ public void Main(string argument, UpdateType updateSource)
 			
 		}
 		
-		//stop when destination is reached
-		if(targetV3Drel.Length()<5){
-			myTerrainTarget = new Vector3D(0, 0, 0);
+		// //stop when destination is reached
+		// if(targetV3Drel.Length()<5){
+			// myTerrainTarget = new Vector3D(0, 0, 0);
+		// }
+		
+		if(facenumberCalculated==facenumberCalculatedTarget){
+			if(Math.Abs(pixelPosCalculated.X-pixelPosCalculatedTarget.X)<=1){
+				if(Math.Abs(pixelPosCalculated.Y-pixelPosCalculatedTarget.Y)<=1){
+					myTerrainTarget = new Vector3D(0, 0, 0);
+				}
+			}
 		}
 		
 		
