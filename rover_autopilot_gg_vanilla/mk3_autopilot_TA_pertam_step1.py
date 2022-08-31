@@ -343,4 +343,7 @@ if __name__ == '__main__':
     # cv.imwrite(fileNameTarget,npAccumalator)
     print(fileNameTarget ,"wrote")
 
+    with open(stringTmpSplitted + "_mk3_step1" + '.pickle', 'wb') as f:
+        pickle.dump(npAccumalator, f)
+
 
