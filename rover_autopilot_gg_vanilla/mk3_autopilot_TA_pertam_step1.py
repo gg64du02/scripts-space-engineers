@@ -60,7 +60,7 @@ def processThisPoint(point):
 def processThisPoints(points):
     iDistances = []
     iDistance = 0
-    # print("points:"+str(points))
+    print("points:"+str(points))
     # print("str(len(points)):"+str(len(points)))
     for point in points:
         x = point[0]
@@ -75,6 +75,7 @@ def processThisPoints(points):
             for iDistance in range(iDistance, 2048):
                 positiveHit = False
                 testListingDiamond = generateDiamondList([x, y], iDistance)
+                # testListingDiamond = generateCircleList([x, y], iDistance)
                 for pTT in testListingDiamond:
                     # print(thres_abs_sobelxy[x,y])
                     if (thres_abs_sobelxy[pTT[0], pTT[1]] == 128):
@@ -89,7 +90,52 @@ def processThisPoints(points):
         else:
             iDistances.append(0)
 
+    print(points, iDistances)
     return points, iDistances
+
+import pickle
+
+def processThisPointsAgainstCircles(points):
+    iDistances = []
+    # iDistance = 0
+    # print("points:"+str(points))
+    # print("str(len(points)):"+str(len(points)))
+    with open('arrayOfCirclesPointsList.pickle','rb') as f:
+        arrayOfCirclesPointsList = pickle.load(f)
+    # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
+    for point in points:
+        x = point[0]
+        y = point[1]
+        # if(iDistance!=0):
+        #     iDistance=iDistance-1
+        # print("point:"+str(point))
+        # global thres_abs_sobelxy
+        if (thres_abs_sobelxy[x, y] == 0):
+            # print(thres_abs_sobelxy[x,y])
+            # for iDistance in range(0, 2048):
+            smallestDistanceSoFar = 50000
+            pointsIndex = 0
+            positiveHit = False
+            for listPointForARadius in arrayOfCirclesPointsList:
+                # print("pointsIndex:",pointsIndex)
+                for pointOnARadius in listPointForARadius:
+                    testingPoint = [x+pointOnARadius[0],y+pointOnARadius[1]]
+                    pass
+                    if(isThisInBounds(testingPoint)==True):
+                        if(thres_abs_sobelxy[testingPoint[0],testingPoint[1]]!=0):
+                            iDistances.append(pointsIndex)
+                            positiveHit = True
+                    if (positiveHit == True):
+                        break
+                if (positiveHit == True):
+                    break
+                pointsIndex = pointsIndex + 1
+        else:
+            iDistances.append(0)
+
+    # print(points, iDistances)
+    return points, iDistances
+
 
 def generateDiamondList(point, distance):
     resultList =[]
@@ -164,15 +210,15 @@ for file_path in full_files_path:
     abs_sobely = np.absolute(sobely)
     abs_sobelxy = np.add(abs_sobelx , abs_sobely)
 
-    # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
+    ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 4  , 128,cv.THRESH_BINARY)
     # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 1 , 128,cv.THRESH_BINARY)
     # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 12 , 256,cv.THRESH_BINARY)
-    ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 6 , 128,cv.THRESH_BINARY)
+    # ret,thres_abs_sobelxy = cv.threshold(abs_sobelxy, 6 , 128,cv.THRESH_BINARY)
 
     # plt.imshow(sobelxy,cmap='gray')
     # plt.imshow(abs_sobelxy,cmap='gray')
     # plt.imshow(thres_abs_sobelxy)
-    plt.imshow(thres_abs_sobelxy,cmap='gray')
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
 
     stringTmpSplitted = file_path.split(".")[0]
     # print("stringTmpSplitted",stringTmpSplitted)
@@ -194,21 +240,64 @@ for file_path in full_files_path:
     #     npAccumalator[point[0],point[1]] = 50
 
 
-#     # plt.imshow(npAccumalator,cmap='gray')
+    # # plt.imshow(npAccumalator,cmap='gray')
+
+
+
+    # thres_abs_sobelxy = thres_abs_sobelxy.astype('float64')
+    thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
+
+    # image = thres_abs_sobelxy
+    # # image = img
+    #
+    # connectivity = 8
+    #
+    # # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
+    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
+    #
+    # num_stats = output[0]
+    # labels = output[1]
+    # stats = output[2]
+    #
+    # new_image = image.copy()
+    #
+    # for label in range(num_stats):
+    #     # if stats[label,cv.CC_STAT_AREA] == 1:
+    #     #     new_image[labels == label] = 0
+    #     # if stats[label,cv.CC_STAT_AREA] == 2:
+    #     #     new_image[labels == label] = 0
+    #     # if stats[label,cv.CC_STAT_AREA] == 3:
+    #     #     new_image[labels == label] = 0
+    #     if stats[label,cv.CC_STAT_AREA] <64:
+    #         new_image[labels == label] = 0
+    #     # else:
+    #     #     print(stats[label,cv.CC_STAT_AREA])
+    #
+    # thres_abs_sobelxy = new_image
+
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
+    #
+    # plt.show()
+    # plt.close()
+#     plt.imshow(new_image,cmap='gray')
+#
 #     plt.show()
 #     plt.close()
-#     # exit()
-#     # img.delete()
-#
+# exit()
+    # img.delete()
+
 # exit()
 
 if __name__ == '__main__':
 
     p = Pool(processes = 16)
 
-    lines =  [[[i,j] for i in range(k,k+1) for j in range(0,2048)] for k in range(0,2048)]
+    print("pooling....")
+    lines =  [[[i,j] for i in range(k,k+1) for j in range(0,256)] for k in range(0,256)]
 
-    data = p.map(processThisPoints , lines)
+    # data = p.map(processThisPoints , lines)
+    data = p.map(processThisPointsAgainstCircles , lines)
+
     for dataPoint in data:
         pixels = dataPoint[0]
         iDistances = dataPoint[1]
@@ -218,6 +307,10 @@ if __name__ == '__main__':
             # print("iPixels"+str(iPixels))
             # if(iPixels==2046):
             #     pass
+            # using processThisPoints
+            # xData = pixels[iPixels]
+            # yData = pixels[iPixels]
+            # using processThisPointsAgainstCircles
             xData = pixels[iPixels][0]
             yData = pixels[iPixels][1]
             # print("xData"+str(xData))
@@ -246,8 +339,8 @@ if __name__ == '__main__':
     # print(data)
 
     fileNameTarget = stringTmpSplitted + "_mk3_step1" + ".png"
-
-    cv.imwrite(fileNameTarget,npAccumalator)
+    #
+    # cv.imwrite(fileNameTarget,npAccumalator)
     print(fileNameTarget ,"wrote")
 
 
