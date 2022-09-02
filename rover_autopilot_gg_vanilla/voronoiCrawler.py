@@ -85,8 +85,8 @@ for file_path in full_files_path:
     # plt.imshow(sobelxy,cmap='gray')
     # plt.imshow(abs_sobelxy,cmap='gray')
     # plt.imshow(thres_abs_sobelxy)
-    plt.imshow(thres_abs_sobelxy,cmap='gray')
-    # plt.imshow(img,cmap='gray')
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
+    # # plt.imshow(img,cmap='gray')
     # plt.show()
 
     stringTmpSplitted = file_path.split(".")[0]
@@ -103,45 +103,73 @@ for file_path in full_files_path:
         print("if(isThisInBounds(startingPoint)==False):")
         exit()
 
+    iLoop = 0
+
+    resultImg = np.zeros_like(thres_abs_sobelxy)
+
+    while iLoop<51:
+
+        # # debugging purpose
+        # testingFunction = generateFourNeighborPoints(startingPoint)
+        # for point in testingFunction:
+        #     print("point:",point)
+
+        closestDistanceToABorder = 0
+
+        # Distance_from_a_point_to_a_line
+        # horizontals
+        horDist1 = abs((startingPoint[1]-2048))
+        horDist2 = abs((startingPoint[1]-0))
+
+        # verticals
+        verDist1 = abs((startingPoint[0]-2048))
+        verDist2 = abs((startingPoint[0]-0))
+
+        print(horDist1,horDist2,verDist1,verDist2)
+
+        closestDistanceToABorder =min(horDist1,horDist2,verDist1,verDist2)
+
+        print("closestDistanceToABorder",closestDistanceToABorder)
+
+        for pointOnCircle in arrayOfCirclesPointsList[closestDistanceToABorder]:
+            currentTestedPoint = [startingPoint[0]+pointOnCircle[0],startingPoint[1]+pointOnCircle[1]]
+            # print("pointOnCircle",pointOnCircle)
+            pass
+            if(thres_abs_sobelxy[currentTestedPoint[0],currentTestedPoint[1]]==128):
+                print("touched!")
+                print("iLoop",iLoop)
+                print("currentTestedPoint",currentTestedPoint)
+                # resultImg[pointOnCircle[0],pointOnCircle [1]] = 128
+                # plt.imshow(resultImg,cmap='gray')
+                # plt.show()
+                # exit()
+
+        nextStartingPoint = [0,0]
+
+        if(closestDistanceToABorder==horDist1):
+            nextStartingPoint = [startingPoint[0],startingPoint[1]-1]
+        if (closestDistanceToABorder == horDist2):
+            nextStartingPoint = [startingPoint[0],startingPoint[1]+1]
+
+        if (closestDistanceToABorder == verDist1):
+            nextStartingPoint = [startingPoint[0]-1,startingPoint[1]]
+        if (closestDistanceToABorder == verDist2):
+            nextStartingPoint = [startingPoint[0]+1,startingPoint[1]]
+
+        print("nextStartingPoint",nextStartingPoint)
+
+        resultImg[startingPoint[0],startingPoint[1]] = 128
+
+        startingPoint = nextStartingPoint
 
 
-    # # debugging purpose
-    # testingFunction = generateFourNeighborPoints(startingPoint)
-    # for point in testingFunction:
-    #     print("point:",point)
 
-    closestDistanceToABorder = 0
-
-    # Distance_from_a_point_to_a_line
-    # horizontals
-    horDist1 = abs((startingPoint[1]-2048))
-    horDist2 = abs((startingPoint[1]-0))
-
-    # verticals
-    verDist1 = abs((startingPoint[0]-2048))
-    verDist2 = abs((startingPoint[0]-0))
-
-    print(horDist1,horDist2,verDist1,verDist2)
-
-    closestDistanceToABorder =min(horDist1,horDist2,verDist1,verDist2)
-
-    print("closestDistanceToABorder",closestDistanceToABorder)
-
-    nextStartingPoint = [0,0]
-
-    if(closestDistanceToABorder==horDist1):
-        nextStartingPoint = [startingPoint[0],startingPoint[1]-1]
-    if (closestDistanceToABorder == horDist2):
-        nextStartingPoint = [startingPoint[0],startingPoint[1]+1]
-
-    if (closestDistanceToABorder == verDist1):
-        nextStartingPoint = [startingPoint[0]-1,startingPoint[1]]
-    if (closestDistanceToABorder == verDist2):
-        nextStartingPoint = [startingPoint[0]+1,startingPoint[1]]
-
-    print("nextStartingPoint",nextStartingPoint)
+        iLoop = iLoop + 1
 
 
 
 
+
+    plt.imshow(thres_abs_sobelxy,cmap='gray')
+    plt.show()
 
