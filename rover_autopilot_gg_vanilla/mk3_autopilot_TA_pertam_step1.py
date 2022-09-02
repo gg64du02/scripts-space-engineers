@@ -99,38 +99,64 @@ def processThisPointsAgainstCircles(points):
     iDistances = []
     # iDistance = 0
     # print("points:"+str(points))
+    print("points[0]:"+str(points[0]))
     # print("str(len(points)):"+str(len(points)))
     with open('arrayOfCirclesPointsList.pickle','rb') as f:
         arrayOfCirclesPointsList = pickle.load(f)
     # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
+    pointsIndex = 0
+    previousPointsIndex = 0
     for point in points:
+        # print("test1")
         x = point[0]
         y = point[1]
         # if(iDistance!=0):
         #     iDistance=iDistance-1
         # print("point:"+str(point))
         # global thres_abs_sobelxy
+        # print("thres_abs_sobelxy[x, y]:",str(int(thres_abs_sobelxy[x, y])))
+        # print("thres_abs_sobelxy[x, y]:",thres_abs_sobelxy[x, y])
+        # if (int(thres_abs_sobelxy[x, y]) == 0):
         if (thres_abs_sobelxy[x, y] == 0):
+            # print("test2")
             # print(thres_abs_sobelxy[x,y])
             # for iDistance in range(0, 2048):
             smallestDistanceSoFar = 50000
-            pointsIndex = 0
+            # pointsIndex = pointsIndex -2
+            # if(pointsIndex <0):
+            #     pointsIndex = 0
+
             positiveHit = False
-            for listPointForARadius in arrayOfCirclesPointsList:
+            # print("pointsIndex1:",pointsIndex)
+            pointsIndex = previousPointsIndex - 2
+            if(pointsIndex <0):
+                pointsIndex = 0
+            # print("pointsIndex2:",pointsIndex)
+            # for listPointForARadius in arrayOfCirclesPointsList:
+            for listPointForARadius in arrayOfCirclesPointsList[pointsIndex:]:
                 # print("pointsIndex:",pointsIndex)
                 for pointOnARadius in listPointForARadius:
+                    # print("pointOnARadius:",pointOnARadius)
                     testingPoint = [x+pointOnARadius[0],y+pointOnARadius[1]]
                     pass
                     if(isThisInBounds(testingPoint)==True):
+                        # print("if(isThisInBounds(testingPoint)==True):")
+                        # print("thres_abs_sobelxy[testingPoint[0],testingPoint[1]]:",thres_abs_sobelxy[testingPoint[0],testingPoint[1]])
+                        # print(thres_abs_sobelxy[testingPoint[0],testingPoint[1]])
                         if(thres_abs_sobelxy[testingPoint[0],testingPoint[1]]!=0):
+                            # print(thres_abs_sobelxy[testingPoint[0],testingPoint[1]])
+                            # print("if(thres_abs_sobelxy[testingPoint[0],testingPoint[1]]!=0):")
                             iDistances.append(pointsIndex)
+                            # print("pointsIndex:",pointsIndex)
                             positiveHit = True
+                            previousPointsIndex = pointsIndex
                     if (positiveHit == True):
                         break
                 if (positiveHit == True):
                     break
                 pointsIndex = pointsIndex + 1
         else:
+            # iDistances.append(128)
             iDistances.append(0)
 
     # print(points, iDistances)
@@ -247,6 +273,67 @@ for file_path in full_files_path:
     # thres_abs_sobelxy = thres_abs_sobelxy.astype('float64')
     thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
 
+    image = thres_abs_sobelxy
+    # image = img
+
+    connectivity = 8
+
+    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
+    output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
+
+    num_stats = output[0]
+    labels = output[1]
+    stats = output[2]
+
+    new_image = image.copy()
+
+    for label in range(num_stats):
+        # if stats[label,cv.CC_STAT_AREA] == 1:
+        #     new_image[labels == label] = 0
+        # if stats[label,cv.CC_STAT_AREA] == 2:
+        #     new_image[labels == label] = 0
+        # if stats[label,cv.CC_STAT_AREA] == 3:
+        #     new_image[labels == label] = 0
+        if stats[label,cv.CC_STAT_AREA] <64:
+            # print("label:",label)
+            new_image[labels == label] = 0
+        # else:
+        #     print(stats[label,cv.CC_STAT_AREA])
+
+    thres_abs_sobelxy = new_image
+
+# import pickle
+#
+# if __name__ != '__main__':
+#     fileNameThres = "thres_abs_sobelxy" + '.pickle'
+#     if (os.path.exists(fileNameThres) == True):
+#         with open(fileNameThres, 'rb') as f:
+#             thres_abs_sobelxy = pickle.load(f)
+#             print("pickle loaded")
+#             thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
+#     else:
+#         print("!if (os.path.exists(fileNameThres) == True):")
+
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
+    #
+    # plt.show()
+    # plt.close()
+#     plt.imshow(new_image,cmap='gray')
+#
+#     plt.show()
+#     plt.close()
+# exit()
+    # img.delete()
+
+# exit()
+
+print("new process")
+
+if __name__ == '__main__':
+
+    # # thres_abs_sobelxy = thres_abs_sobelxy.astype('float64')
+    # thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
+    #
     # image = thres_abs_sobelxy
     # # image = img
     #
@@ -268,32 +355,23 @@ for file_path in full_files_path:
     #     #     new_image[labels == label] = 0
     #     # if stats[label,cv.CC_STAT_AREA] == 3:
     #     #     new_image[labels == label] = 0
-    #     if stats[label,cv.CC_STAT_AREA] <64:
+    #     if stats[label,cv.CC_STAT_AREA] <1:
     #         new_image[labels == label] = 0
     #     # else:
     #     #     print(stats[label,cv.CC_STAT_AREA])
     #
     # thres_abs_sobelxy = new_image
-
-    # plt.imshow(thres_abs_sobelxy,cmap='gray')
     #
-    # plt.show()
-    # plt.close()
-#     plt.imshow(new_image,cmap='gray')
-#
-#     plt.show()
-#     plt.close()
-# exit()
-    # img.delete()
+    #
+    #
+    # with open("thres_abs_sobelxy" + '.pickle', 'wb') as f:
+    #     pickle.dump(npAccumalator, f)
 
-# exit()
-
-if __name__ == '__main__':
 
     p = Pool(processes = 16)
 
     print("pooling....")
-    lines =  [[[i,j] for i in range(k,k+1) for j in range(0,256)] for k in range(0,256)]
+    lines =  [[[i,j] for i in range(k,k+1) for j in range(0,2048)] for k in range(0,2048)]
 
     # data = p.map(processThisPoints , lines)
     data = p.map(processThisPointsAgainstCircles , lines)
@@ -338,12 +416,12 @@ if __name__ == '__main__':
     p.close()
     # print(data)
 
-    fileNameTarget = stringTmpSplitted + "_mk3_step1" + ".png"
+    fileNameTarget = stringTmpSplitted + "_mk3_step1_64_no" + ".png"
     #
-    # cv.imwrite(fileNameTarget,npAccumalator)
+    cv.imwrite(fileNameTarget,npAccumalator)
     print(fileNameTarget ,"wrote")
 
-    with open(stringTmpSplitted + "_mk3_step1" + '.pickle', 'wb') as f:
+    with open(stringTmpSplitted + "_mk3_step1_64_no" + '.pickle', 'wb') as f:
         pickle.dump(npAccumalator, f)
 
 
