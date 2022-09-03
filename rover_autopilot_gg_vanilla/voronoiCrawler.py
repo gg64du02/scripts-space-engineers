@@ -89,6 +89,75 @@ for file_path in full_files_path:
     # # plt.imshow(img,cmap='gray')
     # plt.show()
 
+
+    # ===================================================
+    thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
+
+    image = thres_abs_sobelxy
+    # image = img
+
+    connectivity = 8
+
+    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
+    output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
+
+    num_stats = output[0]
+    labels = output[1]
+    stats = output[2]
+
+    new_image = image.copy()
+
+    print("num_stats",num_stats)
+
+    for label in range(num_stats):
+        # if stats[label,cv.CC_STAT_AREA] == 1:
+        #     new_image[labels == label] = 0
+        # if stats[label,cv.CC_STAT_AREA] == 2:
+        #     new_image[labels == label] = 0
+        # if stats[label,cv.CC_STAT_AREA] == 3:
+        #     new_image[labels == label] = 0
+        if stats[label,cv.CC_STAT_AREA] <64:
+            # print("label:",label)
+            new_image[labels == label] = 0
+        # else:
+        #     print(stats[label,cv.CC_STAT_AREA])
+
+    thres_abs_sobelxy = new_image
+
+
+    # image = thres_abs_sobelxy
+    # # image = img
+    #
+    # connectivity = 8
+    #
+    # # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
+    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
+    #
+    # num_stats = output[0]
+    # labels = output[1]
+    # stats = output[2]
+    #
+    # print("num_stats",num_stats)
+    # new_image = image.copy()
+    #
+    # for label in range(num_stats):
+    #     print("label",label)
+    #     # if stats[label,cv.CC_STAT_AREA] == 1:
+    #     #     new_image[labels == label] = 0
+    #     # if stats[label,cv.CC_STAT_AREA] == 2:
+    #     #     new_image[labels == label] = 0
+    #     # if stats[label,cv.CC_STAT_AREA] == 3:
+    #     #     new_image[labels == label] = 0
+    #     # if stats[label,cv.CC_STAT_AREA] <64:
+    #     #     # print("label:",label)
+    #     #     new_image[labels == label] = 0
+    # ===================================================
+
+    # labels contains the thres_abs_sobelxy with the labels on the grouped points
+
+
+
+
     stringTmpSplitted = file_path.split(".")[0]
     # print("stringTmpSplitted",stringTmpSplitted)
 
@@ -107,7 +176,11 @@ for file_path in full_files_path:
 
     resultImg = np.zeros_like(thres_abs_sobelxy)
 
-    while iLoop<51:
+    storedNodes = []
+
+    previousGroupedPointsLabel = 0
+
+    while iLoop<1000:
 
         # # debugging purpose
         # testingFunction = generateFourNeighborPoints(startingPoint)
@@ -129,7 +202,11 @@ for file_path in full_files_path:
 
         closestDistanceToABorder =min(horDist1,horDist2,verDist1,verDist2)
 
+        # closestDistanceToABorderOrObstacle = 0
+
         print("closestDistanceToABorder",closestDistanceToABorder)
+
+        # testRadius = 0
 
         for pointOnCircle in arrayOfCirclesPointsList[closestDistanceToABorder]:
             currentTestedPoint = [startingPoint[0]+pointOnCircle[0],startingPoint[1]+pointOnCircle[1]]
@@ -139,10 +216,18 @@ for file_path in full_files_path:
                 print("touched!")
                 print("iLoop",iLoop)
                 print("currentTestedPoint",currentTestedPoint)
+                groupedPointsLabel = labels[currentTestedPoint[0],currentTestedPoint[1]]
+                print("groupedPointsLabel",groupedPointsLabel)
+                storedNodes.append([startingPoint,previousGroupedPointsLabel,groupedPointsLabel])
+                previousGroupedPointsLabel = groupedPointsLabel
                 # resultImg[pointOnCircle[0],pointOnCircle [1]] = 128
+                # plt.imshow(thres_abs_sobelxy,cmap='gray')
+                # plt.show()
                 # plt.imshow(resultImg,cmap='gray')
                 # plt.show()
                 # exit()
+
+                break
 
         nextStartingPoint = [0,0]
 
@@ -167,9 +252,11 @@ for file_path in full_files_path:
         iLoop = iLoop + 1
 
 
+    print("storedNodes",storedNodes)
 
 
-
-    plt.imshow(thres_abs_sobelxy,cmap='gray')
+    # plt.imshow(thres_abs_sobelxy,cmap='gray')
+    # plt.show()
+    plt.imshow(resultImg,cmap='gray')
     plt.show()
 
