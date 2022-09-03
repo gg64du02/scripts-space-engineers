@@ -7,3 +7,4 @@ ore_mapping/Generating files containing all ore GPSs/PlanetGeneratorDefinitions.
 *.bak
 rover_autopilot_gg_vanilla/.idea/*
 *.pickle
+*.xcf
