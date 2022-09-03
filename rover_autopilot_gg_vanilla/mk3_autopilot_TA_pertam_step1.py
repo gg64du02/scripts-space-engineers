@@ -265,11 +265,6 @@ for file_path in full_files_path:
     #     print(point[0],point[1])
     #     npAccumalator[point[0],point[1]] = 50
 
-
-    # # plt.imshow(npAccumalator,cmap='gray')
-
-
-
     # thres_abs_sobelxy = thres_abs_sobelxy.astype('float64')
     thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
 
@@ -288,10 +283,6 @@ for file_path in full_files_path:
     new_image = image.copy()
 
     for label in range(num_stats):
-        # if stats[label,cv.CC_STAT_AREA] == 1:
-        #     new_image[labels == label] = 0
-        # if stats[label,cv.CC_STAT_AREA] == 2:
-        #     new_image[labels == label] = 0
         # if stats[label,cv.CC_STAT_AREA] == 3:
         #     new_image[labels == label] = 0
         if stats[label,cv.CC_STAT_AREA] <64:
@@ -302,71 +293,16 @@ for file_path in full_files_path:
 
     thres_abs_sobelxy = new_image
 
-# import pickle
-#
-# if __name__ != '__main__':
-#     fileNameThres = "thres_abs_sobelxy" + '.pickle'
-#     if (os.path.exists(fileNameThres) == True):
-#         with open(fileNameThres, 'rb') as f:
-#             thres_abs_sobelxy = pickle.load(f)
-#             print("pickle loaded")
-#             thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
-#     else:
-#         print("!if (os.path.exists(fileNameThres) == True):")
-
-    # plt.imshow(thres_abs_sobelxy,cmap='gray')
-    #
-    # plt.show()
-    # plt.close()
-#     plt.imshow(new_image,cmap='gray')
-#
-#     plt.show()
-#     plt.close()
+# plt.show()
+# plt.close()
 # exit()
-    # img.delete()
-
+# img.delete()
+#
 # exit()
 
 print("new process")
 
 if __name__ == '__main__':
-
-    # # thres_abs_sobelxy = thres_abs_sobelxy.astype('float64')
-    # thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
-    #
-    # image = thres_abs_sobelxy
-    # # image = img
-    #
-    # connectivity = 8
-    #
-    # # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
-    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
-    #
-    # num_stats = output[0]
-    # labels = output[1]
-    # stats = output[2]
-    #
-    # new_image = image.copy()
-    #
-    # for label in range(num_stats):
-    #     # if stats[label,cv.CC_STAT_AREA] == 1:
-    #     #     new_image[labels == label] = 0
-    #     # if stats[label,cv.CC_STAT_AREA] == 2:
-    #     #     new_image[labels == label] = 0
-    #     # if stats[label,cv.CC_STAT_AREA] == 3:
-    #     #     new_image[labels == label] = 0
-    #     if stats[label,cv.CC_STAT_AREA] <1:
-    #         new_image[labels == label] = 0
-    #     # else:
-    #     #     print(stats[label,cv.CC_STAT_AREA])
-    #
-    # thres_abs_sobelxy = new_image
-    #
-    #
-    #
-    # with open("thres_abs_sobelxy" + '.pickle', 'wb') as f:
-    #     pickle.dump(npAccumalator, f)
-
 
     p = Pool(processes = 16)
 
