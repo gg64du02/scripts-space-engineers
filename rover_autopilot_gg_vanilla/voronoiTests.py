@@ -83,6 +83,16 @@ stats = output[2]
 
 new_image = image.copy()
 
+for label in range(num_stats):
+    # if stats[label,cv.CC_STAT_AREA] == 3:
+    #     new_image[labels == label] = 0
+    if stats[label, cv.CC_STAT_AREA] < 64:
+        # print("label:",label)
+        new_image[labels == label] = 0
+    # else:
+    #     print(stats[label,cv.CC_STAT_AREA])
+
+thres_abs_sobelxy = new_image
 
 
 numberOfHitOnSinglePoint = 0
@@ -144,7 +154,7 @@ for x in range(500,800):
         minIndex = listlendiffPoints.index(min(listlendiffPoints))
         # print("minIndex",minIndex)
 
-        # resultTmp[x,y] = listOfLabels[minIndex]
+        resultTmp[x,y] = listOfLabels[minIndex]
         if(thres_abs_sobelxy[x,y]!=0):
             resultTmp[x,y] = labels[x,y]
 
