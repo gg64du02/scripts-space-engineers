@@ -99,8 +99,8 @@ numberOfHitOnSinglePoint = 0
 
 
 lastLabelHit = -1
-for x in range(500,800):
-    for y in range(500,800):
+# for x in range(500,800):
+#     for y in range(500,800):
 # for x in range(500,800):
 #     for y in range(0,100):
 # for x in range(600,700):
@@ -115,8 +115,9 @@ for x in range(500,800):
 #     for y in range(1000,1200):
 # for x in range(500,1000):
 #     for y in range(500,1500):
-# for x in range(0,2048):
-#     for y in range(0,2048):
+for x in range(0,2048):
+    print("x",x)
+    for y in range(0,2048):
         numberOfHitOnSinglePoint = 0
         currentPointChecked = [x,y]
         # print("currentPointChecked",currentPointChecked)
@@ -134,18 +135,19 @@ for x in range(500,800):
             checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0],currentPointChecked[1]+pointOnCircle[1]]
             diffPoints = [x-checkPointOnCircle[0],y-checkPointOnCircle[1]]
             lendiffPoints = np.linalg.norm(diffPoints,ord=2)
-            if(thres_abs_sobelxy[checkPointOnCircle[0],checkPointOnCircle[1]]!=0):
-                listOfClosestPoints.append(checkPointOnCircle)
-                listlendiffPoints.append(lendiffPoints)
-                # labels ?
-                readLabel = labels[checkPointOnCircle[0],checkPointOnCircle[1]]
-                listOfLabels.append(readLabel)
-                # if(readLabel!=0):
-                #     print("lendiffPoints",lendiffPoints)
-                #     print(checkPointOnCircle, "added")
-                #     print(lendiffPoints, "added")
-                #     print(readLabel, "added")
-                #     print("readLabel",readLabel)
+            if(isThisInBounds([checkPointOnCircle[0],checkPointOnCircle[1]])==True):
+                if(thres_abs_sobelxy[checkPointOnCircle[0],checkPointOnCircle[1]]!=0):
+                    listOfClosestPoints.append(checkPointOnCircle)
+                    listlendiffPoints.append(lendiffPoints)
+                    # labels ?
+                    readLabel = labels[checkPointOnCircle[0],checkPointOnCircle[1]]
+                    listOfLabels.append(readLabel)
+                    # if(readLabel!=0):
+                    #     print("lendiffPoints",lendiffPoints)
+                    #     print(checkPointOnCircle, "added")
+                    #     print(lendiffPoints, "added")
+                    #     print(readLabel, "added")
+                    #     print("readLabel",readLabel)
 
         # print("listOfClosestPoints",listOfClosestPoints)
         # print("listlendiffPoints",listlendiffPoints)
@@ -161,6 +163,8 @@ for x in range(500,800):
         # if(numberOfHitOnSinglePoint==1):
         #     resultTmp[checkPointOnCircle[0], checkPointOnCircle[1]] = lastLabelHit
 
+with open("voronoi_back" + '.pickle', 'wb') as f:
+    pickle.dump(resultTmp, f)
 
 plt.imshow(resultTmp,cmap='gray')
 plt.show()
