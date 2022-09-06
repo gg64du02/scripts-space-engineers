@@ -38,7 +38,7 @@ def isThisInBounds(point):
         return False
     return True
 
-files = {"back_mk3_step1.png"}
+files = {"back_mk3_step1_64.png"}
 # files = {"front.png","back.png"}
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
 full_files_path=[]
@@ -76,7 +76,8 @@ for file_path in full_files_path:
                 for procX in range(cord[0]-max_value,cord[0]+max_value):
                     for procY in range(cord[1]-max_value,cord[1]+max_value):
                         # if np.linalg.norm([cord[0]-procX,cord[1]-procY])<max_value*.7:
-                        if np.linalg.norm([cord[0]-procX,cord[1]-procY])<max_value*.9:
+                        if np.linalg.norm([cord[0]-procX,cord[1]-procY])<max_value*1:
+                        # if np.linalg.norm([cord[0]-procX,cord[1]-procY])<max_value*.99:
                             if isThisInBounds([procX,procY])==True :
                                 img[procX,procY]=0
 
