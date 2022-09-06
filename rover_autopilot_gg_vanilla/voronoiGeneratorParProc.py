@@ -55,42 +55,59 @@ def processThisPointsAgainstLabels(points):
         if(radiusToBechecked <0):
             radiusToBechecked = 0
         # print("radiusToBechecked2:",radiusToBechecked)
-        for pointOnCircle in arrayOfCirclesPointsList[radiusToBechecked:]:
-            # checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0],currentPointChecked[1]+pointOnCircle[1]]
-            checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0][0],currentPointChecked[1]+pointOnCircle[0][1]]
-            diffPoints = [x-checkPointOnCircle[0],y-checkPointOnCircle[1]]
-            lendiffPoints = np.linalg.norm(diffPoints,ord=2)
-            if(isThisInBounds([checkPointOnCircle[0],checkPointOnCircle[1]])==True):
-                if(thres_abs_sobelxy[checkPointOnCircle[0],checkPointOnCircle[1]]!=0):
-                    listOfClosestPoints.append(checkPointOnCircle)
-                    listlendiffPoints.append(lendiffPoints)
-                    # labels ?
-                    readLabel = labels[checkPointOnCircle[0],checkPointOnCircle[1]]
-                    listOfLabels.append(readLabel)
-                    # if(readLabel!=0):
-                    #     print("lendiffPoints",lendiffPoints)
-                    #     print(checkPointOnCircle, "added")
-                    #     print(lendiffPoints, "added")
-                    #     print(readLabel, "added")
-                    #     print("readLabel",readLabel)
-                    radiusToBechecked = int(radiusToBechecked)
-                    # print("radiusToBechecked3:",radiusToBechecked)
-
-        # print("listOfClosestPoints",listOfClosestPoints)
-        # print("listlendiffPoints",listlendiffPoints)
-        # print("listOfLabels",listOfLabels)
-
-        minIndex = listlendiffPoints.index(min(listlendiffPoints))
-        # print("minIndex",minIndex)
-
-        resultTmp[x,y] = listOfLabels[minIndex]
+        oneHit = False
         if(thres_abs_sobelxy[x,y]!=0):
-            resultTmp[x,y] = labels[x,y]
+            iDistances.append(labels[x,y])
+        else:
+            # iDistances.append(0)
+            # for pointOnCircle in arrayOfCirclesPointsList[radiusToBechecked:]:
+            radiusToBechecked = 0
+            # print("radiusToBechecked", radiusToBechecked)
+            # for pointOnCircleList in arrayOfCirclesPointsList:
+            for pointOnCircleList in arrayOfCirclesPointsList[radiusToBechecked:]:
+                # print("radiusToBechecked", radiusToBechecked)
+                for pointOnCircle in pointOnCircleList:
+                # for pointOnCircle in arrayOfCirclesPointsList[radiusToBechecked:radiusToBechecked+2]:
+                #     checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0],currentPointChecked[1]+pointOnCircle[1]]
+                    checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0],currentPointChecked[1]+pointOnCircle[1]]
+                    # print("checkPointOnCircle:",checkPointOnCircle)
+                    diffPoints = [x-checkPointOnCircle[0],y-checkPointOnCircle[1]]
+                    lendiffPoints = np.linalg.norm(diffPoints,ord=2)
+                    if(isThisInBounds([checkPointOnCircle[0],checkPointOnCircle[1]])==True):
+                        if(thres_abs_sobelxy[checkPointOnCircle[0],checkPointOnCircle[1]]!=0):
+                            listOfClosestPoints.append(checkPointOnCircle)
+                            listlendiffPoints.append(lendiffPoints)
+                            # labels ?
+                            readLabel = labels[checkPointOnCircle[0],checkPointOnCircle[1]]
+                            listOfLabels.append(readLabel)
+                            # if(readLabel!=0):
+                            #     print("lendiffPoints",lendiffPoints)
+                            #     print(checkPointOnCircle, "added")
+                            #     print(lendiffPoints, "added")
+                            #     print(readLabel, "added")
+                            #     print("readLabel",readLabel)
+                            radiusToBechecked = int(radiusToBechecked)
+                            # print("radiusToBechecked3:",radiusToBechecked)
+                            oneHit = True
+                    if(oneHit==True):
+                        break
+            # print("radiusToBechecked", radiusToBechecked)
+            # print("oneHit", oneHit)
+            # print("listOfClosestPoints",listOfClosestPoints)
+            # print("listlendiffPoints",listlendiffPoints)
+            # print("listOfLabels",listOfLabels)
 
-        iDistances.append(listOfLabels[minIndex])
+            minIndex = listlendiffPoints.index(min(listlendiffPoints))
+            # print("minIndex",minIndex)
 
-        # if(numberOfHitOnSinglePoint==1):
-        #     resultTmp[checkPointOnCircle[0], checkPointOnCircle[1]] = lastLabelHit
+            # resultTmp[x,y] = listOfLabels[minIndex]
+            # if(thres_abs_sobelxy[x,y]!=0):
+            #     resultTmp[x,y] = labels[x,y]
+
+            iDistances.append(listOfLabels[minIndex])
+
+            # if(numberOfHitOnSinglePoint==1):
+            #     resultTmp[checkPointOnCircle[0], checkPointOnCircle[1]] = lastLabelHit
 
 
 
@@ -182,7 +199,8 @@ for file_path in full_files_path:
         print("pooling....")
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 520)] for k in range(500, 520)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
-        lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
+        lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 800)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
 
         # data = p.map(processThisPoints , lines)
         # data = p.map(processThisPointsAgainstCircles, lines)
