@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     print("pooling....")
     # lines =  [[[i,j] for i in range(k,k+1) for j in range(0,5)] for k in range(0,5)]
-    radiuses =  [k for k in range(0,512)]
+    radiuses =  [k for k in range(0,1024)]
 
     # data = p.map(processThisPoints , lines)
     data = p.map(returnGenerateListOfCircles , radiuses)
