@@ -119,8 +119,10 @@ for file_path in full_files_path:
     # print("img is empty: exiting")
     stringTmpSplitted = file_path.split(".")[0]
     # print("stringTmpSplitted",stringTmpSplitted)
-    voronoiTargetFilePath = stringTmpSplitted + "_voronoi.pickle"
+    voronoiTargetFilePath = stringTmpSplitted + "_voronoi_par_proc.pickle"
     # print("voronoiTargetFilePath",voronoiTargetFilePath)
+    fileNameTarget = stringTmpSplitted + "_voronoi_par_proc.png"
+    # print("fileNameTarget",fileNameTarget)
     npAccumalator = np.zeros_like(img)
 
     npAccumalator = npAccumalator.astype('float64')
@@ -179,7 +181,8 @@ for file_path in full_files_path:
 
         print("pooling....")
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 520)] for k in range(500, 520)]
-        lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
+        lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
 
         # data = p.map(processThisPoints , lines)
         # data = p.map(processThisPointsAgainstCircles, lines)
@@ -190,6 +193,8 @@ for file_path in full_files_path:
             iDistances = dataPoint[1]
             # print("pixels"+str(pixels))
             # print("iDistances"+str(iDistances))
+            print("len(pixels)"+str(len(pixels)))
+            print("len(iDistances)"+str(len(iDistances)))
             for iPixels in range(0, len(pixels)):
                 # print("iPixels"+str(iPixels))
                 # if(iPixels==2046):
@@ -203,16 +208,17 @@ for file_path in full_files_path:
                 # print("xData"+str(xData))
                 # print("yData"+str(yData))
                 # print("len(iDistances)"+str(len(iDistances)))
-                print("len(pixels)"+str(len(pixels)))
-                print("len(iDistances)"+str(len(iDistances)))
                 iDistance = iDistances[iPixels]
                 # print("iDistance"+str(iDistance))
                 npAccumalator[xData, yData] = iDistance
 
         resultTmp =npAccumalator
 
-        # with open(voronoiTargetFilePath, 'wb') as f:
-        #     pickle.dump(resultTmp, f)
+        with open(voronoiTargetFilePath, 'wb') as f:
+            pickle.dump(resultTmp, f)
 
-        plt.imshow(resultTmp,cmap='gray')
-        plt.show()
+        cv.imwrite(fileNameTarget, resultTmp)
+        print(fileNameTarget, "wrote")
+
+        # plt.imshow(resultTmp,cmap='gray')
+        # plt.show()
