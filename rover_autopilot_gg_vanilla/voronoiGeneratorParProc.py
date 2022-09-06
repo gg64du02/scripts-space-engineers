@@ -27,6 +27,7 @@ def isThisInBounds(point):
 
 def processThisPointsAgainstLabels(points):
     iDistances = []
+    iClosestDistances = []
     # iDistance = 0
     # print("points:"+str(points))
     print("points[0]:"+str(points[0]))
@@ -58,6 +59,7 @@ def processThisPointsAgainstLabels(points):
         oneHit = False
         if(thres_abs_sobelxy[x,y]!=0):
             iDistances.append(labels[x,y])
+            iClosestDistances.append(0)
         else:
             # iDistances.append(0)
             # for pointOnCircle in arrayOfCirclesPointsList[radiusToBechecked:]:
@@ -105,14 +107,17 @@ def processThisPointsAgainstLabels(points):
             #     resultTmp[x,y] = labels[x,y]
 
             iDistances.append(listOfLabels[minIndex])
+            iClosestDistances.append(radiusToBechecked)
 
             # if(numberOfHitOnSinglePoint==1):
             #     resultTmp[checkPointOnCircle[0], checkPointOnCircle[1]] = lastLabelHit
 
-
+    del arrayOfCirclesPointsList
+    del pointOnCircleList
 
     # print(points, iDistances)
-    return points, iDistances
+    # return points, iDistances
+    return points, iDistances,iClosestDistances
 
 
 import cv2 as cv
@@ -138,11 +143,18 @@ for file_path in full_files_path:
     # print("stringTmpSplitted",stringTmpSplitted)
     voronoiTargetFilePath = stringTmpSplitted + "_voronoi_par_proc.pickle"
     # print("voronoiTargetFilePath",voronoiTargetFilePath)
+    closestDistancesTargetFilePath = stringTmpSplitted + "_clos_dis_par_proc.pickle"
+    # print("closestDistancesTargetFilePath",closestDistancesTargetFilePath)
     fileNameTarget = stringTmpSplitted + "_voronoi_par_proc.png"
     # print("fileNameTarget",fileNameTarget)
     npAccumalator = np.zeros_like(img)
 
     npAccumalator = npAccumalator.astype('float64')
+
+
+    npClosestDistance = np.zeros_like(img)
+
+    npClosestDistance = npClosestDistance.astype('float64')
 
     resultTmp = np.zeros_like(img)
     # exit()
@@ -177,6 +189,7 @@ for file_path in full_files_path:
         # if stats[label,cv.CC_STAT_AREA] == 3:
         #     new_image[labels == label] = 0
         if stats[label, cv.CC_STAT_AREA] < 64:
+        # if stats[label, cv.CC_STAT_AREA] < 1:
             # print("label:",label)
             new_image[labels == label] = 0
         # else:
@@ -194,13 +207,15 @@ for file_path in full_files_path:
 
     if __name__ == '__main__':
 
-        p = Pool(processes=10)
+        p = Pool(processes=12)
 
         print("pooling....")
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 520)] for k in range(500, 520)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
-        lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 800)]
-        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 550)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(1000, 1200)] for k in range(500, 800)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 200)] for k in range(0, 200)]
+        lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
 
         # data = p.map(processThisPoints , lines)
         # data = p.map(processThisPointsAgainstCircles, lines)
@@ -209,6 +224,7 @@ for file_path in full_files_path:
         for dataPoint in data:
             pixels = dataPoint[0]
             iDistances = dataPoint[1]
+            closestDistances = dataPoint[2]
             # print("pixels"+str(pixels))
             # print("iDistances"+str(iDistances))
             print("len(pixels)"+str(len(pixels)))
@@ -229,11 +245,16 @@ for file_path in full_files_path:
                 iDistance = iDistances[iPixels]
                 # print("iDistance"+str(iDistance))
                 npAccumalator[xData, yData] = iDistance
+                # print("len(closestDistances)"+str(len(closestDistances)))
+                npClosestDistance[xData, yData] = closestDistances[iPixels]
 
         resultTmp =npAccumalator
 
-        with open(voronoiTargetFilePath, 'wb') as f:
-            pickle.dump(resultTmp, f)
+        with open(voronoiTargetFilePath, 'wb') as f1:
+            pickle.dump(resultTmp, f1)
+
+        with open(closestDistancesTargetFilePath, 'wb') as f2:
+            pickle.dump(npClosestDistance, f2)
 
         cv.imwrite(fileNameTarget, resultTmp)
         print(fileNameTarget, "wrote")
