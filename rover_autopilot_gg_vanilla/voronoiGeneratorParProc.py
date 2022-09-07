@@ -52,8 +52,7 @@ def processThisPointsAgainstLabels(points):
         listlendiffPoints = []
         listOfLabels = []
 
-        # print("radiusToBechecked1:",radiusToBechecked)
-        # radiusToBechecked = int(radiusToBechecked) - 1
+        # print("radiusToRemember:",radiusToRemember)
         radiusToBechecked = int(radiusToRemember) - 2
         if(radiusToBechecked <0):
             radiusToBechecked = 0
@@ -192,8 +191,8 @@ for file_path in full_files_path:
     for label in range(num_stats):
         # if stats[label,cv.CC_STAT_AREA] == 3:
         #     new_image[labels == label] = 0
-        # if stats[label, cv.CC_STAT_AREA] < 64:
-        if stats[label, cv.CC_STAT_AREA] < 1:
+        if stats[label, cv.CC_STAT_AREA] < 64:
+        # if stats[label, cv.CC_STAT_AREA] < 1:
             # print("label:",label)
             new_image[labels == label] = 0
         # else:
@@ -217,12 +216,12 @@ for file_path in full_files_path:
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 520)] for k in range(500, 520)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 550)]
-        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(500, 550)]
-        lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 800)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 550)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 800)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 300)] for k in range(0, 300)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 600)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 200)] for k in range(0, 200)]
-        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
+        lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
 
         # data = p.map(processThisPoints , lines)
         # data = p.map(processThisPointsAgainstCircles, lines)
