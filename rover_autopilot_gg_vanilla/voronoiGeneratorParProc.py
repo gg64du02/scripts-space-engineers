@@ -38,6 +38,7 @@ def processThisPointsAgainstLabels(points):
     pointsIndex = 0
     previousPointsIndex = 0
     radiusToBechecked = 0
+    radiusToRemember = 0
     for point in points:
         # print("test1")
         x = point[0]
@@ -52,10 +53,11 @@ def processThisPointsAgainstLabels(points):
         listOfLabels = []
 
         # print("radiusToBechecked1:",radiusToBechecked)
-        radiusToBechecked = int(radiusToBechecked) - 1
+        # radiusToBechecked = int(radiusToBechecked) - 1
+        radiusToBechecked = int(radiusToRemember) - 2
         if(radiusToBechecked <0):
             radiusToBechecked = 0
-        # print("radiusToBechecked2:",radiusToBechecked)
+        # print("radiusToBechecked:",radiusToBechecked)
         oneHit = False
         if(thres_abs_sobelxy[x,y]!=0):
             iDistances.append(labels[x,y])
@@ -63,7 +65,6 @@ def processThisPointsAgainstLabels(points):
         else:
             # iDistances.append(0)
             # for pointOnCircle in arrayOfCirclesPointsList[radiusToBechecked:]:
-            radiusToBechecked = 0
             # print("radiusToBechecked", radiusToBechecked)
             # for pointOnCircleList in arrayOfCirclesPointsList:
             for pointOnCircleList in arrayOfCirclesPointsList[radiusToBechecked:]:
@@ -74,9 +75,9 @@ def processThisPointsAgainstLabels(points):
                     checkPointOnCircle = [currentPointChecked[0]+pointOnCircle[0],currentPointChecked[1]+pointOnCircle[1]]
                     # print("checkPointOnCircle:",checkPointOnCircle)
                     diffPoints = [x-checkPointOnCircle[0],y-checkPointOnCircle[1]]
-                    lendiffPoints = np.linalg.norm(diffPoints,ord=2)
                     if(isThisInBounds([checkPointOnCircle[0],checkPointOnCircle[1]])==True):
                         if(thres_abs_sobelxy[checkPointOnCircle[0],checkPointOnCircle[1]]!=0):
+                            lendiffPoints = np.linalg.norm(diffPoints,ord=2)
                             listOfClosestPoints.append(checkPointOnCircle)
                             listlendiffPoints.append(lendiffPoints)
                             # labels ?
@@ -88,11 +89,14 @@ def processThisPointsAgainstLabels(points):
                             #     print(lendiffPoints, "added")
                             #     print(readLabel, "added")
                             #     print("readLabel",readLabel)
-                            radiusToBechecked = int(radiusToBechecked)
-                            # print("radiusToBechecked3:",radiusToBechecked)
+                            radiusToRemember = int(arrayOfCirclesPointsList.index(pointOnCircleList))
                             oneHit = True
                     if(oneHit==True):
                         break
+                if(oneHit==True):
+                    break
+                radiusToRemember = radiusToRemember + 1
+            radiusToBechecked = radiusToRemember
             # print("radiusToBechecked", radiusToBechecked)
             # print("oneHit", oneHit)
             # print("listOfClosestPoints",listOfClosestPoints)
@@ -107,7 +111,7 @@ def processThisPointsAgainstLabels(points):
             #     resultTmp[x,y] = labels[x,y]
 
             iDistances.append(listOfLabels[minIndex])
-            iClosestDistances.append(radiusToBechecked)
+            iClosestDistances.append(radiusToRemember)
 
             # if(numberOfHitOnSinglePoint==1):
             #     resultTmp[checkPointOnCircle[0], checkPointOnCircle[1]] = lastLabelHit
@@ -188,8 +192,8 @@ for file_path in full_files_path:
     for label in range(num_stats):
         # if stats[label,cv.CC_STAT_AREA] == 3:
         #     new_image[labels == label] = 0
-        if stats[label, cv.CC_STAT_AREA] < 64:
-        # if stats[label, cv.CC_STAT_AREA] < 1:
+        # if stats[label, cv.CC_STAT_AREA] < 64:
+        if stats[label, cv.CC_STAT_AREA] < 1:
             # print("label:",label)
             new_image[labels == label] = 0
         # else:
@@ -213,9 +217,12 @@ for file_path in full_files_path:
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 520)] for k in range(500, 520)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 600)] for k in range(500, 600)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 550)]
-        # lines = [[[i, j] for i in range(k, k + 1) for j in range(1000, 1200)] for k in range(500, 800)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(500, 550)]
+        lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 800)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 300)] for k in range(0, 300)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(500, 800)] for k in range(500, 600)]
         # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 200)] for k in range(0, 200)]
-        lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
+        # lines = [[[i, j] for i in range(k, k + 1) for j in range(0, 2048)] for k in range(0, 2048)]
 
         # data = p.map(processThisPoints , lines)
         # data = p.map(processThisPointsAgainstCircles, lines)
@@ -227,8 +234,8 @@ for file_path in full_files_path:
             closestDistances = dataPoint[2]
             # print("pixels"+str(pixels))
             # print("iDistances"+str(iDistances))
-            print("len(pixels)"+str(len(pixels)))
-            print("len(iDistances)"+str(len(iDistances)))
+            # print("len(pixels)"+str(len(pixels)))
+            # print("len(iDistances)"+str(len(iDistances)))
             for iPixels in range(0, len(pixels)):
                 # print("iPixels"+str(iPixels))
                 # if(iPixels==2046):
