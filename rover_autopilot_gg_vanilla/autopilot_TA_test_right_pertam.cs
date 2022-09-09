@@ -475,8 +475,7 @@ public Program()
 	testPointRegionsLinked.Add(new Point(14,6));
 	// ================
 // ================
- string nodesStringRight = @"
-9,1310,20
+ string nodesStringRight = @"9,1310,20
 40,239,37
 45,1100,37
 52,1199,41
@@ -1282,8 +1281,31 @@ public Program()
 2005,357,27
 2013,212,26
 2014,1865,283
-2027,776,251
-";
+2027,776,251";
+
+
+	//string s = "You win some. You lose some.";
+	string s = nodesStringRight;
+
+	string[] subs  = s.Split('\n');
+
+	int indexNumber = 0;
+	
+	foreach (var sub in subs)
+	{
+		//string[] subs = s.Split('\n');
+		Echo(sub);
+		string[] subsub = sub.Split(',');
+		Echo(subsub[0]);
+		Echo(subsub[1]);
+		Echo(subsub[2]);
+		Point position = new Point(int.Parse(subsub[0]),int.Parse(subsub[1]));
+		int radius = int.Parse(subsub[2]);
+		nodes.Add(new Node(indexNumber,position, radius));
+		indexNumber = indexNumber + 1;
+	}
+	
+
 
 }
 
@@ -1306,6 +1328,9 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
+	
+	
+	Echo("nodes.Count"+nodes.Count);
 	
 	if(theAntenna != null){
 		theAntenna.HudText = str_to_display;
