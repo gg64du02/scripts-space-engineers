@@ -5,11 +5,18 @@ import pickle
 # with open('back_clos_dis_par_proc.pickle', 'rb') as f:
 import numpy as np
 
-with open('back_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('back_voronoi_par_proc.pickle', 'rb') as f1:
+#     back_voronoi_par_proc = pickle.load(f1)
+# # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
+#
+# with open('back_clos_dis_par_proc.pickle', 'rb') as f2:
+#     back_clos_dis_par_proc = pickle.load(f2)
+
+with open('right_voronoi_par_proc.pickle', 'rb') as f1:
     back_voronoi_par_proc = pickle.load(f1)
 # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
 
-with open('back_clos_dis_par_proc.pickle', 'rb') as f2:
+with open('right_clos_dis_par_proc.pickle', 'rb') as f2:
     back_clos_dis_par_proc = pickle.load(f2)
 
 from matplotlib import pyplot as plt
@@ -26,8 +33,6 @@ def isThisInBounds(point):
     if(point[1] < 0):
         return False
     return True
-
-
 
 
 # plt.imshow(back_voronoi_par_proc)
@@ -152,23 +157,59 @@ for node1 in nodesArray:
 
 # testing
 # start
-testStartPoint = [50,50]
+# testStartPoint = [50,50]
+testStartPoint = [2021,572]
 
-for nodeTest in nodesArrayWithChilds:
-    diffPoint = [nodeTest[0][0]-testStartPoint[0],nodeTest[0][1]-testStartPoint[1]]
-    diff_radius = np.linalg.norm(diffPoint,ord=2)
-    # print("diff_radius",diff_radius)
+# for nodeTest in nodesArrayWithChilds:
+#     diffPoint = [nodeTest[0][0]-testStartPoint[0],nodeTest[0][1]-testStartPoint[1]]
+#     diff_radius = np.linalg.norm(diffPoint,ord=2)
+#     # print("diff_radius",diff_radius)
+#
+#     if (diff_radius < nodeTest[2]):
+#         print("node close start:", nodeTest)
+#
+# # end
+# # testEndPoint = [800,220]
+# testEndPoint = [2042,1665]
+#
+# for nodeTest in nodesArrayWithChilds:
+#     diffPoint = [nodeTest[0][0]-testEndPoint[0],nodeTest[0][1]-testEndPoint[1]]
+#     diff_radius = np.linalg.norm(diffPoint,ord=2)
+#     # print("diff_radius",diff_radius)
+#
+#     if (diff_radius < nodeTest[2]):
+#         print("node close end:", nodeTest)
 
-    if (diff_radius < nodeTest[2]):
-        print("node close:", nodeTest)
 
-# end
-testEndPoint = [800,220]
+# public Node(int index, Point position, int radius){
+# this.index = index;
+# this.position = position;
+# this.radius = radius;
+# }
 
-for nodeTest in nodesArrayWithChilds:
-    diffPoint = [nodeTest[0][0]-testEndPoint[0],nodeTest[0][1]-testEndPoint[1]]
-    diff_radius = np.linalg.norm(diffPoint,ord=2)
-    # print("diff_radius",diff_radius)
+def generateCSinitCode(index,position,radius):
+    tmpString = ""
 
-    if (diff_radius < nodeTest[2]):
-        print("node close:", nodeTest)
+    tmpString += "  nodes.Add(new Node("+str(index)+",new Point("+str(position[0])+","+str(position[1])+"),"+str(int(radius))+"));"
+
+
+    return tmpString
+
+def generateStingInitCode(index,position,radius):
+    tmpString = ""
+
+    tmpString += ""+str(position[0])+","+str(position[1])+","+str(int(radius))+"";
+
+
+    return tmpString
+
+print("// ================")
+print(" string nodesStringRight = @\"")
+for nodeGen in nodesArray:
+    # print("nodeGen",nodeGen)
+    indexNode = nodesArray.index(nodeGen)
+    position = nodeGen[0]
+    radius = nodeGen[2]
+    # print("generateCSinitCode",generateCSinitCode(indexNode,position,radius))
+    print(generateStingInitCode(indexNode,position,radius))
+print("\";")
