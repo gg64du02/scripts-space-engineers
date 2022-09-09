@@ -473,818 +473,818 @@ public Program()
 	testPointRegionsLinked.Add(new Point(14,8));
 	testPointRegionsLinked.Add(new Point(14,11));
 	testPointRegionsLinked.Add(new Point(14,6));
-	
+	// ================
 // ================
-  nodes.Add(new Node(0,new Point(9,1310),20));
-  nodes.Add(new Node(1,new Point(40,239),37));
-  nodes.Add(new Node(2,new Point(45,1100),37));
-  nodes.Add(new Node(3,new Point(52,1199),41));
-  nodes.Add(new Node(4,new Point(55,961),29));
-  nodes.Add(new Node(5,new Point(55,1315),26));
-  nodes.Add(new Node(6,new Point(58,782),16));
-  nodes.Add(new Node(7,new Point(58,980),19));
-  nodes.Add(new Node(8,new Point(60,959),25));
-  nodes.Add(new Node(9,new Point(61,959),24));
-  nodes.Add(new Node(10,new Point(61,1123),40));
-  nodes.Add(new Node(11,new Point(61,1285),23));
-  nodes.Add(new Node(12,new Point(61,1326),25));
-  nodes.Add(new Node(13,new Point(62,455),21));
-  nodes.Add(new Node(14,new Point(62,595),22));
-  nodes.Add(new Node(15,new Point(62,1327),25));
-  nodes.Add(new Node(16,new Point(64,1383),27));
-  nodes.Add(new Node(17,new Point(67,861),24));
-  nodes.Add(new Node(18,new Point(69,534),9));
-  nodes.Add(new Node(19,new Point(69,719),23));
-  nodes.Add(new Node(20,new Point(73,570),9));
-  nodes.Add(new Node(21,new Point(75,517),9));
-  nodes.Add(new Node(22,new Point(77,545),9));
-  nodes.Add(new Node(23,new Point(79,1034),30));
-  nodes.Add(new Node(24,new Point(82,603),15));
-  nodes.Add(new Node(25,new Point(83,908),20));
-  nodes.Add(new Node(26,new Point(85,734),23));
-  nodes.Add(new Node(27,new Point(87,1233),49));
-  nodes.Add(new Node(28,new Point(88,762),22));
-  nodes.Add(new Node(29,new Point(89,436),25));
-  nodes.Add(new Node(30,new Point(89,915),21));
-  nodes.Add(new Node(31,new Point(93,435),27));
-  nodes.Add(new Node(32,new Point(94,1029),36));
-  nodes.Add(new Node(33,new Point(99,270),19));
-  nodes.Add(new Node(34,new Point(100,324),31));
-  nodes.Add(new Node(35,new Point(101,206),14));
-  nodes.Add(new Node(36,new Point(103,816),20));
-  nodes.Add(new Node(37,new Point(107,41),119));
-  nodes.Add(new Node(38,new Point(107,619),20));
-  nodes.Add(new Node(39,new Point(109,226),20));
-  nodes.Add(new Node(40,new Point(110,677),24));
-  nodes.Add(new Node(41,new Point(111,962),22));
-  nodes.Add(new Node(42,new Point(112,678),23));
-  nodes.Add(new Node(43,new Point(113,664),16));
-  nodes.Add(new Node(44,new Point(114,811),24));
-  nodes.Add(new Node(45,new Point(116,550),27));
-  nodes.Add(new Node(46,new Point(116,684),20));
-  nodes.Add(new Node(47,new Point(116,718),11));
-  nodes.Add(new Node(48,new Point(117,518),26));
-  nodes.Add(new Node(49,new Point(117,555),29));
-  nodes.Add(new Node(50,new Point(117,556),28));
-  nodes.Add(new Node(51,new Point(118,557),29));
-  nodes.Add(new Node(52,new Point(119,181),14));
-  nodes.Add(new Node(53,new Point(119,1369),31));
-  nodes.Add(new Node(54,new Point(120,561),29));
-  nodes.Add(new Node(55,new Point(121,232),25));
-  nodes.Add(new Node(56,new Point(122,798),27));
-  nodes.Add(new Node(57,new Point(124,798),27));
-  nodes.Add(new Node(58,new Point(125,480),38));
-  nodes.Add(new Node(59,new Point(125,797),26));
-  nodes.Add(new Node(60,new Point(129,481),39));
-  nodes.Add(new Node(61,new Point(132,174),20));
-  nodes.Add(new Node(62,new Point(138,148),30));
-  nodes.Add(new Node(63,new Point(146,223),30));
-  nodes.Add(new Node(64,new Point(146,356),63));
-  nodes.Add(new Node(65,new Point(148,636),22));
-  nodes.Add(new Node(66,new Point(149,607),39));
-  nodes.Add(new Node(67,new Point(155,737),30));
-  nodes.Add(new Node(68,new Point(155,849),18));
-  nodes.Add(new Node(69,new Point(158,737),31));
-  nodes.Add(new Node(70,new Point(159,589),48));
-  nodes.Add(new Node(71,new Point(159,690),13));
-  nodes.Add(new Node(72,new Point(159,737),32));
-  nodes.Add(new Node(73,new Point(162,665),18));
-  nodes.Add(new Node(74,new Point(165,795),11));
-  nodes.Add(new Node(75,new Point(167,670),20));
-  nodes.Add(new Node(76,new Point(168,845),22));
-  nodes.Add(new Node(77,new Point(171,991),73));
-  nodes.Add(new Node(78,new Point(176,1126),88));
-  nodes.Add(new Node(79,new Point(178,1126),89));
-  nodes.Add(new Node(80,new Point(180,1126),91));
-  nodes.Add(new Node(81,new Point(183,1126),94));
-  nodes.Add(new Node(82,new Point(184,822),14));
-  nodes.Add(new Node(83,new Point(184,1126),95));
-  nodes.Add(new Node(84,new Point(185,1237),103));
-  nodes.Add(new Node(85,new Point(189,1278),94));
-  nodes.Add(new Node(86,new Point(190,863),20));
-  nodes.Add(new Node(87,new Point(191,1026),102));
-  nodes.Add(new Node(88,new Point(192,673),23));
-  nodes.Add(new Node(89,new Point(192,1027),103));
-  nodes.Add(new Node(90,new Point(193,743),42));
-  nodes.Add(new Node(91,new Point(199,1031),107));
-  nodes.Add(new Node(92,new Point(206,1126),114));
-  nodes.Add(new Node(93,new Point(207,462),85));
-  nodes.Add(new Node(94,new Point(207,741),48));
-  nodes.Add(new Node(95,new Point(209,422),81));
-  nodes.Add(new Node(96,new Point(209,423),81));
-  nodes.Add(new Node(97,new Point(209,424),80));
-  nodes.Add(new Node(98,new Point(210,355),105));
-  nodes.Add(new Node(99,new Point(211,1051),112));
-  nodes.Add(new Node(100,new Point(211,1058),111));
-  nodes.Add(new Node(101,new Point(215,1355),107));
-  nodes.Add(new Node(102,new Point(217,889),18));
-  nodes.Add(new Node(103,new Point(219,1171),117));
-  nodes.Add(new Node(104,new Point(230,843),23));
-  nodes.Add(new Node(105,new Point(235,555),89));
-  nodes.Add(new Node(106,new Point(235,556),89));
-  nodes.Add(new Node(107,new Point(236,515),90));
-  nodes.Add(new Node(108,new Point(238,863),16));
-  nodes.Add(new Node(109,new Point(239,966),45));
-  nodes.Add(new Node(110,new Point(248,609),65));
-  nodes.Add(new Node(111,new Point(248,792),60));
-  nodes.Add(new Node(112,new Point(249,791),60));
-  nodes.Add(new Node(113,new Point(266,772),79));
-  nodes.Add(new Node(114,new Point(272,875),13));
-  nodes.Add(new Node(115,new Point(278,174),100));
-  nodes.Add(new Node(116,new Point(278,175),101));
-  nodes.Add(new Node(117,new Point(278,868),15));
-  nodes.Add(new Node(118,new Point(279,176),102));
-  nodes.Add(new Node(119,new Point(280,268),143));
-  nodes.Add(new Node(120,new Point(284,937),22));
-  nodes.Add(new Node(121,new Point(287,658),60));
-  nodes.Add(new Node(122,new Point(289,769),89));
-  nodes.Add(new Node(123,new Point(293,1180),75));
-  nodes.Add(new Node(124,new Point(305,904),17));
-  nodes.Add(new Node(125,new Point(309,245),159));
-  nodes.Add(new Node(126,new Point(311,244),160));
-  nodes.Add(new Node(127,new Point(312,244),161));
-  nodes.Add(new Node(128,new Point(319,240),164));
-  nodes.Add(new Node(129,new Point(320,756),103));
-  nodes.Add(new Node(130,new Point(329,1514),237));
-  nodes.Add(new Node(131,new Point(331,238),164));
-  nodes.Add(new Node(132,new Point(337,998),53));
-  nodes.Add(new Node(133,new Point(341,484),55));
-  nodes.Add(new Node(134,new Point(341,998),54));
-  nodes.Add(new Node(135,new Point(347,771),97));
-  nodes.Add(new Node(136,new Point(347,1076),11));
-  nodes.Add(new Node(137,new Point(356,74),40));
-  nodes.Add(new Node(138,new Point(357,1146),50));
-  nodes.Add(new Node(139,new Point(358,1146),50));
-  nodes.Add(new Node(140,new Point(361,1002),49));
-  nodes.Add(new Node(141,new Point(363,1070),9));
-  nodes.Add(new Node(142,new Point(375,1049),16));
-  nodes.Add(new Node(143,new Point(375,1050),16));
-  nodes.Add(new Node(144,new Point(375,1051),15));
-  nodes.Add(new Node(145,new Point(376,1050),15));
-  nodes.Add(new Node(146,new Point(385,1290),75));
-  nodes.Add(new Node(147,new Point(386,1082),7));
-  nodes.Add(new Node(148,new Point(386,1180),23));
-  nodes.Add(new Node(149,new Point(392,499),62));
-  nodes.Add(new Node(150,new Point(393,1193),14));
-  nodes.Add(new Node(151,new Point(399,522),46));
-  nodes.Add(new Node(152,new Point(404,165),128));
-  nodes.Add(new Node(153,new Point(413,986),42));
-  nodes.Add(new Node(154,new Point(415,845),91));
-  nodes.Add(new Node(155,new Point(415,1116),38));
-  nodes.Add(new Node(156,new Point(421,1356),141));
-  nodes.Add(new Node(157,new Point(422,647),11));
-  nodes.Add(new Node(158,new Point(422,1068),18));
-  nodes.Add(new Node(159,new Point(426,1186),11));
-  nodes.Add(new Node(160,new Point(430,607),23));
-  nodes.Add(new Node(161,new Point(430,1080),30));
-  nodes.Add(new Node(162,new Point(431,1111),44));
-  nodes.Add(new Node(163,new Point(435,1200),13));
-  nodes.Add(new Node(164,new Point(436,1480),244));
-  nodes.Add(new Node(165,new Point(443,593),29));
-  nodes.Add(new Node(166,new Point(443,594),30));
-  nodes.Add(new Node(167,new Point(443,999),32));
-  nodes.Add(new Node(168,new Point(444,599),32));
-  nodes.Add(new Node(169,new Point(451,860),97));
-  nodes.Add(new Node(170,new Point(451,861),97));
-  nodes.Add(new Node(171,new Point(451,1441),222));
-  nodes.Add(new Node(172,new Point(454,493),31));
-  nodes.Add(new Node(173,new Point(457,995),27));
-  nodes.Add(new Node(174,new Point(457,1130),38));
-  nodes.Add(new Node(175,new Point(458,995),27));
-  nodes.Add(new Node(176,new Point(459,995),27));
-  nodes.Add(new Node(177,new Point(468,499),22));
-  nodes.Add(new Node(178,new Point(472,679),37));
-  nodes.Add(new Node(179,new Point(475,845),83));
-  nodes.Add(new Node(180,new Point(487,1160),26));
-  nodes.Add(new Node(181,new Point(488,1161),26));
-  nodes.Add(new Node(182,new Point(493,1173),30));
-  nodes.Add(new Node(183,new Point(494,1057),14));
-  nodes.Add(new Node(184,new Point(494,1174),30));
-  nodes.Add(new Node(185,new Point(498,360),97));
-  nodes.Add(new Node(186,new Point(502,1010),27));
-  nodes.Add(new Node(187,new Point(507,377),90));
-  nodes.Add(new Node(188,new Point(516,513),20));
-  nodes.Add(new Node(189,new Point(516,529),19));
-  nodes.Add(new Node(190,new Point(519,697),67));
-  nodes.Add(new Node(191,new Point(521,107),146));
-  nodes.Add(new Node(192,new Point(526,938),6));
-  nodes.Add(new Node(193,new Point(536,987),12));
-  nodes.Add(new Node(194,new Point(537,612),56));
-  nodes.Add(new Node(195,new Point(537,1110),34));
-  nodes.Add(new Node(196,new Point(538,1110),34));
-  nodes.Add(new Node(197,new Point(546,1214),67));
-  nodes.Add(new Node(198,new Point(553,298),58));
-  nodes.Add(new Node(199,new Point(558,1062),48));
-  nodes.Add(new Node(200,new Point(561,259),52));
-  nodes.Add(new Node(201,new Point(562,1023),52));
-  nodes.Add(new Node(202,new Point(563,917),3));
-  nodes.Add(new Node(203,new Point(564,1020),52));
-  nodes.Add(new Node(204,new Point(574,847),3));
-  nodes.Add(new Node(205,new Point(574,896),17));
-  nodes.Add(new Node(206,new Point(578,454),64));
-  nodes.Add(new Node(207,new Point(586,814),2));
-  nodes.Add(new Node(208,new Point(593,996),56));
-  nodes.Add(new Node(209,new Point(595,2),187));
-  nodes.Add(new Node(210,new Point(604,470),59));
-  nodes.Add(new Node(211,new Point(607,263),12));
-  nodes.Add(new Node(212,new Point(607,990),57));
-  nodes.Add(new Node(213,new Point(608,907),32));
-  nodes.Add(new Node(214,new Point(609,821),2));
-  nodes.Add(new Node(215,new Point(613,777),5));
-  nodes.Add(new Node(216,new Point(618,655),8));
-  nodes.Add(new Node(217,new Point(619,657),8));
-  nodes.Add(new Node(218,new Point(621,798),2));
-  nodes.Add(new Node(219,new Point(623,706),2));
-  nodes.Add(new Node(220,new Point(629,703),3));
-  nodes.Add(new Node(221,new Point(630,238),7));
-  nodes.Add(new Node(222,new Point(633,660),3));
-  nodes.Add(new Node(223,new Point(640,282),19));
-  nodes.Add(new Node(224,new Point(641,677),4));
-  nodes.Add(new Node(225,new Point(642,683),3));
-  nodes.Add(new Node(226,new Point(643,717),3));
-  nodes.Add(new Node(227,new Point(648,864),54));
-  nodes.Add(new Node(228,new Point(650,1926),257));
-  nodes.Add(new Node(229,new Point(651,629),18));
-  nodes.Add(new Node(230,new Point(652,628),19));
-  nodes.Add(new Node(231,new Point(652,722),2));
-  nodes.Add(new Node(232,new Point(657,737),6));
-  nodes.Add(new Node(233,new Point(658,245),11));
-  nodes.Add(new Node(234,new Point(660,708),2));
-  nodes.Add(new Node(235,new Point(660,1889),241));
-  nodes.Add(new Node(236,new Point(663,589),47));
-  nodes.Add(new Node(237,new Point(667,161),23));
-  nodes.Add(new Node(238,new Point(669,608),42));
-  nodes.Add(new Node(239,new Point(669,666),10));
-  nodes.Add(new Node(240,new Point(669,667),10));
-  nodes.Add(new Node(241,new Point(670,265),30));
-  nodes.Add(new Node(242,new Point(670,601),47));
-  nodes.Add(new Node(243,new Point(670,694),3));
-  nodes.Add(new Node(244,new Point(670,995),65));
-  nodes.Add(new Node(245,new Point(672,724),3));
-  nodes.Add(new Node(246,new Point(673,208),13));
-  nodes.Add(new Node(247,new Point(674,854),70));
-  nodes.Add(new Node(248,new Point(675,645),16));
-  nodes.Add(new Node(249,new Point(676,853),71));
-  nodes.Add(new Node(250,new Point(676,1761),214));
-  nodes.Add(new Node(251,new Point(677,853),72));
-  nodes.Add(new Node(252,new Point(678,736),11));
-  nodes.Add(new Node(253,new Point(679,852),73));
-  nodes.Add(new Node(254,new Point(680,706),3));
-  nodes.Add(new Node(255,new Point(680,852),74));
-  nodes.Add(new Node(256,new Point(684,851),77));
-  nodes.Add(new Node(257,new Point(686,805),57));
-  nodes.Add(new Node(258,new Point(689,808),61));
-  nodes.Add(new Node(259,new Point(690,809),62));
-  nodes.Add(new Node(260,new Point(690,847),80));
-  nodes.Add(new Node(261,new Point(691,809),63));
-  nodes.Add(new Node(262,new Point(692,810),64));
-  nodes.Add(new Node(263,new Point(693,810),65));
-  nodes.Add(new Node(264,new Point(694,811),66));
-  nodes.Add(new Node(265,new Point(695,811),67));
-  nodes.Add(new Node(266,new Point(695,812),68));
-  nodes.Add(new Node(267,new Point(695,813),68));
-  nodes.Add(new Node(268,new Point(696,813),69));
-  nodes.Add(new Node(269,new Point(697,814),70));
-  nodes.Add(new Node(270,new Point(698,814),71));
-  nodes.Add(new Node(271,new Point(699,815),72));
-  nodes.Add(new Node(272,new Point(700,815),73));
-  nodes.Add(new Node(273,new Point(703,818),77));
-  nodes.Add(new Node(274,new Point(704,818),78));
-  nodes.Add(new Node(275,new Point(705,819),79));
-  nodes.Add(new Node(276,new Point(707,266),52));
-  nodes.Add(new Node(277,new Point(709,822),84));
-  nodes.Add(new Node(278,new Point(711,823),86));
-  nodes.Add(new Node(279,new Point(714,245),46));
-  nodes.Add(new Node(280,new Point(717,828),94));
-  nodes.Add(new Node(281,new Point(730,611),43));
-  nodes.Add(new Node(282,new Point(741,375),93));
-  nodes.Add(new Node(283,new Point(747,343),83));
-  nodes.Add(new Node(284,new Point(748,383),89));
-  nodes.Add(new Node(285,new Point(752,573),23));
-  nodes.Add(new Node(286,new Point(754,534),24));
-  nodes.Add(new Node(287,new Point(759,461),55));
-  nodes.Add(new Node(288,new Point(765,431),69));
-  nodes.Add(new Node(289,new Point(766,327),66));
-  nodes.Add(new Node(290,new Point(767,326),65));
-  nodes.Add(new Node(291,new Point(782,1939),137));
-  nodes.Add(new Node(292,new Point(783,1939),136));
-  nodes.Add(new Node(293,new Point(784,1938),135));
-  nodes.Add(new Node(294,new Point(785,1939),135));
-  nodes.Add(new Node(295,new Point(786,1939),134));
-  nodes.Add(new Node(296,new Point(788,1939),132));
-  nodes.Add(new Node(297,new Point(790,1939),130));
-  nodes.Add(new Node(298,new Point(795,804),141));
-  nodes.Add(new Node(299,new Point(796,804),141));
-  nodes.Add(new Node(300,new Point(798,803),143));
-  nodes.Add(new Node(301,new Point(801,1940),121));
-  nodes.Add(new Node(302,new Point(802,1940),120));
-  nodes.Add(new Node(303,new Point(804,1940),118));
-  nodes.Add(new Node(304,new Point(805,541),24));
-  nodes.Add(new Node(305,new Point(805,1940),117));
-  nodes.Add(new Node(306,new Point(807,1941),116));
-  nodes.Add(new Node(307,new Point(812,801),153));
-  nodes.Add(new Node(308,new Point(812,1941),111));
-  nodes.Add(new Node(309,new Point(816,524),16));
-  nodes.Add(new Node(310,new Point(818,581),32));
-  nodes.Add(new Node(311,new Point(833,374),24));
-  nodes.Add(new Node(312,new Point(834,373),23));
-  nodes.Add(new Node(313,new Point(845,455),17));
-  nodes.Add(new Node(314,new Point(855,503),19));
-  nodes.Add(new Node(315,new Point(860,1947),76));
-  nodes.Add(new Node(316,new Point(861,508),19));
-  nodes.Add(new Node(317,new Point(861,521),13));
-  nodes.Add(new Node(318,new Point(861,1948),76));
-  nodes.Add(new Node(319,new Point(862,582),40));
-  nodes.Add(new Node(320,new Point(873,824),181));
-  nodes.Add(new Node(321,new Point(882,954),162));
-  nodes.Add(new Node(322,new Point(892,811),170));
-  nodes.Add(new Node(323,new Point(893,810),169));
-  nodes.Add(new Node(324,new Point(894,514),9));
-  nodes.Add(new Node(325,new Point(900,810),162));
-  nodes.Add(new Node(326,new Point(901,810),161));
-  nodes.Add(new Node(327,new Point(904,810),159));
-  nodes.Add(new Node(328,new Point(909,1843),8));
-  nodes.Add(new Node(329,new Point(917,288),61));
-  nodes.Add(new Node(330,new Point(919,291),62));
-  nodes.Add(new Node(331,new Point(920,292),63));
-  nodes.Add(new Node(332,new Point(924,1817),11));
-  nodes.Add(new Node(333,new Point(927,418),73));
-  nodes.Add(new Node(334,new Point(938,369),73));
-  nodes.Add(new Node(335,new Point(938,370),73));
-  nodes.Add(new Node(336,new Point(938,1817),9));
-  nodes.Add(new Node(337,new Point(940,328),85));
-  nodes.Add(new Node(338,new Point(940,362),76));
-  nodes.Add(new Node(339,new Point(945,1770),24));
-  nodes.Add(new Node(340,new Point(948,334),89));
-  nodes.Add(new Node(341,new Point(958,1873),24));
-  nodes.Add(new Node(342,new Point(960,1878),26));
-  nodes.Add(new Node(343,new Point(966,1041),125));
-  nodes.Add(new Node(344,new Point(970,1993),69));
-  nodes.Add(new Node(345,new Point(980,487),70));
-  nodes.Add(new Node(346,new Point(981,1801),28));
-  nodes.Add(new Node(347,new Point(990,1862),10));
-  nodes.Add(new Node(348,new Point(998,567),88));
-  nodes.Add(new Node(349,new Point(998,600),101));
-  nodes.Add(new Node(350,new Point(999,618),100));
-  nodes.Add(new Node(351,new Point(1004,584),99));
-  nodes.Add(new Node(352,new Point(1004,1809),35));
-  nodes.Add(new Node(353,new Point(1014,2037),108));
-  nodes.Add(new Node(354,new Point(1029,1820),32));
-  nodes.Add(new Node(355,new Point(1030,1821),32));
-  nodes.Add(new Node(356,new Point(1052,1210),45));
-  nodes.Add(new Node(357,new Point(1053,1777),8));
-  nodes.Add(new Node(358,new Point(1053,1840),44));
-  nodes.Add(new Node(359,new Point(1057,653),55));
-  nodes.Add(new Node(360,new Point(1060,1053),97));
-  nodes.Add(new Node(361,new Point(1073,1214),43));
-  nodes.Add(new Node(362,new Point(1083,685),43));
-  nodes.Add(new Node(363,new Point(1088,1186),22));
-  nodes.Add(new Node(364,new Point(1088,1187),22));
-  nodes.Add(new Node(365,new Point(1093,459),34));
-  nodes.Add(new Node(366,new Point(1094,460),35));
-  nodes.Add(new Node(367,new Point(1096,255),134));
-  nodes.Add(new Node(368,new Point(1108,1755),5));
-  nodes.Add(new Node(369,new Point(1109,1057),100));
-  nodes.Add(new Node(370,new Point(1112,482),46));
-  nodes.Add(new Node(371,new Point(1121,1864),94));
-  nodes.Add(new Node(372,new Point(1122,1865),95));
-  nodes.Add(new Node(373,new Point(1123,1866),96));
-  nodes.Add(new Node(374,new Point(1124,408),11));
-  nodes.Add(new Node(375,new Point(1124,1866),97));
-  nodes.Add(new Node(376,new Point(1132,408),10));
-  nodes.Add(new Node(377,new Point(1139,773),56));
-  nodes.Add(new Node(378,new Point(1139,1874),109));
-  nodes.Add(new Node(379,new Point(1142,765),55));
-  nodes.Add(new Node(380,new Point(1145,1884),115));
-  nodes.Add(new Node(381,new Point(1150,1794),46));
-  nodes.Add(new Node(382,new Point(1150,1795),47));
-  nodes.Add(new Node(383,new Point(1150,1796),47));
-  nodes.Add(new Node(384,new Point(1151,742),54));
-  nodes.Add(new Node(385,new Point(1154,1785),40));
-  nodes.Add(new Node(386,new Point(1156,1116),66));
-  nodes.Add(new Node(387,new Point(1156,1118),64));
-  nodes.Add(new Node(388,new Point(1156,1119),64));
-  nodes.Add(new Node(389,new Point(1159,1064),108));
-  nodes.Add(new Node(390,new Point(1160,1617),5));
-  nodes.Add(new Node(391,new Point(1168,164),219));
-  nodes.Add(new Node(392,new Point(1168,1233),63));
-  nodes.Add(new Node(393,new Point(1170,1485),13));
-  nodes.Add(new Node(394,new Point(1173,728),43));
-  nodes.Add(new Node(395,new Point(1194,602),72));
-  nodes.Add(new Node(396,new Point(1198,124),261));
-  nodes.Add(new Node(397,new Point(1198,1255),71));
-  nodes.Add(new Node(398,new Point(1202,1586),37));
-  nodes.Add(new Node(399,new Point(1211,1574),44));
-  nodes.Add(new Node(400,new Point(1212,1518),52));
-  nodes.Add(new Node(401,new Point(1212,1542),54));
-  nodes.Add(new Node(402,new Point(1212,1544),55));
-  nodes.Add(new Node(403,new Point(1217,1497),52));
-  nodes.Add(new Node(404,new Point(1217,1718),46));
-  nodes.Add(new Node(405,new Point(1218,1495),52));
-  nodes.Add(new Node(406,new Point(1218,1496),53));
-  nodes.Add(new Node(407,new Point(1227,1707),42));
-  nodes.Add(new Node(408,new Point(1234,1628),14));
-  nodes.Add(new Node(409,new Point(1238,1417),71));
-  nodes.Add(new Node(410,new Point(1241,829),35));
-  nodes.Add(new Node(411,new Point(1242,1360),65));
-  nodes.Add(new Node(412,new Point(1245,1428),70));
-  nodes.Add(new Node(413,new Point(1245,1821),27));
-  nodes.Add(new Node(414,new Point(1251,1225),57));
-  nodes.Add(new Node(415,new Point(1252,828),33));
-  nodes.Add(new Node(416,new Point(1260,220),192));
-  nodes.Add(new Node(417,new Point(1267,1130),72));
-  nodes.Add(new Node(418,new Point(1268,1183),56));
-  nodes.Add(new Node(419,new Point(1270,582),118));
-  nodes.Add(new Node(420,new Point(1275,790),23));
-  nodes.Add(new Node(421,new Point(1283,437),111));
-  nodes.Add(new Node(422,new Point(1284,528),110));
-  nodes.Add(new Node(423,new Point(1284,530),110));
-  nodes.Add(new Node(424,new Point(1284,531),110));
-  nodes.Add(new Node(425,new Point(1284,1342),44));
-  nodes.Add(new Node(426,new Point(1286,609),110));
-  nodes.Add(new Node(427,new Point(1287,515),110));
-  nodes.Add(new Node(428,new Point(1289,1338),42));
-  nodes.Add(new Node(429,new Point(1289,1778),15));
-  nodes.Add(new Node(430,new Point(1290,1777),15));
-  nodes.Add(new Node(431,new Point(1295,331),140));
-  nodes.Add(new Node(432,new Point(1295,350),133));
-  nodes.Add(new Node(433,new Point(1300,1754),24));
-  nodes.Add(new Node(434,new Point(1301,1753),25));
-  nodes.Add(new Node(435,new Point(1305,1712),35));
-  nodes.Add(new Node(436,new Point(1306,1649),32));
-  nodes.Add(new Node(437,new Point(1307,1259),28));
-  nodes.Add(new Node(438,new Point(1309,1337),29));
-  nodes.Add(new Node(439,new Point(1316,790),34));
-  nodes.Add(new Node(440,new Point(1316,1426),35));
-  nodes.Add(new Node(441,new Point(1317,921),61));
-  nodes.Add(new Node(442,new Point(1318,1384),5));
-  nodes.Add(new Node(443,new Point(1319,2017),32));
-  nodes.Add(new Node(444,new Point(1333,870),62));
-  nodes.Add(new Node(445,new Point(1333,1260),30));
-  nodes.Add(new Node(446,new Point(1337,888),66));
-  nodes.Add(new Node(447,new Point(1338,1930),42));
-  nodes.Add(new Node(448,new Point(1341,1363),3));
-  nodes.Add(new Node(449,new Point(1345,1921),45));
-  nodes.Add(new Node(450,new Point(1347,1966),14));
-  nodes.Add(new Node(451,new Point(1350,1319),28));
-  nodes.Add(new Node(452,new Point(1351,1007),41));
-  nodes.Add(new Node(453,new Point(1351,1561),36));
-  nodes.Add(new Node(454,new Point(1352,1214),27));
-  nodes.Add(new Node(455,new Point(1353,890),54));
-  nodes.Add(new Node(456,new Point(1360,1223),35));
-  nodes.Add(new Node(457,new Point(1369,1361),23));
-  nodes.Add(new Node(458,new Point(1369,1836),59));
-  nodes.Add(new Node(459,new Point(1374,1601),28));
-  nodes.Add(new Node(460,new Point(1375,1407),39));
-  nodes.Add(new Node(461,new Point(1377,1070),32));
-  nodes.Add(new Node(462,new Point(1390,640),53));
-  nodes.Add(new Node(463,new Point(1397,1792),47));
-  nodes.Add(new Node(464,new Point(1400,33),130));
-  nodes.Add(new Node(465,new Point(1401,34),129));
-  nodes.Add(new Node(466,new Point(1402,34),128));
-  nodes.Add(new Node(467,new Point(1403,34),127));
-  nodes.Add(new Node(468,new Point(1403,35),127));
-  nodes.Add(new Node(469,new Point(1405,35),125));
-  nodes.Add(new Node(470,new Point(1406,35),124));
-  nodes.Add(new Node(471,new Point(1409,1699),38));
-  nodes.Add(new Node(472,new Point(1411,1008),25));
-  nodes.Add(new Node(473,new Point(1414,246),42));
-  nodes.Add(new Node(474,new Point(1415,1648),33));
-  nodes.Add(new Node(475,new Point(1416,1322),10));
-  nodes.Add(new Node(476,new Point(1419,1041),7));
-  nodes.Add(new Node(477,new Point(1419,1309),11));
-  nodes.Add(new Node(478,new Point(1421,851),16));
-  nodes.Add(new Node(479,new Point(1422,1000),22));
-  nodes.Add(new Node(480,new Point(1424,1570),23));
-  nodes.Add(new Node(481,new Point(1427,1709),33));
-  nodes.Add(new Node(482,new Point(1432,1639),30));
-  nodes.Add(new Node(483,new Point(1433,464),37));
-  nodes.Add(new Node(484,new Point(1434,464),38));
-  nodes.Add(new Node(485,new Point(1438,464),41));
-  nodes.Add(new Node(486,new Point(1438,771),60));
-  nodes.Add(new Node(487,new Point(1442,770),62));
-  nodes.Add(new Node(488,new Point(1445,1117),58));
-  nodes.Add(new Node(489,new Point(1445,1773),44));
-  nodes.Add(new Node(490,new Point(1449,868),13));
-  nodes.Add(new Node(491,new Point(1452,750),55));
-  nodes.Add(new Node(492,new Point(1453,1580),32));
-  nodes.Add(new Node(493,new Point(1454,1580),32));
-  nodes.Add(new Node(494,new Point(1454,1958),76));
-  nodes.Add(new Node(495,new Point(1455,1073),34));
-  nodes.Add(new Node(496,new Point(1462,864),20));
-  nodes.Add(new Node(497,new Point(1462,926),19));
-  nodes.Add(new Node(498,new Point(1465,1659),17));
-  nodes.Add(new Node(499,new Point(1466,1681),14));
-  nodes.Add(new Node(500,new Point(1474,829),25));
-  nodes.Add(new Node(501,new Point(1476,1653),14));
-  nodes.Add(new Node(502,new Point(1476,1783),49));
-  nodes.Add(new Node(503,new Point(1477,1784),49));
-  nodes.Add(new Node(504,new Point(1482,655),35));
-  nodes.Add(new Node(505,new Point(1482,810),39));
-  nodes.Add(new Node(506,new Point(1486,1317),32));
-  nodes.Add(new Node(507,new Point(1496,1705),12));
-  nodes.Add(new Node(508,new Point(1496,1935),86));
-  nodes.Add(new Node(509,new Point(1497,1704),12));
-  nodes.Add(new Node(510,new Point(1501,1719),13));
-  nodes.Add(new Node(511,new Point(1502,607),54));
-  nodes.Add(new Node(512,new Point(1502,1625),13));
-  nodes.Add(new Node(513,new Point(1503,528),95));
-  nodes.Add(new Node(514,new Point(1503,1919),85));
-  nodes.Add(new Node(515,new Point(1504,543),86));
-  nodes.Add(new Node(516,new Point(1504,544),85));
-  nodes.Add(new Node(517,new Point(1504,545),85));
-  nodes.Add(new Node(518,new Point(1504,1917),85));
-  nodes.Add(new Node(519,new Point(1504,1918),85));
-  nodes.Add(new Node(520,new Point(1510,1881),84));
-  nodes.Add(new Node(521,new Point(1513,435),97));
-  nodes.Add(new Node(522,new Point(1513,504),106));
-  nodes.Add(new Node(523,new Point(1515,305),70));
-  nodes.Add(new Node(524,new Point(1515,384),79));
-  nodes.Add(new Node(525,new Point(1515,385),80));
-  nodes.Add(new Node(526,new Point(1515,386),80));
-  nodes.Add(new Node(527,new Point(1515,1357),37));
-  nodes.Add(new Node(528,new Point(1515,1956),67));
-  nodes.Add(new Node(529,new Point(1516,346),73));
-  nodes.Add(new Node(530,new Point(1516,1370),38));
-  nodes.Add(new Node(531,new Point(1517,816),23));
-  nodes.Add(new Node(532,new Point(1519,470),114));
-  nodes.Add(new Node(533,new Point(1519,955),15));
-  nodes.Add(new Node(534,new Point(1519,1960),62));
-  nodes.Add(new Node(535,new Point(1520,1723),12));
-  nodes.Add(new Node(536,new Point(1521,263),62));
-  nodes.Add(new Node(537,new Point(1521,287),69));
-  nodes.Add(new Node(538,new Point(1521,957),16));
-  nodes.Add(new Node(539,new Point(1522,286),69));
-  nodes.Add(new Node(540,new Point(1522,476),116));
-  nodes.Add(new Node(541,new Point(1522,865),22));
-  nodes.Add(new Node(542,new Point(1522,957),17));
-  nodes.Add(new Node(543,new Point(1522,1847),83));
-  nodes.Add(new Node(544,new Point(1522,1965),60));
-  nodes.Add(new Node(545,new Point(1525,1736),15));
-  nodes.Add(new Node(546,new Point(1528,803),9));
-  nodes.Add(new Node(547,new Point(1529,802),8));
-  nodes.Add(new Node(548,new Point(1531,741),24));
-  nodes.Add(new Node(549,new Point(1534,845),4));
-  nodes.Add(new Node(550,new Point(1534,916),14));
-  nodes.Add(new Node(551,new Point(1535,904),11));
-  nodes.Add(new Node(552,new Point(1535,1641),31));
-  nodes.Add(new Node(553,new Point(1536,902),12));
-  nodes.Add(new Node(554,new Point(1536,903),12));
-  nodes.Add(new Node(555,new Point(1536,1681),25));
-  nodes.Add(new Node(556,new Point(1536,1682),25));
-  nodes.Add(new Node(557,new Point(1537,1650),35));
-  nodes.Add(new Node(558,new Point(1540,884),19));
-  nodes.Add(new Node(559,new Point(1547,760),33));
-  nodes.Add(new Node(560,new Point(1549,158),53));
-  nodes.Add(new Node(561,new Point(1551,1665),39));
-  nodes.Add(new Node(562,new Point(1553,1412),16));
-  nodes.Add(new Node(563,new Point(1553,1515),32));
-  nodes.Add(new Node(564,new Point(1554,1506),31));
-  nodes.Add(new Node(565,new Point(1556,1520),30));
-  nodes.Add(new Node(566,new Point(1560,1534),23));
-  nodes.Add(new Node(567,new Point(1563,1441),22));
-  nodes.Add(new Node(568,new Point(1563,1578),31));
-  nodes.Add(new Node(569,new Point(1566,765),39));
-  nodes.Add(new Node(570,new Point(1567,987),16));
-  nodes.Add(new Node(571,new Point(1569,680),39));
-  nodes.Add(new Node(572,new Point(1570,851),24));
-  nodes.Add(new Node(573,new Point(1573,678),39));
-  nodes.Add(new Node(574,new Point(1573,955),17));
-  nodes.Add(new Node(575,new Point(1577,1265),50));
-  nodes.Add(new Node(576,new Point(1578,1748),42));
-  nodes.Add(new Node(577,new Point(1579,677),39));
-  nodes.Add(new Node(578,new Point(1579,1392),22));
-  nodes.Add(new Node(579,new Point(1581,1327),29));
-  nodes.Add(new Node(580,new Point(1581,1391),23));
-  nodes.Add(new Node(581,new Point(1582,1444),21));
-  nodes.Add(new Node(582,new Point(1584,1588),29));
-  nodes.Add(new Node(583,new Point(1587,121),59));
-  nodes.Add(new Node(584,new Point(1588,120),59));
-  nodes.Add(new Node(585,new Point(1588,339),10));
-  nodes.Add(new Node(586,new Point(1589,119),60));
-  nodes.Add(new Node(587,new Point(1589,1327),36));
-  nodes.Add(new Node(588,new Point(1589,1469),18));
-  nodes.Add(new Node(589,new Point(1592,1543),8));
-  nodes.Add(new Node(590,new Point(1593,1676),53));
-  nodes.Add(new Node(591,new Point(1594,106),63));
-  nodes.Add(new Node(592,new Point(1595,781),50));
-  nodes.Add(new Node(593,new Point(1595,1518),10));
-  nodes.Add(new Node(594,new Point(1596,104),65));
-  nodes.Add(new Node(595,new Point(1596,105),65));
-  nodes.Add(new Node(596,new Point(1596,1728),46));
-  nodes.Add(new Node(597,new Point(1598,623),26));
-  nodes.Add(new Node(598,new Point(1598,1579),21));
-  nodes.Add(new Node(599,new Point(1598,1671),51));
-  nodes.Add(new Node(600,new Point(1601,1545),7));
-  nodes.Add(new Node(601,new Point(1602,818),53));
-  nodes.Add(new Node(602,new Point(1603,1342),38));
-  nodes.Add(new Node(603,new Point(1604,1577),16));
-  nodes.Add(new Node(604,new Point(1607,1370),40));
-  nodes.Add(new Node(605,new Point(1607,1374),40));
-  nodes.Add(new Node(606,new Point(1608,831),57));
-  nodes.Add(new Node(607,new Point(1611,55),77));
-  nodes.Add(new Node(608,new Point(1612,1468),7));
-  nodes.Add(new Node(609,new Point(1614,925),51));
-  nodes.Add(new Node(610,new Point(1618,360),13));
-  nodes.Add(new Node(611,new Point(1620,384),15));
-  nodes.Add(new Node(612,new Point(1621,119),39));
-  nodes.Add(new Node(613,new Point(1622,2012),36));
-  nodes.Add(new Node(614,new Point(1623,120),37));
-  nodes.Add(new Node(615,new Point(1623,2013),37));
-  nodes.Add(new Node(616,new Point(1625,1950),32));
-  nodes.Add(new Node(617,new Point(1626,1439),12));
-  nodes.Add(new Node(618,new Point(1626,1443),14));
-  nodes.Add(new Node(619,new Point(1627,294),35));
-  nodes.Add(new Node(620,new Point(1627,696),43));
-  nodes.Add(new Node(621,new Point(1628,748),36));
-  nodes.Add(new Node(622,new Point(1629,854),58));
-  nodes.Add(new Node(623,new Point(1629,1742),30));
-  nodes.Add(new Node(624,new Point(1630,855),58));
-  nodes.Add(new Node(625,new Point(1630,1415),20));
-  nodes.Add(new Node(626,new Point(1631,312),36));
-  nodes.Add(new Node(627,new Point(1632,313),36));
-  nodes.Add(new Node(628,new Point(1632,314),36));
-  nodes.Add(new Node(629,new Point(1632,1501),24));
-  nodes.Add(new Node(630,new Point(1635,337),30));
-  nodes.Add(new Node(631,new Point(1637,463),78));
-  nodes.Add(new Node(632,new Point(1638,1472),15));
-  nodes.Add(new Node(633,new Point(1639,324),39));
-  nodes.Add(new Node(634,new Point(1639,1929),41));
-  nodes.Add(new Node(635,new Point(1640,1462),16));
-  nodes.Add(new Node(636,new Point(1643,1513),25));
-  nodes.Add(new Node(637,new Point(1643,1566),4));
-  nodes.Add(new Node(638,new Point(1644,1645),44));
-  nodes.Add(new Node(639,new Point(1644,1737),20));
-  nodes.Add(new Node(640,new Point(1646,1534),29));
-  nodes.Add(new Node(641,new Point(1646,1788),23));
-  nodes.Add(new Node(642,new Point(1647,1316),16));
-  nodes.Add(new Node(643,new Point(1649,276),17));
-  nodes.Add(new Node(644,new Point(1656,1934),33));
-  nodes.Add(new Node(645,new Point(1657,1586),19));
-  nodes.Add(new Node(646,new Point(1661,1563),20));
-  nodes.Add(new Node(647,new Point(1662,1847),38));
-  nodes.Add(new Node(648,new Point(1663,1548),26));
-  nodes.Add(new Node(649,new Point(1664,918),91));
-  nodes.Add(new Node(650,new Point(1666,466),84));
-  nodes.Add(new Node(651,new Point(1671,814),8));
-  nodes.Add(new Node(652,new Point(1672,813),8));
-  nodes.Add(new Node(653,new Point(1675,332),36));
-  nodes.Add(new Node(654,new Point(1675,665),47));
-  nodes.Add(new Node(655,new Point(1675,1926),21));
-  nodes.Add(new Node(656,new Point(1677,414),42));
-  nodes.Add(new Node(657,new Point(1678,413),42));
-  nodes.Add(new Node(658,new Point(1679,1342),25));
-  nodes.Add(new Node(659,new Point(1679,1357),30));
-  nodes.Add(new Node(660,new Point(1680,325),30));
-  nodes.Add(new Node(661,new Point(1680,341),33));
-  nodes.Add(new Node(662,new Point(1681,279),4));
-  nodes.Add(new Node(663,new Point(1683,307),17));
-  nodes.Add(new Node(664,new Point(1683,1361),29));
-  nodes.Add(new Node(665,new Point(1684,1416),25));
-  nodes.Add(new Node(666,new Point(1684,1491),17));
-  nodes.Add(new Node(667,new Point(1686,1448),25));
-  nodes.Add(new Node(668,new Point(1691,750),30));
-  nodes.Add(new Node(669,new Point(1691,937),106));
-  nodes.Add(new Node(670,new Point(1692,1979),31));
-  nodes.Add(new Node(671,new Point(1694,1433),33));
-  nodes.Add(new Node(672,new Point(1699,814),16));
-  nodes.Add(new Node(673,new Point(1703,221),34));
-  nodes.Add(new Node(674,new Point(1703,1429),28));
-  nodes.Add(new Node(675,new Point(1703,1976),28));
-  nodes.Add(new Node(676,new Point(1708,625),78));
-  nodes.Add(new Node(677,new Point(1708,1924),15));
-  nodes.Add(new Node(678,new Point(1710,595),92));
-  nodes.Add(new Node(679,new Point(1715,1847),51));
-  nodes.Add(new Node(680,new Point(1716,1529),34));
-  nodes.Add(new Node(681,new Point(1719,1298),39));
-  nodes.Add(new Node(682,new Point(1719,1359),17));
-  nodes.Add(new Node(683,new Point(1720,766),44));
-  nodes.Add(new Node(684,new Point(1720,783),33));
-  nodes.Add(new Node(685,new Point(1721,762),46));
-  nodes.Add(new Node(686,new Point(1721,765),45));
-  nodes.Add(new Node(687,new Point(1726,85),45));
-  nodes.Add(new Node(688,new Point(1726,86),44));
-  nodes.Add(new Node(689,new Point(1728,257),37));
-  nodes.Add(new Node(690,new Point(1728,1363),15));
-  nodes.Add(new Node(691,new Point(1730,757),47));
-  nodes.Add(new Node(692,new Point(1731,362),23));
-  nodes.Add(new Node(693,new Point(1732,259),38));
-  nodes.Add(new Node(694,new Point(1733,1379),15));
-  nodes.Add(new Node(695,new Point(1737,980),146));
-  nodes.Add(new Node(696,new Point(1738,261),38));
-  nodes.Add(new Node(697,new Point(1739,982),148));
-  nodes.Add(new Node(698,new Point(1741,983),150));
-  nodes.Add(new Node(699,new Point(1742,984),150));
-  nodes.Add(new Node(700,new Point(1744,985),152));
-  nodes.Add(new Node(701,new Point(1746,1666),85));
-  nodes.Add(new Node(702,new Point(1747,282),32));
-  nodes.Add(new Node(703,new Point(1747,541),119));
-  nodes.Add(new Node(704,new Point(1747,1667),86));
-  nodes.Add(new Node(705,new Point(1748,537),120));
-  nodes.Add(new Node(706,new Point(1751,319),34));
-  nodes.Add(new Node(707,new Point(1754,172),19));
-  nodes.Add(new Node(708,new Point(1759,191),12));
-  nodes.Add(new Node(709,new Point(1763,219),11));
-  nodes.Add(new Node(710,new Point(1764,724),55));
-  nodes.Add(new Node(711,new Point(1765,1674),101));
-  nodes.Add(new Node(712,new Point(1766,348),43));
-  nodes.Add(new Node(713,new Point(1773,1106),216));
-  nodes.Add(new Node(714,new Point(1780,1400),35));
-  nodes.Add(new Node(715,new Point(1783,1409),40));
-  nodes.Add(new Node(716,new Point(1783,1738),106));
-  nodes.Add(new Node(717,new Point(1785,1425),44));
-  nodes.Add(new Node(718,new Point(1786,1105),227));
-  nodes.Add(new Node(719,new Point(1787,1104),227));
-  nodes.Add(new Node(720,new Point(1791,1103),230));
-  nodes.Add(new Node(721,new Point(1792,1437),45));
-  nodes.Add(new Node(722,new Point(1797,216),23));
-  nodes.Add(new Node(723,new Point(1797,1037),211));
-  nodes.Add(new Node(724,new Point(1801,155),27));
-  nodes.Add(new Node(725,new Point(1807,1539),90));
-  nodes.Add(new Node(726,new Point(1807,1547),94));
-  nodes.Add(new Node(727,new Point(1808,1286),85));
-  nodes.Add(new Node(728,new Point(1809,1127),220));
-  nodes.Add(new Node(729,new Point(1809,1283),88));
-  nodes.Add(new Node(730,new Point(1810,522),123));
-  nodes.Add(new Node(731,new Point(1810,1127),220));
-  nodes.Add(new Node(732,new Point(1810,1281),90));
-  nodes.Add(new Node(733,new Point(1811,1279),92));
-  nodes.Add(new Node(734,new Point(1812,260),22));
-  nodes.Add(new Node(735,new Point(1814,221),32));
-  nodes.Add(new Node(736,new Point(1816,1838),127));
-  nodes.Add(new Node(737,new Point(1825,1582),106));
-  nodes.Add(new Node(738,new Point(1826,1583),106));
-  nodes.Add(new Node(739,new Point(1830,371),73));
-  nodes.Add(new Node(740,new Point(1831,211),36));
-  nodes.Add(new Node(741,new Point(1838,1635),130));
-  nodes.Add(new Node(742,new Point(1838,1636),130));
-  nodes.Add(new Node(743,new Point(1838,1637),131));
-  nodes.Add(new Node(744,new Point(1838,1695),163));
-  nodes.Add(new Node(745,new Point(1841,1157),206));
-  nodes.Add(new Node(746,new Point(1842,211),36));
-  nodes.Add(new Node(747,new Point(1849,1195),179));
-  nodes.Add(new Node(748,new Point(1850,1720),173));
-  nodes.Add(new Node(749,new Point(1856,340),72));
-  nodes.Add(new Node(750,new Point(1857,107),62));
-  nodes.Add(new Node(751,new Point(1857,199),33));
-  nodes.Add(new Node(752,new Point(1857,339),71));
-  nodes.Add(new Node(753,new Point(1859,1376),34));
-  nodes.Add(new Node(754,new Point(1866,43),97));
-  nodes.Add(new Node(755,new Point(1867,73),81));
-  nodes.Add(new Node(756,new Point(1868,175),34));
-  nodes.Add(new Node(757,new Point(1874,301),43));
-  nodes.Add(new Node(758,new Point(1885,742),115));
-  nodes.Add(new Node(759,new Point(1886,743),116));
-  nodes.Add(new Node(760,new Point(1887,742),116));
-  nodes.Add(new Node(761,new Point(1888,742),117));
-  nodes.Add(new Node(762,new Point(1889,742),118));
-  nodes.Add(new Node(763,new Point(1891,743),120));
-  nodes.Add(new Node(764,new Point(1894,744),123));
-  nodes.Add(new Node(765,new Point(1895,744),124));
-  nodes.Add(new Node(766,new Point(1909,185),16));
-  nodes.Add(new Node(767,new Point(1913,1326),102));
-  nodes.Add(new Node(768,new Point(1915,1333),100));
-  nodes.Add(new Node(769,new Point(1915,1334),99));
-  nodes.Add(new Node(770,new Point(1917,215),15));
-  nodes.Add(new Node(771,new Point(1918,207),15));
-  nodes.Add(new Node(772,new Point(1919,1492),11));
-  nodes.Add(new Node(773,new Point(1920,1808),225));
-  nodes.Add(new Node(774,new Point(1921,352),43));
-  nodes.Add(new Node(775,new Point(1927,875),171));
-  nodes.Add(new Node(776,new Point(1929,873),172));
-  nodes.Add(new Node(777,new Point(1930,872),173));
-  nodes.Add(new Node(778,new Point(1931,262),14));
-  nodes.Add(new Node(779,new Point(1931,871),173));
-  nodes.Add(new Node(780,new Point(1932,261),14));
-  nodes.Add(new Node(781,new Point(1932,870),174));
-  nodes.Add(new Node(782,new Point(1937,1375),90));
-  nodes.Add(new Node(783,new Point(1941,173),13));
-  nodes.Add(new Node(784,new Point(1941,245),18));
-  nodes.Add(new Node(785,new Point(1941,1379),88));
-  nodes.Add(new Node(786,new Point(1942,172),14));
-  nodes.Add(new Node(787,new Point(1944,168),16));
-  nodes.Add(new Node(788,new Point(1952,596),156));
-  nodes.Add(new Node(789,new Point(1961,1466),29));
-  nodes.Add(new Node(790,new Point(1963,1396),79));
-  nodes.Add(new Node(791,new Point(1964,387),41));
-  nodes.Add(new Node(792,new Point(1968,164),16));
-  nodes.Add(new Node(793,new Point(1968,408),40));
-  nodes.Add(new Node(794,new Point(1970,321),14));
-  nodes.Add(new Node(795,new Point(1973,275),16));
-  nodes.Add(new Node(796,new Point(1974,1523),37));
-  nodes.Add(new Node(797,new Point(1975,1531),39));
-  nodes.Add(new Node(798,new Point(1985,279),20));
-  nodes.Add(new Node(799,new Point(1985,1539),36));
-  nodes.Add(new Node(800,new Point(1989,283),20));
-  nodes.Add(new Node(801,new Point(1994,250),10));
-  nodes.Add(new Node(802,new Point(2000,125),37));
-  nodes.Add(new Node(803,new Point(2005,357),27));
-  nodes.Add(new Node(804,new Point(2013,212),26));
-  nodes.Add(new Node(805,new Point(2014,1865),283));
-  nodes.Add(new Node(806,new Point(2027,776),251));
+ string nodesStringRight = @"
+9,1310,20
+40,239,37
+45,1100,37
+52,1199,41
+55,961,29
+55,1315,26
+58,782,16
+58,980,19
+60,959,25
+61,959,24
+61,1123,40
+61,1285,23
+61,1326,25
+62,455,21
+62,595,22
+62,1327,25
+64,1383,27
+67,861,24
+69,534,9
+69,719,23
+73,570,9
+75,517,9
+77,545,9
+79,1034,30
+82,603,15
+83,908,20
+85,734,23
+87,1233,49
+88,762,22
+89,436,25
+89,915,21
+93,435,27
+94,1029,36
+99,270,19
+100,324,31
+101,206,14
+103,816,20
+107,41,119
+107,619,20
+109,226,20
+110,677,24
+111,962,22
+112,678,23
+113,664,16
+114,811,24
+116,550,27
+116,684,20
+116,718,11
+117,518,26
+117,555,29
+117,556,28
+118,557,29
+119,181,14
+119,1369,31
+120,561,29
+121,232,25
+122,798,27
+124,798,27
+125,480,38
+125,797,26
+129,481,39
+132,174,20
+138,148,30
+146,223,30
+146,356,63
+148,636,22
+149,607,39
+155,737,30
+155,849,18
+158,737,31
+159,589,48
+159,690,13
+159,737,32
+162,665,18
+165,795,11
+167,670,20
+168,845,22
+171,991,73
+176,1126,88
+178,1126,89
+180,1126,91
+183,1126,94
+184,822,14
+184,1126,95
+185,1237,103
+189,1278,94
+190,863,20
+191,1026,102
+192,673,23
+192,1027,103
+193,743,42
+199,1031,107
+206,1126,114
+207,462,85
+207,741,48
+209,422,81
+209,423,81
+209,424,80
+210,355,105
+211,1051,112
+211,1058,111
+215,1355,107
+217,889,18
+219,1171,117
+230,843,23
+235,555,89
+235,556,89
+236,515,90
+238,863,16
+239,966,45
+248,609,65
+248,792,60
+249,791,60
+266,772,79
+272,875,13
+278,174,100
+278,175,101
+278,868,15
+279,176,102
+280,268,143
+284,937,22
+287,658,60
+289,769,89
+293,1180,75
+305,904,17
+309,245,159
+311,244,160
+312,244,161
+319,240,164
+320,756,103
+329,1514,237
+331,238,164
+337,998,53
+341,484,55
+341,998,54
+347,771,97
+347,1076,11
+356,74,40
+357,1146,50
+358,1146,50
+361,1002,49
+363,1070,9
+375,1049,16
+375,1050,16
+375,1051,15
+376,1050,15
+385,1290,75
+386,1082,7
+386,1180,23
+392,499,62
+393,1193,14
+399,522,46
+404,165,128
+413,986,42
+415,845,91
+415,1116,38
+421,1356,141
+422,647,11
+422,1068,18
+426,1186,11
+430,607,23
+430,1080,30
+431,1111,44
+435,1200,13
+436,1480,244
+443,593,29
+443,594,30
+443,999,32
+444,599,32
+451,860,97
+451,861,97
+451,1441,222
+454,493,31
+457,995,27
+457,1130,38
+458,995,27
+459,995,27
+468,499,22
+472,679,37
+475,845,83
+487,1160,26
+488,1161,26
+493,1173,30
+494,1057,14
+494,1174,30
+498,360,97
+502,1010,27
+507,377,90
+516,513,20
+516,529,19
+519,697,67
+521,107,146
+526,938,6
+536,987,12
+537,612,56
+537,1110,34
+538,1110,34
+546,1214,67
+553,298,58
+558,1062,48
+561,259,52
+562,1023,52
+563,917,3
+564,1020,52
+574,847,3
+574,896,17
+578,454,64
+586,814,2
+593,996,56
+595,2,187
+604,470,59
+607,263,12
+607,990,57
+608,907,32
+609,821,2
+613,777,5
+618,655,8
+619,657,8
+621,798,2
+623,706,2
+629,703,3
+630,238,7
+633,660,3
+640,282,19
+641,677,4
+642,683,3
+643,717,3
+648,864,54
+650,1926,257
+651,629,18
+652,628,19
+652,722,2
+657,737,6
+658,245,11
+660,708,2
+660,1889,241
+663,589,47
+667,161,23
+669,608,42
+669,666,10
+669,667,10
+670,265,30
+670,601,47
+670,694,3
+670,995,65
+672,724,3
+673,208,13
+674,854,70
+675,645,16
+676,853,71
+676,1761,214
+677,853,72
+678,736,11
+679,852,73
+680,706,3
+680,852,74
+684,851,77
+686,805,57
+689,808,61
+690,809,62
+690,847,80
+691,809,63
+692,810,64
+693,810,65
+694,811,66
+695,811,67
+695,812,68
+695,813,68
+696,813,69
+697,814,70
+698,814,71
+699,815,72
+700,815,73
+703,818,77
+704,818,78
+705,819,79
+707,266,52
+709,822,84
+711,823,86
+714,245,46
+717,828,94
+730,611,43
+741,375,93
+747,343,83
+748,383,89
+752,573,23
+754,534,24
+759,461,55
+765,431,69
+766,327,66
+767,326,65
+782,1939,137
+783,1939,136
+784,1938,135
+785,1939,135
+786,1939,134
+788,1939,132
+790,1939,130
+795,804,141
+796,804,141
+798,803,143
+801,1940,121
+802,1940,120
+804,1940,118
+805,541,24
+805,1940,117
+807,1941,116
+812,801,153
+812,1941,111
+816,524,16
+818,581,32
+833,374,24
+834,373,23
+845,455,17
+855,503,19
+860,1947,76
+861,508,19
+861,521,13
+861,1948,76
+862,582,40
+873,824,181
+882,954,162
+892,811,170
+893,810,169
+894,514,9
+900,810,162
+901,810,161
+904,810,159
+909,1843,8
+917,288,61
+919,291,62
+920,292,63
+924,1817,11
+927,418,73
+938,369,73
+938,370,73
+938,1817,9
+940,328,85
+940,362,76
+945,1770,24
+948,334,89
+958,1873,24
+960,1878,26
+966,1041,125
+970,1993,69
+980,487,70
+981,1801,28
+990,1862,10
+998,567,88
+998,600,101
+999,618,100
+1004,584,99
+1004,1809,35
+1014,2037,108
+1029,1820,32
+1030,1821,32
+1052,1210,45
+1053,1777,8
+1053,1840,44
+1057,653,55
+1060,1053,97
+1073,1214,43
+1083,685,43
+1088,1186,22
+1088,1187,22
+1093,459,34
+1094,460,35
+1096,255,134
+1108,1755,5
+1109,1057,100
+1112,482,46
+1121,1864,94
+1122,1865,95
+1123,1866,96
+1124,408,11
+1124,1866,97
+1132,408,10
+1139,773,56
+1139,1874,109
+1142,765,55
+1145,1884,115
+1150,1794,46
+1150,1795,47
+1150,1796,47
+1151,742,54
+1154,1785,40
+1156,1116,66
+1156,1118,64
+1156,1119,64
+1159,1064,108
+1160,1617,5
+1168,164,219
+1168,1233,63
+1170,1485,13
+1173,728,43
+1194,602,72
+1198,124,261
+1198,1255,71
+1202,1586,37
+1211,1574,44
+1212,1518,52
+1212,1542,54
+1212,1544,55
+1217,1497,52
+1217,1718,46
+1218,1495,52
+1218,1496,53
+1227,1707,42
+1234,1628,14
+1238,1417,71
+1241,829,35
+1242,1360,65
+1245,1428,70
+1245,1821,27
+1251,1225,57
+1252,828,33
+1260,220,192
+1267,1130,72
+1268,1183,56
+1270,582,118
+1275,790,23
+1283,437,111
+1284,528,110
+1284,530,110
+1284,531,110
+1284,1342,44
+1286,609,110
+1287,515,110
+1289,1338,42
+1289,1778,15
+1290,1777,15
+1295,331,140
+1295,350,133
+1300,1754,24
+1301,1753,25
+1305,1712,35
+1306,1649,32
+1307,1259,28
+1309,1337,29
+1316,790,34
+1316,1426,35
+1317,921,61
+1318,1384,5
+1319,2017,32
+1333,870,62
+1333,1260,30
+1337,888,66
+1338,1930,42
+1341,1363,3
+1345,1921,45
+1347,1966,14
+1350,1319,28
+1351,1007,41
+1351,1561,36
+1352,1214,27
+1353,890,54
+1360,1223,35
+1369,1361,23
+1369,1836,59
+1374,1601,28
+1375,1407,39
+1377,1070,32
+1390,640,53
+1397,1792,47
+1400,33,130
+1401,34,129
+1402,34,128
+1403,34,127
+1403,35,127
+1405,35,125
+1406,35,124
+1409,1699,38
+1411,1008,25
+1414,246,42
+1415,1648,33
+1416,1322,10
+1419,1041,7
+1419,1309,11
+1421,851,16
+1422,1000,22
+1424,1570,23
+1427,1709,33
+1432,1639,30
+1433,464,37
+1434,464,38
+1438,464,41
+1438,771,60
+1442,770,62
+1445,1117,58
+1445,1773,44
+1449,868,13
+1452,750,55
+1453,1580,32
+1454,1580,32
+1454,1958,76
+1455,1073,34
+1462,864,20
+1462,926,19
+1465,1659,17
+1466,1681,14
+1474,829,25
+1476,1653,14
+1476,1783,49
+1477,1784,49
+1482,655,35
+1482,810,39
+1486,1317,32
+1496,1705,12
+1496,1935,86
+1497,1704,12
+1501,1719,13
+1502,607,54
+1502,1625,13
+1503,528,95
+1503,1919,85
+1504,543,86
+1504,544,85
+1504,545,85
+1504,1917,85
+1504,1918,85
+1510,1881,84
+1513,435,97
+1513,504,106
+1515,305,70
+1515,384,79
+1515,385,80
+1515,386,80
+1515,1357,37
+1515,1956,67
+1516,346,73
+1516,1370,38
+1517,816,23
+1519,470,114
+1519,955,15
+1519,1960,62
+1520,1723,12
+1521,263,62
+1521,287,69
+1521,957,16
+1522,286,69
+1522,476,116
+1522,865,22
+1522,957,17
+1522,1847,83
+1522,1965,60
+1525,1736,15
+1528,803,9
+1529,802,8
+1531,741,24
+1534,845,4
+1534,916,14
+1535,904,11
+1535,1641,31
+1536,902,12
+1536,903,12
+1536,1681,25
+1536,1682,25
+1537,1650,35
+1540,884,19
+1547,760,33
+1549,158,53
+1551,1665,39
+1553,1412,16
+1553,1515,32
+1554,1506,31
+1556,1520,30
+1560,1534,23
+1563,1441,22
+1563,1578,31
+1566,765,39
+1567,987,16
+1569,680,39
+1570,851,24
+1573,678,39
+1573,955,17
+1577,1265,50
+1578,1748,42
+1579,677,39
+1579,1392,22
+1581,1327,29
+1581,1391,23
+1582,1444,21
+1584,1588,29
+1587,121,59
+1588,120,59
+1588,339,10
+1589,119,60
+1589,1327,36
+1589,1469,18
+1592,1543,8
+1593,1676,53
+1594,106,63
+1595,781,50
+1595,1518,10
+1596,104,65
+1596,105,65
+1596,1728,46
+1598,623,26
+1598,1579,21
+1598,1671,51
+1601,1545,7
+1602,818,53
+1603,1342,38
+1604,1577,16
+1607,1370,40
+1607,1374,40
+1608,831,57
+1611,55,77
+1612,1468,7
+1614,925,51
+1618,360,13
+1620,384,15
+1621,119,39
+1622,2012,36
+1623,120,37
+1623,2013,37
+1625,1950,32
+1626,1439,12
+1626,1443,14
+1627,294,35
+1627,696,43
+1628,748,36
+1629,854,58
+1629,1742,30
+1630,855,58
+1630,1415,20
+1631,312,36
+1632,313,36
+1632,314,36
+1632,1501,24
+1635,337,30
+1637,463,78
+1638,1472,15
+1639,324,39
+1639,1929,41
+1640,1462,16
+1643,1513,25
+1643,1566,4
+1644,1645,44
+1644,1737,20
+1646,1534,29
+1646,1788,23
+1647,1316,16
+1649,276,17
+1656,1934,33
+1657,1586,19
+1661,1563,20
+1662,1847,38
+1663,1548,26
+1664,918,91
+1666,466,84
+1671,814,8
+1672,813,8
+1675,332,36
+1675,665,47
+1675,1926,21
+1677,414,42
+1678,413,42
+1679,1342,25
+1679,1357,30
+1680,325,30
+1680,341,33
+1681,279,4
+1683,307,17
+1683,1361,29
+1684,1416,25
+1684,1491,17
+1686,1448,25
+1691,750,30
+1691,937,106
+1692,1979,31
+1694,1433,33
+1699,814,16
+1703,221,34
+1703,1429,28
+1703,1976,28
+1708,625,78
+1708,1924,15
+1710,595,92
+1715,1847,51
+1716,1529,34
+1719,1298,39
+1719,1359,17
+1720,766,44
+1720,783,33
+1721,762,46
+1721,765,45
+1726,85,45
+1726,86,44
+1728,257,37
+1728,1363,15
+1730,757,47
+1731,362,23
+1732,259,38
+1733,1379,15
+1737,980,146
+1738,261,38
+1739,982,148
+1741,983,150
+1742,984,150
+1744,985,152
+1746,1666,85
+1747,282,32
+1747,541,119
+1747,1667,86
+1748,537,120
+1751,319,34
+1754,172,19
+1759,191,12
+1763,219,11
+1764,724,55
+1765,1674,101
+1766,348,43
+1773,1106,216
+1780,1400,35
+1783,1409,40
+1783,1738,106
+1785,1425,44
+1786,1105,227
+1787,1104,227
+1791,1103,230
+1792,1437,45
+1797,216,23
+1797,1037,211
+1801,155,27
+1807,1539,90
+1807,1547,94
+1808,1286,85
+1809,1127,220
+1809,1283,88
+1810,522,123
+1810,1127,220
+1810,1281,90
+1811,1279,92
+1812,260,22
+1814,221,32
+1816,1838,127
+1825,1582,106
+1826,1583,106
+1830,371,73
+1831,211,36
+1838,1635,130
+1838,1636,130
+1838,1637,131
+1838,1695,163
+1841,1157,206
+1842,211,36
+1849,1195,179
+1850,1720,173
+1856,340,72
+1857,107,62
+1857,199,33
+1857,339,71
+1859,1376,34
+1866,43,97
+1867,73,81
+1868,175,34
+1874,301,43
+1885,742,115
+1886,743,116
+1887,742,116
+1888,742,117
+1889,742,118
+1891,743,120
+1894,744,123
+1895,744,124
+1909,185,16
+1913,1326,102
+1915,1333,100
+1915,1334,99
+1917,215,15
+1918,207,15
+1919,1492,11
+1920,1808,225
+1921,352,43
+1927,875,171
+1929,873,172
+1930,872,173
+1931,262,14
+1931,871,173
+1932,261,14
+1932,870,174
+1937,1375,90
+1941,173,13
+1941,245,18
+1941,1379,88
+1942,172,14
+1944,168,16
+1952,596,156
+1961,1466,29
+1963,1396,79
+1964,387,41
+1968,164,16
+1968,408,40
+1970,321,14
+1973,275,16
+1974,1523,37
+1975,1531,39
+1985,279,20
+1985,1539,36
+1989,283,20
+1994,250,10
+2000,125,37
+2005,357,27
+2013,212,26
+2014,1865,283
+2027,776,251
+";
 
-
-	
 }
 
 public void Save()
@@ -2064,3 +2064,5 @@ public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point poi
 	
 	return resultV3D;
 }
+
+
