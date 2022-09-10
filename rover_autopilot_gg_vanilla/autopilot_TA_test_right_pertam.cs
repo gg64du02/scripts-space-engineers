@@ -21,6 +21,8 @@ List<Point> testPointRegionsLinked =  new List<Point>();
 
 List<Node> nodes = new List<Node>();
 
+IEnumerator<bool> _stateMachine;
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -1294,11 +1296,11 @@ public Program()
 	foreach (var sub in subs)
 	{
 		//string[] subs = s.Split('\n');
-		Echo(sub);
+		// Echo(sub);
 		string[] subsub = sub.Split(',');
-		Echo(subsub[0]);
-		Echo(subsub[1]);
-		Echo(subsub[2]);
+		// Echo(subsub[0]);
+		// Echo(subsub[1]);
+		// Echo(subsub[2]);
 		Point position = new Point(int.Parse(subsub[0]),int.Parse(subsub[1]));
 		int radius = int.Parse(subsub[2]);
 		nodes.Add(new Node(indexNumber,position, radius));
@@ -1307,6 +1309,11 @@ public Program()
 	
 
 
+    // Initialize our state machine
+    _stateMachine = RunStuffOverTime();
+	
+    Runtime.UpdateFrequency |= UpdateFrequency.Once;
+	
 }
 
 public void Save()
@@ -1318,6 +1325,82 @@ public void Save()
     // This method is optional and can be removed if not
     // needed.
 }
+
+
+
+// ***MARKER: Coroutine Execution
+public void RunStateMachine()
+{
+    // If there is an active state machine, run its next instruction set.
+    if (_stateMachine != null) 
+    {
+		Echo("bool hasMoreSteps");
+        // machine.
+        bool hasMoreSteps = _stateMachine.MoveNext();
+
+		Echo("bool hasMoreSteps2");
+        // If there are no more instructions, we stop and release the state machine.
+        if (hasMoreSteps)
+        {
+            // The state machine still has more work to do, so signal another run again, 
+            // just like at the beginning.
+            Runtime.UpdateFrequency |= UpdateFrequency.Once;
+        } 
+        else 
+        {
+            _stateMachine.Dispose();
+
+            _stateMachine = null;
+        }
+    }
+}
+
+// ***MARKER: Coroutine Example
+// The return value (bool in this case) is not important for this example. It is not
+// actually in use.
+public IEnumerator<bool> RunStuffOverTime() 
+{
+    // // For the very first instruction set, we will just switch on the light.
+    // _panelLight.Enabled = true;
+	yield return true;
+	
+	
+    // while (true) 
+    // {
+        // yield return true;
+    // }
+	
+	
+	foreach(Node node1 in nodes){
+		foreach(Node node2 in nodes){
+			if(node1 != node2){
+				Point diffPos = new Point(node1.position.X-node2.position.X,node1.position.Y-node2.position.Y);
+				int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
+				int radius = node1.radius;
+				if(radius*radius > distSq){
+					// Echo("node2.index"+node2.index);
+					Echo("nodes.IndexOf(node1):"+nodes.IndexOf(node1));
+					nodes[nodes.IndexOf(node1)].neighborsNodesIndex.Add(node2.index);
+				}
+				
+			}
+		}
+		yield return true;
+	}
+
+    // yield return true;
+
+    // int i = 0;
+	
+    // while (true) 
+    // {
+        // // _textPanel.WriteText(i.ToString());
+        // // i++;
+		
+        // yield return true;
+    // }
+}
+
 
 public void Main(string argument, UpdateType updateSource)
 {
@@ -1331,6 +1414,14 @@ public void Main(string argument, UpdateType updateSource)
 	
 	
 	Echo("nodes.Count"+nodes.Count);
+					
+    if ((updateSource & UpdateType.Once) == UpdateType.Once)
+    {
+		Echo("oi1");
+        RunStateMachine();
+		Echo("oi2");
+    }
+	
 	
 	if(theAntenna != null){
 		theAntenna.HudText = str_to_display;
@@ -1879,6 +1970,7 @@ public class Node {
 		this.index = index;
 		this.position = position;
 		this.radius = radius;
+		this.neighborsNodesIndex = new List<int>();
 	}
 	
 	public String toString(){
