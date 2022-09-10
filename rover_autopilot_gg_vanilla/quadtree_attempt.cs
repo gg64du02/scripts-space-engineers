@@ -1,3 +1,4 @@
+
 // opengenus quadtree converted
 
 
@@ -22,22 +23,26 @@ public class QuadTree{
 	int TR = 1;    // top right
 	int BR = 2;    // bottom right
 	int BL = 3;    // bottom left
+	
+	public string debug = "";
 
 
 	Point nullPoint = new Point(2049,2049);
 		
     // if point == NULL, node is regional.
     // if point == (-1, -1), node is empty.
-    Point point;
+    public Point point;
 
-    Point top_left;
-	Point bottom_right;   // represents the space.
+    public Point top_left;
+	public Point bottom_right;   // represents the space.
     //std::vector<QuadTree *> children;
-	List<QuadTree> children;
+	public List<QuadTree> children;
 	
 	public QuadTree(){
         // to declare empty node
-        point = new Point();
+        //point = new Point();
+        // point = new Point(2049,2049);
+        point = new Point(2049,2049);
 	}
 	
 	public QuadTree(int x, int y){
@@ -50,12 +55,15 @@ public class QuadTree{
             return;
         // point = nullptr;
         point = nullPoint;
+        // point = null;
         top_left = new Point(x1, y1);
         bottom_right = new Point(x2, y2);
         // children.assign(4, nullPoint);
         children = new List<QuadTree>();
-        for(int i = TL; i <= BL; ++i)
-            children[i] = new QuadTree();
+        for(int i = TL; i <= BL; ++i){
+            // children[i] = new QuadTree();
+			children.Add(new QuadTree());
+		}
     }
 
 	
@@ -63,12 +71,16 @@ public class QuadTree{
     public void insert(int x, int y){
         // if(x < top_left->x || x > bottom_right->x
             // || y < top_left->y || y > bottom_right->y)
+		debug = "test1";
         if(x < top_left.X || x > bottom_right.X
-            || y < top_left.Y || y > bottom_right.Y)
+            || y < top_left.Y || y > bottom_right.Y){
+			debug = "test3";
             return;
+			}
         int midx = (top_left.X + bottom_right.X) >> 1,
             midy = (top_left.Y + bottom_right.Y) >> 1;
         int pos = -1;
+		debug = "test2";
         if(x <= midx){
             if(y <= midy)
                 pos = TL;
@@ -82,12 +94,13 @@ public class QuadTree{
                 pos = BR;
         }
 
-        if(children[pos].point == nullPoint){
+        // if(children[pos].point == nullPoint){
+        if(children[pos].point == null){
            // if region node
             children[pos].insert(x, y);
             return;
         }
-        else if(children[pos].point.X == -1){
+        else if(children[pos].point.X == 2049){
             // if empty node
             // delete children[pos];
 			children.RemoveAt(pos);
@@ -123,11 +136,14 @@ public class QuadTree{
     }
 
 
-    bool find(int x, int y){
+    public bool find(int x, int y){
         if(x < top_left.X || x > bottom_right.X
-            || y < top_left.Y || y > bottom_right.Y)
+            || y < top_left.Y || y > bottom_right.Y){
             // return 0;
+			
+			debug = "test4";
             return false;
+			}
         int midx = (top_left.X + bottom_right.X) >> 1,
             midy = (top_left.Y + bottom_right.Y) >> 1;
         int pos = -1;
@@ -144,18 +160,25 @@ public class QuadTree{
                 pos = BR;
         }
         if(children[pos].point == nullPoint){
+        // if(children[pos].point == null){
            // if region node
+			debug = "test5";
+			debug = ""+pos;
             return children[pos].find(x, y);
         }
-        else if(children[pos].point.X == -1){
+        else if(children[pos].point.X == 2049){
             // if empty node
             // return 0;
+			debug = "test6";
             return false;
         }
         else{
-            if(x == children[pos].point.X && y == children[pos].point.Y)
+            if(x == children[pos].point.X && y == children[pos].point.Y){
                 // return 1;
+			
+				debug = "test7";
                 return true;
+			}
         }
         // return 0;
 		return false;
