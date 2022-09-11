@@ -1402,6 +1402,37 @@ public IEnumerator<bool> RunStuffOverTime()
 }
 
 
+Point startPointGoal = new Point(1081,1031);
+Point finalPointGoal = new Point(2043,1664);
+
+public int closestNodeToPoint(Point thisPoint){
+	List<int> indexNodes = new List<int>();
+	List<double> indexRadiusSq = new List<double>();
+	foreach(Node node in nodes){
+		
+		Point diffPos = new Point(node.position.X-thisPoint.X,node.position.Y-thisPoint.Y);
+		int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
+		int radius = node.radius;
+		if(radius*radius > distSq){
+			// Echo("node.index"+node.index);
+			// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
+			indexNodes.Add(nodes.IndexOf(node));
+			indexRadiusSq.Add(distSq);
+		}
+	}
+	
+	int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
+	
+	// Echo("minIndexRadius:"+minIndexRadius);
+	
+	int indexOrClosestNode = indexNodes[minIndexRadius];
+	Echo("indexOrClosestNode:"+indexOrClosestNode);
+	
+	return indexOrClosestNode;
+		
+}
+
+
 public void Main(string argument, UpdateType updateSource)
 {
     // The main entry point of the script, invoked every time
@@ -1413,7 +1444,87 @@ public void Main(string argument, UpdateType updateSource)
     // can be removed if not needed.
 	
 	
+	
+	
+	// foreach(int index in Range(0, nodes.Count)){
+		// nodeGvalue.Add(-1);
+	// }
+	
+	
 	Echo("nodes.Count"+nodes.Count);
+	
+	
+	//TODO: trouver le bon node de start pour avoir l'heuristique correspondant
+	int startingIndex = closestNodeToPoint(startPointGoal);
+	
+	Node nodeStarting = nodes[startingIndex];
+	
+	Echo("nodeStarting.position"+nodeStarting.position);
+	
+	//1 make an openlist containing only the starting node
+	List<Node> openlist = new List<Node> ();
+	// openlist.Add(nodes[3]);
+	openlist.Add(nodeStarting);
+	
+	//2 make an empty closed list
+	List<Node> closelist = new List<Node> ();
+	
+	int endingIndex = closestNodeToPoint(finalPointGoal);
+	
+	List<double> nodeGvalue = new List<double>();
+	
+	// Node ourDestinationNode = nodes[50];
+	Node ourDestinationNode = nodes[endingIndex];
+	Node node = null;
+	
+	List<double> testHeuristicFunction = heuristicFunction(ourDestinationNode.position);
+	// // or
+	// List<double> testHeuristicFunction = heuristicFunction(finalPointGoal);
+	
+	/*
+   //3 while (the destination node has not been reached):
+	while(true){
+       //4 consider the node with the lowest f score in the open list
+	   // h = heuristic
+	   // f(n)=g(n)+h(n)
+		// f(n) = total estimated cost of path through node nn
+		// g(n) = cost so far to reach node nn
+		// h(n) = estimated cost from nn to goal. This is the heuristic part of the cost function, so it is like a guess.
+	   
+	   // TODO
+		
+		
+		//5 if (this node is our destination node) :
+        //6 we are finished 
+		if(ourDestinationNode == node){
+			break;
+		}
+		//7 if not:
+		else{
+			//8 put the current node in the closed list and look at all of its neighbors
+			closelist.Add(node);
+			List<Node> neighbors = new List<Node>();
+			foreach(int index in range(0, node.neighborsNodesIndex.Count){
+				neighbors.Add(nodes[index]);
+				}
+			//9 for (each neighbor of the current node):
+			foreach(Node neighbor in neighbors){
+				
+				
+				//17 else if this neighbor is not in both lists:
+				else if(neighbor not in openlist){
+					if(neighbor not in closelist){
+						//18 add it to the open list and set its g
+						//TODO
+						// nodeGvalue[
+					}
+				}
+			}
+		}
+		
+	}
+	*/
+	
 					
     if ((updateSource & UpdateType.Once) == UpdateType.Once)
     {
@@ -2183,3 +2294,22 @@ public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point poi
 }
 
 
+
+public List<double> heuristicFunction(Point iPG){
+
+	List<double> heuristicTmp = new List<double>();
+	
+	foreach(Node node in nodes){
+		Point diffPos = new Point(node.position.X-iPG.X,node.position.Y-iPG.Y);
+		int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
+		double dist = Math.Sqrt(distSq);
+		heuristicTmp.Add(dist);
+		// Echo("dist:"+dist);
+		// if(nodes.IndexOf(node)==10){
+			// break;
+		// }
+	}
+	
+	return heuristicTmp;
+}
+	
