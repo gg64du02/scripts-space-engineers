@@ -1437,6 +1437,11 @@ public double heuristic(Point a, Point b){
     return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
 }
 
+public double distanceSquarred(Point a, Point b){
+	
+    return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+}
+
 
 
 
@@ -1516,8 +1521,19 @@ public void Main(string argument, UpdateType updateSource)
 		// g(n) = cost so far to reach node nn
 		// h(n) = estimated cost from nn to goal. This is the heuristic part of the cost function, so it is like a guess.
 	   
-	   // TODO
-		
+	   double tmpF = -1;
+	   Node tmpNode = null;
+		foreach(Node testFnode in openlist){
+			if(tmpF==-1){
+				tmpF = fscore[testFnode];
+				tmpNode = testFnode;
+			}
+			if(tmpF>fscore[testFnode]){
+				tmpF = fscore[testFnode];
+				tmpNode = testFnode;
+			}
+		}
+		node= tmpNode;
 		
 		//5 if (this node is our destination node) :
         //6 we are finished 
@@ -1539,7 +1555,7 @@ public void Main(string argument, UpdateType updateSource)
 				if(gscore[neighbor]<gscore[node]){
 					if(closelist.Contains(neighbor)==true){
 						// 11 replace the neighbor with the new, lower, g value 
-						gscore[neighbor] = gscore[neighbor];
+						gscore[node] = gscore[neighbor];
 						//12 current node is now the neighbor's parent      
 						path.Add(neighbor,node);      
 					}
@@ -1559,7 +1575,9 @@ public void Main(string argument, UpdateType updateSource)
 					if(closelist.Contains(neighbor)==false){
 						//18 add it to the open list and set its g
 						openlist.Add(neighbor);
-						// gscore[neighbor] = 
+						//TODO
+						double distanceNeighNode = Math.Sqrt(distanceSquarred(neighbor.position,node.position));
+						gscore[neighbor] = gscore[node] + distanceNeighNode;
 					}
 				}
 			}
