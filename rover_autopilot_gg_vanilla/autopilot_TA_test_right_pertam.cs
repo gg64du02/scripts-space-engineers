@@ -1432,6 +1432,13 @@ public int closestNodeToPoint(Point thisPoint){
 		
 }
 
+public double heuristic(Point a, Point b){
+	
+    return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+}
+
+
+
 
 public void Main(string argument, UpdateType updateSource)
 {
@@ -1475,13 +1482,31 @@ public void Main(string argument, UpdateType updateSource)
 	
 	// Node ourDestinationNode = nodes[50];
 	Node ourDestinationNode = nodes[endingIndex];
-	Node node = null;
+	// Node node = null;
+	Node node = nodeStarting;
 	
 	List<double> testHeuristicFunction = heuristicFunction(ourDestinationNode.position);
 	// // or
 	// List<double> testHeuristicFunction = heuristicFunction(finalPointGoal);
 	
-	/*
+	
+	// Point start = nodeStarting.position;
+	// Point goal = ourDestinationNode.position;
+	// Dictionary<Point, double> came_from = new Dictionary<Point, double>();
+	// Dictionary<Point, double> gscore = new Dictionary<Point, double>();
+	// gscore.Add(start, heuristic(start,goal));
+	// Dictionary<Point, double> fscore = new Dictionary<Point, double>();
+	
+	Dictionary<Node, double> gscore = new Dictionary<Node, double>();
+	//gscore.Add(nodeStarting, heuristic(nodeStarting.position,ourDestinationNode.position));
+	Dictionary<Node, double> fscore = new Dictionary<Node, double>();
+	
+	Dictionary<Node, Node> path = new Dictionary<Node, Node>();
+	
+	
+	//int fscore = 
+	
+	
    //3 while (the destination node has not been reached):
 	while(true){
        //4 consider the node with the lowest f score in the open list
@@ -1504,26 +1529,44 @@ public void Main(string argument, UpdateType updateSource)
 			//8 put the current node in the closed list and look at all of its neighbors
 			closelist.Add(node);
 			List<Node> neighbors = new List<Node>();
-			foreach(int index in range(0, node.neighborsNodesIndex.Count){
+			// foreach(int index in  Enumerable.Range(0, node.neighborsNodesIndex.Count)){
+			foreach(int index in node.neighborsNodesIndex){
 				neighbors.Add(nodes[index]);
-				}
-			//9 for (each neighbor of the current node):
+			}
+			// 9 for (each neighbor of the current node):
 			foreach(Node neighbor in neighbors){
-				
-				
+				//10 if (neighbor has lower g value than current and is in the closed list) :
+				if(gscore[neighbor]<gscore[node]){
+					if(closelist.Contains(neighbor)==true){
+						// 11 replace the neighbor with the new, lower, g value 
+						gscore[neighbor] = gscore[neighbor];
+						//12 current node is now the neighbor's parent      
+						path.Add(neighbor,node);      
+					}
+				}
+               //13 else if (current g value is lower and this neighbor is in the open list ) :
+			   else if(gscore[node]<gscore[neighbor]){
+					if(openlist.Contains(neighbor)==true){
+						// 14 replace the neighbor with the new, lower, g value 
+						gscore[neighbor] = gscore[node];
+						// 15 change the neighbor's parent to our current node 
+						path.Add(node,neighbor);
+					}
+			   }
+				//16 (empty line)
 				//17 else if this neighbor is not in both lists:
-				else if(neighbor not in openlist){
-					if(neighbor not in closelist){
+				else if(openlist.Contains(neighbor)==false){
+					if(closelist.Contains(neighbor)==false){
 						//18 add it to the open list and set its g
-						//TODO
-						// nodeGvalue[
+						openlist.Add(neighbor);
+						// gscore[neighbor] = 
 					}
 				}
 			}
 		}
 		
 	}
-	*/
+	
 	
 					
     if ((updateSource & UpdateType.Once) == UpdateType.Once)
