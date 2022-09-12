@@ -1379,14 +1379,16 @@ public IEnumerator<bool> RunStuffOverTime()
 				int radius = node1.radius;
 				if(radius*radius > distSq){
 					// Echo("node2.index"+node2.index);
-					Echo("nodes.IndexOf(node1):"+nodes.IndexOf(node1));
 					nodes[nodes.IndexOf(node1)].neighborsNodesIndex.Add(node2.index);
 				}
 				
 			}
 		}
+		Echo("nodes.IndexOf(node1):"+nodes.IndexOf(node1));
 		yield return true;
 	}
+
+	graphRegened = true;
 
     // yield return true;
 
@@ -1442,7 +1444,7 @@ public double distanceSquarred(Point a, Point b){
     return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
 }
 
-
+bool graphRegened = false;
 
 
 public void Main(string argument, UpdateType updateSource)
@@ -1463,8 +1465,23 @@ public void Main(string argument, UpdateType updateSource)
 	// }
 	
 	
+	
+	
 	Echo("nodes.Count"+nodes.Count);
 	
+	
+					
+    if ((updateSource & UpdateType.Once) == UpdateType.Once)
+    {
+		Echo("oi1");
+        RunStateMachine();
+		Echo("oi2");
+    }
+	
+	if( graphRegened ==false){
+		return;
+	}
+	Echo("oi3");
 	
 	//TODO: trouver le bon node de start pour avoir l'heuristique correspondant
 	int startingIndex = closestNodeToPoint(startPointGoal);
@@ -1509,8 +1526,7 @@ public void Main(string argument, UpdateType updateSource)
 	Dictionary<Node, Node> path = new Dictionary<Node, Node>();
 	
 	
-	//int fscore = 
-	
+	Echo("oi4");
 	
    //3 while (the destination node has not been reached):
 	while(true){
@@ -1521,6 +1537,9 @@ public void Main(string argument, UpdateType updateSource)
 		// g(n) = cost so far to reach node nn
 		// h(n) = estimated cost from nn to goal. This is the heuristic part of the cost function, so it is like a guess.
 	   
+		Echo("oi5");
+		
+		Echo("openlist.Count:"+openlist.Count);
 	   double tmpF = -1;
 	   Node tmpNode = null;
 		foreach(Node testFnode in openlist){
@@ -1535,6 +1554,7 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		node= tmpNode;
 		
+		Echo("oi6");
 		//5 if (this node is our destination node) :
         //6 we are finished 
 		if(ourDestinationNode == node){
@@ -1586,13 +1606,6 @@ public void Main(string argument, UpdateType updateSource)
 	}
 	
 	
-					
-    if ((updateSource & UpdateType.Once) == UpdateType.Once)
-    {
-		Echo("oi1");
-        RunStateMachine();
-		Echo("oi2");
-    }
 	
 	
 	if(theAntenna != null){
