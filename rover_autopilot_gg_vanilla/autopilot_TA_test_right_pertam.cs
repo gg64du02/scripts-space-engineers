@@ -1405,7 +1405,13 @@ public IEnumerator<bool> RunStuffOverTime()
 
  
 // Point startPointGoal = new Point(1081,1031);
- Point startPointGoal = new Point(1794,1913);
+ // Point startPointGoal = new Point(1794,1913);
+ // Point startPointGoal = new Point(1102,1791);//bug358
+ // Point startPointGoal = new Point(1425,1783);
+//Point startPointGoal = new Point(1950,1664);
+//Point startPointGoal = new Point(1800,1664);//2node
+// Point startPointGoal = new Point(1500,1664);
+Point startPointGoal = new Point(500,1664);
 Point finalPointGoal = new Point(2043,1664);
 
 public int closestNodeToPoint(Point thisPoint){
@@ -1484,6 +1490,9 @@ public void Main(string argument, UpdateType updateSource)
 	}
 	Echo("oi3");
 	
+	Echo("startPointGoal:"+startPointGoal);
+	Echo("finalPointGoal:"+finalPointGoal);
+	
 	//TODO: trouver le bon node de start pour avoir l'heuristique correspondant
 	int startingIndex = closestNodeToPoint(startPointGoal);
 	
@@ -1516,7 +1525,7 @@ public void Main(string argument, UpdateType updateSource)
 	Dictionary<Node, double> gscore = new Dictionary<Node, double>();
 	Dictionary<Node, double> fscore = new Dictionary<Node, double>();
 	
-	Dictionary<Node, Node> path = new Dictionary<Node, Node>();
+	Dictionary<Node, Node> came_from = new Dictionary<Node, Node>();
 	
 	
 	// is 0 because it does not cost anything to move from starting node
@@ -1537,8 +1546,13 @@ public void Main(string argument, UpdateType updateSource)
 	listHeapNodes.Add(nodeStarting);
 	
 	
+	
+	Echo("start.position:"+node.position);
+	Echo("goal.position:"+ourDestinationNode.position);
+	
 	while(true){
 		
+		Echo("heap.C:"+listHeapNodes.Count);
 		node = listHeapNodes[listHeapNodes.Count-1];
 		listHeapNodes.RemoveAt(listHeapNodes.Count-1);
 		
@@ -1546,7 +1560,8 @@ public void Main(string argument, UpdateType updateSource)
 		// Echo("fscore["+node.index+"]:"+fscore[node]);
 		// Echo("gscore["+node.index+"]:"+gscore[node]);
 		// Echo("h:"+heuristic(node.position,ourDestinationNode.position));
-		Echo("node.position:"+node.position);
+		// Echo("node.position:"+node.position);
+		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
 			
 		if(ourDestinationNode == node){
 			Echo("goal reached");
@@ -1557,14 +1572,18 @@ public void Main(string argument, UpdateType updateSource)
 				closelist.Add(node);
 			}
 			List<Node> neighbors = new List<Node>();
+			// Echo("nodes.Count:"+nodes.Count);
+			Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
 			foreach(int index in node.neighborsNodesIndex){
 				if(closelist.Contains(nodes[index])==false){
 					neighbors.Add(nodes[index]);
 				}
 			}
+			Echo("neighbors.Count:"+neighbors.Count);
 			foreach(Node neighbor in neighbors){
 				
-				double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
+					 // Echo("here11");
+				double tentative_g_score = gscore[node] + Math.Sqrt(heuristic(node.position, neighbor.position));
 				if(closelist.Contains(neighbor)==true){
 					double gscoreTmp = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
 					if( tentative_g_score >=gscoreTmp){
@@ -1578,8 +1597,10 @@ public void Main(string argument, UpdateType updateSource)
 					 // Echo("here1");
 					// gscore.Add(neighbor, tentative_g_score);
 					// fscore.Add(neighbor, tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position));
+					came_from[neighbor] = node;
 					gscore[neighbor] = tentative_g_score;
-					fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
+					//fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
+					fscore[neighbor] = tentative_g_score + Math.Sqrt(heuristic(neighbor.position,ourDestinationNode.position));
 					listHeapNodes.Add(neighbor);
 					 // Echo("here2");
 				}
@@ -1596,6 +1617,18 @@ public void Main(string argument, UpdateType updateSource)
 		
 		debugCount = debugCount + 1;
 	}
+	
+	List<Node> data = new List<Node>();
+	
+	while(came_from.ContainsKey(node)){
+		Echo("data.Add(node);");
+		Echo("node.position:"+node.position);
+		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		data.Add(node);
+		node = came_from[node];
+	}
+	
+	
 	
 	// ==============================================================================
 	
