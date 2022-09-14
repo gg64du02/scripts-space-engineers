@@ -35,6 +35,71 @@ def isThisInBounds(point):
     return True
 
 
+def encodeAsStringNumberMax64(number):
+    print("number:"+str(number))
+    resultEncodeStr = ""
+    if(number<10):
+        # print("if(number<10):")
+        resultEncodeStr = "" + str(number)
+    else:
+        if(number<36):
+            # print("if(number<36):")
+            resultEncodeStr = "" + chr(number + 87)
+        else:
+            if(number<62):
+                # print("if(number<62):")
+                resultEncodeStr = "" + chr(number + 29)
+            else:
+                if(number==62):
+                    # print("-")
+                    resultEncodeStr = "-"
+                if(number==63):
+                    # print("_")
+                    resultEncodeStr = "_"
+
+
+    return resultEncodeStr
+
+def encodeAsString__Range(number):
+
+    # max range is 0-4095
+    first_part = encodeAsStringNumberMax64(number // 64)
+    second_part = encodeAsStringNumberMax64(number % 64)
+
+    print("first_part",first_part)
+    print("second_part",second_part)
+
+
+    resultEncodeStr = str(first_part) + str(second_part)
+
+
+    # resultEncodeStr = ""
+    return resultEncodeStr
+
+# print(""+encodeAsStringNumberMax64(0))
+# print(""+encodeAsStringNumberMax64(1))
+# print(""+encodeAsStringNumberMax64(9))
+# print(""+encodeAsStringNumberMax64(10))
+# print(""+encodeAsStringNumberMax64(11))
+#
+# print(""+encodeAsStringNumberMax64(35))
+# print(""+encodeAsStringNumberMax64(36))
+#
+# print(""+encodeAsStringNumberMax64(61))
+# print(""+encodeAsStringNumberMax64(62))
+# print(""+encodeAsStringNumberMax64(63))
+# print(""+encodeAsStringNumberMax64(64))
+
+# print(""+str(encodeAsString__Range(654)))
+# print(""+str(encodeAsString__Range(546)))
+# print(""+str(encodeAsString__Range(128)))
+# print(""+str(encodeAsString__Range(4095)))
+#
+# exit()
+
+
+
+
 # plt.imshow(back_voronoi_par_proc)
 # plt.show()
 
@@ -152,6 +217,7 @@ for node1 in nodesArray:
                 # print("if(diff_radius2>diff_radius):")
                 nodesIndexToPutinChildren.append(nodesArray.index(node2))
     # print("nodesIndexToPutinChildren",nodesIndexToPutinChildren)
+    print("",nodesIndexToPutinChildren)
     nodesArrayWithChilds.append([node1[0],node1[1],node1[2],nodesIndexToPutinChildren])
 
 
@@ -211,5 +277,5 @@ for nodeGen in nodesArray:
     position = nodeGen[0]
     radius = nodeGen[2]
     # print("generateCSinitCode",generateCSinitCode(indexNode,position,radius))
-    print(generateStingInitCode(indexNode,position,radius))
+    # print(generateStingInitCode(indexNode,position,radius))
 print("\";")
