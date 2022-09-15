@@ -34,6 +34,55 @@ def isThisInBounds(point):
         return False
     return True
 
+def decodeStr__NumberMax4095(strMax4095):
+
+
+    resultInt = decodeAsCharNumberMax64(strMax4095[0]) * 64 + decodeAsCharNumberMax64(strMax4095[1]) * 1
+
+    # resultInt = 0
+    return resultInt
+
+
+
+def decodeAsCharNumberMax64(character):
+    # print("number:"+str(number))
+
+    # print("character:",character)
+    numberToProcess = ord(character)
+    # print("numberToProcess:",numberToProcess)
+
+    resultNumberUnder64 = 0
+
+
+    if(character=="-"):
+        resultNumberUnder64 = 62
+        return resultNumberUnder64
+    if(character=="_"):
+        resultNumberUnder64 = 63
+        return resultNumberUnder64
+
+    # "0" "9" 48 58     0 9       58= 48 +10
+    # "A" "Z" 65 90     36 62     91= 65 + 26
+    # "a" "z" 97 122    10 35     122
+
+    if(numberToProcess<58):
+        # 48 is "0"
+        resultNumberUnder64 = numberToProcess - 48
+        return resultNumberUnder64
+    if(numberToProcess<(90+1)):
+        # 97 is "A"
+        resultNumberUnder64 = numberToProcess - (90+1) + 26 + 36
+        return resultNumberUnder64
+    if(numberToProcess<(122+1)):
+        # 97 is "a"
+        resultNumberUnder64 = numberToProcess - (122+1) + 10 + 26
+        return resultNumberUnder64
+
+
+
+
+    return resultNumberUnder64
+
 
 def encodeAsStringNumberMax64(number):
     # print("number:"+str(number))
@@ -97,6 +146,17 @@ def encodeAsString__Range(number):
 #
 # exit()
 
+# print(""+str(decodeAsCharNumberMax64("0")))
+# print(""+str(decodeAsCharNumberMax64("9")))
+# print(""+str(decodeAsCharNumberMax64("a")))
+# print(""+str(decodeAsCharNumberMax64("z")))
+# print(""+str(decodeAsCharNumberMax64("A")))
+# print(""+str(decodeAsCharNumberMax64("Z")))
+# print(""+str(decodeAsCharNumberMax64("-")))
+# print(""+str(decodeAsCharNumberMax64("_")))
+#
+#
+# print(""+str(decodeStr__NumberMax4095("aa")))
 
 
 
@@ -168,7 +228,7 @@ for x in range(0,2048):
                     pass
                     # potential node
                     # print("node:x,y",x,y)
-                    print(np.unique(pixelsValue))
+                    # print(np.unique(pixelsValue))
                     radiusAtThisVertex = back_clos_dis_par_proc[x,y]
                     nodeNumberIndex = nodeNumberIndex + 1
                     tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
@@ -177,13 +237,13 @@ for x in range(0,2048):
                     # print("nodesArray[0]",nodesArray[0])
                 if(numberOfdifferentsValue==4):
                     pass
-                    # potential node rare
-                    # print("rare node")
-                    # print("rare node:x,y",x,y)
-                    # print(np.unique(pixelsValue))
-                    radiusAtThisVertex = back_clos_dis_par_proc[x,y]
-                    nodeNumberIndex = nodeNumberIndex + 1
-                    tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
+                    # # potential node rare
+                    # # print("rare node")
+                    # # print("rare node:x,y",x,y)
+                    # # print(np.unique(pixelsValue))
+                    # radiusAtThisVertex = back_clos_dis_par_proc[x,y]
+                    # nodeNumberIndex = nodeNumberIndex + 1
+                    # tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
         if(tmpNode!=[]):
             nodesArray.append(tmpNode)
             nodesArrayWithLabels.append(tmpNodeWithLabels)
@@ -198,6 +258,8 @@ resultStr = []
 
 finalIndex = 0
 
+dictPointStrIndex = {}
+
 for indexStr in range(len(nodesArray)):
     # tmpStr = "" + finalIndex + "," + str(nodesArray[indexStr][0])
     # tmpStr = "" + encodeAsString__Range(finalIndex) + str(encodeAsString__Range(nodesArray[indexStr][0][0])) + str(
@@ -205,9 +267,16 @@ for indexStr in range(len(nodesArray)):
     tmpStr = ""  + str(encodeAsString__Range(nodesArray[indexStr][0][0])) + str(
         encodeAsString__Range(nodesArray[indexStr][0][1]))+ encodeAsString__Range(finalIndex)
 
+    dictPointStrIndex[tmpStr[0:4]] = encodeAsString__Range(finalIndex)
+
     # print("tmpStr:"+tmpStr)
     resultStr.append(tmpStr)
     finalIndex = finalIndex + 1
+
+# print("dictPointStrIndex[tmpStr]"+dictPointStrIndex[tmpStr])
+# exit()
+# print(""+str(resultStr[0]))
+# exit()
 
 nodesArrayWithChilds = []
 
@@ -248,42 +317,41 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                             # print("numberOfuniqueLabels:" + str(numberOfuniqueLabels))
                             # two common label, and two not neighbors
                             if(numberOfuniqueLabels==4):
-                                print("numberOfuniqueLabels:"+str(numberOfuniqueLabels))
-                                print("nodeWithLabels1[0]:"+str(nodeWithLabels1[0]))
-                                print("nodeWithLabels2[0]:"+str(nodeWithLabels2[0]))
+                                # print("numberOfuniqueLabels:"+str(numberOfuniqueLabels))
+                                # print("nodeWithLabels1[0]:"+str(nodeWithLabels1[0]))
+                                # print("nodeWithLabels2[0]:"+str(nodeWithLabels2[0]))
 
                                 encodedLabel1 = str(encodeAsString__Range(nodeWithLabels1[0][0])) + str(
                                     encodeAsString__Range(nodeWithLabels1[0][1]))
                                 encodedLabel2 = str(encodeAsString__Range(nodeWithLabels2[0][0])) + str(
         encodeAsString__Range(nodeWithLabels2[0][1]))
-                                print("encodedLabel1:"+str(encodedLabel1))
-                                print("encodedLabel2:"+str(encodedLabel2))
+                                # print("==================")
+                                # print("encodedLabel1:"+str(encodedLabel1))
+                                # print("encodedLabel2:"+str(encodedLabel2))
+
+                                previousInsert1 = ""
+                                previousInsert2 = ""
+
+                                # print("dictPointStrIndex[encodedLabel1]"+dictPointStrIndex[encodedLabel1])
+                                # print("dictPointStrIndex[encodedLabel2]"+dictPointStrIndex[encodedLabel2])
+
+                                # TODO: needs decoding
+                                tmpIndex1 = decodeStr__NumberMax4095(dictPointStrIndex[encodedLabel1])
+                                tmpIndex2 = decodeStr__NumberMax4095(dictPointStrIndex[encodedLabel2])
+
+                                resultStr[tmpIndex1] = resultStr[tmpIndex1] + dictPointStrIndex[encodedLabel2]
+                                resultStr[tmpIndex2] = resultStr[tmpIndex2] + dictPointStrIndex[encodedLabel1]
 
 
-                                tmpCount = 0
-                                for listStr in resultStr:
-                                    # print("listStr[0:4]:"+listStr[0:4])
-                                    if(listStr[0:4]==encodedLabel1):
-                                        # print("test1")
-                                        indexToInsertBackInto1 = listStr[5:6]
-                                        addThis1 = encodedLabel2
-                                        resultStr[tmpCount] = resultStr[tmpCount] + addThis1
-                                        pass
-                                    if(listStr[0:4]==encodedLabel2):
-                                        # print("test2")
-                                        indexToInsertBackInto2 = listStr[5:6]
-                                        pass
-                                        addThis2 = encodedLabel1
-                                        resultStr[tmpCount] = resultStr[tmpCount] + addThis2
 
-                                    tmpCount = tmpCount + 1
 
 pass
 
-print("resultStr[0]:"+resultStr[0])
+# print("resultStr[0]:"+resultStr[0])
 
 for strres  in resultStr:
-    print("strres:",strres)
+    # print("strres:",strres)
+    print(strres)
 
 # testing
 # start
