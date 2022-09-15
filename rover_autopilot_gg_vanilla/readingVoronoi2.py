@@ -339,8 +339,24 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                                 tmpIndex1 = decodeStr__NumberMax4095(dictPointStrIndex[encodedLabel1])
                                 tmpIndex2 = decodeStr__NumberMax4095(dictPointStrIndex[encodedLabel2])
 
-                                resultStr[tmpIndex1] = resultStr[tmpIndex1] + dictPointStrIndex[encodedLabel2]
-                                resultStr[tmpIndex2] = resultStr[tmpIndex2] + dictPointStrIndex[encodedLabel1]
+                                # resultStr[tmpIndex1] = resultStr[tmpIndex1] + dictPointStrIndex[encodedLabel2]
+                                # resultStr[tmpIndex2] = resultStr[tmpIndex2] + dictPointStrIndex[encodedLabel1]
+
+                                allIndexes1 = resultStr[tmpIndex1][6:]
+                                allIndexes2 = resultStr[tmpIndex2][6:]
+                                # print("resultStr[tmpIndex1]",resultStr[tmpIndex1])
+                                # print("allIndexes1",allIndexes1)
+
+                                n = 2
+                                listIndexes1 = [allIndexes1[i:i+n] for i in range(0, len(allIndexes1), n)]
+                                listIndexes2 = [allIndexes2[i:i+n] for i in range(0, len(allIndexes2), n)]
+                                pass
+
+                                if(dictPointStrIndex[encodedLabel2] not in listIndexes1):
+                                    resultStr[tmpIndex1] = resultStr[tmpIndex1] + dictPointStrIndex[encodedLabel2]
+                                if(dictPointStrIndex[encodedLabel1] not in listIndexes2):
+                                    resultStr[tmpIndex2] = resultStr[tmpIndex2] + dictPointStrIndex[encodedLabel1]
+
 
 
 
