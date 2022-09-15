@@ -1380,6 +1380,7 @@ public IEnumerator<bool> RunStuffOverTime()
 				if(radius*radius > distSq){
 					// Echo("node2.index"+node2.index);
 					nodes[nodes.IndexOf(node1)].neighborsNodesIndex.Add(node2.index);
+					//nodes[nodes.IndexOf(node2)].neighborsNodesIndex.Add(node1.index);
 				}
 				
 			}
@@ -1387,7 +1388,6 @@ public IEnumerator<bool> RunStuffOverTime()
 		Echo("nodes.IndexOf(node1):"+nodes.IndexOf(node1));
 		yield return true;
 	}
-
 	graphRegened = true;
 
     // yield return true;
@@ -1404,14 +1404,14 @@ public IEnumerator<bool> RunStuffOverTime()
 }
 
  
-// Point startPointGoal = new Point(1081,1031);
+// Point startPointGoal = new Point(1081,1031);//crash
  // Point startPointGoal = new Point(1794,1913);
- // Point startPointGoal = new Point(1102,1791);//bug358
+ // Point startPointGoal = new Point(1102,1791);//crash ? bug358
  // Point startPointGoal = new Point(1425,1783);
 //Point startPointGoal = new Point(1950,1664);
-//Point startPointGoal = new Point(1800,1664);//2node
-// Point startPointGoal = new Point(1500,1664);
-Point startPointGoal = new Point(500,1664);
+Point startPointGoal = new Point(1800,1664);//2node
+//Point startPointGoal = new Point(0,1664);//crash
+// Point startPointGoal = new Point(1081,1786);//crash
 Point finalPointGoal = new Point(2043,1664);
 
 public int closestNodeToPoint(Point thisPoint){
@@ -1618,15 +1618,15 @@ public void Main(string argument, UpdateType updateSource)
 		debugCount = debugCount + 1;
 	}
 	
-	List<Node> data = new List<Node>();
+	// List<Node> data = new List<Node>();
 	
-	while(came_from.ContainsKey(node)){
-		Echo("data.Add(node);");
-		Echo("node.position:"+node.position);
-		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
-		data.Add(node);
-		node = came_from[node];
-	}
+	// while(came_from.ContainsKey(node)){
+		// Echo("data.Add(node);");
+		// Echo("node.position:"+node.position);
+		// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		// data.Add(node);
+		// node = came_from[node];
+	// }
 	
 	
 	
