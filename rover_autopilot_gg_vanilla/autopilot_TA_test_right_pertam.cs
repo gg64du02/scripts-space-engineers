@@ -1293,7 +1293,6 @@ vHc8cAbQbRbSbTbUbVbWbXc5c6c7c9cb";
 	// Echo("aa:"+decodeStr__NumberMax4095("aa"));
 	
 
-	//int indexNumber = 0;
 	
 	foreach (string sub in subs)
 	{
@@ -1338,13 +1337,6 @@ vHc8cAbQbRbSbTbUbVbWbXc5c6c7c9cb";
 		}
 		
 		
-		
-		// foreach(string strNeighborsIndex in encodedNeighborsIndexes){
-			// int subsubStringIndex = subsub.IndexOf(strNeighborsIndex);
-			// if(subsubStringIndex>2){
-				// nodes[indexNumber].neighborsNodesIndex.Add(int.Parse(subsubStringIndex));
-			// }
-		// }
 		indexNumber = indexNumber + 1;
 	}
 	
@@ -1505,12 +1497,13 @@ public IEnumerator<bool> RunStuffOverTime()
 }
 
  
-// Point startPointGoal = new Point(1081,1031);//crash
+// Point startPointGoal = new Point(1081,1031);//ok
+Point startPointGoal = new Point(50,50);//crash
  // Point startPointGoal = new Point(1794,1913);
  // Point startPointGoal = new Point(1102,1791);//crash ? bug358
  // Point startPointGoal = new Point(1425,1783);
 //Point startPointGoal = new Point(1950,1664);
-Point startPointGoal = new Point(1800,1664);//2node
+// Point startPointGoal = new Point(1800,1664);//2node
 //Point startPointGoal = new Point(0,1664);//crash
 // Point startPointGoal = new Point(1081,1786);//crash
 Point finalPointGoal = new Point(2043,1664);
@@ -1620,10 +1613,6 @@ public void Main(string argument, UpdateType updateSource)
 	// Node node = null;
 	Node node = nodeStarting;
 	
-	List<double> testHeuristicFunction = heuristicFunction(ourDestinationNode.position);
-	// // or
-	// List<double> testHeuristicFunction = heuristicFunction(finalPointGoal);
-	
 	
 	Dictionary<Node, double> gscore = new Dictionary<Node, double>();
 	Dictionary<Node, double> fscore = new Dictionary<Node, double>();
@@ -1721,17 +1710,35 @@ public void Main(string argument, UpdateType updateSource)
 		debugCount = debugCount + 1;
 	}
 	
-	// List<Node> data = new List<Node>();
+	List<Node> data = new List<Node>();
 	
-	// while(came_from.ContainsKey(node)){
-		// Echo("data.Add(node);");
-		// Echo("node.position:"+node.position);
-		// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
-		// data.Add(node);
-		// node = came_from[node];
-	// }
+	while(came_from.ContainsKey(node)){
+		Echo("data.Add(node);");
+		Echo("node.position:"+node.position);
+		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		data.Add(node);
+		node = came_from[node];
+	}
 	
 	
+	string toCustomData = "";
+	
+	int gps_number = 0;
+	
+	foreach(Node pathNode in data){
+		// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
+		//toCustomData = toCustomData + pathNode.position;
+		Vector3D nodeConverted = convertPointToV3D(RemoteControl, 4, pathNode.position);
+		
+		// MyWaypointInfo tmpWPINode  = new MyWaypointInfo("inter", nodeConverted);
+		MyWaypointInfo tmpWPINode  = new MyWaypointInfo(gps_number.ToString(), nodeConverted);
+		
+		toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
+		
+		gps_number = gps_number + 1;
+	}
+	
+	Me.CustomData = toCustomData;
 	
 	// ==============================================================================
 	
@@ -2495,22 +2502,3 @@ public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point poi
 }
 
 
-
-public List<double> heuristicFunction(Point iPG){
-
-	List<double> heuristicTmp = new List<double>();
-	
-	foreach(Node node in nodes){
-		Point diffPos = new Point(node.position.X-iPG.X,node.position.Y-iPG.Y);
-		int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
-		double dist = Math.Sqrt(distSq);
-		heuristicTmp.Add(dist);
-		// Echo("dist:"+dist);
-		// if(nodes.IndexOf(node)==10){
-			// break;
-		// }
-	}
-	
-	return heuristicTmp;
-}
-	
