@@ -1498,30 +1498,27 @@ public IEnumerator<bool> RunStuffOverTime()
     // }
 }
 
- 
-// // Point startPointGoal = new Point(1081,1031);//ok
-// Point startPointGoal = new Point(50,50);//crash
- // // Point startPointGoal = new Point(1794,1913);
- // // Point startPointGoal = new Point(1102,1791);//crash ? bug358
- // // Point startPointGoal = new Point(1425,1783);
-// //Point startPointGoal = new Point(1950,1664);
-// // Point startPointGoal = new Point(1800,1664);//2node
-// //Point startPointGoal = new Point(0,1664);//crash
-// // Point startPointGoal = new Point(1081,1786);//crash
-// Point finalPointGoal = new Point(2043,1664);
 
+// // ok euclidian distance going across with no circles
+// Point startPointGoal  = new Point(2043,1664);
+// Point finalPointGoal = new Point(50,50);
 
 Point startPointGoal  = new Point(2043,1664);
-Point finalPointGoal = new Point(50,50);//crash
+Point finalPointGoal = new Point(429,1284);
 
-
+// need more test, seems like path finding is jumping around the big obstacle ?
+//TODO: too many links ?
 // Point startPointGoal  = new Point(1101,1791);
 // Point finalPointGoal = new Point(586,1265);
 
+
+//ok, 3 point euclidian distance
 // Point startPointGoal  = new Point(1871,2019);
 // Point finalPointGoal = new Point(1733,1852);
 
-
+// //testing avoiding the canyons
+// Point startPointGoal  = new Point(600,2043);
+// Point finalPointGoal = new Point(1600,2043);
 
 
 public int closestNodeToPoint(Point thisPoint){
@@ -1554,6 +1551,16 @@ public int closestNodeToPoint(Point thisPoint){
 public double heuristic(Point a, Point b){
 	
     return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+}
+
+public double euclideanDistance(Point a, Point b){
+	
+    return Math.Sqrt((b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y));
+}
+
+public double manhattanDistance(Point a, Point b){
+	
+    return Math.Abs(b.X - a.X) + Math.Abs(b.Y - a.Y);
 }
 
 public double distanceSquarred(Point a, Point b){
@@ -1693,7 +1700,9 @@ public void Main(string argument, UpdateType updateSource)
 			foreach(Node neighbor in neighbors){
 				
 					 // Echo("here11");
-				double tentative_g_score = gscore[node] + Math.Sqrt(heuristic(node.position, neighbor.position));
+				// double tentative_g_score = gscore[node] + (heuristic(node.position, neighbor.position));
+				// double tentative_g_score = gscore[node] + (manhattanDistance(node.position, neighbor.position));
+				double tentative_g_score = gscore[node] + euclideanDistance(node.position, neighbor.position);
 				if(closelist.Contains(neighbor)==true){
 					double gscoreTmp = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
 					if( tentative_g_score >=gscoreTmp){
@@ -1712,7 +1721,8 @@ public void Main(string argument, UpdateType updateSource)
 					came_from[neighbor] = node;
 					gscore[neighbor] = tentative_g_score;
 					//fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
-					fscore[neighbor] = tentative_g_score + Math.Sqrt(heuristic(neighbor.position,ourDestinationNode.position));
+					//fscore[neighbor] = tentative_g_score + (manhattanDistance(neighbor.position,ourDestinationNode.position));
+					fscore[neighbor] = tentative_g_score + euclideanDistance(neighbor.position,ourDestinationNode.position);
 					NodeFscore[neighbor] = fscore[neighbor];
 					//listHeapNodes.Add(neighbor);
 					 // Echo("here2");
@@ -1760,11 +1770,11 @@ public void Main(string argument, UpdateType updateSource)
 		// MyWaypointInfo tmpWPINode  = new MyWaypointInfo("inter", nodeConverted);
 		MyWaypointInfo tmpWPINode  = new MyWaypointInfo(gps_number.ToString(), nodeConverted);
 		
-		toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
+		// toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
 		
-		// toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
+		toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
 		
-		// //2027 776
+		// 2027 776
 		// if(gps_number == 15){
 			// Echo("pathNode.position 15:"+pathNode.position);
 			// Echo("pathNode.index 15:"+pathNode.index);
