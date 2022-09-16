@@ -241,9 +241,10 @@ for x in range(0,2048):
                     # # print("rare node")
                     # # print("rare node:x,y",x,y)
                     # # print(np.unique(pixelsValue))
-                    # radiusAtThisVertex = back_clos_dis_par_proc[x,y]
-                    # nodeNumberIndex = nodeNumberIndex + 1
-                    # tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
+                    radiusAtThisVertex = back_clos_dis_par_proc[x,y]
+                    nodeNumberIndex = nodeNumberIndex + 1
+                    tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
+                    tmpNodeWithLabels = [[x,y],radiusAtThisVertex,np.unique(pixelsValue)]
         if(tmpNode!=[]):
             nodesArray.append(tmpNode)
             nodesArrayWithLabels.append(tmpNodeWithLabels)
@@ -302,6 +303,8 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                     # print("numberOfLabels1:"+str(numberOfLabels1))
                     # print("numberOfLabels2:"+str(numberOfLabels2))
 
+                    pass
+
                     combinedLabels = []
 
                     for lbl in labels1:
@@ -309,14 +312,30 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                     for lbl in labels2:
                         combinedLabels.append(lbl)
 
-                    if(numberOfLabels1 == 3):
-                        if(numberOfLabels2 == 3):
+                    if(numberOfLabels1 >= 3):
+                        if(numberOfLabels2 >= 3):
                             combinedLabels = sorted(set(combinedLabels))
                             # print("len(combinedLabels):"+str(len(combinedLabels)))
                             numberOfuniqueLabels = len(np.unique(combinedLabels))
                             # print("numberOfuniqueLabels:" + str(numberOfuniqueLabels))
-                            # two common label, and two not neighbors
-                            if(numberOfuniqueLabels==4):
+
+                            numberOfCommonLabels = 0
+                            if(labels1.size>labels2.size):
+                                for label1 in labels1:
+                                    if(label1 in labels2):
+                                        numberOfCommonLabels = numberOfCommonLabels + 1
+                            else:
+                                for label2 in labels2:
+                                    if(label2 in labels1):
+                                        numberOfCommonLabels = numberOfCommonLabels + 1
+
+                            # if(numberOfCommonLabels>2):
+                            #     print("numberOfCommonLabels:", numberOfCommonLabels)
+
+                            # # two common label, and two not neighbors
+                            # if(numberOfuniqueLabels==4):
+                            # two common labels
+                            if(numberOfCommonLabels>=2):
                                 # print("numberOfuniqueLabels:"+str(numberOfuniqueLabels))
                                 # print("nodeWithLabels1[0]:"+str(nodeWithLabels1[0]))
                                 # print("nodeWithLabels2[0]:"+str(nodeWithLabels2[0]))
