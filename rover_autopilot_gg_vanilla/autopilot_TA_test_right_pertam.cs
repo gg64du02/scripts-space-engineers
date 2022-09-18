@@ -607,102 +607,12 @@ public int decodeAsCharNumberMax64(char character){
 }
 
 
-// // ok euclidian distance going across with no circles
-// Point startPointGoal  = new Point(2043,1664);
-// Point finalPointGoal = new Point(50,50);
-
-//todo: checking for simplification
-Point startPointGoal  = new Point(2043,1664);//this2
-Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(2043,1664);//this1
-// Point startPointGoal   = new Point(429,1284);
-// Point startPointGoal  = new Point(1440,767);
-// Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(1440,767);
-// Point startPointGoal  = new Point(429,1284);
-
-// need more test, seems like path finding is jumping around the big obstacle ?
-//TODO: too many links ?
-// Point startPointGoal  = new Point(1101,1791);
-// Point finalPointGoal = new Point(586,1265);
-
-
-//ok, 3 point euclidian distance
-// Point startPointGoal  = new Point(1871,2019);
-// Point finalPointGoal = new Point(1733,1852);
-
-// //testing avoiding the canyons
-// Point startPointGoal  = new Point(600,2043);
-// Point finalPointGoal = new Point(1600,2043);
-
-
-public int closestNodeToPoint(Point thisPoint){
-	List<int> indexNodes = new List<int>();
-	List<double> indexRadiusSq = new List<double>();
-	foreach(Node node in nodes){
-		
-		Point diffPos = new Point(node.position.X-thisPoint.X,node.position.Y-thisPoint.Y);
-		int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
-		int radius = node.radius;
-		if(radius*radius > distSq){
-			// Echo("node.index"+node.index);
-			// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
-			indexNodes.Add(nodes.IndexOf(node));
-			indexRadiusSq.Add(distSq);
-		}
-	}
+public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> listPathNode){
+	listPathNode = new List<Node>();
 	
-	int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
-	
-	// Echo("minIndexRadius:"+minIndexRadius);
-	
-	int indexOrClosestNode = indexNodes[minIndexRadius];
-	Echo("indexOrClosestNode:"+indexOrClosestNode);
-	
-	return indexOrClosestNode;
-		
-}
+	Point startPointGoal  = startPoint;
+	Point finalPointGoal = endPoint;
 
-public double heuristic(Point a, Point b){
-	
-    // return heuristicZero(a,b);
-    return euclideanDistance(a,b);
-    // return manhattanDistance(a,b);
-    // return distanceSquarred(a,b);
-}
-
-public double euclideanDistance(Point a, Point b){
-	
-    return Math.Sqrt((b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y));
-}
-
-public double manhattanDistance(Point a, Point b){
-	
-    return Math.Abs(b.X - a.X) + Math.Abs(b.Y - a.Y);
-}
-
-public double distanceSquarred(Point a, Point b){
-	
-    return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
-}
-
-
-public double heuristicZero(Point a, Point b){
-	
-    return 0;
-}
-
-
-public void Main(string argument, UpdateType updateSource)
-{
-    // The main entry point of the script, invoked every time
-    // one of the programmable block's Run actions are invoked,
-    // or the script updates itself. The updateSource argument
-    // describes where the update came from.
-    // 
-    // The method itself is required, but the arguments above
-    // can be removed if not needed.
-	
 	
 	Echo("nodes.Count"+nodes.Count);
 	
@@ -824,9 +734,10 @@ public void Main(string argument, UpdateType updateSource)
 	List<Node> data = new List<Node>();
 	
 	while(came_from.ContainsKey(node)){
-		Echo("data.Add(node);");
-		Echo("node.position:"+node.position);
-		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		// Echo("data.Add(node);");
+		// Echo("node.position:"+node.position);
+		// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		Echo("gscore[node]:"+gscore[node]);
 		data.Add(node);
 		node = came_from[node];
 	}
@@ -860,8 +771,112 @@ public void Main(string argument, UpdateType updateSource)
 		
 		gps_number = gps_number + 1;
 	}
-	
 	Me.CustomData = toCustomData;
+}
+
+
+
+public int closestNodeToPoint(Point thisPoint){
+	List<int> indexNodes = new List<int>();
+	List<double> indexRadiusSq = new List<double>();
+	foreach(Node node in nodes){
+		
+		Point diffPos = new Point(node.position.X-thisPoint.X,node.position.Y-thisPoint.Y);
+		int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
+		int radius = node.radius;
+		if(radius*radius > distSq){
+			// Echo("node.index"+node.index);
+			// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
+			indexNodes.Add(nodes.IndexOf(node));
+			indexRadiusSq.Add(distSq);
+		}
+	}
+	
+	int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
+	
+	// Echo("minIndexRadius:"+minIndexRadius);
+	
+	int indexOrClosestNode = indexNodes[minIndexRadius];
+	Echo("indexOrClosestNode:"+indexOrClosestNode);
+	
+	return indexOrClosestNode;
+		
+}
+
+public double heuristic(Point a, Point b){
+	
+    // return heuristicZero(a,b);
+    return euclideanDistance(a,b);
+    // return manhattanDistance(a,b);
+    // return distanceSquarred(a,b);
+}
+
+public double euclideanDistance(Point a, Point b){
+	
+    return Math.Sqrt((b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y));
+}
+
+public double manhattanDistance(Point a, Point b){
+	
+    return Math.Abs(b.X - a.X) + Math.Abs(b.Y - a.Y);
+}
+
+public double distanceSquarred(Point a, Point b){
+	
+    return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+}
+
+
+public double heuristicZero(Point a, Point b){
+	
+    return 0;
+}
+
+
+public void Main(string argument, UpdateType updateSource)
+{
+    // The main entry point of the script, invoked every time
+    // one of the programmable block's Run actions are invoked,
+    // or the script updates itself. The updateSource argument
+    // describes where the update came from.
+    // 
+    // The method itself is required, but the arguments above
+    // can be removed if not needed.
+	
+	List<Node> aStarPathNodeList = new List<Node>();
+	
+// // ok euclidian distance going across with no circles
+// Point startPointGoal  = new Point(2043,1664);
+// Point finalPointGoal = new Point(50,50);
+
+//todo: checking for simplification
+// Point startPointGoal  = new Point(2043,1664);//this2
+// Point finalPointGoal = new Point(429,1284);
+Point finalPointGoal  = new Point(2043,1664);//this1
+Point startPointGoal   = new Point(429,1284);
+// Point startPointGoal  = new Point(1440,767);
+// Point finalPointGoal = new Point(429,1284);
+// Point finalPointGoal  = new Point(1440,767);
+// Point startPointGoal  = new Point(429,1284);
+
+// need more test, seems like path finding is jumping around the big obstacle ?
+//TODO: too many links ?
+// Point startPointGoal  = new Point(1101,1791);
+// Point finalPointGoal = new Point(586,1265);
+
+
+//ok, 3 point euclidian distance
+// Point startPointGoal  = new Point(1871,2019);
+// Point finalPointGoal = new Point(1733,1852);
+
+// //testing avoiding the canyons
+// Point startPointGoal  = new Point(600,2043);
+// Point finalPointGoal = new Point(1600,2043);
+
+
+	aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList);
+	
+	
 	
 	// ==============================================================================
 	
