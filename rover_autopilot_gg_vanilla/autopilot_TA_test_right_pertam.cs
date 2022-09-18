@@ -21,8 +21,6 @@ List<Point> testPointRegionsLinked =  new List<Point>();
 
 List<Node> nodes = new List<Node>();
 
-IEnumerator<bool> _stateMachine;
-
 public Program()
 {
     // The constructor, called only once every session and
@@ -1342,12 +1340,6 @@ vHc8cCbSbTbUbVbWbXbYbZc7c8c9cbcd";
 		indexNumber = indexNumber + 1;
 	}
 	
-
-
-    // Initialize our state machine
-    _stateMachine = RunStuffOverTime();
-	
-    Runtime.UpdateFrequency |= UpdateFrequency.Once;
 	
 }
 
@@ -1420,94 +1412,15 @@ public int decodeAsCharNumberMax64(char character){
 }
 
 
-
-
-
-// ***MARKER: Coroutine Execution
-public void RunStateMachine()
-{
-    // If there is an active state machine, run its next instruction set.
-    if (_stateMachine != null) 
-    {
-		Echo("bool hasMoreSteps");
-        // machine.
-        bool hasMoreSteps = _stateMachine.MoveNext();
-
-		Echo("bool hasMoreSteps2");
-        // If there are no more instructions, we stop and release the state machine.
-        if (hasMoreSteps)
-        {
-            // The state machine still has more work to do, so signal another run again, 
-            // just like at the beginning.
-            Runtime.UpdateFrequency |= UpdateFrequency.Once;
-        } 
-        else 
-        {
-            _stateMachine.Dispose();
-
-            _stateMachine = null;
-        }
-    }
-}
-
-// ***MARKER: Coroutine Example
-// The return value (bool in this case) is not important for this example. It is not
-// actually in use.
-public IEnumerator<bool> RunStuffOverTime() 
-{
-    // // For the very first instruction set, we will just switch on the light.
-    // _panelLight.Enabled = true;
-	yield return true;
-	
-	
-    // while (true) 
-    // {
-        // yield return true;
-    // }
-	
-	
-	foreach(Node node1 in nodes){
-		foreach(Node node2 in nodes){
-			if(node1 != node2){
-				Point diffPos = new Point(node1.position.X-node2.position.X,node1.position.Y-node2.position.Y);
-				int distSq = diffPos.X*diffPos.X + diffPos.Y*diffPos.Y;
-				int radius = node1.radius;
-				if(radius*radius > distSq){
-					// Echo("node2.index"+node2.index);
-					nodes[nodes.IndexOf(node1)].neighborsNodesIndex.Add(node2.index);
-					//nodes[nodes.IndexOf(node2)].neighborsNodesIndex.Add(node1.index);
-				}
-				
-			}
-		}
-		Echo("nodes.IndexOf(node1):"+nodes.IndexOf(node1));
-		yield return true;
-	}
-	graphRegened = true;
-
-    // yield return true;
-
-    // int i = 0;
-	
-    // while (true) 
-    // {
-        // // _textPanel.WriteText(i.ToString());
-        // // i++;
-		
-        // yield return true;
-    // }
-}
-
-
 // // ok euclidian distance going across with no circles
 // Point startPointGoal  = new Point(2043,1664);
 // Point finalPointGoal = new Point(50,50);
 
 //todo: checking for simplification
-Point startPointGoal  = new Point(2043,1664);//this2
-Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(2043,1664);//this1
-// Point startPointGoal   = new Point(429,1284);
+// Point startPointGoal  = new Point(2043,1664);//this2
+// Point finalPointGoal = new Point(429,1284);
+Point finalPointGoal  = new Point(2043,1664);//this1
+Point startPointGoal   = new Point(429,1284);
 // Point startPointGoal  = new Point(1440,767);
 // Point finalPointGoal = new Point(429,1284);
 // Point finalPointGoal  = new Point(1440,767);
@@ -1557,7 +1470,6 @@ public int closestNodeToPoint(Point thisPoint){
 
 public double heuristic(Point a, Point b){
 	
-    // return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
     // return heuristicZero(a,b);
     return euclideanDistance(a,b);
     // return manhattanDistance(a,b);
@@ -1586,9 +1498,6 @@ public double heuristicZero(Point a, Point b){
 }
 
 
-bool graphRegened = false;
-
-
 public void Main(string argument, UpdateType updateSource)
 {
     // The main entry point of the script, invoked every time
@@ -1600,32 +1509,7 @@ public void Main(string argument, UpdateType updateSource)
     // can be removed if not needed.
 	
 	
-	
-	
-	// foreach(int index in Range(0, nodes.Count)){
-		// nodeGvalue.Add(-1);
-	// }
-	
-	
-	
-	
 	Echo("nodes.Count"+nodes.Count);
-	
-	
-					
-    // if ((updateSource & UpdateType.Once) == UpdateType.Once)
-    // {
-		// Echo("oi1");
-        // RunStateMachine();
-		// Echo("oi2");
-    // }
-	
-	graphRegened = true;
-	
-	if( graphRegened ==false){
-		return;
-	}
-	Echo("oi3");
 	
 	Echo("startPointGoal:"+startPointGoal);
 	Echo("finalPointGoal:"+finalPointGoal);
@@ -1668,16 +1552,10 @@ public void Main(string argument, UpdateType updateSource)
 	Echo("nodeStarting.index:"+nodeStarting.index);
 	
 	
-	Echo("oi4");
-	
 	int debugCount = 0;
 	
-	
-    //py heappush(oheap, (fscore[start], start))
 	List<Node> listHeapNodes = new List<Node>();
 	listHeapNodes.Add(nodeStarting);
-	
-	
 	
 	Echo("start.position:"+node.position);
 	Echo("goal.position:"+ourDestinationNode.position);
@@ -1715,12 +1593,8 @@ public void Main(string argument, UpdateType updateSource)
 			
 			Dictionary<Node, double> NodeFscore = new Dictionary<Node, double>();
 			foreach(Node neighbor in neighbors){
-				
 					 // Echo("here11");
 				double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
-				// double tentative_g_score = gscore[node] + heuristicZero(node.position, neighbor.position);
-				// double tentative_g_score = gscore[node] + manhattanDistance(node.position, neighbor.position);
-				// double tentative_g_score = gscore[node] + euclideanDistance(node.position, neighbor.position);
 				if(closelist.Contains(neighbor)==true){
 					double gscoreTmp = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
 					if( tentative_g_score >=gscoreTmp){
@@ -1728,41 +1602,27 @@ public void Main(string argument, UpdateType updateSource)
 					}
 				}
 				
-				
-				
 				double gscoreTmp2 = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
 				if(tentative_g_score < gscoreTmp2 || listHeapNodes.Contains(neighbor)==false){
-					 // py came_from[neighbor] = current
 					 // Echo("here1");
-					// gscore.Add(neighbor, tentative_g_score);
-					// fscore.Add(neighbor, tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position));
 					came_from[neighbor] = node;
 					gscore[neighbor] = tentative_g_score;
 					fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
-					// fscore[neighbor] = tentative_g_score + heuristicZero(neighbor.position,ourDestinationNode.position);
-					// fscore[neighbor] = tentative_g_score + manhattanDistance(neigbor.position,ourDestinationNode.position);
-					// fscore[neighbor] = tentative_g_score + euclideanDistance(neighbor.position,ourDestinationNode.position);
 					NodeFscore[neighbor] = fscore[neighbor];
 					//listHeapNodes.Add(neighbor);
 					 // Echo("here2");
 				}
-				
 			}
 			
 			foreach(KeyValuePair<Node,double> entry in NodeFscore.OrderByDescending(key => key.Value)){
 				//Echo("entry.Key:"+entry.Key);
 				listHeapNodes.Add(entry.Key);
 			}
-				
 		}
-		
-		
 		
 		if(debugCount ==245){
 			break;
 		}
-		
-		
 		debugCount = debugCount + 1;
 	}
 	
@@ -1802,17 +1662,6 @@ public void Main(string argument, UpdateType updateSource)
 			toCustomData = toCustomData +"displayLine(["+pathNode.position.X+","+pathNode.position.Y + "],["+previousPointDebug.X+","+previousPointDebug.Y+"])" + '\n';
 			previousPointDebug = pathNode.position;
 		}
-		
-		// 2027 776
-		// if(gps_number == 15){
-			// Echo("pathNode.position 15:"+pathNode.position);
-			// Echo("pathNode.index 15:"+pathNode.index);
-		// }
-		// // 1952 596
-		// if(gps_number == 56){
-			// Echo("pathNode.position 56:"+pathNode.position);
-			// Echo("pathNode.index 56:"+pathNode.index);
-		// }
 		
 		gps_number = gps_number + 1;
 	}
