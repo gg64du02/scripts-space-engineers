@@ -13,10 +13,12 @@ import numpy as np
 #     back_clos_dis_par_proc = pickle.load(f2)
 
 with open('right_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('front_voronoi_par_proc.pickle', 'rb') as f1:
     back_voronoi_par_proc = pickle.load(f1)
 # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
 
 with open('right_clos_dis_par_proc.pickle', 'rb') as f2:
+# with open('front_clos_dis_par_proc.pickle', 'rb') as f2:
     back_clos_dis_par_proc = pickle.load(f2)
 
 from matplotlib import pyplot as plt
@@ -335,7 +337,7 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                             # # two common label, and two not neighbors
                             # if(numberOfuniqueLabels==4):
                             # two common labels
-                            if(numberOfCommonLabels>=2):
+                            if(numberOfCommonLabels==2):
                                 # print("numberOfuniqueLabels:"+str(numberOfuniqueLabels))
                                 # print("nodeWithLabels1[0]:"+str(nodeWithLabels1[0]))
                                 # print("nodeWithLabels2[0]:"+str(nodeWithLabels2[0]))
@@ -384,10 +386,18 @@ pass
 
 # print("resultStr[0]:"+resultStr[0])
 
+resultStrNoRN = ""
+
 for strres  in resultStr:
     # print("strres:",strres)
-    print(strres)
+    # print(strres)
+    # print(strres[0:4]+strres[6:])
+    if(resultStrNoRN==""):
+        resultStrNoRN = "" + strres[0:4]+strres[6:]
+    else:
+        resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strres[6:]
 
+print(resultStrNoRN)
 # testing
 # start
 # testStartPoint = [50,50]
