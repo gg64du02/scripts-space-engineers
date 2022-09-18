@@ -1720,8 +1720,8 @@ public void Main(string argument, UpdateType updateSource)
 					// fscore.Add(neighbor, tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position));
 					came_from[neighbor] = node;
 					gscore[neighbor] = tentative_g_score;
-					//fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
-					//fscore[neighbor] = tentative_g_score + (manhattanDistance(neighbor.position,ourDestinationNode.position));
+					// fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
+					// fscore[neighbor] = tentative_g_score + (manhattanDistance(neighbor.position,ourDestinationNode.position));
 					fscore[neighbor] = tentative_g_score + euclideanDistance(neighbor.position,ourDestinationNode.position);
 					NodeFscore[neighbor] = fscore[neighbor];
 					//listHeapNodes.Add(neighbor);
@@ -1762,6 +1762,8 @@ public void Main(string argument, UpdateType updateSource)
 	
 	int gps_number = 0;
 	
+	Point previousPointDebug = new Point(0,0);
+	
 	foreach(Node pathNode in data){
 		// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
 		//toCustomData = toCustomData + pathNode.position;
@@ -1772,7 +1774,15 @@ public void Main(string argument, UpdateType updateSource)
 		
 		// toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
 		
-		toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
+		//toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
+		
+		if(previousPointDebug==new Point(0,0)){
+			previousPointDebug = pathNode.position;
+		}
+		else{
+			toCustomData = toCustomData +"displayLine(["+pathNode.position.X+","+pathNode.position.Y + "],["+previousPointDebug.X+","+previousPointDebug.Y+"])" + '\n';
+			previousPointDebug = pathNode.position;
+		}
 		
 		// 2027 776
 		// if(gps_number == 15){
