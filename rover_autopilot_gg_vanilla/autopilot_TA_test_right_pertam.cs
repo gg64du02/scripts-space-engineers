@@ -607,7 +607,7 @@ public int decodeAsCharNumberMax64(char character){
 }
 
 
-public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> listPathNode){
+public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut){
 	listPathNode = new List<Node>();
 	
 	Point startPointGoal  = startPoint;
@@ -731,6 +731,8 @@ public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> lis
 		debugCount = debugCount + 1;
 	}
 	
+	gscoreOut = gscore;
+	
 	List<Node> data = new List<Node>();
 	
 	while(came_from.ContainsKey(node)){
@@ -742,6 +744,7 @@ public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> lis
 		node = came_from[node];
 	}
 	
+	listPathNode = data;
 	
 	string toCustomData = "";
 	
@@ -843,7 +846,8 @@ public void Main(string argument, UpdateType updateSource)
     // The method itself is required, but the arguments above
     // can be removed if not needed.
 	
-	List<Node> aStarPathNodeList = new List<Node>();
+	List<Node> aStarPathNodeList1 = new List<Node>();
+	List<Node> aStarPathNodeList2 = new List<Node>();
 	
 // // ok euclidian distance going across with no circles
 // Point startPointGoal  = new Point(2043,1664);
@@ -852,10 +856,10 @@ public void Main(string argument, UpdateType updateSource)
 //todo: checking for simplification
 // Point startPointGoal  = new Point(2043,1664);//this2
 // Point finalPointGoal = new Point(429,1284);
-Point finalPointGoal  = new Point(2043,1664);//this1
-Point startPointGoal   = new Point(429,1284);
-// Point startPointGoal  = new Point(1440,767);
-// Point finalPointGoal = new Point(429,1284);
+// Point finalPointGoal  = new Point(2043,1664);//this1
+// Point startPointGoal   = new Point(429,1284);
+Point startPointGoal  = new Point(1440,767);
+Point finalPointGoal = new Point(429,1284);
 // Point finalPointGoal  = new Point(1440,767);
 // Point startPointGoal  = new Point(429,1284);
 
@@ -873,8 +877,21 @@ Point startPointGoal   = new Point(429,1284);
 // Point startPointGoal  = new Point(600,2043);
 // Point finalPointGoal = new Point(1600,2043);
 
+Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
+Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 
-	aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList);
+	aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gscore1);
+	aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
+	
+	Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
+	Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+	if(aStarPathNodeList1.Count !=0){
+		Echo("gscore1_max:"+gscore1[aStarPathNodeList1[0]]);
+	}
+	if(aStarPathNodeList2.Count !=0){
+		Echo("gscore2_max:"+gscore2[aStarPathNodeList2[0]]);
+	}
+	
 	
 	
 	
