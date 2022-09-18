@@ -1503,8 +1503,15 @@ public IEnumerator<bool> RunStuffOverTime()
 // Point startPointGoal  = new Point(2043,1664);
 // Point finalPointGoal = new Point(50,50);
 
-Point startPointGoal  = new Point(2043,1664);
+//todo: checking for simplification
+Point startPointGoal  = new Point(2043,1664);//this2
 Point finalPointGoal = new Point(429,1284);
+// Point finalPointGoal  = new Point(2043,1664);//this1
+// Point startPointGoal   = new Point(429,1284);
+// Point startPointGoal  = new Point(1440,767);
+// Point finalPointGoal = new Point(429,1284);
+// Point finalPointGoal  = new Point(1440,767);
+// Point startPointGoal  = new Point(429,1284);
 
 // need more test, seems like path finding is jumping around the big obstacle ?
 //TODO: too many links ?
@@ -1550,7 +1557,11 @@ public int closestNodeToPoint(Point thisPoint){
 
 public double heuristic(Point a, Point b){
 	
-    return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+    // return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
+    // return heuristicZero(a,b);
+    return euclideanDistance(a,b);
+    // return manhattanDistance(a,b);
+    // return distanceSquarred(a,b);
 }
 
 public double euclideanDistance(Point a, Point b){
@@ -1567,6 +1578,13 @@ public double distanceSquarred(Point a, Point b){
 	
     return (b.X - a.X)*(b.X - a.X) + (b.Y - a.Y)*(b.Y - a.Y);
 }
+
+
+public double heuristicZero(Point a, Point b){
+	
+    return 0;
+}
+
 
 bool graphRegened = false;
 
@@ -1645,8 +1663,7 @@ public void Main(string argument, UpdateType updateSource)
 	
 	// is 0 because it does not cost anything to move from starting node
 	gscore.Add(node,0);
-	// fscore.Add(node,gscore[node]+heuristic(node.position,ourDestinationNode.position));
-	fscore.Add(node,gscore[node]+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+	fscore.Add(node,gscore[node]+heuristic(node.position,ourDestinationNode.position));
 	
 	Echo("nodeStarting.index:"+nodeStarting.index);
 	
@@ -1700,9 +1717,10 @@ public void Main(string argument, UpdateType updateSource)
 			foreach(Node neighbor in neighbors){
 				
 					 // Echo("here11");
-				// double tentative_g_score = gscore[node] + (heuristic(node.position, neighbor.position));
-				// double tentative_g_score = gscore[node] + (manhattanDistance(node.position, neighbor.position));
-				double tentative_g_score = gscore[node] + euclideanDistance(node.position, neighbor.position);
+				double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
+				// double tentative_g_score = gscore[node] + heuristicZero(node.position, neighbor.position);
+				// double tentative_g_score = gscore[node] + manhattanDistance(node.position, neighbor.position);
+				// double tentative_g_score = gscore[node] + euclideanDistance(node.position, neighbor.position);
 				if(closelist.Contains(neighbor)==true){
 					double gscoreTmp = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
 					if( tentative_g_score >=gscoreTmp){
@@ -1720,9 +1738,10 @@ public void Main(string argument, UpdateType updateSource)
 					// fscore.Add(neighbor, tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position));
 					came_from[neighbor] = node;
 					gscore[neighbor] = tentative_g_score;
-					// fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
-					// fscore[neighbor] = tentative_g_score + (manhattanDistance(neighbor.position,ourDestinationNode.position));
-					fscore[neighbor] = tentative_g_score + euclideanDistance(neighbor.position,ourDestinationNode.position);
+					fscore[neighbor] = tentative_g_score + heuristic(neighbor.position,ourDestinationNode.position);
+					// fscore[neighbor] = tentative_g_score + heuristicZero(neighbor.position,ourDestinationNode.position);
+					// fscore[neighbor] = tentative_g_score + manhattanDistance(neigbor.position,ourDestinationNode.position);
+					// fscore[neighbor] = tentative_g_score + euclideanDistance(neighbor.position,ourDestinationNode.position);
 					NodeFscore[neighbor] = fscore[neighbor];
 					//listHeapNodes.Add(neighbor);
 					 // Echo("here2");
