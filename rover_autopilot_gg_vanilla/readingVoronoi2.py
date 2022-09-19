@@ -12,12 +12,12 @@ import numpy as np
 # with open('back_clos_dis_par_proc.pickle', 'rb') as f2:
 #     back_clos_dis_par_proc = pickle.load(f2)
 
-with open('right_voronoi_par_proc.pickle', 'rb') as f1:
+with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\right_voronoi_par_proc.pickle', 'rb') as f1:
 # with open('front_voronoi_par_proc.pickle', 'rb') as f1:
     back_voronoi_par_proc = pickle.load(f1)
 # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
 
-with open('right_clos_dis_par_proc.pickle', 'rb') as f2:
+with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\right_clos_dis_par_proc.pickle', 'rb') as f2:
 # with open('front_clos_dis_par_proc.pickle', 'rb') as f2:
     back_clos_dis_par_proc = pickle.load(f2)
 
@@ -392,10 +392,19 @@ for strres  in resultStr:
     # print("strres:",strres)
     # print(strres)
     # print(strres[0:4]+strres[6:])
+
+    # adding radius to allow linking between faces
+    xRadius = decodeStr__NumberMax4095(strres[0:2])
+    yRadius = decodeStr__NumberMax4095(strres[2:4])
+
+    radiusAtPoint = back_clos_dis_par_proc[xRadius,yRadius]
+    strRadiusToAdd  = encodeAsString__Range(int(radiusAtPoint))
     if(resultStrNoRN==""):
-        resultStrNoRN = "" + strres[0:4]+strres[6:]
+        # resultStrNoRN = "" + strres[0:4]+strres[6:]
+        resultStrNoRN = "" + strres[0:4]+strRadiusToAdd+strres[6:]
     else:
-        resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strres[6:]
+        # resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strres[6:]
+        resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strRadiusToAdd+strres[6:]
 
 print(resultStrNoRN)
 # testing
