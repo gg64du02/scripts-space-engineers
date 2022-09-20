@@ -268,7 +268,7 @@ public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> lis
 		// Echo("gscore["+node.index+"]:"+gscore[node]);
 		// Echo("h:"+heuristic(node.position,ourDestinationNode.position));
 		// Echo("node.position:"+node.position);
-		Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+		// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
 			
 		if(ourDestinationNode == node){
 			Echo("goal reached");
@@ -280,13 +280,13 @@ public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> lis
 			}
 			List<Node> neighbors = new List<Node>();
 			// Echo("nodes.Count:"+nodes.Count);
-			Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
+			// Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
 			foreach(int index in node.neighborsNodesIndex){
 				if(closelist.Contains(nodes[index])==false){
 					neighbors.Add(nodes[index]);
 				}
 			}
-			Echo("neighbors.Count:"+neighbors.Count);
+			// Echo("neighbors.Count:"+neighbors.Count);
 			
 			Dictionary<Node, double> NodeFscore = new Dictionary<Node, double>();
 			foreach(Node neighbor in neighbors){
@@ -401,8 +401,8 @@ public int closestNodeToPoint(Point thisPoint){
 public double heuristic(Point a, Point b){
 	
     // return heuristicZero(a,b);
-    return euclideanDistance(a,b);
-    // return manhattanDistance(a,b);
+    // return euclideanDistance(a,b);
+    return manhattanDistance(a,b);
     // return distanceSquarred(a,b);
 }
 
@@ -437,52 +437,6 @@ public void Main(string argument, UpdateType updateSource)
     // 
     // The method itself is required, but the arguments above
     // can be removed if not needed.
-	
-	List<Node> aStarPathNodeList1 = new List<Node>();
-	List<Node> aStarPathNodeList2 = new List<Node>();
-	
-// // ok euclidian distance going across with no circles
-// Point startPointGoal  = new Point(2043,1664);
-// Point finalPointGoal = new Point(50,50);
-
-//todo: checking for simplification
-// Point startPointGoal  = new Point(2043,1664);//this2
-// Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(2043,1664);//this1
-// Point startPointGoal   = new Point(429,1284);
-Point startPointGoal  = new Point(1440,767);
-Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(1440,767);
-// Point startPointGoal  = new Point(429,1284);
-
-// need more test, seems like path finding is jumping around the big obstacle ?
-//TODO: too many links ?
-// Point startPointGoal  = new Point(1101,1791);
-// Point finalPointGoal = new Point(586,1265);
-
-
-//ok, 3 point euclidian distance
-// Point startPointGoal  = new Point(1871,2019);
-// Point finalPointGoal = new Point(1733,1852);
-
-// //testing avoiding the canyons
-// Point startPointGoal  = new Point(600,2043);
-// Point finalPointGoal = new Point(1600,2043);
-
-Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
-Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
-
-	aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gscore1);
-	aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
-	
-	Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
-	Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
-	if(aStarPathNodeList1.Count !=0){
-		Echo("gscore1_max:"+gscore1[aStarPathNodeList1[0]]);
-	}
-	if(aStarPathNodeList2.Count !=0){
-		Echo("gscore2_max:"+gscore2[aStarPathNodeList2[0]]);
-	}
 	
 	
 	
@@ -529,6 +483,10 @@ Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
         // //using the expected remote control to give us the center of the current planet
         // flightIndicatorsShipController.TryGetPlanetPosition(out myTerrainTarget);
     }
+	
+	
+		
+	
 	
 	Echo("myTerrainTarget:"+Vector3D.Round(myTerrainTarget,3));
 	
@@ -586,6 +544,72 @@ Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 			targetIsOnTheSameFace = false;
 		}
 		Echo("targetIsOnTheSameFace:"+targetIsOnTheSameFace);
+		
+		if(targetIsOnTheSameFace==true){
+List<Node> aStarPathNodeList1 = new List<Node>();
+List<Node> aStarPathNodeList2 = new List<Node>();
+	
+// // ok euclidian distance going across with no circles
+// Point startPointGoal  = new Point(2043,1664);
+// Point finalPointGoal = new Point(50,50);
+
+//todo: checking for simplification
+// Point startPointGoal  = new Point(2043,1664);//this2
+// Point finalPointGoal = new Point(429,1284);
+// Point finalPointGoal  = new Point(2043,1664);//this1
+// Point startPointGoal   = new Point(429,1284);
+// Point finalPointGoal  = new Point(1440,767);
+// Point startPointGoal  = new Point(429,1284);
+
+// need more test, seems like path finding is jumping around the big obstacle ?
+//TODO: too many links ?
+// Point startPointGoal  = new Point(1101,1791);
+// Point finalPointGoal = new Point(586,1265);
+
+
+//ok, 3 point euclidian distance
+// Point startPointGoal  = new Point(1871,2019);
+// Point finalPointGoal = new Point(1733,1852);
+
+// //testing avoiding the canyons
+// Point startPointGoal  = new Point(600,2043);
+// Point finalPointGoal = new Point(1600,2043);
+
+// Point startPointGoal  = new Point(1440,767);
+// Point finalPointGoal = new Point(429,1284);
+
+Point startPointGoal  = pixelPosCalculated;
+Point finalPointGoal = pixelPosCalculatedTarget;
+
+Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
+Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
+
+aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gscore1);
+// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
+
+Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
+// Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+if(aStarPathNodeList1.Count !=0){
+	Echo("gscore1_max:"+gscore1[aStarPathNodeList1[0]]);
+	// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
+	// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+	Echo("nextPointToGo:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+	Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
+}
+// if(aStarPathNodeList2.Count !=0){
+	// Echo("gscore2_max:"+gscore2[aStarPathNodeList2[0]]);
+// }
+
+// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
+if(aStarPathNodeList1.Count >2){
+targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+}
+else{
+targetV3Dabs= new Vector3D(0,0,0);
+
+}
+		}
+	
 		
 		
 		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
@@ -654,7 +678,7 @@ Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 		
 		steerOverride = turnRightOrLeft/crossForwardTT.Length();
 		
-		Echo("targetV3Drel.L:"+targetV3Drel.Length());
+		Echo("targetV3Drel.L:"+Math.Round(targetV3Drel.Length(),3));
 		
 		if(targetV3Drel.Length()>10000){
 			steerOverride *=4;
