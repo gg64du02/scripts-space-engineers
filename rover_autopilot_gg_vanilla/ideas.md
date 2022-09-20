@@ -1,8 +1,13 @@
 py:
 write the obstacles over the voronoi with the graph on top displayer
+On the diplay write:
+the voronoi
+the obstacles' bitmap
+the graph
+
 
 py or cs:
-Make a list of linked Node between faces
+Make a list of linked Node between faces (generate on the edges and linked them between faces ?)
 
 cs:
 write an a star in 3d, or get the 2d a star to find its way through multiple faces

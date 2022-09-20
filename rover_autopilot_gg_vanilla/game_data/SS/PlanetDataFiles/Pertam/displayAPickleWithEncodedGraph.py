@@ -25,6 +25,17 @@ with open('back_voronoi_par_proc.pickle', 'rb') as f:
     back_voronoi_par_proc = pickle.load(f)
 # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
 
+with open('back_sobelBitmap.pickle', 'rb') as f:
+    back_sobelBitmap = pickle.load(f)
+
+for xSobel in range(0,2048):
+    for ySobel in range(0,2048):
+        if(back_sobelBitmap[xSobel,ySobel]==128):
+            back_voronoi_par_proc[xSobel,ySobel]=0
+
+
+# exit()
+
 def displayLarger(point):
     x = point[0]
     y = point[1]

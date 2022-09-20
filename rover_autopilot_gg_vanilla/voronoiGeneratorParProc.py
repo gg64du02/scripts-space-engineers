@@ -147,6 +147,7 @@ for file_path in full_files_path:
     voronoiTargetFilePath = stringTmpSplitted + "_voronoi_par_proc.pickle"
     # print("voronoiTargetFilePath",voronoiTargetFilePath)
     closestDistancesTargetFilePath = stringTmpSplitted + "_clos_dis_par_proc.pickle"
+    sobelBitmapTargetFilePath = stringTmpSplitted + "_sobelBitmap.pickle"
     # print("closestDistancesTargetFilePath",closestDistancesTargetFilePath)
     fileNameTarget = stringTmpSplitted + "_voronoi_par_proc.png"
     # print("fileNameTarget",fileNameTarget)
@@ -174,6 +175,13 @@ for file_path in full_files_path:
 
 
     thres_abs_sobelxy = thres_abs_sobelxy.astype('uint8')
+
+    # sobelBitmap = thres_abs_sobelxy
+    #
+    # with open(sobelBitmapTargetFilePath, 'wb') as f2:
+    #     pickle.dump(sobelBitmap, f2)
+    #
+    # continue
 
     image = thres_abs_sobelxy
 
@@ -261,6 +269,10 @@ for file_path in full_files_path:
 
         with open(closestDistancesTargetFilePath, 'wb') as f2:
             pickle.dump(npClosestDistance, f2)
+
+
+        with open(sobelBitmapTargetFilePath, 'wb') as f2:
+            pickle.dump(sobelBitmap, f2)
 
         cv.imwrite(fileNameTarget, resultTmp)
         print(fileNameTarget, "wrote")
