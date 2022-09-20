@@ -331,7 +331,7 @@ public void aStarPathFinding(Point startPoint, Point endPoint,out List<Node> lis
 		// Echo("data.Add(node);");
 		// Echo("node.position:"+node.position);
 		// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
-		Echo("gscore[node]:"+gscore[node]);
+		Echo("gscore[node]:"+Math.Round(gscore[node],3));
 		data.Add(node);
 		node = came_from[node];
 	}
@@ -401,8 +401,8 @@ public int closestNodeToPoint(Point thisPoint){
 public double heuristic(Point a, Point b){
 	
     // return heuristicZero(a,b);
-    // return euclideanDistance(a,b);
-    return manhattanDistance(a,b);
+    return euclideanDistance(a,b);
+    // return manhattanDistance(a,b);
     // return distanceSquarred(a,b);
 }
 
@@ -588,21 +588,38 @@ aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gsco
 // aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
 
 Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
-// Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
 if(aStarPathNodeList1.Count !=0){
-	Echo("gscore1_max:"+gscore1[aStarPathNodeList1[0]]);
+	Echo("gscore1_max:"+Math.Round(gscore1[aStarPathNodeList1[0]],3));
 	// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
 	// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
 	Echo("nextPointToGo:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
 	Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
 }
-// if(aStarPathNodeList2.Count !=0){
-	// Echo("gscore2_max:"+gscore2[aStarPathNodeList2[0]]);
+if(aStarPathNodeList2.Count !=0){
+	Echo("gscore2_max:"+Math.Round(gscore2[aStarPathNodeList2[0]],3));
+	// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
+	// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+	Echo("nextPointToGo:"+aStarPathNodeList2[aStarPathNodeList2.Count-1].position);
+	Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+}
+// Point bestPositionToGo = new Point(0,0);
+// if(gscore1[aStarPathNodeList1[0]] < gscore2[aStarPathNodeList2[0]]){
+	// bestPositionToGo = aStarPathNodeList1[aStarPathNodeList1.Count-1].position;
+// }
+// else{
+	// if(aStarPathNodeList1.Count != 1){
+		// bestPositionToGo = aStarPathNodeList2[1].position;	
+	// }
+	// else{
+		// bestPositionToGo = aStarPathNodeList2[0].position;	
+	// }
 // }
 
 // public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
 if(aStarPathNodeList1.Count >2){
 targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+// targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, bestPositionToGo);
 }
 else{
 targetV3Dabs= new Vector3D(0,0,0);
