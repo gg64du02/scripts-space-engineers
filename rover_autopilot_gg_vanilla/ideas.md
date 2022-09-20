@@ -1,13 +1,12 @@
-cs:
-do a alogirthm in cs that can guess the face and pixel position on the face
-
 py:
-do a region (about 100k, black) recognization, generate polygon around the said region, associates each polygons with a label (number ?)
-generate a links list between region to go around very large obstacles (aka canyons) by linking the labels (numbers ?)
-do a label (number, point list couple) for each region ?
+write the obstacles over the voronoi with the graph on top displayer
 
-py:
-generate polygons around small obstacles to avoid(, aka hill and mountains cliffs)
+py or cs:
+Make a list of linked Node between faces
 
 cs:
-make the autopilot that can decided to change between region (through linked list) and move around small obstacles
+write an a star in 3d, or get the 2d a star to find its way through multiple faces
+
+write a function that can grop Node to together to generate a region
+
+write a function that can tell which group of Node I am curently at
