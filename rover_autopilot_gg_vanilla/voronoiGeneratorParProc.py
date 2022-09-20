@@ -271,8 +271,8 @@ for file_path in full_files_path:
             pickle.dump(npClosestDistance, f2)
 
 
-        with open(sobelBitmapTargetFilePath, 'wb') as f2:
-            pickle.dump(sobelBitmap, f2)
+        # with open(sobelBitmapTargetFilePath, 'wb') as f2:
+        #     pickle.dump(sobelBitmap, f2)
 
         cv.imwrite(fileNameTarget, resultTmp)
         print(fileNameTarget, "wrote")
