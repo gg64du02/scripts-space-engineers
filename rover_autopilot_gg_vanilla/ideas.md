@@ -1,9 +1,11 @@
 py:
-write the obstacles over the voronoi with the graph on top displayer
-On the diplay write:
-the voronoi
-the obstacles' bitmap
-the graph
+DONE:>write the obstacles over the voronoi with the graph on top displayer
+-On the diplay write:
+-the voronoi
+-the obstacles' bitmap
+-the graph
+
+DONE:>Generate all image with obstacles
 
 
 py or cs:
