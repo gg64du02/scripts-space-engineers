@@ -667,14 +667,25 @@ targetV3Dabs= new Vector3D(0,0,0);
 			foreach(int indexNodeTmp in Enumerable.Range(0,aStarPathNodeList1.Count)){
 				if(indexNodeTmp !=aStarPathNodeList1.Count -1){
 					Echo("aStarPathNodeList1["+indexNodeTmp+"]:"+aStarPathNodeList1[indexNodeTmp]);
-					startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2()/8;
-					endVector2 = aStarPathNodeList1[indexNodeTmp+1].toVector2()/8;
+					startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2sax()/8;
+					endVector2 = aStarPathNodeList1[indexNodeTmp+1].toVector2sax()/8;
 					DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
 					// startVector2 = aStarPathNodeList1[indexNodeTmp].position;
 					// endVector2 = aStarPathNodeList1[indexNodeTmp+1].position;
 				}
 			}
 		}
+		if(aStarPathNodeList1.Count==1){
+			Vector2 leftLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y - 24, aStarPathNodeList1[0].position.X)/8;
+			Vector2 rightLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y + 24, aStarPathNodeList1[0].position.X)/8;
+			DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green );
+		}
+		
+		// Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.X - 24, (float)pixelPosCalculated.Y)/8;
+		// Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.X + 24, (float)pixelPosCalculated.Y)/8;
+		Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X)/8;
+		Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X)/8;
+		DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );
 		
 		// x 0 y 0 w 256 h 256
 	
@@ -1020,6 +1031,10 @@ public class Node {
 	
 	public Vector2 toVector2(){
 		return new Vector2(position.X,position.Y);
+	}
+	//swaitched axises
+	public Vector2 toVector2sax(){
+		return new Vector2(position.Y,position.X);
 		
 	}
 	
