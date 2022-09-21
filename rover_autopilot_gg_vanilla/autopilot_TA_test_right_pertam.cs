@@ -681,8 +681,12 @@ targetV3Dabs= new Vector3D(0,0,0);
 			DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green );
 		}
 		
-		// Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.X - 24, (float)pixelPosCalculated.Y)/8;
-		// Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.X + 24, (float)pixelPosCalculated.Y)/8;
+		}
+		
+		Vector2 leftMyGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y - 24, (float)pixelPosCalculatedTarget.X)/8;
+		Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X)/8;
+		DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue   );
+		
 		Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X)/8;
 		Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X)/8;
 		DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );
@@ -692,8 +696,6 @@ targetV3Dabs= new Vector3D(0,0,0);
 		Echo("_viewport:"+_viewport);
 		// DrawSprites(ref spriteFrame);
 		spriteFrame.Dispose();
-		}
-		
 		
 		
 		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
