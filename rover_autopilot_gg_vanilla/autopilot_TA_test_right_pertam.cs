@@ -21,6 +21,11 @@ List<Point> testPointRegionsLinked =  new List<Point>();
 
 List<Node> nodes = new List<Node>();
 
+
+IMyTextSurface _drawingSurface;
+RectangleF _viewport;
+MySpriteDrawFrame spriteFrame;
+
 public Program()
 {
     // The constructor, called only once every session and
@@ -128,6 +133,15 @@ string nodesStringRight = "09ku05|0E3L0x0D|0Jhc0a0n|0QiL0a0r1e1f1g1h1j|0Tf107080
 	}
 	
 	
+    _drawingSurface = Me.GetSurface(0);
+	
+    // Calculate the viewport offset by centering the surface size onto the texture size
+    _viewport = new RectangleF(
+        (_drawingSurface.TextureSize - _drawingSurface.SurfaceSize) / 2f,
+        _drawingSurface.SurfaceSize
+    );
+	
+	
 }
 
 public void Save()
@@ -196,6 +210,25 @@ public int decodeAsCharNumberMax64(char character){
 
 
     return resultNumberUnder64;
+}
+
+//whip's code
+public void DrawLine(ref MySpriteDrawFrame frame, Vector2 point1, Vector2 point2, float width, Color color)
+{
+    Vector2 position = 0.5f * (point1 + point2);
+    Vector2 diff = point1 - point2;
+    float length = diff.Length();
+    if (length > 0)
+        diff /= length;
+
+    Vector2 size = new Vector2(length, width);
+    float angle = (float)Math.Acos(Vector2.Dot(diff, Vector2.UnitX));
+    angle *= Math.Sign(Vector2.Dot(diff, Vector2.UnitY));
+
+    MySprite sprite = MySprite.CreateSprite("SquareSimple", position, size);
+    sprite.RotationOrScale = angle;
+    sprite.Color = color;
+    frame.Add(sprite);
 }
 
 
@@ -625,8 +658,31 @@ else{
 targetV3Dabs= new Vector3D(0,0,0);
 
 }
+
+		spriteFrame = _drawingSurface.DrawFrame();
+		// DrawLine(ref spriteFrame, new Vector2(256,100), new Vector2(256,160), 30.0f, Color.DarkRed);
+		Vector2 startVector2 = new Vector2(0,0);
+		Vector2 endVector2 = new Vector2(0,0);
+		if(aStarPathNodeList1.Count>=2){
+			foreach(int indexNodeTmp in Enumerable.Range(0,aStarPathNodeList1.Count)){
+				if(indexNodeTmp !=aStarPathNodeList1.Count -1){
+					Echo("aStarPathNodeList1["+indexNodeTmp+"]:"+aStarPathNodeList1[indexNodeTmp]);
+					startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2()/8;
+					endVector2 = aStarPathNodeList1[indexNodeTmp+1].toVector2()/8;
+					DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
+					// startVector2 = aStarPathNodeList1[indexNodeTmp].position;
+					// endVector2 = aStarPathNodeList1[indexNodeTmp+1].position;
+				}
+			}
 		}
+		
+		// x 0 y 0 w 256 h 256
 	
+		Echo("_viewport:"+_viewport);
+		// DrawSprites(ref spriteFrame);
+		spriteFrame.Dispose();
+		}
+		
 		
 		
 		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
@@ -960,6 +1016,11 @@ public class Node {
 	public String toString(){
 		return "index is:"+index + "\n" + "position is:" + position + "\n"
 		+ "radius is:" + radius;
+	}
+	
+	public Vector2 toVector2(){
+		return new Vector2(position.X,position.Y);
+		
 	}
 	
 }
