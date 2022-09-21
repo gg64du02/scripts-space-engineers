@@ -613,6 +613,10 @@ List<Node> aStarPathNodeList2 = new List<Node>();
 
 Point startPointGoal  = pixelPosCalculated;
 Point finalPointGoal = pixelPosCalculatedTarget;
+// Point finalPointGoal = new Point(429,-200);
+// Point finalPointGoal = new Point(1500,-200);
+
+// Point finalPointGoal = new Point(1500,2060);
 
 Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
 Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
@@ -689,9 +693,26 @@ targetV3Dabs= new Vector3D(0,0,0);
 		
 		Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X)/8;
 		Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X)/8;
-		DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );
+		DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );	
+		
+		
+		// add the direction of the rover on the map
+		int faceNumberTipRover = -1;
+		Vector3D shipForwardVectorTip = 8*1024*RemoteControl.WorldMatrix.Forward+Me.GetPosition();
+		
+		Point pointShipForwardVector = new Point(0,0);
+		faceAndPointOnPlanetsCalculated( RemoteControl,out faceNumberTipRover,out pointShipForwardVector,true,shipForwardVectorTip);
+		Echo("shipForwardVectorTip:"+Vector3D.Round(shipForwardVectorTip,3));
+		Echo("pointShipForwardVector:"+pointShipForwardVector);
+		
+		Vector2 leftMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y - 24, (float)pointShipForwardVector.X)/8;
+		Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y + 24, (float)pointShipForwardVector.X)/8;
+		DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 6.0f, Color.Red   );
+		
+		
 		
 		// x 0 y 0 w 256 h 256
+	
 	
 		Echo("_viewport:"+_viewport);
 		// DrawSprites(ref spriteFrame);
