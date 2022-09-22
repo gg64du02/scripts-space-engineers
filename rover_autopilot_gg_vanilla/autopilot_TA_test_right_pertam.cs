@@ -705,9 +705,12 @@ targetV3Dabs= new Vector3D(0,0,0);
 		Echo("shipForwardVectorTip:"+Vector3D.Round(shipForwardVectorTip,3));
 		Echo("pointShipForwardVector:"+pointShipForwardVector);
 		
-		Vector2 leftMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y - 24, (float)pointShipForwardVector.X)/8;
-		Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y + 24, (float)pointShipForwardVector.X)/8;
-		DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 6.0f, Color.Red   );
+		// Vector2 leftMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y - 24, (float)pointShipForwardVector.X)/8;
+		// Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y + 24, (float)pointShipForwardVector.X)/8;
+		Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X)/8;
+		Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X)/8;
+		// DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 6.0f, Color.Red   );
+		DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green   );
 		
 		
 		
