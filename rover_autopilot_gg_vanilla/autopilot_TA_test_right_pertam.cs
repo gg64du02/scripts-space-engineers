@@ -589,15 +589,15 @@ public void Main(string argument, UpdateType updateSource)
 	
 	if(myTerrainTarget== new Vector3D(0,0,0)){
 		
-		foreach (IMyMotorSuspension Wheel in Wheels)
-		{
-			Wheel.SetValue<Single>("Steer override", 0);
-			Wheel.SetValue<float>("Propulsion override", 0);
-			Wheel.Brake = true;
+		// foreach (IMyMotorSuspension Wheel in Wheels)
+		// {
+			// Wheel.SetValue<Single>("Steer override", 0);
+			// Wheel.SetValue<float>("Propulsion override", 0);
+			// Wheel.Brake = true;
 			
-			RemoteControl.HandBrake = true;
+			// RemoteControl.HandBrake = true;
 			
-		}
+		// }
 		
 	}
 	else
@@ -838,32 +838,32 @@ public void Main(string argument, UpdateType updateSource)
 		steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
 		
 		
-		foreach (IMyMotorSuspension Wheel in Wheels)
-		{
-			double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
-			Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
+		// foreach (IMyMotorSuspension Wheel in Wheels)
+		// {
+			// double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
+			// Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
 			
-			float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
+			// float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
 			
-			// str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
-			// Echo(str_to_display);
-			//SLerror = -0.2f;
+			// // str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
+			// // Echo(str_to_display);
+			// //SLerror = -0.2f;
 			
-			float localPO = -MultiplierPO * SLerror;
+			// float localPO = -MultiplierPO * SLerror;
 			
-			str_to_display = ""+"localPO:"+Math.Round(localPO,3);
+			// str_to_display = ""+"localPO:"+Math.Round(localPO,3);
 				
-			if(areThisFrontWheel>0){
-				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
-				Wheel.SetValue<float>("Propulsion override", localPO);
+			// if(areThisFrontWheel>0){
+				// Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
+				// Wheel.SetValue<float>("Propulsion override", localPO);
 				
-			}
-			else{
-				// Wheel.SetValue<Single>("Steer override", Convert.ToSingle(-steerOverride));
-				Wheel.SetValue<float>("Propulsion override", localPO);
-			}
+			// }
+			// else{
+				// // Wheel.SetValue<Single>("Steer override", Convert.ToSingle(-steerOverride));
+				// Wheel.SetValue<float>("Propulsion override", localPO);
+			// }
 			
-		}
+		// }
 		
 		// //stop when destination is reached
 		// if(targetV3Drel.Length()<5){
