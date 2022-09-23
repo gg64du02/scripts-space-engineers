@@ -562,6 +562,31 @@ public void Main(string argument, UpdateType updateSource)
 	
 	float SLerror = (float) (RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
 	
+	
+	
+	
+	spriteFrame = _drawingSurface.DrawFrame();
+	
+	int facenumberCalculated = -1;
+	Point pixelPosCalculated = new Point(0,0);
+	
+	faceAndPointOnPlanetsCalculated( RemoteControl,out facenumberCalculated,out pixelPosCalculated,false,new Vector3D(0,0,0));
+	
+	Echo("facenumberMain1:"+facenumberCalculated);
+	Echo("pixelPosMain1:"+pixelPosCalculated);
+
+	whichFileShouldIlook(facenumberCalculated);
+	
+	// add the direction of the rover on the map
+	int faceNumberTipRover = -1;
+	Vector3D shipForwardVectorTip = 8*1024*RemoteControl.WorldMatrix.Forward+Me.GetPosition();
+		
+	Point pointShipForwardVector = new Point(0,0);
+	faceAndPointOnPlanetsCalculated( RemoteControl,out faceNumberTipRover,out pointShipForwardVector,true,shipForwardVectorTip);
+	Echo("shipForwardVectorTip:"+Vector3D.Round(shipForwardVectorTip,3));
+	Echo("pointShipForwardVector:"+pointShipForwardVector);
+		
+	
 	if(myTerrainTarget== new Vector3D(0,0,0)){
 		
 		foreach (IMyMotorSuspension Wheel in Wheels)
@@ -577,15 +602,6 @@ public void Main(string argument, UpdateType updateSource)
 	}
 	else
 	{
-		int facenumberCalculated = -1;
-		Point pixelPosCalculated = new Point(0,0);
-		
-		faceAndPointOnPlanetsCalculated( RemoteControl,out facenumberCalculated,out pixelPosCalculated,false,new Vector3D(0,0,0));
-		
-		Echo("facenumberMain1:"+facenumberCalculated);
-		Echo("pixelPosMain1:"+pixelPosCalculated);
-
-		whichFileShouldIlook(facenumberCalculated);
 		
 		Vector3D targetV3Dabs = myWaypointInfoTerrainTarget.Coords;
 		
@@ -615,118 +631,117 @@ public void Main(string argument, UpdateType updateSource)
 		Echo("targetIsOnTheSameFace:"+targetIsOnTheSameFace);
 		
 		if(targetIsOnTheSameFace==true){
-List<Node> aStarPathNodeList1 = new List<Node>();
-List<Node> aStarPathNodeList2 = new List<Node>();
-	
-// // ok euclidian distance going across with no circles
-// Point startPointGoal  = new Point(2043,1664);
-// Point finalPointGoal = new Point(50,50);
+			List<Node> aStarPathNodeList1 = new List<Node>();
+			List<Node> aStarPathNodeList2 = new List<Node>();
 
-//todo: checking for simplification
-// Point startPointGoal  = new Point(2043,1664);//this2
-// Point finalPointGoal = new Point(429,1284);
-// Point finalPointGoal  = new Point(2043,1664);//this1
-// Point startPointGoal   = new Point(429,1284);
-// Point finalPointGoal  = new Point(1440,767);
-// Point startPointGoal  = new Point(429,1284);
+			// // ok euclidian distance going across with no circles
+			// Point startPointGoal  = new Point(2043,1664);
+			// Point finalPointGoal = new Point(50,50);
 
-// need more test, seems like path finding is jumping around the big obstacle ?
-//TODO: too many links ?
-// Point startPointGoal  = new Point(1101,1791);
-// Point finalPointGoal = new Point(586,1265);
+			//todo: checking for simplification
+			// Point startPointGoal  = new Point(2043,1664);//this2
+			// Point finalPointGoal = new Point(429,1284);
+			// Point finalPointGoal  = new Point(2043,1664);//this1
+			// Point startPointGoal   = new Point(429,1284);
+			// Point finalPointGoal  = new Point(1440,767);
+			// Point startPointGoal  = new Point(429,1284);
+
+			// need more test, seems like path finding is jumping around the big obstacle ?
+			//TODO: too many links ?
+			// Point startPointGoal  = new Point(1101,1791);
+			// Point finalPointGoal = new Point(586,1265);
 
 
-//ok, 3 point euclidian distance
-// Point startPointGoal  = new Point(1871,2019);
-// Point finalPointGoal = new Point(1733,1852);
+			//ok, 3 point euclidian distance
+			// Point startPointGoal  = new Point(1871,2019);
+			// Point finalPointGoal = new Point(1733,1852);
 
-// //testing avoiding the canyons
-// Point startPointGoal  = new Point(600,2043);
-// Point finalPointGoal = new Point(1600,2043);
+			// //testing avoiding the canyons
+			// Point startPointGoal  = new Point(600,2043);
+			// Point finalPointGoal = new Point(1600,2043);
 
-// Point startPointGoal  = new Point(1440,767);
-// Point finalPointGoal = new Point(429,1284);
-Echo("nodes.Count:"+nodes.Count);
-if(previousCalculatedFace!=facenumberCalculated){
-bool faceNodesInitResult = initTheCurrentFaceNodes(facenumberCalculated);
+			// Point startPointGoal  = new Point(1440,767);
+			// Point finalPointGoal = new Point(429,1284);
+			Echo("nodes.Count:"+nodes.Count);
+			if(previousCalculatedFace!=facenumberCalculated){
+				bool faceNodesInitResult = initTheCurrentFaceNodes(facenumberCalculated);
 
-Echo("faceNodesInitResult:"+faceNodesInitResult);
-previousCalculatedFace=facenumberCalculated;
-}
+				Echo("faceNodesInitResult:"+faceNodesInitResult);
+				previousCalculatedFace=facenumberCalculated;
+			}
 
-Point startPointGoal  = pixelPosCalculated;
-Point finalPointGoal = pixelPosCalculatedTarget;
-// Point finalPointGoal = new Point(429,-200);
-// Point finalPointGoal = new Point(1500,-200);
+			Point startPointGoal  = pixelPosCalculated;
+			Point finalPointGoal = pixelPosCalculatedTarget;
+			// Point finalPointGoal = new Point(429,-200);
+			// Point finalPointGoal = new Point(1500,-200);
 
-// Point finalPointGoal = new Point(1500,2060);
+			// Point finalPointGoal = new Point(1500,2060);
 
-Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
-Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
+			Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
+			Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 
-aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gscore1);
-// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
+			aStarPathFinding(startPointGoal,finalPointGoal, out aStarPathNodeList1, out gscore1);
+			// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
 
-Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
-Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
-if(aStarPathNodeList1.Count !=0){
-	Echo("gscore1_max:"+Math.Round(gscore1[aStarPathNodeList1[0]],3));
-	// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
-	// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-	Echo("nextPointToGo:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-	Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
-}
-if(aStarPathNodeList2.Count !=0){
-	Echo("gscore2_max:"+Math.Round(gscore2[aStarPathNodeList2[0]],3));
-	// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
-	// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-	Echo("nextPointToGo:"+aStarPathNodeList2[aStarPathNodeList2.Count-1].position);
-	Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
-}
-// Point bestPositionToGo = new Point(0,0);
-// if(gscore1[aStarPathNodeList1[0]] < gscore2[aStarPathNodeList2[0]]){
-	// bestPositionToGo = aStarPathNodeList1[aStarPathNodeList1.Count-1].position;
-// }
-// else{
-	// if(aStarPathNodeList1.Count != 1){
-		// bestPositionToGo = aStarPathNodeList2[1].position;	
-	// }
-	// else{
-		// bestPositionToGo = aStarPathNodeList2[0].position;	
-	// }
-// }
+			Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
+			Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+			if(aStarPathNodeList1.Count !=0){
+				Echo("gscore1_max:"+Math.Round(gscore1[aStarPathNodeList1[0]],3));
+				// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
+				// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+				Echo("nextPointToGo:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+				Echo("aStarPathNodeList1.Count:"+aStarPathNodeList1.Count);
+			}
+			if(aStarPathNodeList2.Count !=0){
+				Echo("gscore2_max:"+Math.Round(gscore2[aStarPathNodeList2[0]],3));
+				// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
+				// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+				Echo("nextPointToGo:"+aStarPathNodeList2[aStarPathNodeList2.Count-1].position);
+				Echo("aStarPathNodeList2.Count:"+aStarPathNodeList2.Count);
+			}
+			// Point bestPositionToGo = new Point(0,0);
+			// if(gscore1[aStarPathNodeList1[0]] < gscore2[aStarPathNodeList2[0]]){
+			// bestPositionToGo = aStarPathNodeList1[aStarPathNodeList1.Count-1].position;
+			// }
+			// else{
+			// if(aStarPathNodeList1.Count != 1){
+			// bestPositionToGo = aStarPathNodeList2[1].position;	
+			// }
+			// else{
+			// bestPositionToGo = aStarPathNodeList2[0].position;	
+			// }
+			// }
 
-// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
-if(aStarPathNodeList1.Count >2){
-targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-// targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, bestPositionToGo);
-}
-else{
-targetV3Dabs= new Vector3D(0,0,0);
+			// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
+			if(aStarPathNodeList1.Count >2){
+				targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
+				// targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, bestPositionToGo);
+			}
+			else{
+				targetV3Dabs= new Vector3D(0,0,0);
 
-}
+			}
 
-		spriteFrame = _drawingSurface.DrawFrame();
-		// DrawLine(ref spriteFrame, new Vector2(256,100), new Vector2(256,160), 30.0f, Color.DarkRed);
-		Vector2 startVector2 = new Vector2(0,0);
-		Vector2 endVector2 = new Vector2(0,0);
-		if(aStarPathNodeList1.Count>=2){
-			foreach(int indexNodeTmp in Enumerable.Range(0,aStarPathNodeList1.Count)){
-				if(indexNodeTmp !=aStarPathNodeList1.Count -1){
-					Echo("aStarPathNodeList1["+indexNodeTmp+"]:"+aStarPathNodeList1[indexNodeTmp]);
-					startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2sax()/8;
-					endVector2 = aStarPathNodeList1[indexNodeTmp+1].toVector2sax()/8;
-					DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
-					// startVector2 = aStarPathNodeList1[indexNodeTmp].position;
-					// endVector2 = aStarPathNodeList1[indexNodeTmp+1].position;
+			// DrawLine(ref spriteFrame, new Vector2(256,100), new Vector2(256,160), 30.0f, Color.DarkRed);
+			Vector2 startVector2 = new Vector2(0,0);
+			Vector2 endVector2 = new Vector2(0,0);
+			if(aStarPathNodeList1.Count>=2){
+				foreach(int indexNodeTmp in Enumerable.Range(0,aStarPathNodeList1.Count)){
+					if(indexNodeTmp !=aStarPathNodeList1.Count -1){
+						Echo("aStarPathNodeList1["+indexNodeTmp+"]:"+aStarPathNodeList1[indexNodeTmp]);
+						startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2sax()/8;
+						endVector2 = aStarPathNodeList1[indexNodeTmp+1].toVector2sax()/8;
+						DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
+						// startVector2 = aStarPathNodeList1[indexNodeTmp].position;
+						// endVector2 = aStarPathNodeList1[indexNodeTmp+1].position;
+					}
 				}
 			}
-		}
-		if(aStarPathNodeList1.Count==1){
-			Vector2 leftLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y - 24, aStarPathNodeList1[0].position.X)/8;
-			Vector2 rightLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y + 24, aStarPathNodeList1[0].position.X)/8;
-			DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green );
-		}
+			if(aStarPathNodeList1.Count==1){
+				Vector2 leftLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y - 24, aStarPathNodeList1[0].position.X)/8;
+				Vector2 rightLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y + 24, aStarPathNodeList1[0].position.X)/8;
+				DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green );
+			}
 		
 		}
 		
@@ -734,35 +749,8 @@ targetV3Dabs= new Vector3D(0,0,0);
 		Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X)/8;
 		DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue   );
 		
-		Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X)/8;
-		Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X)/8;
-		DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );	
 		
 		
-		// add the direction of the rover on the map
-		int faceNumberTipRover = -1;
-		Vector3D shipForwardVectorTip = 8*1024*RemoteControl.WorldMatrix.Forward+Me.GetPosition();
-		
-		Point pointShipForwardVector = new Point(0,0);
-		faceAndPointOnPlanetsCalculated( RemoteControl,out faceNumberTipRover,out pointShipForwardVector,true,shipForwardVectorTip);
-		Echo("shipForwardVectorTip:"+Vector3D.Round(shipForwardVectorTip,3));
-		Echo("pointShipForwardVector:"+pointShipForwardVector);
-		
-		// Vector2 leftMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y - 24, (float)pointShipForwardVector.X)/8;
-		// Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y + 24, (float)pointShipForwardVector.X)/8;
-		Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X)/8;
-		Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X)/8;
-		// DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 6.0f, Color.Red   );
-		DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green   );
-		
-		
-		
-		// x 0 y 0 w 256 h 256
-	
-	
-		Echo("_viewport:"+_viewport);
-		// DrawSprites(ref spriteFrame);
-		spriteFrame.Dispose();
 		
 		
 		// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
@@ -893,6 +881,20 @@ targetV3Dabs= new Vector3D(0,0,0);
 		
 		
 	}
+		
+	Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X)/8;
+	Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X)/8;
+	DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green );	
+	
+	Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X)/8;
+	Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X)/8;
+	DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green   );
+	
+	// x 0 y 0 w 256 h 256
+
+	Echo("_viewport:"+_viewport);
+	// DrawSprites(ref spriteFrame);
+	spriteFrame.Dispose();
 	
 	Echo("regionLinkCount:" + testPointRegionsLinked.Count );
 	
