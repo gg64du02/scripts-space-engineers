@@ -34,6 +34,8 @@ namespace IngameScript
 
 		IMyRadioAntenna theAntenna = null;
 
+		IMyCockpit theCockpit = null;
+
 		string str_to_display = "";
 
 		List<faceRegionPolygon> faceRegionPolygonList = new List<faceRegionPolygon>();
@@ -78,6 +80,8 @@ namespace IngameScript
 
 			theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
 
+			theCockpit = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyCockpit) as IMyCockpit;
+
 			Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
 
@@ -103,8 +107,10 @@ namespace IngameScript
 			// ================
 
 
-
-			_drawingSurface = Me.GetSurface(0);
+			// use the PB big display with the keyboard placed toward gravity
+			// _drawingSurface = Me.GetSurface(0);
+			// use the top center screen to display
+			_drawingSurface = theCockpit.GetSurface(0);
 
 			// Calculate the viewport offset by centering the surface size onto the texture size
 			_viewport = new RectangleF(
