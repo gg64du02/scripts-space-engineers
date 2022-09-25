@@ -848,11 +848,11 @@ namespace IngameScript
 						DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green);
 					}
 
-				}
 
-				Vector2 leftMyGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y - 24, (float)pixelPosCalculatedTarget.X) / 8;
-				Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X) / 8;
-				DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue);
+					Vector2 leftMyGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y - 24, (float)pixelPosCalculatedTarget.X) / 8;
+					Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X) / 8;
+					DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue);
+				}
 
 
 
