@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32901.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA_mk3_with_mdk", "IngameScript1\TA_mk3_with_mdk.csproj", "{EB77BA35-072D-454F-98A9-061BBE86CA50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB77BA35-072D-454F-98A9-061BBE86CA50}.Debug|x64.ActiveCfg = Debug|x64
+		{EB77BA35-072D-454F-98A9-061BBE86CA50}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B5563E1-6E54-49DB-BD05-65BDC85F154C}
+	EndGlobalSection
+EndGlobal
