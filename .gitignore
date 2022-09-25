@@ -14,3 +14,4 @@ rover_autopilot_gg_vanilla/.idea/*
 *.cache
 *.exe
 rover_autopilot_gg_vanilla/TA_mk3_with_mdk/IngameScript1/obj*
+rover_autopilot_gg_vanilla/TA_mk3_with_mdk/IngameScript1/bin*
