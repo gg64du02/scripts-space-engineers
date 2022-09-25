@@ -10,3 +10,7 @@ rover_autopilot_gg_vanilla/.idea/*
 *.xcf
 *.sbc
 *.dll
+*.props
+*.xml
+*.cache
+*.exe
