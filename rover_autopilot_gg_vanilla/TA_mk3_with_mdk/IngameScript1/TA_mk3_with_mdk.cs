@@ -647,9 +647,15 @@ namespace IngameScript
 
 
 
+			Echo("if the script don't refresh the screen, the Remote Control might be gone, please hit Recompile");
 
 
 			Echo("myTerrainTarget:" + Vector3D.Round(myTerrainTarget, 3));
+
+            if (RemoteControl == null)
+            {
+				Echo("Remote Control gone or not existant\n=\n=");
+            }
 
 
 			float SLerror = (float)(RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
