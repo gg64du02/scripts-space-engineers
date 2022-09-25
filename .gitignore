@@ -9,3 +9,4 @@ rover_autopilot_gg_vanilla/.idea/*
 *.pickle
 *.xcf
 *.sbc
+*.dll
