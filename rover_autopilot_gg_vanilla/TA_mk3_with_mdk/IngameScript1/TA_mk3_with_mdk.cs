@@ -771,6 +771,7 @@ namespace IngameScript
 
 						Echo("faceNodesInitResult:" + faceNodesInitResult);
 						previousCalculatedFace = facenumberCalculated;
+						return;
 					}
 
 					Point startPointGoal = pixelPosCalculated;
