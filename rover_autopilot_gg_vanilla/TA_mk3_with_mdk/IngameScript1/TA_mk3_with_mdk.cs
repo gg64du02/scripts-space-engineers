@@ -183,24 +183,32 @@ namespace IngameScript
 			foreach (string sub in subs)
 			{
 				//string[] subs = s.Split('\n');
-				Echo(sub);
+				//Echo(sub);
 
-				Echo("sub.Length:" + sub.Length);
+				Echo("indexNumber:" + indexNumber);
+
+				//Echo("sub.Length:" + sub.Length);
 				// string encodedIndexes = sub.Substring(5,sub.Length-3);
 				int end = sub.Length - 1;
+
+				if(end == 3)
+                {
+					Echo("This node got no neighbors:" + indexNumber);
+					continue;
+                }
 
 				// Echo("end:"+end);
 
 				// string encodedIndexes = sub.Substring(5,sub.Length-1);
 				string encodedIndexes = sub.Substring(4);
 				// string encodedIndexes = sub.Substring(5,sub.Length);
-				Echo(encodedIndexes);
+				//Echo(encodedIndexes);
 
 				string encodedNeighborsIndexes = encodedIndexes.Substring(0);
-				Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
+				//Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
 
 				int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
-				Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
+				//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
 
 				int xNodeInit = decodeStr__NumberMax4095(sub.Substring(0, 2));
 				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
@@ -214,7 +222,7 @@ namespace IngameScript
 				nodes.Add(new Node(indexNumber, position, radius));
 
 				int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 2;
-				Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
+				//Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
 
 				foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
 				{
@@ -399,7 +407,7 @@ namespace IngameScript
 				Echo("heap.C:" + listHeapNodes.Count);
 				node = listHeapNodes[listHeapNodes.Count - 1];
 				listHeapNodes.RemoveAt(listHeapNodes.Count - 1);
-
+				Echo("node.index:" + node.index);
 				// Echo("debugCount=====================:");
 				// Echo("fscore["+node.index+"]:"+fscore[node]);
 				// Echo("gscore["+node.index+"]:"+gscore[node]);
@@ -423,6 +431,7 @@ namespace IngameScript
 					// Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
 					foreach (int index in node.neighborsNodesIndex)
 					{
+						Echo("index:" + index);
 						if (closelist.Contains(nodes[index]) == false)
 						{
 							neighbors.Add(nodes[index]);
@@ -684,6 +693,8 @@ namespace IngameScript
 			Echo("shipForwardVectorTip:" + Vector3D.Round(shipForwardVectorTip, 3));
 			Echo("pointShipForwardVector:" + pointShipForwardVector);
 
+			Echo("nodes.CountMain:"+ nodes.Count);
+
 
 			if (myTerrainTarget == new Vector3D(0, 0, 0))
 			{
@@ -783,6 +794,12 @@ namespace IngameScript
 
 					Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
 					Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
+
+					if(nodes.Count == 0)
+                    {
+						Echo("no nodes init, no path available!");
+						return;
+                    }
 
 					aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
 					// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
