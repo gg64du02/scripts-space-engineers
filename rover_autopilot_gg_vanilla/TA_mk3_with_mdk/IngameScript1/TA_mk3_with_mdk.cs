@@ -191,45 +191,49 @@ namespace IngameScript
 				// string encodedIndexes = sub.Substring(5,sub.Length-3);
 				int end = sub.Length - 1;
 
-				if(end == 3)
-                {
-					Echo("This node got no neighbors:" + indexNumber);
-					continue;
-                }
-
-				// Echo("end:"+end);
-
-				// string encodedIndexes = sub.Substring(5,sub.Length-1);
-				string encodedIndexes = sub.Substring(4);
-				// string encodedIndexes = sub.Substring(5,sub.Length);
-				//Echo(encodedIndexes);
-
-				string encodedNeighborsIndexes = encodedIndexes.Substring(0);
-				//Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
-
-				int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
-				//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
-
 				int xNodeInit = decodeStr__NumberMax4095(sub.Substring(0, 2));
 				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
 
 				Point position = new Point(xNodeInit, yNodeInit);
-				//int radius = 0;
-				//TODO: encode this
-				int radius = 500;
-				// int indexNumber = int.Parse(subsub[2]);
-				//int indexNumber = currentNodeIndexDecoded;
-				nodes.Add(new Node(indexNumber, position, radius));
 
-				int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 2;
-				//Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
-
-				foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
-				{
-					string tmpNeighborStr = encodedNeighborsIndexes.Substring(2 * tmpIndex, 2);
-					int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
-					nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
+				if (end == 3)
+                {
+					Echo("This node got no neighbors:" + indexNumber);
+					nodes.Add(new Node(indexNumber, position, 500));
 				}
+                else {
+
+					// Echo("end:"+end);
+
+					// string encodedIndexes = sub.Substring(5,sub.Length-1);
+					string encodedIndexes = sub.Substring(4);
+					// string encodedIndexes = sub.Substring(5,sub.Length);
+					//Echo(encodedIndexes);
+
+					string encodedNeighborsIndexes = encodedIndexes.Substring(0);
+					//Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
+
+					int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
+					//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
+
+					//int radius = 0;
+					//TODO: encode this
+					int radius = 500;
+					// int indexNumber = int.Parse(subsub[2]);
+					//int indexNumber = currentNodeIndexDecoded;
+					nodes.Add(new Node(indexNumber, position, 500));
+
+					int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 2;
+					//Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
+
+					foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
+					{
+						string tmpNeighborStr = encodedNeighborsIndexes.Substring(2 * tmpIndex, 2);
+						int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
+						nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
+					}
+				}
+
 
 
 				indexNumber = indexNumber + 1;
