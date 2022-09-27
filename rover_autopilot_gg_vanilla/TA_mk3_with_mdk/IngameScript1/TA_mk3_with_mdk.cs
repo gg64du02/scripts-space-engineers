@@ -690,7 +690,7 @@ namespace IngameScript
 
 			// add the direction of the rover on the map
 			int faceNumberTipRover = -1;
-			Vector3D shipForwardVectorTip = 8 * 1024 * RemoteControl.WorldMatrix.Forward + Me.GetPosition();
+			Vector3D shipForwardVectorTip = 2 * 1024 * RemoteControl.WorldMatrix.Forward + Me.GetPosition();
 
 			Point pointShipForwardVector = new Point(0, 0);
 			faceAndPointOnPlanetsCalculated(RemoteControl, out faceNumberTipRover, out pointShipForwardVector, true, shipForwardVectorTip);
@@ -790,6 +790,7 @@ namespace IngameScript
 					}
 
 					Point startPointGoal = pixelPosCalculated;
+					//Point startPointGoal = new Point(50, 50); ;
 					Point finalPointGoal = pixelPosCalculatedTarget;
 					// Point finalPointGoal = new Point(429,-200);
 					// Point finalPointGoal = new Point(1500,-200);
@@ -1051,7 +1052,9 @@ namespace IngameScript
 		}
 
 
-
+		//check from down6 gps to down3 gps
+		//GPS:down3:-3957044.93:-55637.06:-748943.78:#FF75C9F1:
+		//GPS:down6:-3971849:-53922.84:-787513.96:#FF75C9F1:
 		public void faceAndPointOnPlanetsCalculated(IMyRemoteControl sc, out int facenumber, out Point pixelPos, bool debugMode, Vector3D testedV3D)
 		{
 
@@ -1139,8 +1142,10 @@ namespace IngameScript
 					else
 					{
 						faceNumber = 1;
-						extractionY_pointRL = planet_radius + intX;
-						extractionX_pointRL = planet_radius - intZ;
+						//extractionY_pointRL = planet_radius + intX;
+						//extractionX_pointRL = planet_radius - intZ;
+						extractionY_pointRL = planet_radius - intX;
+						extractionX_pointRL = planet_radius + intZ;
 					}
 				}
 			}
