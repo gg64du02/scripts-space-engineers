@@ -408,10 +408,14 @@ namespace IngameScript
 			while (true)
 			{
 
-				Echo("heap.C:" + listHeapNodes.Count);
+				//Echo("heap.C:" + listHeapNodes.Count);
+                if (listHeapNodes.Count == 0)
+                {
+					Echo("ran out of heap content, no path found");
+                }
 				node = listHeapNodes[listHeapNodes.Count - 1];
 				listHeapNodes.RemoveAt(listHeapNodes.Count - 1);
-				Echo("node.index:" + node.index);
+				//Echo("node.index:" + node.index);
 				// Echo("debugCount=====================:");
 				// Echo("fscore["+node.index+"]:"+fscore[node]);
 				// Echo("gscore["+node.index+"]:"+gscore[node]);
@@ -435,7 +439,7 @@ namespace IngameScript
 					// Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
 					foreach (int index in node.neighborsNodesIndex)
 					{
-						Echo("index:" + index);
+						//Echo("index:" + index);
 						if (closelist.Contains(nodes[index]) == false)
 						{
 							neighbors.Add(nodes[index]);
@@ -492,8 +496,7 @@ namespace IngameScript
 			{
 				// Echo("data.Add(node);");
 				// Echo("node.position:"+node.position);
-				// Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
-				Echo("gscore[node]:" + Math.Round(gscore[node], 3));
+				//Echo("gscore[node]:" + Math.Round(gscore[node], 3));
 				data.Add(node);
 				node = came_from[node];
 			}
@@ -746,6 +749,7 @@ namespace IngameScript
 				}
 				Echo("targetIsOnTheSameFace:" + targetIsOnTheSameFace);
 
+				targetIsOnTheSameFace = true;
 				if (targetIsOnTheSameFace == true)
 				{
 					List<Node> aStarPathNodeList1 = new List<Node>();
@@ -789,13 +793,12 @@ namespace IngameScript
 						return;
 					}
 
-					Point startPointGoal = pixelPosCalculated;
-					//Point startPointGoal = new Point(50, 50); ;
-					Point finalPointGoal = pixelPosCalculatedTarget;
-					// Point finalPointGoal = new Point(429,-200);
-					// Point finalPointGoal = new Point(1500,-200);
+					//Point startPointGoal = pixelPosCalculated;
+					//Point finalPointGoal = pixelPosCalculatedTarget;
 
 					// Point finalPointGoal = new Point(1500,2060);
+					Point startPointGoal = new Point(50, 50); ;
+					Point finalPointGoal = new Point(2000, 2000); ;
 
 					Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
 					Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
@@ -861,7 +864,7 @@ namespace IngameScript
 						{
 							if (indexNodeTmp != aStarPathNodeList1.Count - 1)
 							{
-								Echo("aStarPathNodeList1[" + indexNodeTmp + "]:" + aStarPathNodeList1[indexNodeTmp]);
+								//Echo("aStarPathNodeList1[" + indexNodeTmp + "]:" + aStarPathNodeList1[indexNodeTmp]);
 								startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2sax() / 8;
 								endVector2 = aStarPathNodeList1[indexNodeTmp + 1].toVector2sax() / 8;
 								DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
