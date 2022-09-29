@@ -17,9 +17,11 @@ string[] lyrics = {"Lorem ipsum dolor sit amet",
 "Donec vitae augue eget elit maximus auctor."};
 
 
-List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
 
-IMyRadioAntenna theAntenna = null;
+
+IMyRadioAntenna Antenna = null;
+
+IMyBeacon Beacon = null;
 
 int i = 0;
 
@@ -37,15 +39,12 @@ public Program()
     // timer block.
     Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
-    GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(listAntenna);
 	
-        foreach (IMyRadioAntenna antenna in listAntenna)
-        {
-            if (antenna.IsSameConstructAs(Me))
-            {
-				theAntenna=antenna;
-			}
-		}
+	var Blocks = new List<IMyTerminalBlock>();
+	GridTerminalSystem.GetBlocks(Blocks);
+	Beacon = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyBeacon) as IMyBeacon;
+	Antenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+	
 }
 
 public void Save()
@@ -68,20 +67,15 @@ public void Main(string argument, UpdateType updateSource)
     // The method itself is required, but the arguments above
     // can be removed if not needed.
 
+
     // Echo("" + lyrics.Length);
     Echo("i: " + i);
     i++;
-    if (listAntenna.Count != 0)
-    {
-        foreach (IMyRadioAntenna antenna in listAntenna)
-        {
-            if (antenna.IsSameConstructAs(Me))
-            {
-				Echo("i%lyrics.Length:"+i%lyrics.Length);
-				Echo("lyrics[i%lyrics.Length]:"+lyrics[i%lyrics.Length]);
-                //theAntenna.HudText = lyrics[i%lyrics.Length];
-                theAntenna.CustomName = lyrics[i%lyrics.Length];
-            }
-        }
-    }
+	
+	Antenna.HudText = lyrics[i%lyrics.Length];
+	Antenna.CustomName = lyrics[i%lyrics.Length];
+	
+	Beacon.HudText = lyrics[i%lyrics.Length];
+	Beacon.CustomName = lyrics[i%lyrics.Length];
+	
 }
