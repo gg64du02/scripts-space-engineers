@@ -13,11 +13,19 @@ import numpy as np
 #     back_clos_dis_par_proc = pickle.load(f2)
 
 with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\right_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\down_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\up_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\left_voronoi_par_proc.pickle', 'rb') as f1:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\front_voronoi_par_proc.pickle', 'rb') as f1:
 # with open('front_voronoi_par_proc.pickle', 'rb') as f1:
     back_voronoi_par_proc = pickle.load(f1)
 # print("len(arrayOfCirclesPointsList):",str(len(arrayOfCirclesPointsList)))
 
 with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\right_clos_dis_par_proc.pickle', 'rb') as f2:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\down_clos_dis_par_proc.pickle', 'rb') as f2:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\up_clos_dis_par_proc.pickle', 'rb') as f2:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\left_clos_dis_par_proc.pickle', 'rb') as f2:
+# with open('.\\game_data\\SS\\PlanetDataFiles\\Pertam\\front_clos_dis_par_proc.pickle', 'rb') as f2:
 # with open('front_clos_dis_par_proc.pickle', 'rb') as f2:
     back_clos_dis_par_proc = pickle.load(f2)
 
@@ -243,10 +251,10 @@ for x in range(0,2048):
                     # # print("rare node")
                     # # print("rare node:x,y",x,y)
                     # # print(np.unique(pixelsValue))
-                    radiusAtThisVertex = back_clos_dis_par_proc[x,y]
-                    nodeNumberIndex = nodeNumberIndex + 1
-                    tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
-                    tmpNodeWithLabels = [[x,y],radiusAtThisVertex,np.unique(pixelsValue)]
+                    # radiusAtThisVertex = back_clos_dis_par_proc[x,y]
+                    # nodeNumberIndex = nodeNumberIndex + 1
+                    # tmpNode = [[x,y],np.unique(pixelsValue),radiusAtThisVertex]
+                    # tmpNodeWithLabels = [[x,y],radiusAtThisVertex,np.unique(pixelsValue)]
         if(tmpNode!=[]):
             nodesArray.append(tmpNode)
             nodesArrayWithLabels.append(tmpNodeWithLabels)
@@ -373,6 +381,17 @@ for nodeWithLabels1 in nodesArrayWithLabels:
                                 listIndexes2 = [allIndexes2[i:i+n] for i in range(0, len(allIndexes2), n)]
                                 pass
 
+                                # print("listIndexes1",listIndexes1)
+                                # print("listIndexes2",listIndexes2)
+                                # print(""+resultStr[tmpIndex1])
+                                xRadius1 = decodeStr__NumberMax4095(resultStr[tmpIndex1][0:2])
+                                yRadius1 = decodeStr__NumberMax4095(resultStr[tmpIndex1][2:4])
+                                xRadius2 = decodeStr__NumberMax4095(resultStr[tmpIndex2][0:2])
+                                yRadius2 = decodeStr__NumberMax4095(resultStr[tmpIndex2][2:4])
+                                # print(np.linalg.norm([xRadius1-xRadius2,yRadius1-yRadius2]))
+                                distanceBetweenLabels = np.linalg.norm([xRadius1-xRadius2,yRadius1-yRadius2])
+                                if(distanceBetweenLabels>350):
+                                    continue
                                 if(dictPointStrIndex[encodedLabel2] not in listIndexes1):
                                     resultStr[tmpIndex1] = resultStr[tmpIndex1] + dictPointStrIndex[encodedLabel2]
                                 if(dictPointStrIndex[encodedLabel1] not in listIndexes2):
@@ -388,6 +407,8 @@ pass
 
 resultStrNoRN = ""
 
+debugIndex = 0
+
 for strres  in resultStr:
     # print("strres:",strres)
     # print(strres)
@@ -399,12 +420,17 @@ for strres  in resultStr:
 
     radiusAtPoint = back_clos_dis_par_proc[xRadius,yRadius]
     strRadiusToAdd  = encodeAsString__Range(int(radiusAtPoint))
+    if(strres[0:4]=="aj65"):
+        pass
+        print("debugIndex",debugIndex)
     if(resultStrNoRN==""):
-        # resultStrNoRN = "" + strres[0:4]+strres[6:]
-        resultStrNoRN = "" + strres[0:4]+strRadiusToAdd+strres[6:]
+        resultStrNoRN = "" + strres[0:4]+strres[6:]
+        # resultStrNoRN = "" + strres[0:4]+strRadiusToAdd+strres[6:]
     else:
-        # resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strres[6:]
-        resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strRadiusToAdd+strres[6:]
+        resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strres[6:]
+        # resultStrNoRN = resultStrNoRN + "|" + strres[0:4]+strRadiusToAdd+strres[6:]
+
+    debugIndex = debugIndex + 1
 
 print(resultStrNoRN)
 # testing
