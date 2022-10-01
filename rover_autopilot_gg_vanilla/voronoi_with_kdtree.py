@@ -1,5 +1,7 @@
 import pickle
 
+import numpy as np
+
 from matplotlib import pyplot as plt
 
 from sklearn.neighbors import KDTree
@@ -130,7 +132,7 @@ for file_path in full_files_path:
 
 
 # appending to the planets points
-# X is going to the planets points
+# X is going to be the planets points
 pass
 print("number of points",len(X))
 tree = KDTree(X, leaf_size=2)
@@ -141,5 +143,35 @@ print(ind)  # indices of 5 closest neighbors
 
 print(dist)  # distances to  closest neighbors
 
+
+
+# data = np.load("LIDAR_0.npy")
+# # data.dtype is [('x', '<f4'), ('y', '<f4'), ('z', '<f4'), ('intensity', '<f4'), ('t_low', '<u4'), ('t_high', '<u4')]
+
+xs = []
+ys = []
+zs = []
+
+for t3dPoint in range(len(X)):
+    xs.append(X[t3dPoint][0])
+    ys.append(X[t3dPoint][1])
+    zs.append(X[t3dPoint][2])
+
+# # coordinates
+# xs = X[:,0]
+# ys = X[:,1]
+# zs = X[:,2]
+# # attribute
+# t_low = data["t_low"]
+
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize=(12,7))
+ax = fig.add_subplot(projection='3d')
+# img = ax.scatter(xs, ys, zs, c=t_low, cmap=plt.hot())
+img = ax.scatter(xs, ys, zs)
+fig.colorbar(img)
+
+plt.show()
 pass
 
