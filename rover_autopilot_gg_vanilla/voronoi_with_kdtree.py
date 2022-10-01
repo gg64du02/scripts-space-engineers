@@ -137,35 +137,38 @@ for file_path in full_files_path:
 # X is going to be the planets points
 print("number of points",len(X))
 tree = KDTree(X, leaf_size=2)
-# dist, ind = tree.query(X[:1], k=3)
-dist, ind = tree.query([[500,500,PR]], k=5)
-print(ind)  # indices of 5 closest neighbors
-print(dist)  # distances to 5 closest neighbors
-
-xs = []
-ys = []
-zs = []
-for t3dPoint in range(len(X)):
-    xs.append(X[t3dPoint][0])
-    ys.append(X[t3dPoint][1])
-    zs.append(X[t3dPoint][2])
-
-import matplotlib.pyplot as plt
-
-fig = plt.figure(figsize=(12,7))
-ax = fig.add_subplot(projection='3d')
-# img = ax.scatter(xs, ys, zs,s=1)
-img = ax.scatter(xs, ys, zs,s=0.2)
-fig.colorbar(img)
-
+# # dist, ind = tree.query(X[:1], k=3)
+# dist, ind = tree.query([[500,500,PR]], k=5)
+# print(ind)  # indices of 5 closest neighbors
+# print(dist)  # distances to 5 closest neighbors
+#
+# xs = []
+# ys = []
+# zs = []
+# for t3dPoint in range(len(X)):
+#     xs.append(X[t3dPoint][0])
+#     ys.append(X[t3dPoint][1])
+#     zs.append(X[t3dPoint][2])
+#
+# import matplotlib.pyplot as plt
+#
+# fig = plt.figure(figsize=(12,7))
+# ax = fig.add_subplot(projection='3d')
+# # img = ax.scatter(xs, ys, zs,s=1)
+# img = ax.scatter(xs, ys, zs,s=0.2)
+# fig.colorbar(img)
+#
 # plt.show()
-pass
+# pass
 
 import cv2 as cv
 
-VoronoiAccumulatorSphere = VAS = []
+LabelsAccumulatorSphere = LAS = []
 
-# getting the radius without obstacles for each point
+
+dictPoint3DwithLabels = {}
+
+# getting the labels of each obstacles points
 for file_path in full_files_path:
 
     with open(file_path,'rb') as f:
@@ -186,30 +189,61 @@ for file_path in full_files_path:
     num_stats = output[0]
     labels = output[1]
     stats = output[2]
-    img = image.copy()
+    # img = image.copy()
 
     # converting 2d to 3d point:
     for x in range(0,2048):
-        print("x",x)
+        print("labels:x",x)
         for y in range(0,2048):
             pointIn3D = conv2dTo3D([x,y], intFaceNumber)
             l2norm = np.linalg.norm(pointIn3D,2)
             pointIn3D = pointIn3D / l2norm
-            if(img[x,y]==0):
+            if(labels[x,y]!=0):
+                dictPoint3DwithLabels[tuple(pointIn3D)] = labels[x,y]
 
-                dist, ind = tree.query([pointIn3D], k=1)
+print("# getting the labels of each obstacles points:done")
 
-                # print(ind)  # indices of 1 closest neighbors
-                # print(dist)  # distances to 1 closest neighbors
+dictVoronoiAccumulatorSphere = dVAS = {}
 
-                #TODO: labelled obstacles in 3d
-                # VAS.append()
-                VAS.append([pointIn3D, labels[x, y]])
-                pass
-            else:
-                # TODO:
-                VAS.append([pointIn3D,0])
-                pass
+# getting the labels of each obstacles points
+for file_path in full_files_path:
 
-pass
-print()
+    with open(file_path,'rb') as f:
+        img = pickle.load(f)
+
+    stringTmpSplitted = file_path.split("/")[-1:][0].split('_')[0]
+    # .split('_')[0]
+    print("stringTmpSplitted:",stringTmpSplitted)
+
+    intFaceNumber = numberOfStrFace(stringTmpSplitted)
+    print("intFaceNumber:",intFaceNumber)
+    # converting 2d to 3d point:
+    for x in range(0,25):
+        print("dVAS:x",x)
+        for y in range(0,2048):
+            pass
+            pointIn3D = conv2dTo3D([x,y], intFaceNumber)
+            l2norm = np.linalg.norm(pointIn3D,2)
+            pointIn3D = pointIn3D / l2norm
+
+            # dist, ind = tree.query([[500,500,PR]], k=5)
+            dist, ind = tree.query([pointIn3D], k=1)
+            ind = ind[0][0]
+            dist = dist[0][0]
+            XclosestPoint = X[ind]
+            # print("XclosestPoint",XclosestPoint)
+            # print("ind",ind)  # indices of 1 closest neighbors
+            # print("dist",dist)  # distances to 1 closest neighbors
+            labelAtXY = dictPoint3DwithLabels[tuple(XclosestPoint)]
+            # print("labelAtXY",labelAtXY)
+            dVAS[tuple(XclosestPoint)] = labelAtXY
+            pass
+
+
+folderNameSource = "C:/github_ws/scripts-space-engineers/rover_autopilot_gg_vanilla/game_data/SS/PlanetDataFiles/Pertam/"
+
+dVASfileStr = folderNameSource + "dVASpertam.pickle"
+
+with open(dVASfileStr, 'wb') as f1:
+    pickle.dump(dVAS, f1)
+
