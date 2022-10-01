@@ -158,9 +158,10 @@ ax = fig.add_subplot(projection='3d')
 img = ax.scatter(xs, ys, zs,s=0.2)
 fig.colorbar(img)
 
-plt.show()
+# plt.show()
 pass
 
+import cv2 as cv
 
 VoronoiAccumulatorSphere = VAS = []
 
@@ -177,8 +178,19 @@ for file_path in full_files_path:
     intFaceNumber = numberOfStrFace(stringTmpSplitted)
     print("intFaceNumber:",intFaceNumber)
 
+
+    image = img
+    connectivity = 8
+    # output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_32S)
+    output = cv.connectedComponentsWithStats(image, connectivity, cv.CV_8U)
+    num_stats = output[0]
+    labels = output[1]
+    stats = output[2]
+    img = image.copy()
+
     # converting 2d to 3d point:
     for x in range(0,2048):
+        print("x",x)
         for y in range(0,2048):
             pointIn3D = conv2dTo3D([x,y], intFaceNumber)
             l2norm = np.linalg.norm(pointIn3D,2)
@@ -188,11 +200,16 @@ for file_path in full_files_path:
                 dist, ind = tree.query([pointIn3D], k=1)
 
                 # print(ind)  # indices of 1 closest neighbors
-                print(dist)  # distances to 1 closest neighbors
+                # print(dist)  # distances to 1 closest neighbors
 
                 #TODO: labelled obstacles in 3d
                 # VAS.append()
+                VAS.append([pointIn3D, labels[x, y]])
                 pass
             else:
+                # TODO:
+                VAS.append([pointIn3D,0])
                 pass
-                #TODO: VAS.append([pointIn3D,label?])
+
+pass
+print()
