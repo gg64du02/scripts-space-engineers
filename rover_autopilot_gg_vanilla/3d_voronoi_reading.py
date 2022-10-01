@@ -87,17 +87,30 @@ with open(file_path,'rb') as f:
     dVAS = pickle.load(f)
 
 pass
+from collections import Counter
+
+
+def isThisInBounds(point):
+    if(point[0] >= 2048):
+        return False
+    if(point[0] < 0):
+        return False
+    if(point[1] >= 2048):
+        return False
+    if(point[1] < 0):
+        return False
+    return True
 
 for faceIndex in range(6):
     for x in range(0,2048):
         for y in range(0,2048):
-            p1 = conv2dTo3D([x,y],faceIndex)
-            p2 = conv2dTo3D([x+1,y],faceIndex)
-            p3 = conv2dTo3D([x,y+1],faceIndex)
-            p4 = conv2dTo3D([x+1,y+1],faceIndex)
+            point2Ds = [[x,y],[x+1,y],[x,y+1],[x+1,y+1]]
 
+            pixels = []
 
-            pixels = [p1,p2,p3,p4]
+            for point2D in point2Ds:
+                if(isThisInBounds(point2D)==True):
+                    pixels.append(conv2dTo3D(point2D,faceIndex))
 
             pixelsValue = []
 
@@ -105,8 +118,18 @@ for faceIndex in range(6):
                 l2norm = np.linalg.norm(point3D,2)
                 pointIn3D = point3D / l2norm
                 pixelsValue.append(dVAS[tuple(pointIn3D)])
-                print("pixelsValue",pixelsValue)
+                # print("pixelsValue",pixelsValue)
                 pass
 
+            numberOfdifferentsValue = len(Counter(pixelsValue).values())
+
+            if (numberOfdifferentsValue == 2):
+                pass
+            if (numberOfdifferentsValue == 3):
+                pass
+                print("point2Ds[0]:",point2Ds[0])
+                print("pixels[0]:",pixels[0])
+                # print("p1:",p1)
+            # if (numberOfdifferentsValue == 4):
 
 
