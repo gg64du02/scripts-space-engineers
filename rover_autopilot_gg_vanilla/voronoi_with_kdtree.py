@@ -11,8 +11,8 @@ folderNameSource = "C:/github_ws/scripts-space-engineers/rover_autopilot_gg_vani
 
 
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-files = {"back_sobelBitmap_64_min.pickle"}
-# files = {"back_sobelBitmap_64_min.pickle","down_sobelBitmap_64_min.pickle","front_sobelBitmap_64_min.pickle","left_sobelBitmap_64_min.pickle","right_sobelBitmap_64_min.pickle","up_sobelBitmap_64_min.pickle"}
+# files = {"back_sobelBitmap_64_min.pickle"}
+files = {"back_sobelBitmap_64_min.pickle","down_sobelBitmap_64_min.pickle","front_sobelBitmap_64_min.pickle","left_sobelBitmap_64_min.pickle","right_sobelBitmap_64_min.pickle","up_sobelBitmap_64_min.pickle"}
 
 # sobelBitmap_64_min_TargetFilePath = stringTmpSplitted + "_sobelBitmap_64_min.pickle"
 
@@ -218,7 +218,7 @@ for file_path in full_files_path:
     intFaceNumber = numberOfStrFace(stringTmpSplitted)
     print("intFaceNumber:",intFaceNumber)
     # converting 2d to 3d point:
-    for x in range(0,25):
+    for x in range(0,2048):
         print("dVAS:x",x)
         for y in range(0,2048):
             pass
@@ -236,7 +236,7 @@ for file_path in full_files_path:
             # print("dist",dist)  # distances to 1 closest neighbors
             labelAtXY = dictPoint3DwithLabels[tuple(XclosestPoint)]
             # print("labelAtXY",labelAtXY)
-            dVAS[tuple(XclosestPoint)] = labelAtXY
+            dVAS[tuple(pointIn3D)] = labelAtXY
             pass
 
 
