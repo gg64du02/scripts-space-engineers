@@ -9,8 +9,8 @@ folderNameSource = "C:/github_ws/scripts-space-engineers/rover_autopilot_gg_vani
 
 
 # files = {"back.png","down.png","front.png","left.png","right.png","up.png"}
-files = {"back_sobelBitmap_64_min.pickle"}
-# files = {"back_sobelBitmap_64_min.pickle","down_sobelBitmap_64_min.pickle","front_sobelBitmap_64_min.pickle","left_sobelBitmap_64_min.pickle","right_sobelBitmap_64_min.pickle","up_sobelBitmap_64_min.pickle"}
+# files = {"back_sobelBitmap_64_min.pickle"}
+files = {"back_sobelBitmap_64_min.pickle","down_sobelBitmap_64_min.pickle","front_sobelBitmap_64_min.pickle","left_sobelBitmap_64_min.pickle","right_sobelBitmap_64_min.pickle","up_sobelBitmap_64_min.pickle"}
 
 # sobelBitmap_64_min_TargetFilePath = stringTmpSplitted + "_sobelBitmap_64_min.pickle"
 
@@ -129,16 +129,17 @@ for file_path in full_files_path:
                 pass
 
 
-    # appending to the planets points
-    # X is going to the planets points
-    
-    tree = KDTree(X, leaf_size=2)
+# appending to the planets points
+# X is going to the planets points
+pass
+print("number of points",len(X))
+tree = KDTree(X, leaf_size=2)
 
-    # dist, ind = tree.query(X[:1], k=3)
-    dist, ind = tree.query([[500,500,PR]], k=5)
-    print(ind)  # indices of 5 closest neighbors
+# dist, ind = tree.query(X[:1], k=3)
+dist, ind = tree.query([[500,500,PR]], k=5)
+print(ind)  # indices of 5 closest neighbors
 
-    print(dist)  # distances to  closest neighbors
+print(dist)  # distances to  closest neighbors
 
-    pass
+pass
 
