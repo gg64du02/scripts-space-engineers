@@ -101,8 +101,15 @@ def isThisInBounds(point):
         return False
     return True
 
+dVASpertamFilteredStr = folderNameSource + "dVASpertamFiltered.pickle"
+
+dVASpertamFilteredToBePickled = {}
+
 for faceIndex in range(6):
+    print("faceIndex",faceIndex)
     for x in range(0,2048):
+        if(x%256==0):
+            print("x",x)
         for y in range(0,2048):
             point2Ds = [[x,y],[x+1,y],[x,y+1],[x+1,y+1]]
 
@@ -125,11 +132,22 @@ for faceIndex in range(6):
 
             if (numberOfdifferentsValue == 2):
                 pass
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 2
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = Counter(pixelsValue).values()
             if (numberOfdifferentsValue == 3):
                 pass
-                print("point2Ds[0]:",point2Ds[0])
-                print("pixels[0]:",pixels[0])
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 3
+                # print("point2Ds[0]:",point2Ds[0])
+                # print("pixels[0]:",pixels[0])
+            if (numberOfdifferentsValue == 4):
+                pass
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 4
+                # print("point2Ds[0]:",point2Ds[0])
+                # print("pixels[0]:",pixels[0])
                 # print("p1:",p1)
             # if (numberOfdifferentsValue == 4):
 
 
+
+with open(dVASpertamFilteredStr, 'wb') as f1:
+    pickle.dump(dVASpertamFilteredToBePickled, f1)
