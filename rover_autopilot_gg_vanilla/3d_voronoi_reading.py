@@ -101,7 +101,7 @@ def isThisInBounds(point):
         return False
     return True
 
-dVASpertamFilteredStr = folderNameSource + "dVASpertamFiltered.pickle"
+dVASpertamFilteredStr = folderNameSource + "dVASpertamFilteredWithLabels.pickle"
 
 dVASpertamFilteredToBePickled = {}
 
@@ -132,16 +132,23 @@ for faceIndex in range(6):
 
             if (numberOfdifferentsValue == 2):
                 pass
-                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 2
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = 2
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(Counter(pixelsValue).values())
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(pixelsValue)
+                # print("pixelsValue",pixelsValue)
                 # dVASpertamFilteredToBePickled[tuple(pixels[0])] = Counter(pixelsValue).values()
             if (numberOfdifferentsValue == 3):
                 pass
-                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 3
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = 3
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(Counter(pixelsValue).values())
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(pixelsValue)
                 # print("point2Ds[0]:",point2Ds[0])
                 # print("pixels[0]:",pixels[0])
             if (numberOfdifferentsValue == 4):
                 pass
-                dVASpertamFilteredToBePickled[tuple(pixels[0])] = 4
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = 4
+                # dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(Counter(pixelsValue).values())
+                dVASpertamFilteredToBePickled[tuple(pixels[0])] = tuple(pixelsValue)
                 # print("point2Ds[0]:",point2Ds[0])
                 # print("pixels[0]:",pixels[0])
                 # print("p1:",p1)
