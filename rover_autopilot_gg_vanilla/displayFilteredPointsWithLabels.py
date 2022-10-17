@@ -156,5 +156,29 @@ while len(points_to_process) != 0 :
         if(np.array_equal(pointTestedLabels,labelsFromTheCheckedPoint)==True):
             allExistingPointsWithSameCommonLabels.append(pointTested)
     print("len(allExistingPointsWithSameCommonLabels)",len(allExistingPointsWithSameCommonLabels))
+    potentialNodesToCheck = []
+    for node in nodes.keys():
+        pass
+        # print(node, '->', nodes[node])
+        countingCommon = 0
+        labelsInNode = dVASfiltered[tuple(node)]
+        # print("labelsInNode",labelsInNode)
+        for label in labelsFromTheCheckedPoint:
+            if(label in labelsInNode):
+                countingCommon = countingCommon + 1
+        if(countingCommon>=2):
+            potentialNodesToCheck.append(node)
+    print("len(potentialNodesToCheck)",len(potentialNodesToCheck))
+    #(debug) displaying the potential nodes
+    for potentialNodeToCheck in potentialNodesToCheck:
+        print("potentialNodeToCheck",potentialNodeToCheck)
+        print(np.unique(dVASfiltered[tuple(potentialNodeToCheck)]))
+    # checking for neighboring point of the
+
+    # tree = KDTree(allExistingPointsWithSameCommonLabels, leaf_size=2)
+    # dist, ind = tree.query([checkTheLinkFromThisPoint], k=3)
+    # print(dist, ind )
+
+
     break
     pass
