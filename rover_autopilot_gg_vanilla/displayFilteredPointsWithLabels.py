@@ -83,47 +83,6 @@ print("counting4",counting4)
 
 print()
 
-
-# # appending to the planets points
-# # X is going to be the planets points
-# print("number of points",len(linksArray))
-# tree = KDTree(linksArray, leaf_size=2)
-#
-# heapToProcess = []
-#
-# heapToProcess.append(np.asarray(linksArray[0]))
-#
-# print()
-#
-# print("len(heapToProcess)",len(heapToProcess))
-#
-# while(len(heapToProcess)!=0):
-#     print()
-#
-#     explore_points_nearby = heapToProcess[len(heapToProcess)-1]
-#
-#     heapToProcess.remove(explore_points_nearby)
-#     linksArray.remove(explore_points_nearby)
-#
-#     tree = KDTree(linksArray, leaf_size=2)
-#
-#     labels_for_this_link = dVASfiltered[tuple(explore_points_nearby)]
-#
-#     labels_for_this_link_unique = np.unique(labels_for_this_link)
-#
-#     print("labels_for_this_link_unique",labels_for_this_link_unique)
-#
-#     dist, ind = tree.query([explore_points_nearby], k=3)
-#
-#     for index in ind[0]:
-#         print("linksArray[ind]",linksArray[index])
-#         print("labels",dVASfiltered[tuple(linksArray[index])])
-#
-#     print()
-
-
-print()
-
 # dist, ind = tree.query([pointIn3D], k=1)
 
 # points_to_process = linksArray.copy()
@@ -134,6 +93,40 @@ print()
 #     FROM points_to_process GET all points with 2(and 3?) labels in common
 
 
+def recursiveNeighboringPoints( checkTheLinkFromThisPointPar):
+    global allExistingPointsWithSameCommonLabels
+    global recursiveNeighboringPointsNumberOfCalls
+    global neighborsPoints
+    recursiveNeighboringPointsNumberOfCalls = recursiveNeighboringPointsNumberOfCalls + 1
+    tree = KDTree(allExistingPointsWithSameCommonLabels, leaf_size=2)
+    print("checkTheLinkFromThisPointPar",checkTheLinkFromThisPointPar)
+    print("recursiveNeighboringPointsNumberOfCalls",recursiveNeighboringPointsNumberOfCalls)
+    dist, ind = tree.query([checkTheLinkFromThisPointPar], k=3)
+    indexDist = 0
+    for distance in dist[0]:
+        print("distance",distance)
+        if (distance == 0):
+            pass
+            neighborsPoints.append(checkTheLinkFromThisPointPar)
+            allExistingPointsWithSameCommonLabels.remove(tuple(checkTheLinkFromThisPointPar))
+        if (distance < 30):
+            if (distance != 0):
+                print("indexDist",indexDist)
+                print("len(ind[0])",len(ind[0]))
+                if(tuple(allExistingPointsWithSameCommonLabels[ind[0][indexDist]]) in allExistingPointsWithSameCommonLabels):
+                    recursiveNeighboringPoints( allExistingPointsWithSameCommonLabels[ind[0][indexDist]])
+        indexDist = indexDist + 1
+    print("recursiveNeighboringPoints:end")
+    # if(recursiveNeighboringPointsNumberOfCalls >len(allExistingPointsWithSameCommonLabels)):
+    #     return
+
+
+# # inputs
+# linksArray
+# nodes
+# # outputs
+# dictionnaryNodes (key is position) = list of nodes(Index)
+
 points_to_process = linksArray.copy()
 print()
 # add the first point of linksArray onto the heapToProcess
@@ -143,7 +136,7 @@ heapToProcess.append(np.asarray(linksArray[0]))
 checkTheLinkFromThisPoint = heapToProcess[len(heapToProcess)-1]
 # while len(points_to_process) != 0 :
 while len(points_to_process) != 0 :
-    pass
+    # pass points_to_process
     # get the labels of checkTheLinkFromThisPoint
     labelsFromTheCheckedPoint = np.unique(dVASfiltered[tuple(checkTheLinkFromThisPoint)])
     print("labelsFromTheCheckedPoint",labelsFromTheCheckedPoint)
@@ -173,12 +166,51 @@ while len(points_to_process) != 0 :
     for potentialNodeToCheck in potentialNodesToCheck:
         print("potentialNodeToCheck",potentialNodeToCheck)
         print(np.unique(dVASfiltered[tuple(potentialNodeToCheck)]))
+
+    lenSqAllExistingPointsWithSameCommonLabels = len(allExistingPointsWithSameCommonLabels)*len(allExistingPointsWithSameCommonLabels)
+    print("lenSqAllExistingPointsWithSameCommonLabels",lenSqAllExistingPointsWithSameCommonLabels)
+
     # checking for neighboring point of the
+    neighborsPoints = []
+    countingTrys = 0
+    if(tuple(checkTheLinkFromThisPoint) in allExistingPointsWithSameCommonLabels):
+        neighborsPoints.append(checkTheLinkFromThisPoint)
+        allExistingPointsWithSameCommonLabels.remove(tuple(checkTheLinkFromThisPoint))
+        print("first points done")
+    print("len(allExistingPointsWithSameCommonLabels)",len(allExistingPointsWithSameCommonLabels))
+    if(tuple(checkTheLinkFromThisPoint) in allExistingPointsWithSameCommonLabels):
+        print("error !!!")
+        break
+    while(lenSqAllExistingPointsWithSameCommonLabels>countingTrys):
+        pass
+        onePointAdded = False
+        for knownNeighbor in neighborsPoints:
+            tree = KDTree(allExistingPointsWithSameCommonLabels, leaf_size=2)
+            # print("knownNeighbors", knownNeighbor)
+            dist, ind = tree.query([knownNeighbor], k=3)
+            dist = dist[0]
+            ind = ind[0]
+            # print(dist)
+            indexOfDist = 0
+            for distance in dist:
+                countingTrys = countingTrys + 1
+                if(distance<30):
+                    thePoint = allExistingPointsWithSameCommonLabels[ind[indexOfDist]]
+                    neighborsPoints.append(thePoint)
+                    allExistingPointsWithSameCommonLabels.remove(tuple(thePoint))
+                    print("len(neighborsPoints)",len(neighborsPoints))
 
-    # tree = KDTree(allExistingPointsWithSameCommonLabels, leaf_size=2)
-    # dist, ind = tree.query([checkTheLinkFromThisPoint], k=3)
-    # print(dist, ind )
+                indexOfDist = indexOfDist + 1
 
 
+        # print("len(allExistingPointsWithSameCommonLabels)", len(allExistingPointsWithSameCommonLabels))
+        countingTrys = countingTrys + 1
+        #     if(tuple(checkTheLinkFromThisPoint) in allExistingPointsWithSameCommonLabels):
     break
-    pass
+
+
+
+
+
+
+
