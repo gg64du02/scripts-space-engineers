@@ -178,7 +178,8 @@ while len(points_to_process) != 0 :
         print("potentialNodeToCheck",potentialNodeToCheck)
         print(np.unique(dVASfiltered[tuple(potentialNodeToCheck)]))
 
-    lenSqAllExistingPointsWithSameCommonLabels = len(allExistingPointsWithSameCommonLabels)*len(allExistingPointsWithSameCommonLabels)
+    # lenSqAllExistingPointsWithSameCommonLabels = len(allExistingPointsWithSameCommonLabels)*len(allExistingPointsWithSameCommonLabels)
+    lenSqAllExistingPointsWithSameCommonLabels = 4*len(allExistingPointsWithSameCommonLabels)
     print("lenSqAllExistingPointsWithSameCommonLabels",lenSqAllExistingPointsWithSameCommonLabels)
 
     # checking for neighboring point of the
@@ -203,23 +204,25 @@ while len(points_to_process) != 0 :
             # print("len(allExistingPointsWithSameCommonLabels)",len(allExistingPointsWithSameCommonLabels))
             tree = KDTree(allExistingPointsWithSameCommonLabels, leaf_size=2)
             # print("knownNeighbors", knownNeighbor)
-            numberOfNeighbors = min([3,len(allExistingPointsWithSameCommonLabels)])
-            # print("numberOfNeighbors",numberOfNeighbors)
-            dist, ind = tree.query([knownNeighbor], k=numberOfNeighbors)
+            numberOfNeighbors1 = min([3,len(allExistingPointsWithSameCommonLabels)])
+            # print("numberOfNeighbors1",numberOfNeighbors1)
+            dist, ind = tree.query([knownNeighbor], k=numberOfNeighbors1)
             # dist, ind = tree.query([knownNeighbor], k=2)
             dist = dist[0]
             ind = ind[0]
             # print(dist)
+            tmpAllExistingPointsWithSameCommonLabels = allExistingPointsWithSameCommonLabels.copy()
             indexOfDist = 0
             for distance in dist:
                 countingTrys = countingTrys + 1
                 if(distance<30):
                     thePoint = allExistingPointsWithSameCommonLabels[ind[indexOfDist]]
                     neighborsPoints.append(thePoint)
-                    allExistingPointsWithSameCommonLabels.remove(tuple(thePoint))
+                    tmpAllExistingPointsWithSameCommonLabels.remove(tuple(thePoint))
                     # print("len(neighborsPoints)",len(neighborsPoints))
 
                 indexOfDist = indexOfDist + 1
+            allExistingPointsWithSameCommonLabels = tmpAllExistingPointsWithSameCommonLabels.copy()
         # if (len(allExistingPointsWithSameCommonLabels)==0):
         #     break
 
@@ -239,7 +242,8 @@ while len(points_to_process) != 0 :
 
     for potentialNodeToCheck in potentialNodesToCheck:
         # print("knownNeighbors", knownNeighbor)
-        dist, ind = tree.query([potentialNodeToCheck], k=3)
+        numberOfNeighbors2 = min([3,len(neighborsPoints)])
+        dist, ind = tree.query([potentialNodeToCheck], k=numberOfNeighbors2)
         dist = dist[0]
         ind = ind[0]
         print("potentialNodeToCheck",dist,ind)
@@ -270,6 +274,11 @@ while len(points_to_process) != 0 :
     checkTheLinkFromThisPoint = np.asarray(points_to_process[0])
     # break
 
+
+nodesStr = folderNameSource + "nodes.pickle"
+
+with open(nodesStr, 'wb') as f1:
+    pickle.dump(nodes, f1)
 
 
 
