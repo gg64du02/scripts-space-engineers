@@ -90,11 +90,45 @@ img = ax.scatter(xs, ys, zs, s=0.2)
 # img = ax.scatter(xs, ys, s=0.2)
 fig.colorbar(img)
 
-plt.show()
+# plt.show()
 
-#
-# # Data for a three-dimensional line
-# zline = np.linspace(0, 15, 1000)
-# xline = np.sin(zline)
-# yline = np.cos(zline)
-# ax.plot3D(xline, yline, zline, 'gray')
+dictNodesIndex = {}
+# fixing nodes ref
+nodesIndexes = 0
+for node in nodes:
+    key = node
+    values = nodes[node]
+    dictNodesIndex[key] = nodesIndexes
+    # print("key",key)
+    # print("values",values)
+    nodesIndexes = nodesIndexes + 1
+
+
+dictOfRef = {}
+# make reference to other nodes
+for node in nodes:
+    key = node
+    values = nodes[node]
+    # print("key", key)
+    # print("values", values)
+    dictOfRef[key] = []
+    listValueFor_dictOfRef = []
+    for value in values:
+        if(value!=-1):
+            # print(dictNodesIndex[value])
+            # print(node, "got",dictNodesIndex[value])
+            listValueFor_dictOfRef.append(dictNodesIndex[value])
+        else:
+            print(node,"got", value)
+            listValueFor_dictOfRef.append(-1)
+    dictOfRef[key] = listValueFor_dictOfRef
+
+
+dictToToBeEncoded = {}
+# checking if counting ?
+for node in nodes:
+    key = node
+    values = nodes[node]
+    print("key", key)
+    print("values", values)
+    print("index",dictNodesIndex[key])
