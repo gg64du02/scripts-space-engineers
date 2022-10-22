@@ -73,22 +73,18 @@ def encodeAsString__Range(number):
     # print("first_part",first_part)
     # print("second_part",second_part)
 
-
     resultEncodeStr = str(first_part) + str(second_part)
-
 
     # resultEncodeStr = ""
     return resultEncodeStr
+
 def twos_comp(val, bits):
     """compute the 2's complement of int value val"""
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
         val = val - (1 << bits)        # compute negative value
     return val
 
-def convertBackUnsigned(signedNumber):
-    return
-
-def convertToSigned4096m2048(numberPrepedToConv):
+def encodeToSigned4096m2048(numberPrepedToConv):
     # ?? is -2048 | 100000 000000
     # 00 is 0     | 000000 000000
 
@@ -141,20 +137,70 @@ def convertToSigned4096m2048(numberPrepedToConv):
     print("firstStr",firstStr)
     print("secondStr",secondStr)
 
-    print("==============================")
+    # print("==============================")
 
     resultStr = str(firstStr) + str(secondStr)
 
     return resultStr
 
-convertToSigned4096m2048(0)
-convertToSigned4096m2048(5)
-convertToSigned4096m2048(2046)
-convertToSigned4096m2048(2047)
-convertToSigned4096m2048(2048)
+def decodeSignedStr(EncodedStr):
+    if(len(EncodedStr)!=2):
+        print("if(len(EncodedStr)!=2):")
+        print("ERROR")
+        exit()
+    firstChar = EncodedStr[0]
+    secondChar = EncodedStr[1]
+    intFirstDecoded = decodeAsCharNumberMax64(firstChar)
+    intSecondDecoded = decodeAsCharNumberMax64(secondChar)
 
-convertToSigned4096m2048(-2048)
-convertToSigned4096m2048(-2047)
-convertToSigned4096m2048(-2046)
-convertToSigned4096m2048(-2045)
-convertToSigned4096m2048(-5)
+    print("intFirstDecoded",intFirstDecoded)
+    print("intSecondDecoded",intSecondDecoded)
+
+    signNumber = intFirstDecoded * 64 + intSecondDecoded
+
+    print("signNumber",signNumber)
+
+    minus2048 = signNumber // 2048
+
+    print("minus2048",minus2048)
+
+    if(minus2048 == 1):
+        pass
+        resultInt = - (signNumber - 2048)
+    else:
+        resultInt = signNumber
+
+    print("resultInt",resultInt)
+    print("=============================")
+
+    resultInt = int(resultInt)
+
+    return resultInt
+
+# encodeToSigned4096m2048(0)
+# encodeToSigned4096m2048(5)
+# encodeToSigned4096m2048(2046)
+# encodeToSigned4096m2048(2047)
+# encodeToSigned4096m2048(2048)
+#
+# encodeToSigned4096m2048(-2048)
+# encodeToSigned4096m2048(-2047)
+# encodeToSigned4096m2048(-2046)
+# encodeToSigned4096m2048(-2045)
+# encodeToSigned4096m2048(-5)
+
+# decodeSignedStr("w5")
+# decodeSignedStr("_Z")
+
+decodeSignedStr(encodeToSigned4096m2048(0))
+decodeSignedStr(encodeToSigned4096m2048(5))
+decodeSignedStr(encodeToSigned4096m2048(2046))
+decodeSignedStr(encodeToSigned4096m2048(2047))
+decodeSignedStr(encodeToSigned4096m2048(2048))
+
+decodeSignedStr(encodeToSigned4096m2048(-2047))
+decodeSignedStr(encodeToSigned4096m2048(-2046))
+decodeSignedStr(encodeToSigned4096m2048(-2045))
+decodeSignedStr(encodeToSigned4096m2048(-5))
+print("error expected")
+decodeSignedStr(encodeToSigned4096m2048(-2048))
