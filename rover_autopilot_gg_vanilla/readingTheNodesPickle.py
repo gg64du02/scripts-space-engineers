@@ -123,6 +123,16 @@ for node in nodes:
             listValueFor_dictOfRef.append(-1)
     dictOfRef[key] = listValueFor_dictOfRef
 
+def convertToRangeForUnsignedConv(pointOnPlanet):
+    PR = 30000
+    # print(pointOnPlanet[0])
+    # print(pointOnPlanet[0]*1024/PR)
+    # print(round(pointOnPlanet[0]*1024/PR))
+    x = round(pointOnPlanet[0]*1024/PR)
+    y = round(pointOnPlanet[1]*1024/PR)
+    z = round(pointOnPlanet[2]*1024/PR)
+    return (x,y,z)
+
 
 dictToToBeEncoded = {}
 # checking if counting ?
@@ -132,3 +142,5 @@ for node in nodes:
     print("key", key)
     print("values", values)
     print("index",dictNodesIndex[key])
+    print(convertToRangeForUnsignedConv(key))
+    print()
