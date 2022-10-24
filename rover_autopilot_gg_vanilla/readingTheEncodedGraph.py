@@ -3,8 +3,97 @@ encodedGraph = "FFg0g00X00000X0|CLg0g00W00000W0|BMg0g00W00000X0|zjg0g00X00000X0|
 PR = 30000
 
 print()
+def decodeAsCharNumberMax64(character):
+    # print("number:"+str(number))
+
+    # print("character:",character)
+    numberToProcess = ord(character)
+    # print("numberToProcess:",numberToProcess)
+
+    resultNumberUnder64 = 0
+
+
+    if(character=="-"):
+        resultNumberUnder64 = 62
+        return resultNumberUnder64
+    if(character=="_"):
+        resultNumberUnder64 = 63
+        return resultNumberUnder64
+
+    # "0" "9" 48 58     0 9       58= 48 +10
+    # "A" "Z" 65 90     36 62     91= 65 + 26
+    # "a" "z" 97 122    10 35     122
+
+    if(numberToProcess<58):
+        # 48 is "0"
+        resultNumberUnder64 = numberToProcess - 48
+        return resultNumberUnder64
+    if(numberToProcess<(90+1)):
+        # 97 is "A"
+        resultNumberUnder64 = numberToProcess - (90+1) + 26 + 36
+        return resultNumberUnder64
+    if(numberToProcess<(122+1)):
+        # 97 is "a"
+        resultNumberUnder64 = numberToProcess - (122+1) + 10 + 26
+        return resultNumberUnder64
+
+
+
+
+    return resultNumberUnder64
+def decodeSignedStr(EncodedStr):
+    if(len(EncodedStr)!=2):
+        print("if(len(EncodedStr)!=2):")
+        print("ERROR")
+        exit()
+    firstChar = EncodedStr[0]
+    secondChar = EncodedStr[1]
+    intFirstDecoded = decodeAsCharNumberMax64(firstChar)
+    intSecondDecoded = decodeAsCharNumberMax64(secondChar)
+
+    print("intFirstDecoded",intFirstDecoded)
+    print("intSecondDecoded",intSecondDecoded)
+
+    signNumber = intFirstDecoded * 64 + intSecondDecoded
+
+    print("signNumber",signNumber)
+
+    minus2048 = signNumber // 2048
+
+    print("minus2048",minus2048)
+
+    if(minus2048 == 1):
+        pass
+        resultInt = - (signNumber - 2048)
+    else:
+        resultInt = signNumber
+
+    print("resultInt",resultInt)
+    print("=============================")
+
+    resultInt = int(resultInt)
+
+    return resultInt
+
+def decoded___str(strToDecode):
+
+    firstCar = strToDecode[0]
+    secondCar = strToDecode[1]
+    thirdCar = strToDecode[2]
+
+    firstInt = decodeAsCharNumberMax64(firstCar)
+    secondInt = decodeAsCharNumberMax64(secondCar)
+    thirdInt = decodeAsCharNumberMax64(thirdCar)
+
+    resultInt = firstInt*4096 + secondInt * 64 + thirdInt * 1
+
+    print("resultInt",resultInt)
+
+    return resultInt
 
 listOfNodesWithRef = encodedGraph.split('|')
+
+dictOfNodes = {}
 
 for nodeWithRef in listOfNodesWithRef:
     if(nodeWithRef!=''):
@@ -12,15 +101,43 @@ for nodeWithRef in listOfNodesWithRef:
         nodePositionStr = nodeWithRef[0:6]
         print("nodePositionStr",nodePositionStr)
         print("len(nodePositionStr)",len(nodePositionStr))
+
+        x = decodeSignedStr(nodePositionStr[0:2])
+        y = decodeSignedStr(nodePositionStr[2:4])
+        z = decodeSignedStr(nodePositionStr[4:6])
+
+        print(x,y,z)
+
+        key = (x,y,z)
+
+        print("key",key)
+
         # nodePosition?
         nodeRefStr = nodeWithRef[6:]
         print("nodeRefStr",nodeRefStr)
         print("len(nodeRefStr)",len(nodeRefStr))
+
+        numberOfRefs = len(nodeRefStr)//3
+        print("numberOfRefs",numberOfRefs)
+        listOfRefs = []
+        for indexe in range(numberOfRefs):
+            print("indexe",indexe)
+            toDecodeStr = nodeRefStr[indexe*3:(indexe+1)*3]
+            print("toDecodeStr",toDecodeStr)
+
+            decodedIndex=decoded___str(toDecodeStr)
+            listOfRefs.append(decodedIndex)
+
+
+        dictOfNodes[key] = listOfRefs
+
         print("================================")
 
         if(len(nodePositionStr)%6!=0):
+            print("error")
             exit()
         if(len(nodeRefStr)%3!=0):
+            print("error")
             exit()
 
 print()
