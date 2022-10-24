@@ -77,13 +77,24 @@ def encodeAsStringNumberMax64(number):
 
 def encodeAsString___Range(number):
 
+    print("number",number)
+
     # max range is 0-262 144
-    first_part = encodeAsStringNumberMax64(number // 4096)
-    second_part = encodeAsStringNumberMax64(number // 64)
-    third_part = encodeAsStringNumberMax64(number % 64)
+    first_int = number // 4096
+    second_int = (number-(first_int*4096)) // 64
+    third_part = (number-(first_int*4096+second_int*64)) // 64
+
+    # print("first_int",first_int)
+    # print("second_int",second_int)
+    # print("third_part",third_part)
+
+    first_part = encodeAsStringNumberMax64(first_int)
+    second_part = encodeAsStringNumberMax64(second_int)
+    third_part = encodeAsStringNumberMax64(third_part)
 
     # print("first_part",first_part)
     # print("second_part",second_part)
+    # print("third_part",third_part)
 
     resultEncodeStr = str(first_part) + str(second_part) + str(third_part)
 
@@ -344,9 +355,14 @@ for node in nodes:
 
 
     for index in dictOfRef[key]:
-        if(index>4095):
+        # if(index>4095):
+        #     print(index)
+        tmpCheckingFunction =  encodeAsString___Range(index)
+        if(len(tmpCheckingFunction)%3!=0):
+            print("if(len(tmpCheckingFunction)%3!=0):")
+            print("tmpCheckingFunction",tmpCheckingFunction)
             print(index)
-        resultStr = resultStr + encodeAsString___Range(index)
+        resultStr = resultStr + tmpCheckingFunction
 
     # # values processing
     # for value in values:
