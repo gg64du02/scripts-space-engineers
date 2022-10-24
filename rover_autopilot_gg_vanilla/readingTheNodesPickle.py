@@ -75,6 +75,21 @@ def encodeAsStringNumberMax64(number):
 
     return resultEncodeStr
 
+def encodeAsString___Range(number):
+
+    # max range is 0-262 144
+    first_part = encodeAsStringNumberMax64(number // 4096)
+    second_part = encodeAsStringNumberMax64(number // 64)
+    third_part = encodeAsStringNumberMax64(number % 64)
+
+    # print("first_part",first_part)
+    # print("second_part",second_part)
+
+    resultEncodeStr = str(first_part) + str(second_part) + str(third_part)
+
+    # resultEncodeStr = ""
+    return resultEncodeStr
+
 def encodeAsString__Range(number):
 
     # max range is 0-4095
@@ -329,7 +344,9 @@ for node in nodes:
 
 
     for index in dictOfRef[key]:
-        resultStr = resultStr + encodeToSigned4096m2048(index)
+        if(index>4095):
+            print(index)
+        resultStr = resultStr + encodeAsString___Range(index)
 
     # # values processing
     # for value in values:
