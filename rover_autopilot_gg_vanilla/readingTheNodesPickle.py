@@ -82,7 +82,7 @@ def encodeAsString___Range(number):
     # max range is 0-262 144
     first_int = number // 4096
     second_int = (number-(first_int*4096)) // 64
-    third_part = (number-(first_int*4096+second_int*64)) // 64
+    third_part = (number-(first_int*4096+second_int*64)) % 64
 
     # print("first_int",first_int)
     # print("second_int",second_int)
@@ -97,6 +97,8 @@ def encodeAsString___Range(number):
     # print("third_part",third_part)
 
     resultEncodeStr = str(first_part) + str(second_part) + str(third_part)
+
+    print("resultEncodeStr",resultEncodeStr)
 
     # resultEncodeStr = ""
     return resultEncodeStr
@@ -371,5 +373,8 @@ for node in nodes:
     #         resultStr = resultStr + encodeToSigned4096m2048(valueSubInt)
 
     resultStr = resultStr + '|'
+
+    # print(resultStr)
+    # exit()
 
 print(resultStr)
