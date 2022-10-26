@@ -20,7 +20,7 @@ using VRageMath;
 
 namespace IngameScript
 {
-	partial class Program : MyGridProgram
+	partial class TA_mk4_with_mdk : MyGridProgram
 	{
 		//public PID PowerController = new PID(2, 0, .1, 1);
 		public string Animation = "=|=";
@@ -66,7 +66,7 @@ namespace IngameScript
 		RectangleF _viewport;
 		MySpriteDrawFrame spriteFrame;
 
-		public Program()
+		public TA_mk4_with_mdk()
 		{
 			// The constructor, called only once every session and
 			// always before any other method is called. Use it to
