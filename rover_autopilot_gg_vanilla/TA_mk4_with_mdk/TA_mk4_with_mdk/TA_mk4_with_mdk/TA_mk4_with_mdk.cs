@@ -20,7 +20,7 @@ using VRageMath;
 
 namespace IngameScript
 {
-	partial class TA_mk4_with_mdk : MyGridProgram
+	partial class Program : MyGridProgram
 	{
 		//public PID PowerController = new PID(2, 0, .1, 1);
 		public string Animation = "=|=";
@@ -55,7 +55,7 @@ namespace IngameScript
 		RectangleF _viewport;
 		MySpriteDrawFrame spriteFrame;
 
-		public TA_mk4_with_mdk()
+		public Program()
 		{
 			// The constructor, called only once every session and
 			// always before any other method is called. Use it to
@@ -144,11 +144,18 @@ namespace IngameScript
 				// string encodedIndexes = sub.Substring(5,sub.Length-3);
 				int end = sub.Length - 1;
 
+
+				//TODO: todo unsigned decoding
+				int xNodeInit = decodeSignedStr(sub.Substring(0, 2));
+				int yNodeInit = decodeSignedStr(sub.Substring(2, 2));
+				int zNodeInit = decodeSignedStr(sub.Substring(4, 2));
+				/*
 				int xNodeInit = decodeStr__NumberMax4095(sub.Substring(0, 2));
 				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
 				int zNodeInit = decodeStr__NumberMax4095(sub.Substring(4, 2));
-
+				*/
 				Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
+				Echo("position" + position);
 
 				if (end == 3)
 				{
@@ -157,7 +164,7 @@ namespace IngameScript
 				}
 				else
 				{
-
+					/*
 					// Echo("end:"+end);
 
 					// string encodedIndexes = sub.Substring(5,sub.Length-1);
@@ -187,6 +194,7 @@ namespace IngameScript
 						int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
 						nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
 					}
+					*/
 				}
 
 
@@ -197,6 +205,47 @@ namespace IngameScript
 			return true;
 		}
 
+
+		public int decodeSignedStr(string EncodedStr)
+		{
+			if (EncodedStr.Length != 2)
+			{
+				Echo("if (EncodedStr.Length != 2)");
+				Echo("ERROR");
+			}
+
+
+			char firstChar = EncodedStr[0];
+
+			char secondChar = EncodedStr[1];
+
+			int intFirstDecoded = decodeAsCharNumberMax64(firstChar);
+
+			int intSecondDecoded = decodeAsCharNumberMax64(secondChar);
+
+			Echo("intFirstDecoded" + intFirstDecoded);
+
+			Echo("intSecondDecoded" + intSecondDecoded);
+
+			int signNumber = intFirstDecoded * 64 + intSecondDecoded;
+
+			Echo("signNumber" + signNumber);
+
+			int minus2048 = (int)signNumber / 2048;
+
+			Echo("minus2048" + minus2048);
+
+			int resultInt = 0;
+
+			if (minus2048 == 1) { 
+				resultInt = -(signNumber - 2048);
+			}
+            else {
+				resultInt = signNumber;
+			}
+			
+			return resultInt;
+        }
 
 		public void Save()
 		{

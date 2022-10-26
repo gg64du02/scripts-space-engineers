@@ -20,7 +20,7 @@ namespace IngameScript.MDK
             // your script uses from the game, since they're not available outside of the game.
 
             // Create and configure the desired program.
-            var program = MDKFactory.CreateProgram<TA_mk4_with_mdk>();
+            var program = MDKFactory.CreateProgram<Program>();
             MDKFactory.Run(program);
         }
     }
