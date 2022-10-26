@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32901.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA_mk4_with_mdk", "TA_mk4_with_mdk\TA_mk4_with_mdk.csproj", "{E6563A43-7C03-473C-848A-695E8BBB417F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6563A43-7C03-473C-848A-695E8BBB417F}.Debug|x64.ActiveCfg = Debug|x64
+		{E6563A43-7C03-473C-848A-695E8BBB417F}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {37B28281-062C-41FA-9058-C99644D9B45E}
+	EndGlobalSection
+EndGlobal
