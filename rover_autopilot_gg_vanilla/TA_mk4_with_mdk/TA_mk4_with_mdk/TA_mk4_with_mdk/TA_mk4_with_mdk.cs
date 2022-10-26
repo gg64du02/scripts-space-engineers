@@ -148,7 +148,7 @@ namespace IngameScript
 				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
 				int zNodeInit = decodeStr__NumberMax4095(sub.Substring(4, 2));
 
-				Point position = new Point(xNodeInit, yNodeInit);
+				Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
 
 				if (end == 3)
 				{
@@ -300,12 +300,12 @@ namespace IngameScript
 		//link faces
 		//store all faces
 		//display the current closest point and neighbors to help with changing path
-		public void aStarPathFinding(Point startPoint, Point endPoint, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
+		public void aStarPathFinding(Vector3D startPoint, Vector3D endPoint, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
 		{
 			listPathNode = new List<Node>();
 
-			Point startPointGoal = startPoint;
-			Point finalPointGoal = endPoint;
+			Vector3D startPointGoal = startPoint;
+			Vector3D finalPointGoal = endPoint;
 
 
 			Echo("nodes.Count" + nodes.Count);
@@ -465,7 +465,7 @@ namespace IngameScript
 			string toCustomData = "";
 
 			int gps_number = 0;
-
+			/*
 			Point previousPointDebug = new Point(0, 0);
 
 			foreach (Node pathNode in data)
@@ -493,20 +493,21 @@ namespace IngameScript
 
 				gps_number = gps_number + 1;
 			}
+			*/
 			Me.CustomData = toCustomData;
 		}
 
 
 
-		public int closestNodeToPoint(Point thisPoint)
+		public int closestNodeToPoint(Vector3D thisPoint)
 		{
 			List<int> indexNodes = new List<int>();
 			List<double> indexRadiusSq = new List<double>();
 			foreach (Node node in nodes)
 			{
 
-				Point diffPos = new Point(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y);
-				int distSq = diffPos.X * diffPos.X + diffPos.Y * diffPos.Y;
+				Vector3D diffPos = new Vector3D(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y, node.position.Z - thisPoint.Z);
+				int distSq =(int) (diffPos.X * diffPos.X + diffPos.Y * diffPos.Y + diffPos.Z * diffPos.Z);
 				int radius = node.radius;
 				if (radius * radius > distSq)
 				{
@@ -528,7 +529,7 @@ namespace IngameScript
 
 		}
 
-		public double heuristic(Point a, Point b)
+		public double heuristic(Vector3D a, Vector3D b)
 		{
 
 			// return heuristicZero(a,b);
@@ -537,10 +538,10 @@ namespace IngameScript
 			// return distanceSquarred(a,b);
 		}
 
-		public double euclideanDistance(Point a, Point b)
+		public double euclideanDistance(Vector3D a, Vector3D b)
 		{
 
-			return Math.Sqrt((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y));
+			return Math.Sqrt((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y) + (b.Z - a.Z) * (b.Z - a.Z));
 		}
 
 		public double manhattanDistance(Point a, Point b)
@@ -708,6 +709,7 @@ namespace IngameScript
 				}
 				Echo("targetIsOnTheSameFace:" + targetIsOnTheSameFace);
 
+				/*
 				//targetIsOnTheSameFace = true;
 				if (targetIsOnTheSameFace == true)
 				{
@@ -742,17 +744,17 @@ namespace IngameScript
 
 					// Point startPointGoal  = new Point(1440,767);
 					// Point finalPointGoal = new Point(429,1284);
-					/*
-					Echo("nodes.Count:" + nodes.Count);
-					if (previousCalculatedFace != facenumberCalculated)
-					{
-						bool faceNodesInitResult = initTheCurrentFaceNodes(facenumberCalculated);
-
-						Echo("faceNodesInitResult:" + faceNodesInitResult);
-						previousCalculatedFace = facenumberCalculated;
-						return;
-					}
-					*/
+					
+					//Echo("nodes.Count:" + nodes.Count);
+					//if (previousCalculatedFace != facenumberCalculated)
+					//{
+					//	bool faceNodesInitResult = initTheCurrentFaceNodes(facenumberCalculated);
+				//
+					//	Echo("faceNodesInitResult:" + faceNodesInitResult);
+					//	previousCalculatedFace = facenumberCalculated;
+					//	return;
+					//}
+					
 
 					Point startPointGoal = pixelPosCalculated;
 					Point finalPointGoal = pixelPosCalculatedTarget;
@@ -850,7 +852,7 @@ namespace IngameScript
 					Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X) / 8;
 					DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue);
 				}
-
+				*/
 
 
 
@@ -1226,11 +1228,11 @@ namespace IngameScript
 		{
 			// voronoi vertex
 			public int index;
-			public Point position;
+			public Vector3D position;
 			public int radius;
 			public List<int> neighborsNodesIndex;
 
-			public Node(int index, Point position, int radius)
+			public Node(int index, Vector3D position, int radius)
 			{
 				this.index = index;
 				this.position = position;
@@ -1244,6 +1246,7 @@ namespace IngameScript
 				+ "radius is:" + radius;
 			}
 
+			/*
 			public Vector2 toVector2()
 			{
 				return new Vector2(position.X, position.Y);
@@ -1254,6 +1257,7 @@ namespace IngameScript
 				return new Vector2(position.Y, position.X);
 
 			}
+			*/
 
 		}
 
