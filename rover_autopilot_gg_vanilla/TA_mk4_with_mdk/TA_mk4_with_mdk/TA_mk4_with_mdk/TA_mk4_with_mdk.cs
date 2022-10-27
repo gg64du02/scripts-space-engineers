@@ -157,25 +157,25 @@ namespace IngameScript
 				Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
 				Echo("position" + position);
 
-				if (end == 3)
+				if (end == 6)
 				{
 					Echo("This node got no neighbors:" + indexNumber);
 					nodes.Add(new Node(indexNumber, position, 500));
 				}
 				else
 				{
-					/*
+					
 					// Echo("end:"+end);
 
 					// string encodedIndexes = sub.Substring(5,sub.Length-1);
-					string encodedIndexes = sub.Substring(4);
+					string encodedIndexes = sub.Substring(6);
 					// string encodedIndexes = sub.Substring(5,sub.Length);
 					//Echo(encodedIndexes);
 
 					string encodedNeighborsIndexes = encodedIndexes.Substring(0);
 					//Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
 
-					int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
+					//int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
 					//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
 
 					//int radius = 0;
@@ -185,16 +185,16 @@ namespace IngameScript
 					//int indexNumber = currentNodeIndexDecoded;
 					nodes.Add(new Node(indexNumber, position, 500));
 
-					int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 2;
+					int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 3;
 					//Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
 
 					foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
 					{
-						string tmpNeighborStr = encodedNeighborsIndexes.Substring(2 * tmpIndex, 2);
+						string tmpNeighborStr = encodedNeighborsIndexes.Substring(3 * tmpIndex, 3);
 						int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
 						nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
 					}
-					*/
+					
 				}
 
 
@@ -223,17 +223,17 @@ namespace IngameScript
 
 			int intSecondDecoded = decodeAsCharNumberMax64(secondChar);
 
-			Echo("intFirstDecoded" + intFirstDecoded);
+			//Echo("intFirstDecoded" + intFirstDecoded);
 
-			Echo("intSecondDecoded" + intSecondDecoded);
+			//Echo("intSecondDecoded" + intSecondDecoded);
 
 			int signNumber = intFirstDecoded * 64 + intSecondDecoded;
 
-			Echo("signNumber" + signNumber);
+			//Echo("signNumber" + signNumber);
 
 			int minus2048 = (int)signNumber / 2048;
 
-			Echo("minus2048" + minus2048);
+			//Echo("minus2048" + minus2048);
 
 			int resultInt = 0;
 
