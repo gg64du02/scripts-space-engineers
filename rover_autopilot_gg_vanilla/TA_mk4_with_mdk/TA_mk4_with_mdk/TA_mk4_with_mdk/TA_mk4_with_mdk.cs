@@ -55,6 +55,8 @@ namespace IngameScript
 		RectangleF _viewport;
 		MySpriteDrawFrame spriteFrame;
 
+		IEnumerator<bool> _stateMachine;
+
 		public Program()
 		{
 			// The constructor, called only once every session and
@@ -115,7 +117,12 @@ namespace IngameScript
 				_drawingSurface.SurfaceSize
 			);
 
-			initThePlanetGraph();
+			//initThePlanetGraph();
+
+			// Initialize our state machine
+			_stateMachine = RunStuffOverTime();
+
+			Runtime.UpdateFrequency |= UpdateFrequency.Once;
 		}
 
 		public bool initThePlanetGraph()
@@ -578,6 +585,165 @@ namespace IngameScript
 
 		}
 
+		public void RunStateMachine()
+		{
+			// If there is an active state machine, run its next instruction set.
+			if (_stateMachine != null)
+			{
+				// The MoveNext method is the most important part of this system. When you call
+				// MoveNext, your method is invoked until it hits a `yield return` statement.
+				// Once that happens, your method is halted and flow control returns _here_.
+				// At this point, MoveNext will return `true` since there's more code in your
+				// method to execute. Once your method reaches its end and there are no more
+				// yields, MoveNext will return false to signal that the method has completed.
+				// The actual return value of your yields are unimportant to the actual state
+				// machine.
+				bool hasMoreSteps = _stateMachine.MoveNext();
+
+				// If there are no more instructions, we stop and release the state machine.
+				if (hasMoreSteps)
+				{
+					// The state machine still has more work to do, so signal another run again, 
+					// just like at the beginning.
+					Runtime.UpdateFrequency |= UpdateFrequency.Once;
+				}
+				else
+				{
+					_stateMachine.Dispose();
+
+					// In our case we just want to run this once, so we set the state machine
+					// variable to null. But if we wanted to continously run the same method, we
+					// could as well do
+					// _stateMachine = RunStuffOverTime();
+					// instead.
+					_stateMachine = null;
+				}
+			}
+		}
+
+		public IEnumerator<bool> RunStuffOverTime()
+		{
+			// For the very first instruction set, we will just switch on the light.
+			//*_panelLight.Enabled = true;
+
+			// Then we will tell the script to stop execution here and let the game do it's
+			// thing. The time until the code continues on the next line after this yield return
+			// depends  on your State Machine Execution and the timer setup.
+			// The `true` portion is there simply because an enumerator needs to return a value
+			// per item, in our case the value simply has no meaning at all. You _could_ utilize
+			// it for a more advanced scheduler if you want, but that is beyond the scope of this
+			// tutorial.
+			yield return true;
+
+			int i = 0;
+			// The following would seemingly be an illegal operation, because the script would
+			// keep running until the instruction count overflows. However, using yield return,
+			// you can get around this limitation - without breaking the rules and while remaining
+			// performance friendly.
+			/*
+			while (true)
+			{
+				//_textPanel.WriteText(i.ToString());
+				i++;
+				// Like before, when this statement is executed, control is returned to the game.
+				// This way you can have a continuously polling script with complete state
+				// management, with very little effort.
+				yield return true;
+			}
+			*/
+
+			string s = encodedGraph;
+
+			string[] subs = s.Split('|');
+
+			// Echo("a:"+decodeAsCharNumberMax64('a'));
+			// Echo("aa:"+decodeStr__NumberMax4095("aa"));
+
+
+			int indexNumber = 0;
+
+			//for the function
+			nodes = new List<Node>();
+
+			foreach (string sub in subs)
+			{
+				//string[] subs = s.Split('\n');
+				Echo(sub);
+                if (sub == "")
+                {
+					continue;
+                }
+
+				Echo("indexNumber:" + indexNumber);
+
+				//Echo("sub.Length:" + sub.Length);
+				// string encodedIndexes = sub.Substring(5,sub.Length-3);
+				int end = sub.Length - 1;
+
+
+				//TODO: todo unsigned decoding
+				int xNodeInit = decodeSignedStr(sub.Substring(0, 2));
+				int yNodeInit = decodeSignedStr(sub.Substring(2, 2));
+				int zNodeInit = decodeSignedStr(sub.Substring(4, 2));
+				/*
+				int xNodeInit = decodeStr__NumberMax4095(sub.Substring(0, 2));
+				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
+				int zNodeInit = decodeStr__NumberMax4095(sub.Substring(4, 2));
+				*/
+				Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
+				Echo("position" + position);
+
+				if (end == 6)
+				{
+					Echo("This node got no neighbors:" + indexNumber);
+					nodes.Add(new Node(indexNumber, position, 500));
+				}
+				else
+				{
+
+					// Echo("end:"+end);
+
+					// string encodedIndexes = sub.Substring(5,sub.Length-1);
+					string encodedIndexes = sub.Substring(6);
+					// string encodedIndexes = sub.Substring(5,sub.Length);
+					//Echo(encodedIndexes);
+
+					string encodedNeighborsIndexes = encodedIndexes.Substring(0);
+					//Echo("encodedNeighborsIndexes:" + encodedNeighborsIndexes);
+
+					//int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
+					//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
+
+					//int radius = 0;
+					//TODO: encode this
+					int radius = 500;
+					// int indexNumber = int.Parse(subsub[2]);
+					//int indexNumber = currentNodeIndexDecoded;
+					nodes.Add(new Node(indexNumber, position, 500));
+
+					int numberOfSubstringNeighbors = encodedNeighborsIndexes.Length / 3;
+					//Echo("numberOfSubstringNeighbors:" + numberOfSubstringNeighbors);
+
+					foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
+					{
+						string tmpNeighborStr = encodedNeighborsIndexes.Substring(3 * tmpIndex, 3);
+						int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
+						nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
+					}
+                    if (indexNumber % 500 == 0) { 
+						yield return true;
+					}
+
+				}
+
+
+
+				indexNumber = indexNumber + 1;
+			}
+
+			yield return true;
+		}
+
 		public double heuristic(Vector3D a, Vector3D b)
 		{
 
@@ -623,7 +789,10 @@ namespace IngameScript
 			// The method itself is required, but the arguments above
 			// can be removed if not needed.
 
-
+			if ((updateSource & UpdateType.Once) == UpdateType.Once)
+			{
+				RunStateMachine();
+			}
 
 
 			// ==============================================================================
