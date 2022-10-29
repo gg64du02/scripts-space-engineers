@@ -568,18 +568,18 @@ namespace IngameScript
 				//Vector3D diffPos = new Vector3D(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y, node.position.Z - thisPoint.Z);
 				Vector3D diffPos = node.position - thisPoint;
 				double diffPosLengh = diffPos.Length();
-				Echo("diffPosLengh:" + diffPosLengh);
+				//Echo("diffPosLengh:" + diffPosLengh);
 				//ulong distSq =(ulong) (diffPos.X * diffPos.X + diffPos.Y * diffPos.Y + diffPos.Z * diffPos.Z);
 				double radius = (double)node.radius;
 				//Echo("nodes2");
-				if (radius > diffPosLengh)
-				{
+				//if (radius > diffPosLengh)
+				//{
 					//Echo("nodes3");
 					// Echo("node.index"+node.index);
 					// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
 					indexNodes.Add(nodes.IndexOf(node));
 					indexRadiusSq.Add(diffPosLengh);
-				}
+				//}
 			}
 			Echo("nodes4");
 			Echo("indexRadiusSq" + indexRadiusSq.Count);
@@ -701,7 +701,13 @@ namespace IngameScript
 				int yNodeInit = decodeStr__NumberMax4095(sub.Substring(2, 2));
 				int zNodeInit = decodeStr__NumberMax4095(sub.Substring(4, 2));
 				*/
-				Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
+
+				//Vector3D position = new Vector3D(xNodeInit, yNodeInit, zNodeInit);
+				int PR = 30000;
+				//multiplying factor
+				double muFa = PR / 1024;
+				Vector3D position = new Vector3D(muFa * xNodeInit, muFa * yNodeInit, muFa * zNodeInit);
+				//position = PR*Vector3D.Normalize(position);
 				Echo("position" + position);
 
 				if (end == 6)
