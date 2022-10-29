@@ -557,25 +557,36 @@ namespace IngameScript
 
 		public int closestNodeToPoint(Vector3D thisPoint)
 		{
+			Echo("thisPoint" + thisPoint);
 			List<int> indexNodes = new List<int>();
 			List<double> indexRadiusSq = new List<double>();
+			Echo("nodes.Count"+nodes.Count);
 			foreach (Node node in nodes)
 			{
+				//Echo("nodes1");
 
-				Vector3D diffPos = new Vector3D(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y, node.position.Z - thisPoint.Z);
-				int distSq =(int) (diffPos.X * diffPos.X + diffPos.Y * diffPos.Y + diffPos.Z * diffPos.Z);
-				int radius = node.radius;
-				if (radius * radius > distSq)
+				//Vector3D diffPos = new Vector3D(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y, node.position.Z - thisPoint.Z);
+				Vector3D diffPos = node.position - thisPoint;
+				double diffPosLengh = diffPos.Length();
+				Echo("diffPosLengh:" + diffPosLengh);
+				//ulong distSq =(ulong) (diffPos.X * diffPos.X + diffPos.Y * diffPos.Y + diffPos.Z * diffPos.Z);
+				double radius = (double)node.radius;
+				//Echo("nodes2");
+				if (radius > diffPosLengh)
 				{
+					//Echo("nodes3");
 					// Echo("node.index"+node.index);
 					// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
 					indexNodes.Add(nodes.IndexOf(node));
-					indexRadiusSq.Add(distSq);
+					indexRadiusSq.Add(diffPosLengh);
 				}
 			}
-
+			Echo("nodes4");
+			Echo("indexRadiusSq" + indexRadiusSq.Count);
 			int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
+			Echo("indexRadiusSq[minIndexRadius]" + indexRadiusSq[minIndexRadius]);
 
+			Echo("nodes5");
 			// Echo("minIndexRadius:"+minIndexRadius);
 
 			int indexOrClosestNode = indexNodes[minIndexRadius];
@@ -927,63 +938,35 @@ namespace IngameScript
 				}
 				Echo("targetIsOnTheSameFace:" + targetIsOnTheSameFace);
 
-				/*
-				//targetIsOnTheSameFace = true;
-				if (targetIsOnTheSameFace == true)
-				{
-					List<Node> aStarPathNodeList1 = new List<Node>();
-					List<Node> aStarPathNodeList2 = new List<Node>();
-
-					// // ok euclidian distance going across with no circles
-					// Point startPointGoal  = new Point(2043,1664);
-					// Point finalPointGoal = new Point(50,50);
-
-					//todo: checking for simplification
-					// Point startPointGoal  = new Point(2043,1664);//this2
-					// Point finalPointGoal = new Point(429,1284);
-					// Point finalPointGoal  = new Point(2043,1664);//this1
-					// Point startPointGoal   = new Point(429,1284);
-					// Point finalPointGoal  = new Point(1440,767);
-					// Point startPointGoal  = new Point(429,1284);
-
-					// need more test, seems like path finding is jumping around the big obstacle ?
-					//TODO: too many links ?
-					// Point startPointGoal  = new Point(1101,1791);
-					// Point finalPointGoal = new Point(586,1265);
+				
+				List<Node> aStarPathNodeList1 = new List<Node>();
+				List<Node> aStarPathNodeList2 = new List<Node>();
 
 
-					//ok, 3 point euclidian distance
-					// Point startPointGoal  = new Point(1871,2019);
-					// Point finalPointGoal = new Point(1733,1852);
+				//Point startPointGoal = pixelPosCalculated;
+				//Point finalPointGoal = pixelPosCalculatedTarget;
 
-					// //testing avoiding the canyons
-					// Point startPointGoal  = new Point(600,2043);
-					// Point finalPointGoal = new Point(1600,2043);
 
-					// Point startPointGoal  = new Point(1440,767);
-					// Point finalPointGoal = new Point(429,1284);
-					
-					//Echo("nodes.Count:" + nodes.Count);
-					//if (previousCalculatedFace != facenumberCalculated)
-					//{
-					//	bool faceNodesInitResult = initTheCurrentFaceNodes(facenumberCalculated);
-				//
-					//	Echo("faceNodesInitResult:" + faceNodesInitResult);
-					//	previousCalculatedFace = facenumberCalculated;
-					//	return;
-					//}
-					
+				Vector3D planetCenter = new Vector3D(0, 0, 0);
 
-					Point startPointGoal = pixelPosCalculated;
-					Point finalPointGoal = pixelPosCalculatedTarget;
+				bool planetDetected = RemoteControl.TryGetPlanetPosition(out planetCenter);
 
-					// Point finalPointGoal = new Point(1500,2060);
-					//Point startPointGoal = new Point(50, 50); ;
-					//Point finalPointGoal = new Point(500, 500);
-					//Point finalPointGoal = new Point(1000, 1000);
-					//Point finalPointGoal = new Point(1500, 1500);
+				Echo("planetCenter:" + planetCenter);
 
-					Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
+				Vector3D myPos = RemoteControl.GetPosition();
+				Echo("myPos:" + myPos);
+
+				Vector3D myRelPosOnplanet = myPos - planetCenter;
+
+				Echo("myRelPosOnplanet:" + myRelPosOnplanet);
+
+				Vector3D startPointGoal = Vector3D.Round(myRelPosOnplanet,1);
+
+				Vector3D targetV3DrelToPlanet = targetV3Dabs - planetCenter;
+
+				Vector3D finalPointGoal = Vector3D.Round(targetV3DrelToPlanet,1);
+
+				Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
 					Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 
 					if (nodes.Count == 0)
@@ -994,7 +977,7 @@ namespace IngameScript
 
 					aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
 					// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
-
+					/*
 					Echo("aStarPathNodeList1.Count:" + aStarPathNodeList1.Count);
 					Echo("aStarPathNodeList2.Count:" + aStarPathNodeList2.Count);
 					if (aStarPathNodeList1.Count != 0)
@@ -1069,7 +1052,6 @@ namespace IngameScript
 					Vector2 leftMyGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y - 24, (float)pixelPosCalculatedTarget.X) / 8;
 					Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X) / 8;
 					DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue);
-				}
 				*/
 
 
