@@ -364,7 +364,7 @@ namespace IngameScript
 			Vector3D finalPointGoal = endPoint;
 
 
-			Echo("nodes.Count" + nodes.Count);
+			//Echo("nodes.Count" + nodes.Count);
 
 			Echo("startPointGoal:" + startPointGoal);
 			Echo("finalPointGoal:" + finalPointGoal);
@@ -407,6 +407,7 @@ namespace IngameScript
 			fscore.Add(node, gscore[node] + heuristic(node.position, ourDestinationNode.position));
 
 			Echo("nodeStarting.index:" + nodeStarting.index);
+			Echo("ourDestinationNode.index:" + ourDestinationNode.index);
 
 
 			int debugCount = 0;
@@ -464,6 +465,7 @@ namespace IngameScript
 					foreach (Node neighbor in neighbors)
 					{
 						// Echo("here11");
+						Echo("neighbor.index:"+neighbor.index);
 						double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
 						if (closelist.Contains(neighbor) == true)
 						{
@@ -560,7 +562,7 @@ namespace IngameScript
 			Echo("thisPoint" + thisPoint);
 			List<int> indexNodes = new List<int>();
 			List<double> indexRadiusSq = new List<double>();
-			Echo("nodes.Count"+nodes.Count);
+			//Echo("nodes.Count"+nodes.Count);
 			foreach (Node node in nodes)
 			{
 				//Echo("nodes1");
@@ -581,12 +583,12 @@ namespace IngameScript
 					indexRadiusSq.Add(diffPosLengh);
 				//}
 			}
-			Echo("nodes4");
-			Echo("indexRadiusSq" + indexRadiusSq.Count);
+			//Echo("nodes4");
+			Echo("indexRadiusSq.Count" + indexRadiusSq.Count);
 			int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
 			Echo("indexRadiusSq[minIndexRadius]" + indexRadiusSq[minIndexRadius]);
 
-			Echo("nodes5");
+			//Echo("nodes5");
 			// Echo("minIndexRadius:"+minIndexRadius);
 
 			int indexOrClosestNode = indexNodes[minIndexRadius];
@@ -707,7 +709,7 @@ namespace IngameScript
 				//multiplying factor
 				double muFa = PR / 1024;
 				Vector3D position = new Vector3D(muFa * xNodeInit, muFa * yNodeInit, muFa * zNodeInit);
-				//position = PR*Vector3D.Normalize(position);
+				position = PR*Vector3D.Normalize(position);
 				Echo("position" + position);
 
 				if (end == 6)
@@ -960,11 +962,11 @@ namespace IngameScript
 				Echo("planetCenter:" + planetCenter);
 
 				Vector3D myPos = RemoteControl.GetPosition();
-				Echo("myPos:" + myPos);
+				Echo("myPos:" + Vector3D.Round(myPos,2));
 
 				Vector3D myRelPosOnplanet = myPos - planetCenter;
 
-				Echo("myRelPosOnplanet:" + myRelPosOnplanet);
+				Echo("myRelPosOnplanet:" + Vector3D.Round(myRelPosOnplanet,2));
 
 				Vector3D startPointGoal = Vector3D.Round(myRelPosOnplanet,1);
 
