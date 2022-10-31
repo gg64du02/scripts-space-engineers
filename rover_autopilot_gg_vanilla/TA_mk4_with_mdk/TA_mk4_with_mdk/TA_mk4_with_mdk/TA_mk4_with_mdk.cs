@@ -265,6 +265,16 @@ namespace IngameScript
 		}
 
 
+		public int decodeStr___NumberMax262144(string strMax262144)
+		{
+
+
+			int resultInt = decodeAsCharNumberMax64(strMax262144[0]) * 4096 + decodeAsCharNumberMax64(strMax262144[1]) * 64 +decodeAsCharNumberMax64(strMax262144[2]) * 1;
+
+			// # resultInt = 0
+			return resultInt;
+		}
+
 		public int decodeStr__NumberMax4095(string strMax4095)
 		{
 
@@ -746,7 +756,8 @@ namespace IngameScript
 					foreach (int tmpIndex in Enumerable.Range(0, numberOfSubstringNeighbors))
 					{
 						string tmpNeighborStr = encodedNeighborsIndexes.Substring(3 * tmpIndex, 3);
-						int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
+						//int tmpNeighborInt = decodeStr__NumberMax4095(tmpNeighborStr);
+						int tmpNeighborInt = decodeStr___NumberMax262144(tmpNeighborStr);
 						nodes[indexNumber].neighborsNodesIndex.Add(tmpNeighborInt);
 					}
                     if (indexNumber % 500 == 0) { 
