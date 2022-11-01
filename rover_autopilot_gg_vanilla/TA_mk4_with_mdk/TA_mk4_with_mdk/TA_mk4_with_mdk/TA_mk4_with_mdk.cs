@@ -530,25 +530,25 @@ namespace IngameScript
 
 			listPathNode = data;
 
-			string toCustomData = "";
+			string toCustomData = "points_gened = [";
 
 			int gps_number = 0;
-			/*
+			
 			Point previousPointDebug = new Point(0, 0);
 
 			foreach (Node pathNode in data)
 			{
 				// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
 				//toCustomData = toCustomData + pathNode.position;
-				Vector3D nodeConverted = convertPointToV3D(RemoteControl, 4, pathNode.position);
+				//Vector3D nodeConverted = convertPointToV3D(RemoteControl, 4, pathNode.position);
 
 				// MyWaypointInfo tmpWPINode  = new MyWaypointInfo("inter", nodeConverted);
-				MyWaypointInfo tmpWPINode = new MyWaypointInfo(gps_number.ToString(), nodeConverted);
+				//MyWaypointInfo tmpWPINode = new MyWaypointInfo(gps_number.ToString(), nodeConverted);
 
 				// toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
 
 				//toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
-
+				/*
 				if (previousPointDebug == new Point(0, 0))
 				{
 					previousPointDebug = pathNode.position;
@@ -558,10 +558,25 @@ namespace IngameScript
 					toCustomData = toCustomData + "displayLine([" + pathNode.position.X + "," + pathNode.position.Y + "],[" + previousPointDebug.X + "," + previousPointDebug.Y + "])" + '\n';
 					previousPointDebug = pathNode.position;
 				}
+				*/
+
+				float PRfactorReverse = 1024 / 30000;
+				//float PRfactorReverse = 1024 / 30000;
+				Vector3D pointTI = PRfactorReverse*Vector3D.Round(pathNode.position,3);
+                if (gps_number == 0)
+				{
+					toCustomData = toCustomData + "(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
+				}
+                else
+                {
+					toCustomData = toCustomData + ",(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
+				}
 
 				gps_number = gps_number + 1;
 			}
-			*/
+
+			toCustomData = toCustomData + "]";
+
 			Me.CustomData = toCustomData;
 		}
 
