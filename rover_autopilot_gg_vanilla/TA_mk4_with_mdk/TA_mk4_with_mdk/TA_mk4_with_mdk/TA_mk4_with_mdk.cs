@@ -384,7 +384,7 @@ namespace IngameScript
 
 			Node nodeStarting = nodes[startingIndex];
 
-			Echo("nodeStarting.position" + nodeStarting.position);
+			Echo("nodeStarting.position" + Vector3D.Round(nodeStarting.position,3));
 
 			//1 make an openlist containing only the starting node
 			List<Node> openlist = new List<Node>();
@@ -404,7 +404,7 @@ namespace IngameScript
 			// Node node = null;
 			Node node = nodeStarting;
 
-			Echo("ourDestinationNode.position" + ourDestinationNode.position);
+			Echo("ourDestinationNode.position" + Vector3D.Round(ourDestinationNode.position,1));
 
 			Dictionary<Node, double> gscore = new Dictionary<Node, double>();
 			Dictionary<Node, double> fscore = new Dictionary<Node, double>();
@@ -475,7 +475,7 @@ namespace IngameScript
 					foreach (Node neighbor in neighbors)
 					{
 						// Echo("here11");
-						Echo("neighbor.index:"+neighbor.index);
+						//Echo("neighbor.index:"+neighbor.index);
 						double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
 						if (closelist.Contains(neighbor) == true)
 						{
@@ -522,7 +522,7 @@ namespace IngameScript
 			while (came_from.ContainsKey(node))
 			{
 				// Echo("data.Add(node);");
-				// Echo("node.position:"+node.position);
+				Echo("node.position:"+Vector3D.Round(node.position, 1));
 				//Echo("gscore[node]:" + Math.Round(gscore[node], 3));
 				data.Add(node);
 				node = came_from[node];
@@ -596,7 +596,7 @@ namespace IngameScript
 			//Echo("nodes4");
 			Echo("indexRadiusSq.Count" + indexRadiusSq.Count);
 			int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
-			Echo("indexRadiusSq[minIndexRadius]" + indexRadiusSq[minIndexRadius]);
+			Echo("indexRadiusSq[]" + Math.Round(indexRadiusSq[minIndexRadius],1));
 
 			//Echo("nodes5");
 			// Echo("minIndexRadius:"+minIndexRadius);
