@@ -560,9 +560,10 @@ namespace IngameScript
 				}
 				*/
 
-				float PRfactorReverse = 1024 / 30000;
-				//float PRfactorReverse = 1024 / 30000;
-				Vector3D pointTI = PRfactorReverse*Vector3D.Round(pathNode.position,3);
+				double PRfactorReverse = 1024.0 / 30000.0;
+
+				Echo("PRfactorReverse:" + PRfactorReverse);
+				Vector3D pointTI = Vector3D.Round(PRfactorReverse * pathNode.position,3);
                 if (gps_number == 0)
 				{
 					toCustomData = toCustomData + "(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
