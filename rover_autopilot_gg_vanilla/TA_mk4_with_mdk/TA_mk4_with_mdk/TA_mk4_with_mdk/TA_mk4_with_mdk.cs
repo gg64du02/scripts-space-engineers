@@ -58,7 +58,7 @@ namespace IngameScript
 		IEnumerator<bool> _stateMachine;
 
 		int startInt = -1;
-		int EndInt = -1;
+		int endInt = -1;
 
 		int schedulerCounter = 0;
 
@@ -590,44 +590,47 @@ namespace IngameScript
 
 
 
-		public int closestNodeToPoint(Vector3D thisPoint)
+		public Point closestNodeToPoint(Vector3D thisPoint1, Vector3D thisPoint2)
 		{
-			Echo("thisPoint" + thisPoint);
+			Echo("thisPoint1" + thisPoint1);
 			List<int> indexNodes = new List<int>();
-			List<double> indexRadiusSq = new List<double>();
+			List<double> indexRadius1 = new List<double>();
+			List<double> indexRadius2 = new List<double>();
 			//Echo("nodes.Count"+nodes.Count);
 			foreach (Node node in nodes)
 			{
-				//Echo("nodes1");
+				Vector3D diffPos1 = node.position - thisPoint1;
+				double diffPosLengh1 = diffPos1.Length();
 
-				//Vector3D diffPos = new Vector3D(node.position.X - thisPoint.X, node.position.Y - thisPoint.Y, node.position.Z - thisPoint.Z);
-				Vector3D diffPos = node.position - thisPoint;
-				double diffPosLengh = diffPos.Length();
-				//Echo("diffPosLengh:" + diffPosLengh);
-				//ulong distSq =(ulong) (diffPos.X * diffPos.X + diffPos.Y * diffPos.Y + diffPos.Z * diffPos.Z);
-				double radius = (double)node.radius;
-				//Echo("nodes2");
-				//if (radius > diffPosLengh)
-				//{
-					//Echo("nodes3");
-					// Echo("node.index"+node.index);
-					// Echo("nodes.IndexOf(node):"+nodes.IndexOf(node));
-					indexNodes.Add(nodes.IndexOf(node));
-					indexRadiusSq.Add(diffPosLengh);
-				//}
+				Vector3D diffPos2 = node.position - thisPoint2;
+				double diffPosLengh2 = diffPos2.Length();
+
+				indexNodes.Add(nodes.IndexOf(node));
+				indexRadius1.Add(diffPosLengh1);
+				indexRadius2.Add(diffPosLengh2);
+
 			}
-			//Echo("nodes4");
-			Echo("indexRadiusSq.Count" + indexRadiusSq.Count);
-			int minIndexRadius = indexRadiusSq.IndexOf(indexRadiusSq.Min());
-			Echo("indexRadiusSq[]" + Math.Round(indexRadiusSq[minIndexRadius],1));
+
+			Echo("indexRadius1.Count" + indexRadius1.Count);
+			int minIndexRadius1 = indexRadius1.IndexOf(indexRadius1.Min());
+			Echo("indexRadius1[]" + Math.Round(indexRadius1[minIndexRadius1], 1));
+
+			Echo("indexRadius2.Count" + indexRadius2.Count);
+			int minIndexRadius2 = indexRadius2.IndexOf(indexRadius2.Min());
+			Echo("indexRadius2[]" + Math.Round(indexRadius2[minIndexRadius2], 1));
 
 			//Echo("nodes5");
 			// Echo("minIndexRadius:"+minIndexRadius);
 
-			int indexOrClosestNode = indexNodes[minIndexRadius];
-			Echo("indexOrClosestNode:" + indexOrClosestNode);
+			int indexOrClosestNode1 = indexNodes[minIndexRadius1];
+			Echo("indexOrClosestNode1:" + indexOrClosestNode1);
 
-			return indexOrClosestNode;
+			int indexOrClosestNode2 = indexNodes[minIndexRadius2];
+			Echo("indexOrClosestNode2:" + indexOrClosestNode2);
+
+			Point outputInts = new Point(indexOrClosestNode1, indexOrClosestNode2);
+
+			return outputInts;
 
 		}
 
@@ -950,6 +953,9 @@ namespace IngameScript
 
 				// }
 
+				startInt = -1;
+				endInt = -1;
+
 			}
 			else
 			{
@@ -1026,10 +1032,15 @@ namespace IngameScript
 					return;
 				}
 
+				if (schedulerCounter == 3)
+				{
+					Point outpoutClosestNodeFunc = closestNodeToPoint(startPointGoal, finalPointGoal);
+					startInt = outpoutClosestNodeFunc.X;
+					endInt = outpoutClosestNodeFunc.Y;
+				}
+
 				if (schedulerCounter == 5)
 				{
-					startInt = closestNodeToPoint(startPointGoal);
-					EndInt = closestNodeToPoint(finalPointGoal);
 					schedulerCounter = 0;
 				}
 
@@ -1042,10 +1053,9 @@ namespace IngameScript
 				//aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
 				if (startInt >= 0)
                 {
-					if(EndInt >= 0)
+					if(endInt >= 0)
 					{
-						aStarPathFinding(startInt, EndInt, out aStarPathNodeList1, out gscore1);
-
+						aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
 					}
                 }
 
