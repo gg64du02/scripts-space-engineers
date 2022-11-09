@@ -57,6 +57,11 @@ namespace IngameScript
 
 		IEnumerator<bool> _stateMachine;
 
+		int startInt = -1;
+		int EndInt = -1;
+
+		int schedulerCounter = 0;
+
 		public Program()
 		{
 			// The constructor, called only once every session and
@@ -81,7 +86,8 @@ namespace IngameScript
 
 			theCockpit = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyCockpit) as IMyCockpit;
 
-			Runtime.UpdateFrequency = UpdateFrequency.Update10;
+			//Runtime.UpdateFrequency = UpdateFrequency.Update10;
+			Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
 
 
@@ -366,21 +372,22 @@ namespace IngameScript
 		//link faces
 		//store all faces
 		//display the current closest point and neighbors to help with changing path
-		public void aStarPathFinding(Vector3D startPoint, Vector3D endPoint, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
+		public void aStarPathFinding(int startIndex, int endIndex, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
 		{
 			listPathNode = new List<Node>();
 
-			Vector3D startPointGoal = startPoint;
-			Vector3D finalPointGoal = endPoint;
+			//Vector3D startPointGoal = startPoint;
+			//Vector3D finalPointGoal = endPoint;
 
 
 			//Echo("nodes.Count" + nodes.Count);
 
-			Echo("startPointGoal:" + startPointGoal);
-			Echo("finalPointGoal:" + finalPointGoal);
+			//Echo("startPointGoal:" + startPointGoal);
+			//Echo("finalPointGoal:" + finalPointGoal);
 
 			//TODO: trouver le bon node de start pour avoir l'heuristique correspondant
-			int startingIndex = closestNodeToPoint(startPointGoal);
+			//int startingIndex = closestNodeToPoint(startPointGoal);
+			int startingIndex = startIndex;
 
 			Node nodeStarting = nodes[startingIndex];
 
@@ -394,7 +401,8 @@ namespace IngameScript
 			//2 make an empty closed list
 			List<Node> closelist = new List<Node>();
 
-			int endingIndex = closestNodeToPoint(finalPointGoal);
+			//int endingIndex = closestNodeToPoint(finalPointGoal);
+			int endingIndex = endIndex;
 
 			List<double> nodeGvalue = new List<double>();
 
@@ -521,8 +529,7 @@ namespace IngameScript
 
 			while (came_from.ContainsKey(node))
 			{
-				// Echo("data.Add(node);");
-				Echo("node.position:"+Vector3D.Round(node.position, 1));
+				//Echo("node.positionR:"+Vector3D.Round(node.position, 0));
 				//Echo("gscore[node]:" + Math.Round(gscore[node], 3));
 				data.Add(node);
 				node = came_from[node];
@@ -562,8 +569,8 @@ namespace IngameScript
 
 				double PRfactorReverse = 1024.0 / 30000.0;
 
-				Echo("PRfactorReverse:" + PRfactorReverse);
-				Vector3D pointTI = Vector3D.Round(PRfactorReverse * pathNode.position,3);
+				//Echo("PRfactorReverse:" + PRfactorReverse);
+				Vector3D pointTI = Vector3D.Round(PRfactorReverse * pathNode.position,0);
                 if (gps_number == 0)
 				{
 					toCustomData = toCustomData + "(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
@@ -840,6 +847,8 @@ namespace IngameScript
 				RunStateMachine();
 			}
 
+			schedulerCounter = schedulerCounter + 1;
+
 
 			// ==============================================================================
 
@@ -927,6 +936,7 @@ namespace IngameScript
 			Echo("nodes.CountMain:" + nodes.Count);
 
 
+
 			if (myTerrainTarget == new Vector3D(0, 0, 0))
 			{
 
@@ -943,10 +953,16 @@ namespace IngameScript
 			}
 			else
 			{
-
 				Vector3D targetV3Dabs = myWaypointInfoTerrainTarget.Coords;
 
 				Echo("targetV3Dabs:" + Vector3D.Round(targetV3Dabs, 3));
+
+				/*
+				if (schedulerCounter != 0)
+				{
+					return;
+				}
+				*/
 
 
 
@@ -1002,92 +1018,36 @@ namespace IngameScript
 				Vector3D finalPointGoal = Vector3D.Round(targetV3DrelToPlanet,1);
 
 				Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
-					Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
+				Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 
-					if (nodes.Count == 0)
-					{
-						Echo("no nodes init, no path available!");
-						return;
-					}
+				if (nodes.Count == 0)
+				{
+					Echo("no nodes init, no path available!");
+					return;
+				}
 
-					aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
-					// aStarPathFinding(finalPointGoal,startPointGoal, out aStarPathNodeList2, out gscore2);
-					/*
-					Echo("aStarPathNodeList1.Count:" + aStarPathNodeList1.Count);
-					Echo("aStarPathNodeList2.Count:" + aStarPathNodeList2.Count);
-					if (aStarPathNodeList1.Count != 0)
-					{
-						Echo("gscore1_max:" + Math.Round(gscore1[aStarPathNodeList1[0]], 3));
-						// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
-						// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-						Echo("nextPointToGo:" + aStarPathNodeList1[aStarPathNodeList1.Count - 1].position);
-						Echo("aStarPathNodeList1.Count:" + aStarPathNodeList1.Count);
-					}
-					if (aStarPathNodeList2.Count != 0)
-					{
-						Echo("gscore2_max:" + Math.Round(gscore2[aStarPathNodeList2[0]], 3));
-						// Echo("aStarPathNodeList1[0].position:"+aStarPathNodeList1[0].position);
-						// Echo("aStarPathNodeList1[aStarPathNodeList1.Count-1].position:"+aStarPathNodeList1[aStarPathNodeList1.Count-1].position);
-						Echo("nextPointToGo:" + aStarPathNodeList2[aStarPathNodeList2.Count - 1].position);
-						Echo("aStarPathNodeList2.Count:" + aStarPathNodeList2.Count);
-					}
-					// Point bestPositionToGo = new Point(0,0);
-					// if(gscore1[aStarPathNodeList1[0]] < gscore2[aStarPathNodeList2[0]]){
-					// bestPositionToGo = aStarPathNodeList1[aStarPathNodeList1.Count-1].position;
-					// }
-					// else{
-					// if(aStarPathNodeList1.Count != 1){
-					// bestPositionToGo = aStarPathNodeList2[1].position;	
-					// }
-					// else{
-					// bestPositionToGo = aStarPathNodeList2[0].position;	
-					// }
-					// }
+				if (schedulerCounter == 5)
+				{
+					startInt = closestNodeToPoint(startPointGoal);
+					EndInt = closestNodeToPoint(finalPointGoal);
+					schedulerCounter = 0;
+				}
 
-					// public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
-					if (aStarPathNodeList1.Count > 2)
-					{
-						targetV3Dabs = convertPointToV3D(RemoteControl, facenumberCalculated, aStarPathNodeList1[aStarPathNodeList1.Count - 1].position);
-						// targetV3Dabs  = convertPointToV3D(RemoteControl, facenumberCalculated, bestPositionToGo);
-					}
-					else
-					{
-						targetV3Dabs = new Vector3D(0, 0, 0);
-
-					}
-					Echo("aStarPathNodeList1[0].position:" + aStarPathNodeList1[0].position);
-					Echo("aStarPathNodeList1[aStarPathNodeList1.Count - 1].position:" + aStarPathNodeList1[aStarPathNodeList1.Count - 1].position);
-
-					// DrawLine(ref spriteFrame, new Vector2(256,100), new Vector2(256,160), 30.0f, Color.DarkRed);
-					Vector2 startVector2 = new Vector2(0, 0);
-					Vector2 endVector2 = new Vector2(0, 0);
-					if (aStarPathNodeList1.Count >= 2)
-					{
-						foreach (int indexNodeTmp in Enumerable.Range(0, aStarPathNodeList1.Count))
-						{
-							if (indexNodeTmp != aStarPathNodeList1.Count - 1)
-							{
-								//Echo("aStarPathNodeList1[" + indexNodeTmp + "]:" + aStarPathNodeList1[indexNodeTmp]);
-								startVector2 = aStarPathNodeList1[indexNodeTmp].toVector2sax() / 8;
-								endVector2 = aStarPathNodeList1[indexNodeTmp + 1].toVector2sax() / 8;
-								DrawLine(ref spriteFrame, startVector2, endVector2, 3.0f, Color.DarkRed);
-								// startVector2 = aStarPathNodeList1[indexNodeTmp].position;
-								// endVector2 = aStarPathNodeList1[indexNodeTmp+1].position;
-							}
-						}
-					}
-					if (aStarPathNodeList1.Count == 1)
-					{
-						Vector2 leftLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y - 24, aStarPathNodeList1[0].position.X) / 8;
-						Vector2 rightLastPointVector2 = new Vector2(aStarPathNodeList1[0].position.Y + 24, aStarPathNodeList1[0].position.X) / 8;
-						DrawLine(ref spriteFrame, leftLastPointVector2, rightLastPointVector2, 6.0f, Color.Green);
-					}
+				if (schedulerCounter > 6)
+				{
+					schedulerCounter = 0;
+				}
 
 
-					Vector2 leftMyGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y - 24, (float)pixelPosCalculatedTarget.X) / 8;
-					Vector2 rightGoalVector2 = new Vector2((float)pixelPosCalculatedTarget.Y + 24, (float)pixelPosCalculatedTarget.X) / 8;
-					DrawLine(ref spriteFrame, leftMyGoalVector2, rightGoalVector2, 6.0f, Color.MediumBlue);
-				*/
+				//aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
+				if (startInt >= 0)
+                {
+					if(EndInt >= 0)
+					{
+						aStarPathFinding(startInt, EndInt, out aStarPathNodeList1, out gscore1);
+
+					}
+                }
 
 
 
