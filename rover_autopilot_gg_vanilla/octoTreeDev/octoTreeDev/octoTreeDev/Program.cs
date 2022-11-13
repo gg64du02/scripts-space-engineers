@@ -43,6 +43,134 @@ namespace IngameScript
         //
         // to learn more about ingame scripts.
 
+        Vector3I overallBounds;
+        Node rootNode = new Node();
+
+        List<Vector3D> listPointsNotSorted = new List<Vector3D>();
+        List<Vector3D> listPointsSortedForRoot = new List<Vector3D>();
+
+        public class Bound
+        {
+            Vector3D minBound;
+            Vector3D maxBound;
+            Vector3I BoundDim;
+
+            int volumeCovered;
+            public Bound(Vector3I bound)
+            {
+
+            }
+
+        }
+
+        public class Node
+        {
+
+            int axisDepth = -1;
+            //0 is x
+            //1 is y
+            //2 is z
+            int intAxis = -1;
+
+            Bound bounds;
+
+            Vector3D Point = new Vector3D(0, 0, 0);
+
+            bool leaf = false;
+            Node left;
+            Node right;
+            public Node(Bound bound)
+            {
+
+            }
+
+
+
+            public Node(Vector3D pointLeaf)
+            {
+                Point = pointLeaf;
+                leaf = true;
+            }
+            public Node()
+            {
+                //placeholder
+            }
+            public Node(List<Vector3D> listToBeSorted)
+            {
+                //TODO: listToBeSorted sort this on an axis (0 for root)
+                //Echo("" + listToBeSorted.Count);
+                axisDepth = axisDepth + 1;
+                intAxis = axisDepth % 3;
+                if (listToBeSorted.Count <= 2)
+                {
+                    if(listToBeSorted.Count == 1)
+                    {
+                        //TODO: store a point
+                        //left bias
+                        Point = listToBeSorted[0];
+                    }
+                    else
+                    {
+                        //store a point and make a leaf (Node) (left bias)
+                        Point = listToBeSorted[0];
+                        left = new Node(listToBeSorted[1]);
+                    }
+                }
+                else
+                {
+                    //TODO: store a point and make 2 Node
+
+                    int intIndexPoint = (listToBeSorted.Count - 1) / 2;
+
+                    int startLeft = 0;
+                    int endLeft = intIndexPoint - 1;
+
+                    int startRight = intIndexPoint + 1;
+                    int endtRight = listToBeSorted.Count - 1;
+
+                    List<Vector3D> subListLeft = listToBeSorted.GetRange(startLeft, endLeft);
+                    List<Vector3D> subListRight = listToBeSorted.GetRange(startRight, endtRight);
+
+                    Point = listToBeSorted[intIndexPoint];
+                    left = new Node(subListLeft);
+                    right = new Node(subListRight);
+
+
+                }
+            }
+
+
+        }
+
+
+        /*
+                    +------------+------------+
+                   /            /            /
+                  /            /            /
+                 /      5     /      6     /
+                /            /            /
+               +------------+------------+
+              /            /            /
+             /    1       /    2       /
+            /            /            /
+           /            /            /
+          +------------+------------+
+        
+                    +------------+------------+
+                   /            /            /
+                  /            /            /
+                 /      7     /      8     /
+                /            /            /
+               +------------+------------+
+              /            /            /
+             /    3       /    4       /
+            /            /            /
+           /            /            /
+          +------------+------------+
+         
+         */
+
+
         public Program()
         {
             // The constructor, called only once every session and
@@ -55,6 +183,27 @@ namespace IngameScript
             // It's recommended to set Runtime.UpdateFrequency 
             // here, which will allow your script to run itself without a 
             // timer block.
+
+            Vector3D point1 = new Vector3D(0, 0, 0);
+            Vector3D point2 = new Vector3D(-20, 20, 0);
+            Vector3D point3 = new Vector3D(-51, 21, 24);
+            Vector3D point4 = new Vector3D(21, 452, 32);
+            Vector3D point5 = new Vector3D(651, 782, 45);
+            Vector3D point6 = new Vector3D(-651, 128, 123);
+
+            listPointsNotSorted.Add(point1);
+            listPointsNotSorted.Add(point2);
+            listPointsNotSorted.Add(point3);
+            listPointsNotSorted.Add(point4);
+            listPointsNotSorted.Add(point5);
+            listPointsNotSorted.Add(point6);
+
+
+            Echo("test");
+
+            //rootNode = new Node();
+            rootNode = new Node(listPointsNotSorted);
+
         }
 
         public void Save()
