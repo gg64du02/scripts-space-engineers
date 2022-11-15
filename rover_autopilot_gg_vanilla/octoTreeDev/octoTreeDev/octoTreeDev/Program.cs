@@ -197,12 +197,20 @@ namespace IngameScript
             }
             public string GetDebuggerDisplay()
             {
-                string resultStr ="";
+                string resultStr = "";
                 resultStr = resultStr + "right" + right + "\n";
                 resultStr = resultStr + "left" + left + "\n";
                 resultStr = resultStr + "Point" + Point + "\n";
                 resultStr = resultStr + "axisDepth" + axisDepth + "\n";
                 resultStr = resultStr + "intAxis" + intAxis + "\n";
+                return resultStr;
+            }
+            public string GetDebuggerDisplayWithLeafs()
+            {
+                string resultStr = "";
+                resultStr = resultStr + GetDebuggerDisplay() + "\n";
+                resultStr = resultStr + "left" + left.GetDebuggerDisplay() + "\n";
+                resultStr = resultStr + "right" + right.GetDebuggerDisplay() + "\n";
                 return resultStr;
             }
 
@@ -296,7 +304,8 @@ namespace IngameScript
             //rootOctoTree = new OctoTree();
             rootOctoTree = new OctoTree(listPointsNotSorted);
 
-            Echo("" + rootOctoTree.GetDebuggerDisplay());
+            //Echo("" + rootOctoTree.GetDebuggerDisplay());
+            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
         }
     }
 }
