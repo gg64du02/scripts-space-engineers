@@ -62,6 +62,31 @@ namespace IngameScript
             }
 
         }
+        class SorterByAxisesOnVector3Dx : IComparer<Vector3D>
+        {
+            public int Compare(Vector3D x, Vector3D y)
+            {
+                return x.X.CompareTo(y.X);
+            }
+        }
+
+        class SorterByAxisesOnVector3Dy : IComparer<Vector3D>
+        {
+            public int Compare(Vector3D x, Vector3D y)
+            {
+                return x.Y.CompareTo(y.Y);
+            }
+        }
+        class SorterByAxisesOnVector3Dz : IComparer<Vector3D>
+        {
+            public int Compare(Vector3D x, Vector3D y)
+            {
+                return x.Z.CompareTo(y.Z);
+            }
+        }
+
+
+
 
         public class OctoTree
         {
@@ -74,16 +99,16 @@ namespace IngameScript
 
             Bound bounds;
 
-            Vector3D Point = new Vector3D(0, 0, 0);
+            public Vector3D Point = new Vector3D(0, 0, 0);
 
             bool leaf = false;
-            OctoTree left;
-            OctoTree right;
+            public OctoTree left;
+            public OctoTree right;
             public OctoTree(Bound bound)
             {
 
             }
-
+            
 
 
             public OctoTree(Vector3D pointLeaf)
@@ -101,41 +126,84 @@ namespace IngameScript
                 //Echo("" + listToBeSorted.Count);
                 axisDepth = axisDepth + 1;
                 intAxis = axisDepth % 3;
-                if (listToBeSorted.Count <= 2)
+                List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, intAxis);
+                if (listSorted.Count <= 2)
                 {
-                    if(listToBeSorted.Count == 1)
+                    if(listSorted.Count == 1)
                     {
                         //TODO: store a point
-                        Point = listToBeSorted[0];
+                        Point = listSorted[0];
                     }
                     else
                     {
                         //store a point and make a leaf (OctoTree) (left bias)
-                        Point = listToBeSorted[0];
-                        left = new OctoTree(listToBeSorted[1]);
+                        Point = listSorted[0];
+                        left = new OctoTree(listSorted[1]);
                     }
                 }
                 else
                 {
                     //TODO: store a point and make 2 OctoTree
 
-                    int intIndexPoint = (listToBeSorted.Count - 1) / 2;
+                    int intIndexPoint = (listSorted.Count - 1) / 2;
 
                     int startLeft = 0;
                     int endLeft = intIndexPoint - 1;
 
                     int startRight = intIndexPoint + 1;
-                    int endtRight = listToBeSorted.Count - 1;
+                    int endtRight = listSorted.Count - 1;
+                    
+                    //List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft);
+                    //List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight);
+                    //public System.Collections.Generic.List<T> GetRange (int index, int count);
 
-                    List<Vector3D> subListLeft = listToBeSorted.GetRange(startLeft, endLeft);
-                    List<Vector3D> subListRight = listToBeSorted.GetRange(startRight, endtRight);
-
-                    Point = listToBeSorted[intIndexPoint];
+                    List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft);
+                    List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight);
+                    
+                    Point = listSorted[intIndexPoint];
                     left = new OctoTree(subListLeft);
                     right = new OctoTree(subListRight);
 
-
+                    
                 }
+            }
+
+            public List<Vector3D> sortingOnSpecificAxises(List<Vector3D> listToSort, int axisOnWhichToSort) {
+                //
+                //
+                List<Vector3D> newResult = new List<Vector3D>();
+
+                if (axisOnWhichToSort == 0)
+                {
+                    SorterByAxisesOnVector3Dx storerX = new SorterByAxisesOnVector3Dx();
+                    listToSort.Sort(storerX);
+                }
+                if (axisOnWhichToSort == 1)
+                {
+                    SorterByAxisesOnVector3Dy storerY = new SorterByAxisesOnVector3Dy();
+                    listToSort.Sort(storerY);
+                }
+                if (axisOnWhichToSort == 2)
+                {
+                    SorterByAxisesOnVector3Dz storerZ = new SorterByAxisesOnVector3Dz();
+                    listToSort.Sort(storerZ);
+                }
+
+
+                //debug
+                return listToSort;
+
+                //return newResult;
+            }
+            public string GetDebuggerDisplay()
+            {
+                string resultStr ="";
+                resultStr = resultStr + "right" + right + "\n";
+                resultStr = resultStr + "left" + left + "\n";
+                resultStr = resultStr + "Point" + Point + "\n";
+                resultStr = resultStr + "axisDepth" + axisDepth + "\n";
+                resultStr = resultStr + "intAxis" + intAxis + "\n";
+                return resultStr;
             }
 
 
@@ -183,25 +251,6 @@ namespace IngameScript
             // here, which will allow your script to run itself without a 
             // timer block.
 
-            Vector3D point1 = new Vector3D(0, 0, 0);
-            Vector3D point2 = new Vector3D(-20, 20, 0);
-            Vector3D point3 = new Vector3D(-51, 21, 24);
-            Vector3D point4 = new Vector3D(21, 452, 32);
-            Vector3D point5 = new Vector3D(651, 782, 45);
-            Vector3D point6 = new Vector3D(-651, 128, 123);
-
-            listPointsNotSorted.Add(point1);
-            listPointsNotSorted.Add(point2);
-            listPointsNotSorted.Add(point3);
-            listPointsNotSorted.Add(point4);
-            listPointsNotSorted.Add(point5);
-            listPointsNotSorted.Add(point6);
-
-
-            Echo("test");
-
-            //rootOctoTree = new OctoTree();
-            rootOctoTree = new OctoTree(listPointsNotSorted);
 
         }
 
@@ -226,6 +275,28 @@ namespace IngameScript
             // 
             // The method itself is required, but the arguments above
             // can be removed if not needed.
+
+            Vector3D point1 = new Vector3D(0, 0, 0);
+            Vector3D point2 = new Vector3D(-20, 20, 0);
+            Vector3D point3 = new Vector3D(-51, 21, 24);
+            Vector3D point4 = new Vector3D(21, 452, 32);
+            Vector3D point5 = new Vector3D(651, 782, 45);
+            Vector3D point6 = new Vector3D(-651, 128, 123);
+
+            listPointsNotSorted.Add(point1);
+            listPointsNotSorted.Add(point2);
+            listPointsNotSorted.Add(point3);
+            listPointsNotSorted.Add(point4);
+            listPointsNotSorted.Add(point5);
+            listPointsNotSorted.Add(point6);
+
+
+            Echo("test");
+
+            //rootOctoTree = new OctoTree();
+            rootOctoTree = new OctoTree(listPointsNotSorted);
+
+            Echo("" + rootOctoTree.GetDebuggerDisplay());
         }
     }
 }
