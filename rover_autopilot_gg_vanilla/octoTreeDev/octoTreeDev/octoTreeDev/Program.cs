@@ -44,7 +44,7 @@ namespace IngameScript
         // to learn more about ingame scripts.
 
         Vector3I overallBounds;
-        OctoTree rootOctoTree = new OctoTree();
+        OctoTree rootOctoTree;
 
         List<Vector3D> listPointsNotSorted = new List<Vector3D>();
         List<Vector3D> listPointsSortedForRoot = new List<Vector3D>();
@@ -86,7 +86,7 @@ namespace IngameScript
         }
 
 
-
+        int debugInt = 0;
 
         public class OctoTree
         {
@@ -102,8 +102,8 @@ namespace IngameScript
             public Vector3D Point = new Vector3D(0, 0, 0);
 
             bool leaf = false;
-            public OctoTree left;
-            public OctoTree right;
+            public OctoTree left = null;
+            public OctoTree right = null;
             public OctoTree(Bound bound)
             {
 
@@ -214,6 +214,18 @@ namespace IngameScript
                 resultStr = resultStr + "right" + right.GetDebuggerDisplay() + "\n";
                 return resultStr;
             }
+            public string GetDebuggerDisplayWithLeafsRec()
+            {
+                string resultStr = "";
+                resultStr = resultStr + GetDebuggerDisplay() + "\n";
+                //if (axisDepth < 3) { 
+                //    resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafs() + "\n";
+                //    resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafs() + "\n";
+                //}
+                if (left != null) resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafs() + "\n";
+                if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafs() + "\n";
+                return resultStr;
+            }
 
 
         }
@@ -302,11 +314,32 @@ namespace IngameScript
 
             Echo("test");
 
-            //rootOctoTree = new OctoTree();
+            int N = 6;
+            //int N = 7;
+            //int N = 15;
+            //int N = 14;
+            //int N = 31;
+            //int N = 127;
+            listPointsNotSorted = new List<Vector3D>();
+            foreach (int testInt in Enumerable.Range(0, N))
+            {
+                listPointsNotSorted.Add(new Vector3D(testInt, testInt, testInt));
+            }
+
             rootOctoTree = new OctoTree(listPointsNotSorted,0);
+
 
             //Echo("" + rootOctoTree.GetDebuggerDisplay());
             Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
+            Echo("======================");
+            Echo("" + rootOctoTree.left.GetDebuggerDisplay());
+            Echo("" + rootOctoTree.right.GetDebuggerDisplay());
+            //Echo("" + rootOctoTree.right.right.right.GetDebuggerDisplay());
+            //Echo("" + rootOctoTree.right.right.right.right.right.GetDebuggerDisplay());
+            Echo("======================");
+            Echo("" + rootOctoTree.left.GetDebuggerDisplayWithLeafs());
+            Echo("" + rootOctoTree.right.GetDebuggerDisplayWithLeafs());
+            //Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
         }
     }
 }
