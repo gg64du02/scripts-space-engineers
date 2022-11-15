@@ -111,20 +111,21 @@ namespace IngameScript
             
 
 
-            public OctoTree(Vector3D pointLeaf)
+            public OctoTree(Vector3D pointLeaf, int axisD)
             {
                 Point = pointLeaf;
                 leaf = true;
+                axisDepth = axisD;
             }
             public OctoTree()
             {
                 //placeholder
             }
-            public OctoTree(List<Vector3D> listToBeSorted)
+            public OctoTree(List<Vector3D> listToBeSorted, int axisD)
             {
                 //TODO: listToBeSorted sort this on an axis (0 for root)
                 //Echo("" + listToBeSorted.Count);
-                axisDepth = axisDepth + 1;
+                axisDepth = axisD;
                 intAxis = axisDepth % 3;
                 List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, intAxis);
                 if (listSorted.Count <= 2)
@@ -138,7 +139,7 @@ namespace IngameScript
                     {
                         //store a point and make a leaf (OctoTree) (left bias)
                         Point = listSorted[0];
-                        left = new OctoTree(listSorted[1]);
+                        left = new OctoTree(listSorted[1], axisDepth + 1);
                     }
                 }
                 else
@@ -161,8 +162,8 @@ namespace IngameScript
                     List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight);
                     
                     Point = listSorted[intIndexPoint];
-                    left = new OctoTree(subListLeft);
-                    right = new OctoTree(subListRight);
+                    left = new OctoTree(subListLeft, axisDepth+1);
+                    right = new OctoTree(subListRight, axisDepth + 1);
 
                     
                 }
@@ -302,7 +303,7 @@ namespace IngameScript
             Echo("test");
 
             //rootOctoTree = new OctoTree();
-            rootOctoTree = new OctoTree(listPointsNotSorted);
+            rootOctoTree = new OctoTree(listPointsNotSorted,0);
 
             //Echo("" + rootOctoTree.GetDebuggerDisplay());
             Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
