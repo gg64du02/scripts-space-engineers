@@ -44,7 +44,7 @@ namespace IngameScript
         // to learn more about ingame scripts.
 
         Vector3I overallBounds;
-        Node rootNode = new Node();
+        OctoTree rootOctoTree = new OctoTree();
 
         List<Vector3D> listPointsNotSorted = new List<Vector3D>();
         List<Vector3D> listPointsSortedForRoot = new List<Vector3D>();
@@ -63,7 +63,7 @@ namespace IngameScript
 
         }
 
-        public class Node
+        public class OctoTree
         {
 
             int axisDepth = -1;
@@ -77,25 +77,25 @@ namespace IngameScript
             Vector3D Point = new Vector3D(0, 0, 0);
 
             bool leaf = false;
-            Node left;
-            Node right;
-            public Node(Bound bound)
+            OctoTree left;
+            OctoTree right;
+            public OctoTree(Bound bound)
             {
 
             }
 
 
 
-            public Node(Vector3D pointLeaf)
+            public OctoTree(Vector3D pointLeaf)
             {
                 Point = pointLeaf;
                 leaf = true;
             }
-            public Node()
+            public OctoTree()
             {
                 //placeholder
             }
-            public Node(List<Vector3D> listToBeSorted)
+            public OctoTree(List<Vector3D> listToBeSorted)
             {
                 //TODO: listToBeSorted sort this on an axis (0 for root)
                 //Echo("" + listToBeSorted.Count);
@@ -106,19 +106,18 @@ namespace IngameScript
                     if(listToBeSorted.Count == 1)
                     {
                         //TODO: store a point
-                        //left bias
                         Point = listToBeSorted[0];
                     }
                     else
                     {
-                        //store a point and make a leaf (Node) (left bias)
+                        //store a point and make a leaf (OctoTree) (left bias)
                         Point = listToBeSorted[0];
-                        left = new Node(listToBeSorted[1]);
+                        left = new OctoTree(listToBeSorted[1]);
                     }
                 }
                 else
                 {
-                    //TODO: store a point and make 2 Node
+                    //TODO: store a point and make 2 OctoTree
 
                     int intIndexPoint = (listToBeSorted.Count - 1) / 2;
 
@@ -132,8 +131,8 @@ namespace IngameScript
                     List<Vector3D> subListRight = listToBeSorted.GetRange(startRight, endtRight);
 
                     Point = listToBeSorted[intIndexPoint];
-                    left = new Node(subListLeft);
-                    right = new Node(subListRight);
+                    left = new OctoTree(subListLeft);
+                    right = new OctoTree(subListRight);
 
 
                 }
@@ -201,8 +200,8 @@ namespace IngameScript
 
             Echo("test");
 
-            //rootNode = new Node();
-            rootNode = new Node(listPointsNotSorted);
+            //rootOctoTree = new OctoTree();
+            rootOctoTree = new OctoTree(listPointsNotSorted);
 
         }
 
