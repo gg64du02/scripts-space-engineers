@@ -198,6 +198,7 @@ namespace IngameScript
             }
             public string GetDebuggerDisplay()
             {
+                //string resultStr = "GetDebuggerDisplay";
                 string resultStr = "";
                 resultStr = resultStr + "right" + right + "\n";
                 resultStr = resultStr + "left" + left + "\n";
@@ -208,14 +209,16 @@ namespace IngameScript
             }
             public string GetDebuggerDisplayWithLeafs()
             {
+                //string resultStr = "GetDebuggerDisplayWithLeafs";
                 string resultStr = "";
                 resultStr = resultStr + GetDebuggerDisplay() + "\n";
-                resultStr = resultStr + "left" + left.GetDebuggerDisplay() + "\n";
-                resultStr = resultStr + "right" + right.GetDebuggerDisplay() + "\n";
+                if (left != null) resultStr = resultStr + "left" + left.GetDebuggerDisplay() + "\n";
+                if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplay() + "\n";
                 return resultStr;
             }
             public string GetDebuggerDisplayWithLeafsRec()
             {
+                //string resultStr = "GetDebuggerDisplayWithLeafsRec";
                 string resultStr = "";
                 resultStr = resultStr + GetDebuggerDisplay() + "\n";
                 //if (axisDepth < 3) { 
@@ -314,12 +317,13 @@ namespace IngameScript
 
             Echo("test");
 
-            int N = 6;
+            //int N = 6;
             //int N = 7;
             //int N = 15;
             //int N = 14;
             //int N = 31;
             //int N = 127;
+            int N = 126;
             listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
             {
@@ -334,12 +338,16 @@ namespace IngameScript
             Echo("======================");
             Echo("" + rootOctoTree.left.GetDebuggerDisplay());
             Echo("" + rootOctoTree.right.GetDebuggerDisplay());
-            //Echo("" + rootOctoTree.right.right.right.GetDebuggerDisplay());
-            //Echo("" + rootOctoTree.right.right.right.right.right.GetDebuggerDisplay());
+            Echo("======================");
+            Echo("" + rootOctoTree.right.right.right.GetDebuggerDisplay());
+            Echo("" + rootOctoTree.right.right.right.right.right.GetDebuggerDisplay());
+            /*
             Echo("======================");
             Echo("" + rootOctoTree.left.GetDebuggerDisplayWithLeafs());
             Echo("" + rootOctoTree.right.GetDebuggerDisplayWithLeafs());
-            //Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
+            Echo("======================");
+            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
+            */
         }
     }
 }
