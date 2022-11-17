@@ -104,6 +104,8 @@ namespace IngameScript
             bool leaf = false;
             public OctoTree left = null;
             public OctoTree right = null;
+
+            
             public OctoTree(Bound bound)
             {
 
@@ -116,6 +118,7 @@ namespace IngameScript
                 Point = pointLeaf;
                 leaf = true;
                 axisDepth = axisD;
+                intAxis = axisDepth % 3;
             }
             public OctoTree()
             {
@@ -138,8 +141,8 @@ namespace IngameScript
                     else
                     {
                         //store a point and make a leaf (OctoTree) (left bias)
-                        Point = listSorted[0];
-                        left = new OctoTree(listSorted[1], axisDepth + 1);
+                        Point = listSorted[1];
+                        left = new OctoTree(listSorted[0], axisDepth + 1);
                     }
                 }
                 else
@@ -158,11 +161,11 @@ namespace IngameScript
                     //List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight);
                     //public System.Collections.Generic.List<T> GetRange (int index, int count);
 
-                    List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft);
-                    List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight);
+                    List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
+                    List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
                     
                     Point = listSorted[intIndexPoint];
-                    left = new OctoTree(subListLeft, axisDepth+1);
+                    left = new OctoTree(subListLeft, axisDepth + 1);
                     right = new OctoTree(subListRight, axisDepth + 1);
 
                     
@@ -200,8 +203,6 @@ namespace IngameScript
             {
                 //string resultStr = "GetDebuggerDisplay";
                 string resultStr = "";
-                resultStr = resultStr + "right" + right + "\n";
-                resultStr = resultStr + "left" + left + "\n";
                 resultStr = resultStr + "Point" + Point + "\n";
                 resultStr = resultStr + "axisDepth" + axisDepth + "\n";
                 resultStr = resultStr + "intAxis" + intAxis + "\n";
@@ -225,8 +226,8 @@ namespace IngameScript
                 //    resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafs() + "\n";
                 //    resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafs() + "\n";
                 //}
-                if (left != null) resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafs() + "\n";
-                if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafs() + "\n";
+                if (left != null) resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafsRec() + "\n";
+                if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafsRec() + "\n";
                 return resultStr;
             }
 
@@ -319,30 +320,43 @@ namespace IngameScript
 
             //int N = 6;
             //int N = 7;
+            //int N = 9;
+            //int N = 10;
             //int N = 15;
             //int N = 14;
             //int N = 31;
             //int N = 127;
-            int N = 126;
+            //int N = 126;
+            int N = 55;
+
             listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
             {
                 listPointsNotSorted.Add(new Vector3D(testInt, testInt, testInt));
             }
 
+            Echo("listPointsNotSorted.Count:0 to " + (listPointsNotSorted.Count - 1));
+
+
             rootOctoTree = new OctoTree(listPointsNotSorted,0);
 
-
-            //Echo("" + rootOctoTree.GetDebuggerDisplay());
-            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
+            /*
+            Echo("" + rootOctoTree.GetDebuggerDisplay());
             Echo("======================");
             Echo("" + rootOctoTree.left.GetDebuggerDisplay());
             Echo("" + rootOctoTree.right.GetDebuggerDisplay());
+            
             Echo("======================");
             Echo("" + rootOctoTree.right.right.right.GetDebuggerDisplay());
             Echo("" + rootOctoTree.right.right.right.right.right.GetDebuggerDisplay());
-            /*
+            
+            
             Echo("======================");
+            
+            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
+            */
+            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
+            /*
             Echo("" + rootOctoTree.left.GetDebuggerDisplayWithLeafs());
             Echo("" + rootOctoTree.right.GetDebuggerDisplayWithLeafs());
             Echo("======================");
