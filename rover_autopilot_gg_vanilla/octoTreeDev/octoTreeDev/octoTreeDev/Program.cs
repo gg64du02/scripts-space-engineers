@@ -43,25 +43,11 @@ namespace IngameScript
         //
         // to learn more about ingame scripts.
 
-        Vector3I overallBounds;
         OctoTree rootOctoTree;
 
         List<Vector3D> listPointsNotSorted = new List<Vector3D>();
         List<Vector3D> listPointsSortedForRoot = new List<Vector3D>();
 
-        public class Bound
-        {
-            Vector3D minBound;
-            Vector3D maxBound;
-            Vector3I BoundDim;
-
-            int volumeCovered;
-            public Bound(Vector3I bound)
-            {
-
-            }
-
-        }
         class SorterByAxisesOnVector3Dx : IComparer<Vector3D>
         {
             public int Compare(Vector3D x, Vector3D y)
@@ -97,21 +83,11 @@ namespace IngameScript
             //2 is z
             int intAxis = -1;
 
-            Bound bounds;
-
             public Vector3D Point = new Vector3D(0, 0, 0);
 
             bool leaf = false;
             public OctoTree left = null;
             public OctoTree right = null;
-
-            
-            public OctoTree(Bound bound)
-            {
-
-            }
-            
-
 
             public OctoTree(Vector3D pointLeaf, int axisD)
             {
@@ -199,6 +175,144 @@ namespace IngameScript
 
                 //return newResult;
             }
+
+            public double distanceBetweenPointsOnSpecificAxis(Vector3D a, Vector3D b, int axisN)
+            {
+
+                double distanceTmp = -1;
+                if (axisN == 0) { distanceTmp = a.X - b.X; }
+                if (axisN == 1) { distanceTmp = a.Y - b.Y; }
+                if (axisN == 2) { distanceTmp = a.Z - b.Z; }
+
+                return distanceTmp;
+            }
+
+            public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            {
+                //assuming your are on a root:
+                //available Vector3D Point, OctoTree right left
+
+                //current OctoTree tested
+                OctoTree tmpOctoTree = new OctoTree();
+                //starting position
+                Vector3D tmpPoint = Point;
+                OctoTree rightTmp = right;
+                OctoTree leftTmp = left;
+
+                Vector3D tmpRightPoint = right.Point;
+                Vector3D tmpLeftPoint = left.Point;
+
+                //store the distance
+                Dictionary<Vector3D, double> distanceToPoint = new Dictionary<Vector3D, double>();
+                int tmpAxisD = 0;
+
+                //int debugCount = 0
+
+                List<Vector3D> resultListV3D = new List<Vector3D>();
+                resultListV3D.Add(tmpPoint);
+
+                bool continueRunning = true;
+                while (continueRunning == true)
+                {
+
+                    double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, tmpAxisD);
+                    distanceToPoint[Point] = tmpDistanceToPoint;
+                    if (tmpDistanceToPoint > 0)
+                    {
+                        double tmpDistanceToLeft = distanceBetweenPointsOnSpecificAxis(tmpLeftPoint, testAgainst, tmpAxisD + 1);
+                        distanceToPoint[tmpLeftPoint] = tmpDistanceToLeft;
+                        //updating to the leaf
+                        tmpOctoTree = left;
+                    }
+                    else
+                    {
+                        double tmpDistanceToRight = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, tmpAxisD + 1);
+                        distanceToPoint[tmpRightPoint] = tmpDistanceToRight;
+                        //updating to the leaf
+                        tmpOctoTree = right;
+                    }
+                    rightTmp = tmpOctoTree.right;
+                    leftTmp = tmpOctoTree.left;
+                    tmpAxisD = tmpAxisD + 1;
+
+                    resultListV3D.Add(tmpOctoTree.Point);
+
+                    //on purpose
+                    //List<Vector3D> triggerNull = null;
+                    //Vector3D v = triggerNull[0];
+
+                    //stop searching
+                    //if ((right == null) || (left == null))
+                    if ((right == null))
+                    {
+                        continueRunning = false;
+                    }
+
+                    if (tmpAxisD == 4) { continueRunning = false; }
+                }
+
+                /*
+                List<Vector3D> resultListV3D = new List<Vector3D>();
+
+                foreach (var item in distanceToPoint.Keys)
+                {
+                    resultListV3D.Add(item);
+                }
+                */
+
+
+
+                return resultListV3D;
+            }
+
+            public OctoTree getLeafOctoTree(Vector3D testAgainst,int axisN)
+            {
+                int axisDtmp = axisN % 3;
+                double distanceTmp = -1;
+                distanceTmp = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, axisDtmp);
+
+                if (distanceTmp > 0)
+                {
+                    //check the left leaf
+                }
+                else
+                {
+                    //check the right leaf
+                }
+
+                if((left == null) && (right == null))
+                {
+                    return new OctoTree(Point,axisDtmp);
+                }
+                return new OctoTree();
+            }
+
+            public Vector3D closestOctoTree(Vector3D testAgainst)
+            {
+                Vector3D resultClosest = new Vector3D(0, 0, 0);
+                int depthOfSearch = 3;
+
+                Vector3D pointTmp = Point;
+                OctoTree rightTmp = right;
+                OctoTree leftTmp = left;
+
+                int axisDepthTmp = 0;
+                int intAxisTmp = axisDepthTmp%3;
+
+                double distanceTmp = -1;
+                distanceTmp = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, intAxisTmp);
+
+                if (distanceTmp > 0)
+                {
+                    //check the left leaf
+                }
+                else
+                {
+                    //check the right leaf
+                }
+
+                return resultClosest;
+            }
             public string GetDebuggerDisplay()
             {
                 //string resultStr = "GetDebuggerDisplay";
@@ -222,10 +336,6 @@ namespace IngameScript
                 //string resultStr = "GetDebuggerDisplayWithLeafsRec";
                 string resultStr = "";
                 resultStr = resultStr + GetDebuggerDisplay() + "\n";
-                //if (axisDepth < 3) { 
-                //    resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafs() + "\n";
-                //    resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafs() + "\n";
-                //}
                 if (left != null) resultStr = resultStr + "left" + left.GetDebuggerDisplayWithLeafsRec() + "\n";
                 if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafsRec() + "\n";
                 return resultStr;
@@ -235,32 +345,6 @@ namespace IngameScript
         }
 
 
-        /*
-                    +------------+------------+
-                   /            /            /
-                  /            /            /
-                 /      5     /      6     /
-                /            /            /
-               +------------+------------+
-              /            /            /
-             /    1       /    2       /
-            /            /            /
-           /            /            /
-          +------------+------------+
-        
-                    +------------+------------+
-                   /            /            /
-                  /            /            /
-                 /      7     /      8     /
-                /            /            /
-               +------------+------------+
-              /            /            /
-             /    3       /    4       /
-            /            /            /
-           /            /            /
-          +------------+------------+
-         
-         */
 
 
         public Program()
@@ -322,12 +406,16 @@ namespace IngameScript
             //int N = 7;
             //int N = 9;
             //int N = 10;
-            //int N = 15;
+            int N = 15;
             //int N = 14;
             //int N = 31;
             //int N = 127;
             //int N = 126;
-            int N = 55;
+            //int N = 55;
+            //int N = 1000;
+            //int N = 2000;
+            //int N = 2500;
+            //int N = 3000;
 
             listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
@@ -362,6 +450,17 @@ namespace IngameScript
             Echo("======================");
             Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
             */
+
+
+
+            //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4.3, 4.3, 4.3), 0);
+            List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4, 4, 4), 0);
+
+            foreach (Vector3D points in testClosestneighbor)
+            {
+                Echo("points:" + points);
+            }
+            
         }
     }
 }
