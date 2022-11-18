@@ -179,7 +179,7 @@ namespace IngameScript
             public double distanceBetweenPointsOnSpecificAxis(Vector3D a, Vector3D b, int axisN)
             {
 
-                double distanceTmp = -1;
+                double distanceTmp = 1;
                 if (axisN == 0) { distanceTmp = a.X - b.X; }
                 if (axisN == 1) { distanceTmp = a.Y - b.Y; }
                 if (axisN == 2) { distanceTmp = a.Z - b.Z; }
@@ -187,10 +187,13 @@ namespace IngameScript
                 return distanceTmp;
             }
 
-            public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            //public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            public string listOfPointsInBranch(Vector3D testAgainst, int axisN)
             {
                 //assuming your are on a root:
                 //available Vector3D Point, OctoTree right left
+
+                string debugging = "";
 
                 //current OctoTree tested
                 OctoTree tmpOctoTree = new OctoTree();
@@ -211,31 +214,82 @@ namespace IngameScript
                 List<Vector3D> resultListV3D = new List<Vector3D>();
                 resultListV3D.Add(tmpPoint);
 
+                //throw new InvalidOperationException("break my point");
+
+                
+
                 bool continueRunning = true;
                 while (continueRunning == true)
                 {
 
-                    double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, tmpAxisD);
-                    distanceToPoint[Point] = tmpDistanceToPoint;
+                    debugging = debugging +"Point:" + tmpPoint + "\n";
+                    if(rightTmp != null) debugging = debugging + "right:" + rightTmp.Point + "\n";
+                    if (leftTmp != null) debugging = debugging + "left:" + leftTmp.Point + "\n";
+
+                    //double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, tmpAxisD);
+                    double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(tmpPoint, testAgainst, tmpAxisD);
+                    distanceToPoint[tmpPoint] = tmpDistanceToPoint;
+                    debugging = debugging + "tmpDistanceToPoint:" + tmpDistanceToPoint + "\n";
                     if (tmpDistanceToPoint > 0)
                     {
                         double tmpDistanceToLeft = distanceBetweenPointsOnSpecificAxis(tmpLeftPoint, testAgainst, tmpAxisD + 1);
                         distanceToPoint[tmpLeftPoint] = tmpDistanceToLeft;
                         //updating to the leaf
-                        tmpOctoTree = left;
+
+                        //tmpOctoTree = tmpOctoTree.left;
+                        
+                        if (tmpOctoTree.left == null)
+                        {
+                            tmpOctoTree = left;
+                        }
+                        else
+                        {
+                            tmpOctoTree = tmpOctoTree.left;
+                        }
+
+                        debugging = debugging + "going left:" +"\n\n";
                     }
                     else
                     {
                         double tmpDistanceToRight = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, tmpAxisD + 1);
                         distanceToPoint[tmpRightPoint] = tmpDistanceToRight;
                         //updating to the leaf
-                        tmpOctoTree = right;
+                        //tmpOctoTree = tmpOctoTree.right;
+                        if (tmpOctoTree.right == null)
+                        {
+                            tmpOctoTree = right;
+                        }
+                        else
+                        {
+                            tmpOctoTree = tmpOctoTree.right;
+                        }
+                        debugging = debugging + "going right:" + "\n\n";
                     }
-                    rightTmp = tmpOctoTree.right;
-                    leftTmp = tmpOctoTree.left;
+                    if (tmpOctoTree != null)
+                    {
+                        tmpPoint = tmpOctoTree.Point;
+                        rightTmp = tmpOctoTree.right;
+                        leftTmp = tmpOctoTree.left;
+                        resultListV3D.Add(tmpOctoTree.Point);
+                    }
+
+                    if (tmpAxisD == 0)
+                    {
+                        tmpRightPoint = right.Point;
+                        tmpLeftPoint = left.Point;
+                    }
+                    else
+                    {
+                        if(rightTmp != null) tmpRightPoint = rightTmp.Point;
+                        if (leftTmp != null) tmpLeftPoint = leftTmp.Point;
+                    }
+
+
                     tmpAxisD = tmpAxisD + 1;
 
-                    resultListV3D.Add(tmpOctoTree.Point);
+
+
+
 
                     //on purpose
                     //List<Vector3D> triggerNull = null;
@@ -251,18 +305,8 @@ namespace IngameScript
                     if (tmpAxisD == 4) { continueRunning = false; }
                 }
 
-                /*
-                List<Vector3D> resultListV3D = new List<Vector3D>();
-
-                foreach (var item in distanceToPoint.Keys)
-                {
-                    resultListV3D.Add(item);
-                }
-                */
-
-
-
-                return resultListV3D;
+                //return resultListV3D;
+                return debugging;
             }
 
             public OctoTree getLeafOctoTree(Vector3D testAgainst,int axisN)
@@ -454,13 +498,19 @@ namespace IngameScript
 
 
             //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4.3, 4.3, 4.3), 0);
-            List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4, 4, 4), 0);
+            //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4, 4, 4), 0);
+            //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(0, 0, 0), 0);
+            /*
+            List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(12, 12, 12), 0);
 
             foreach (Vector3D points in testClosestneighbor)
             {
                 Echo("points:" + points);
             }
-            
+            */
+
+            Echo("" + rootOctoTree.listOfPointsInBranch(new Vector3D(12, 12, 12), 0));
+            //Echo("" + rootOctoTree.listOfPointsInBranch(new Vector3D(4.3, 4.3, 4.3), 0));
         }
     }
 }
