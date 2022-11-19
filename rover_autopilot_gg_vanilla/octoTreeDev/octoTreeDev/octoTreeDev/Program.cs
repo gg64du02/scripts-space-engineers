@@ -180,9 +180,9 @@ namespace IngameScript
             {
 
                 double distanceTmp = 1;
-                if (axisN == 0) { distanceTmp = a.X - b.X; }
-                if (axisN == 1) { distanceTmp = a.Y - b.Y; }
-                if (axisN == 2) { distanceTmp = a.Z - b.Z; }
+                if (axisN % 3 == 0) { distanceTmp = a.X - b.X; }
+                if (axisN % 3 == 1) { distanceTmp = a.Y - b.Y; }
+                if (axisN % 3 == 2) { distanceTmp = a.Z - b.Z; }
 
                 return distanceTmp;
             }
@@ -194,6 +194,7 @@ namespace IngameScript
                 //available Vector3D Point, OctoTree right left
 
                 string debugging = "";
+                debugging = debugging+"listOfPointsInBranch\n";
 
                 //current OctoTree tested
                 OctoTree tmpOctoTree = new OctoTree();
@@ -216,7 +217,7 @@ namespace IngameScript
 
                 //throw new InvalidOperationException("break my point");
 
-                
+                List<OctoTree> previousNodes = new List<OctoTree>();
 
                 bool continueRunning = true;
                 while (continueRunning == true)
@@ -230,6 +231,7 @@ namespace IngameScript
                     double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(tmpPoint, testAgainst, tmpAxisD);
                     distanceToPoint[tmpPoint] = tmpDistanceToPoint;
                     debugging = debugging + "tmpDistanceToPoint:" + tmpDistanceToPoint + "\n";
+                    debugging = debugging + "tmpOctoTree.axisDepth.:" + tmpOctoTree.axisDepth + "\n";
                     if (tmpDistanceToPoint > 0)
                     {
                         double tmpDistanceToLeft = distanceBetweenPointsOnSpecificAxis(tmpLeftPoint, testAgainst, tmpAxisD + 1);
@@ -244,10 +246,11 @@ namespace IngameScript
                         }
                         else
                         {
+                            previousNodes.Add(tmpOctoTree);
                             tmpOctoTree = tmpOctoTree.left;
                         }
 
-                        debugging = debugging + "going left:" +"\n\n";
+                        debugging = debugging + "going left:" +"\n";
                     }
                     else
                     {
@@ -261,6 +264,7 @@ namespace IngameScript
                         }
                         else
                         {
+                            previousNodes.Add(tmpOctoTree);
                             tmpOctoTree = tmpOctoTree.right;
                         }
                         debugging = debugging + "going right:" + "\n\n";
@@ -287,23 +291,43 @@ namespace IngameScript
 
                     tmpAxisD = tmpAxisD + 1;
 
-
-
-
-
-                    //on purpose
-                    //List<Vector3D> triggerNull = null;
-                    //Vector3D v = triggerNull[0];
-
                     //stop searching
-                    //if ((right == null) || (left == null))
-                    if ((right == null))
+                    //if ((tmpOctoTree.right == null) || (tmpOctoTree.left == null))
+                    /*
+                    if ((tmpOctoTree.right == null))
+                        {
+                        continueRunning = false;
+                    }*/
+                    if (tmpOctoTree == null) { debugging = debugging + "tmpOctoTree == null\n"; }
+                    if (tmpOctoTree.right == null) { debugging = debugging + "tmpOctoTree.right == null\n"; }
+                    if (tmpOctoTree.left == null) { debugging = debugging + "tmpOctoTree.left == null\n"; }
+
+                    debugging = debugging + "\n";
+
+                    if ((tmpOctoTree.right == null) && (tmpOctoTree.left == null))
                     {
                         continueRunning = false;
+                        break;
                     }
 
-                    if (tmpAxisD == 4) { continueRunning = false; }
+                    if(tmpOctoTree.axisDepth == 3)
+                    {
+                        debugging = debugging + "tmpOctoTree.Point:"+ tmpOctoTree.Point + "\n";
+                        debugging = debugging + "-1:" + previousNodes[previousNodes.Count - 1].Point + "\n";
+                        debugging = debugging + "-2:" + previousNodes[previousNodes.Count - 2].Point + "\n";
+                    }
+
+
+
+                    if (tmpAxisD == 14) {
+                        //fail safe
+                        continueRunning = false;
+
+                        debugging = debugging + "if (tmpAxisD == 12) {\n\n";
+                    }
                 }
+
+                debugging = debugging + GetDebuggerDisplayWithLeafsRec(previousNodes[previousNodes.Count - 3]) + "\n";
 
                 //return resultListV3D;
                 return debugging;
@@ -384,12 +408,16 @@ namespace IngameScript
                 if (right != null) resultStr = resultStr + "right" + right.GetDebuggerDisplayWithLeafsRec() + "\n";
                 return resultStr;
             }
-
-
+            public string GetDebuggerDisplayWithLeafsRec(OctoTree recOctree)
+            {
+                string resultStr = "GetDebuggerRec(recOctree)";
+                //string resultStr = "";
+                resultStr = resultStr + GetDebuggerDisplay() + "\n";
+                if (recOctree.left != null) resultStr = resultStr + "left" + recOctree.left.GetDebuggerDisplayWithLeafsRec() + "\n";
+                if (recOctree.right != null) resultStr = resultStr + "right" + recOctree.right.GetDebuggerDisplayWithLeafsRec() + "\n";
+                return resultStr;
+            }
         }
-
-
-
 
         public Program()
         {
@@ -403,8 +431,6 @@ namespace IngameScript
             // It's recommended to set Runtime.UpdateFrequency 
             // here, which will allow your script to run itself without a 
             // timer block.
-
-
         }
 
         public void Save()
@@ -429,7 +455,7 @@ namespace IngameScript
             // The method itself is required, but the arguments above
             // can be removed if not needed.
 
-            Vector3D point1 = new Vector3D(0, 0, 0);
+            Vector3D point1 = new Vector3D(654, 566, 422);
             Vector3D point2 = new Vector3D(-20, 20, 0);
             Vector3D point3 = new Vector3D(-51, 21, 24);
             Vector3D point4 = new Vector3D(21, 452, 32);
@@ -450,22 +476,43 @@ namespace IngameScript
             //int N = 7;
             //int N = 9;
             //int N = 10;
-            int N = 15;
+            //int N = 15;
             //int N = 14;
             //int N = 31;
             //int N = 127;
             //int N = 126;
-            //int N = 55;
+            int N = 55;
             //int N = 1000;
             //int N = 2000;
             //int N = 2500;
             //int N = 3000;
 
+            /*
             listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
             {
                 listPointsNotSorted.Add(new Vector3D(testInt, testInt, testInt));
             }
+
+            Random rnd = new Random();
+            listPointsNotSorted = new List<Vector3D>();
+            foreach (int testInt in Enumerable.Range(0, N))
+            {
+                int numCoord = rnd.Next() % 1024;
+                listPointsNotSorted.Add(new Vector3D(numCoord, numCoord, numCoord));
+            }
+            
+            */
+            Random rnd = new Random(0);
+            listPointsNotSorted = new List<Vector3D>();
+            foreach (int testInt in Enumerable.Range(0, N))
+            {
+                int numCoordx = rnd.Next() % 1024;
+                int numCoordy = rnd.Next() % 1024;
+                int numCoordz = rnd.Next() % 1024;
+                listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
+            }
+
 
             Echo("listPointsNotSorted.Count:0 to " + (listPointsNotSorted.Count - 1));
 
@@ -487,7 +534,7 @@ namespace IngameScript
             
             Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafs());
             */
-            Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
+            //Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
             /*
             Echo("" + rootOctoTree.left.GetDebuggerDisplayWithLeafs());
             Echo("" + rootOctoTree.right.GetDebuggerDisplayWithLeafs());
@@ -509,8 +556,36 @@ namespace IngameScript
             }
             */
 
-            Echo("" + rootOctoTree.listOfPointsInBranch(new Vector3D(12, 12, 12), 0));
-            //Echo("" + rootOctoTree.listOfPointsInBranch(new Vector3D(4.3, 4.3, 4.3), 0));
+            Vector3D positionToTest = new Vector3D(11.9, 11.9, 11.9);
+            //Vector3D positionToTest = new Vector3D(12, 12, 12);
+            //Vector3D positionToTest = new Vector3D(12.1, 12.1, 12.1);
+            //Vector3D positionToTest = new Vector3D(11.9, 11.9, 11.9);
+            //Vector3D positionToTest = new Vector3D(4.3, 4.3, 4.3);
+
+            //Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
+            //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+
+
+
+
+
+            double minDistanceForeach = 500000;
+            Vector3D closestPointForeach = new Vector3D(0,0,0);
+            foreach (Vector3D vect in listPointsNotSorted)
+            {
+                double tmpDistance = (vect - positionToTest).Length();
+                if(tmpDistance< minDistanceForeach)
+                {
+                    minDistanceForeach = tmpDistance;
+                    closestPointForeach = vect;
+                }
+            }
+
+            Echo("minDistanceForeach:" + minDistanceForeach);
+            Echo("closestPointForeach:" + closestPointForeach);
         }
     }
 }
