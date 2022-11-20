@@ -43,6 +43,51 @@ namespace IngameScript
         //
         // to learn more about ingame scripts.
 
+
+        //int N = 6;
+        //int N = 7;
+        //int N = 8;
+        //int N = 9;
+        //int N = 10;
+        //int N = 15;
+        //int N = 16;
+        //int N = 14;
+        //int N = 31;
+        //int N = 31;
+        int N = 127;
+        //int N = 126;
+        //int N = 55;
+        //int N = 500;
+        //int N = 503;
+
+        //ok
+        //int N = 375;
+
+        //ok
+        //int N = 750;
+        //int N = 850;
+
+        //int N = 860;
+        //fail
+        //int N = 897;
+
+        //int N = 889;
+        //fail?
+        //int N = 899;//or 900
+
+        //int N = 901;
+
+        //int N = 1000;
+
+        //fail
+        //int N = 1500;
+
+        //int N = 2000;
+        //int N = 2500;
+
+        //fail
+        //int N = 3000;
+
         OctoTree rootOctoTree;
 
         List<Vector3D> listPointsNotSorted = new List<Vector3D>();
@@ -472,20 +517,6 @@ namespace IngameScript
 
             Echo("test");
 
-            //int N = 6;
-            //int N = 7;
-            //int N = 9;
-            //int N = 10;
-            //int N = 15;
-            //int N = 14;
-            //int N = 31;
-            //int N = 127;
-            //int N = 126;
-            int N = 55;
-            //int N = 1000;
-            //int N = 2000;
-            //int N = 2500;
-            //int N = 3000;
 
             /*
             listPointsNotSorted = new List<Vector3D>();
@@ -503,13 +534,24 @@ namespace IngameScript
             }
             
             */
-            Random rnd = new Random(0);
+            //N = N * 2;
+
+            //Random rnd = new Random(0);
+            Random rnd = new Random();
+
+            //N = (N + rnd.Next()) % 1000;
+            //N = (N + 10) % 1000;
+            N = (N + 1) % 1000;
+
             listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
             {
-                int numCoordx = rnd.Next() % 1024;
-                int numCoordy = rnd.Next() % 1024;
-                int numCoordz = rnd.Next() % 1024;
+                //int numCoordx = rnd.Next() % 1024;
+                //int numCoordy = rnd.Next() % 1024;
+                //int numCoordz = rnd.Next() % 1024;
+                int numCoordx = -512 + rnd.Next() % 1024;
+                int numCoordy = -512 + rnd.Next() % 1024;
+                int numCoordz = -512 + rnd.Next() % 1024;
                 listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
             }
 
@@ -518,6 +560,7 @@ namespace IngameScript
 
 
             rootOctoTree = new OctoTree(listPointsNotSorted,0);
+            Echo("rootOctoTree init done");
 
             /*
             Echo("" + rootOctoTree.GetDebuggerDisplay());
@@ -571,7 +614,7 @@ namespace IngameScript
 
 
 
-
+            
             double minDistanceForeach = 500000;
             Vector3D closestPointForeach = new Vector3D(0,0,0);
             foreach (Vector3D vect in listPointsNotSorted)
@@ -586,6 +629,7 @@ namespace IngameScript
 
             Echo("minDistanceForeach:" + minDistanceForeach);
             Echo("closestPointForeach:" + closestPointForeach);
+            
         }
     }
 }
