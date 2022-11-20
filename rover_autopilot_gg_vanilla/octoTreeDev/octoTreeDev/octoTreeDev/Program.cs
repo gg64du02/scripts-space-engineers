@@ -52,39 +52,30 @@ namespace IngameScript
         //int N = 15;
         //int N = 16;
         //int N = 14;
+        int N = 31;
         //int N = 31;
-        //int N = 31;
-        int N = 127;
+        //int N = 127;
         //int N = 126;
         //int N = 55;
         //int N = 500;
         //int N = 503;
-
         //ok
         //int N = 375;
-
         //ok
         //int N = 750;
         //int N = 850;
-
         //int N = 860;
         //fail
         //int N = 897;
-
         //int N = 889;
         //fail?
         //int N = 899;//or 900
-
         //int N = 901;
-
         //int N = 1000;
-
         //fail
         //int N = 1500;
-
         //int N = 2000;
         //int N = 2500;
-
         //fail
         //int N = 3000;
 
@@ -115,8 +106,41 @@ namespace IngameScript
                 return x.Z.CompareTo(y.Z);
             }
         }
+        /*
+        public int mostUnambiguousAxis(List<Vector3D)
+        {
+
+            List<Vector3D> listSortedX = sortingOnSpecificAxises(listToBeSorted, 0);
+            List<Vector3D> listSortedY = sortingOnSpecificAxises(listToBeSorted, 1);
+            List<Vector3D> listSortedZ = sortingOnSpecificAxises(listToBeSorted, 2);
+
+            minX = listSortedX[0].X;
+            maxX = listSortedX[listSortedX.Count - 1].X;
+
+            minY = listSortedY[0].Y;
+            maxY = listSortedY[listSortedY.Count - 1].Y;
+
+            minZ = listSortedZ[0].Z;
+            maxZ = listSortedZ[listSortedZ.Count - 1].Z;
 
 
+            int axisChoiceNumber = -1;
+
+            distBB_x = Math.Abs(maxX - minX);
+            distBB_y = Math.Abs(maxY - minY);
+            distBB_z = Math.Abs(maxZ - minZ);
+
+            List<double> maxDists = new List<double>();
+            maxDists.Add(distBB_x);
+            maxDists.Add(distBB_y);
+            maxDists.Add(distBB_z);
+
+            double maxDistValue = maxDists.Max();
+
+            int maxIndexDistValue = maxDistValue == maxDists[0] ? maxDistValue == maxDists[1] ? 0 : 1 : 2;
+
+        }
+        */
         public class OctoTree
         {
 
@@ -135,19 +159,56 @@ namespace IngameScript
             {
                 Point = pointLeaf;
                 axisDepth = axisD;
-                intAxis = axisDepth % 3;
+                intAxis = 0;
             }
             public OctoTree()
             {
                 //placeholder
             }
-            public OctoTree(List<Vector3D> listToBeSorted, int axisD)
+            public OctoTree(List<Vector3D> listToBeSorted, int tmpAxisDepth)
             {
                 //listToBeSorted sort this on an axis (0 for root)
                 //Echo("" + listToBeSorted.Count);
-                axisDepth = axisD;
-                intAxis = axisDepth % 3;
-                List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, intAxis);
+
+                axisDepth = tmpAxisDepth;
+
+                List<Vector3D> listSortedX = sortingOnSpecificAxises(listToBeSorted, 0);
+                List<Vector3D> listSortedY = sortingOnSpecificAxises(listToBeSorted, 1);
+                List<Vector3D> listSortedZ = sortingOnSpecificAxises(listToBeSorted, 2);
+
+                double minX = listSortedX[0].X;
+                double maxX = listSortedX[listSortedX.Count - 1].X;
+
+                double minY = listSortedY[0].Y;
+                double maxY = listSortedY[listSortedY.Count - 1].Y;
+
+                double minZ = listSortedZ[0].Z;
+                double maxZ = listSortedZ[listSortedZ.Count - 1].Z;
+
+
+                int axisChoiceNumber = -1;
+
+                double distBB_x = Math.Abs(maxX - minX);
+                double distBB_y = Math.Abs(maxY - minY);
+                double distBB_z = Math.Abs(maxZ - minZ);
+
+                List<double> maxDists = new List<double>();
+                maxDists.Add(distBB_x);
+                maxDists.Add(distBB_y);
+                maxDists.Add(distBB_z);
+
+                double maxDistValue = maxDists.Max();
+
+                int maxIndexDistValue = maxDistValue == maxDists[0] ? maxDistValue == maxDists[1] ? 0 : 1 : 2;
+
+                intAxis = maxIndexDistValue;
+
+                axisChoiceNumber = maxIndexDistValue;
+
+                //axisDepth = axisD;
+                //intAxis = axisDepth % 3;
+                //List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, intAxis);
+                List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, axisChoiceNumber);
                 if (listSorted.Count <= 2)
                 {
                     if(listSorted.Count == 1)
@@ -178,7 +239,7 @@ namespace IngameScript
                     List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
                     
                     Point = listSorted[intIndexPoint];
-                    left = new OctoTree(subListLeft, axisDepth + 1);
+                    left = new OctoTree(subListLeft,axisDepth+1);
                     right = new OctoTree(subListRight, axisDepth + 1);
 
                     
@@ -224,8 +285,8 @@ namespace IngameScript
                 return distanceTmp;
             }
 
-            //public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
-            public string listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            //public string listOfPointsInBranch(Vector3D testAgainst, int axisN)
             {
                 //assuming your are on a root:
                 //available Vector3D Point, OctoTree right left
@@ -247,7 +308,7 @@ namespace IngameScript
                 Dictionary<Vector3D, double> distanceToPoint = new Dictionary<Vector3D, double>();
                 int tmpAxisD = 0;
 
-                //int debugCount = 0
+                tmpAxisD = intAxis;
 
                 List<Vector3D> resultListV3D = new List<Vector3D>();
                 resultListV3D.Add(tmpPoint);
@@ -264,14 +325,13 @@ namespace IngameScript
                     if(rightTmp != null) debugging = debugging + "right:" + rightTmp.Point + "\n";
                     if (leftTmp != null) debugging = debugging + "left:" + leftTmp.Point + "\n";
 
-                    //double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, tmpAxisD);
                     double tmpDistanceToPoint = distanceBetweenPointsOnSpecificAxis(tmpPoint, testAgainst, tmpAxisD);
                     distanceToPoint[tmpPoint] = tmpDistanceToPoint;
                     debugging = debugging + "tmpDistanceToPoint:" + tmpDistanceToPoint + "\n";
                     debugging = debugging + "tmpOctoTree.axisDepth.:" + tmpOctoTree.axisDepth + "\n";
                     if (tmpDistanceToPoint > 0)
                     {
-                        double tmpDistanceToLeft = distanceBetweenPointsOnSpecificAxis(tmpLeftPoint, testAgainst, tmpAxisD + 1);
+                        double tmpDistanceToLeft = distanceBetweenPointsOnSpecificAxis(tmpLeftPoint, testAgainst, tmpAxisD);
                         distanceToPoint[tmpLeftPoint] = tmpDistanceToLeft;
                         //updating to the leaf
 
@@ -291,7 +351,7 @@ namespace IngameScript
                     }
                     else
                     {
-                        double tmpDistanceToRight = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, tmpAxisD + 1);
+                        double tmpDistanceToRight = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, tmpAxisD);
                         distanceToPoint[tmpRightPoint] = tmpDistanceToRight;
                         //updating to the leaf
                         //tmpOctoTree = tmpOctoTree.right;
@@ -360,8 +420,8 @@ namespace IngameScript
 
                 debugging = debugging + GetDebuggerDisplayWithLeafsRec(previousNodes[previousNodes.Count - 3]) + "\n";
 
-                //return resultListV3D;
-                return debugging;
+                return resultListV3D;
+                //return debugging;
             }
 
 
@@ -501,6 +561,11 @@ namespace IngameScript
             rootOctoTree = new OctoTree(listPointsNotSorted,0);
             Echo("rootOctoTree init done");
 
+
+            Echo(""+ rootOctoTree.GetDebuggerDisplayWithLeafsRec(rootOctoTree));
+
+            Echo("=========================");
+
             /*
             Echo("" + rootOctoTree.GetDebuggerDisplay());
             Echo("======================");
@@ -547,13 +612,31 @@ namespace IngameScript
             //Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
-            Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+
+            
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
 
 
+            List<Vector3D> listPointsNotSorted2 = new List<Vector3D>();
+            listPointsNotSorted2 = rootOctoTree.listOfPointsInBranch(positionToTest, 0);
+            Vector3D closestPointInBranch = new Vector3D(0, 0, 0);
+            double minDistanceForeach2 = 500000;
+            Vector3D closestPointForeach2 = new Vector3D(0, 0, 0);
+            foreach (Vector3D vect in listPointsNotSorted2)
+            {
+                double tmpDistance = (vect - positionToTest).Length();
+                if (tmpDistance < minDistanceForeach2)
+                {
+                    minDistanceForeach2 = tmpDistance;
+                    closestPointForeach2 = vect;
+                }
+            }
+            Echo("minDistanceForeach2:" + minDistanceForeach2);
+            Echo("closestPointForeach2:" + closestPointForeach2);
 
 
-            
             double minDistanceForeach = 500000;
             Vector3D closestPointForeach = new Vector3D(0,0,0);
             foreach (Vector3D vect in listPointsNotSorted)
