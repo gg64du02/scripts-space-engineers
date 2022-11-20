@@ -117,8 +117,6 @@ namespace IngameScript
         }
 
 
-        int debugInt = 0;
-
         public class OctoTree
         {
 
@@ -130,14 +128,12 @@ namespace IngameScript
 
             public Vector3D Point = new Vector3D(0, 0, 0);
 
-            bool leaf = false;
             public OctoTree left = null;
             public OctoTree right = null;
 
             public OctoTree(Vector3D pointLeaf, int axisD)
             {
                 Point = pointLeaf;
-                leaf = true;
                 axisDepth = axisD;
                 intAxis = axisDepth % 3;
             }
@@ -403,7 +399,6 @@ namespace IngameScript
             public Vector3D closestOctoTree(Vector3D testAgainst)
             {
                 Vector3D resultClosest = new Vector3D(0, 0, 0);
-                int depthOfSearch = 3;
 
                 Vector3D pointTmp = Point;
                 OctoTree rightTmp = right;
