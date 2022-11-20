@@ -143,7 +143,7 @@ namespace IngameScript
             }
             public OctoTree(List<Vector3D> listToBeSorted, int axisD)
             {
-                //TODO: listToBeSorted sort this on an axis (0 for root)
+                //listToBeSorted sort this on an axis (0 for root)
                 //Echo("" + listToBeSorted.Count);
                 axisDepth = axisD;
                 intAxis = axisDepth % 3;
@@ -164,7 +164,7 @@ namespace IngameScript
                 }
                 else
                 {
-                    //TODO: store a point and make 2 OctoTree
+                    //store a point and make 2 OctoTree
 
                     int intIndexPoint = (listSorted.Count - 1) / 2;
 
@@ -174,10 +174,6 @@ namespace IngameScript
                     int startRight = intIndexPoint + 1;
                     int endtRight = listSorted.Count - 1;
                     
-                    //List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft);
-                    //List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight);
-                    //public System.Collections.Generic.List<T> GetRange (int index, int count);
-
                     List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
                     List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
                     
@@ -333,12 +329,6 @@ namespace IngameScript
                     tmpAxisD = tmpAxisD + 1;
 
                     //stop searching
-                    //if ((tmpOctoTree.right == null) || (tmpOctoTree.left == null))
-                    /*
-                    if ((tmpOctoTree.right == null))
-                        {
-                        continueRunning = false;
-                    }*/
                     if (tmpOctoTree == null) { debugging = debugging + "tmpOctoTree == null\n"; }
                     if (tmpOctoTree.right == null) { debugging = debugging + "tmpOctoTree.right == null\n"; }
                     if (tmpOctoTree.left == null) { debugging = debugging + "tmpOctoTree.left == null\n"; }
@@ -374,53 +364,7 @@ namespace IngameScript
                 return debugging;
             }
 
-            public OctoTree getLeafOctoTree(Vector3D testAgainst,int axisN)
-            {
-                int axisDtmp = axisN % 3;
-                double distanceTmp = -1;
-                distanceTmp = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, axisDtmp);
 
-                if (distanceTmp > 0)
-                {
-                    //check the left leaf
-                }
-                else
-                {
-                    //check the right leaf
-                }
-
-                if((left == null) && (right == null))
-                {
-                    return new OctoTree(Point,axisDtmp);
-                }
-                return new OctoTree();
-            }
-
-            public Vector3D closestOctoTree(Vector3D testAgainst)
-            {
-                Vector3D resultClosest = new Vector3D(0, 0, 0);
-
-                Vector3D pointTmp = Point;
-                OctoTree rightTmp = right;
-                OctoTree leftTmp = left;
-
-                int axisDepthTmp = 0;
-                int intAxisTmp = axisDepthTmp%3;
-
-                double distanceTmp = -1;
-                distanceTmp = distanceBetweenPointsOnSpecificAxis(Point, testAgainst, intAxisTmp);
-
-                if (distanceTmp > 0)
-                {
-                    //check the left leaf
-                }
-                else
-                {
-                    //check the right leaf
-                }
-
-                return resultClosest;
-            }
             public string GetDebuggerDisplay()
             {
                 //string resultStr = "GetDebuggerDisplay";
