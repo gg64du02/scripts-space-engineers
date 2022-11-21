@@ -52,8 +52,8 @@ namespace IngameScript
         //int N = 15;
         //int N = 16;
         //int N = 14;
-        int N = 31;
         //int N = 31;
+        int N = 31;
         //int N = 127;
         //int N = 126;
         //int N = 55;
@@ -285,8 +285,9 @@ namespace IngameScript
                 return distanceTmp;
             }
 
-            public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
-            //public string listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            //public List<Vector3D> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            //public Tuple<string,List<Vector3D>> listOfPointsInBranch(Vector3D testAgainst, int axisN)
+            public string listOfPointsInBranch(Vector3D testAgainst, int axisN)
             {
                 //assuming your are on a root:
                 //available Vector3D Point, OctoTree right left
@@ -389,9 +390,9 @@ namespace IngameScript
                     tmpAxisD = tmpAxisD + 1;
 
                     //stop searching
-                    if (tmpOctoTree == null) { debugging = debugging + "tmpOctoTree == null\n"; }
-                    if (tmpOctoTree.right == null) { debugging = debugging + "tmpOctoTree.right == null\n"; }
-                    if (tmpOctoTree.left == null) { debugging = debugging + "tmpOctoTree.left == null\n"; }
+                    //if (tmpOctoTree == null) { debugging = debugging + "tmpOctoTree == null\n"; }
+                    //if (tmpOctoTree.right == null) { debugging = debugging + "tmpOctoTree.right == null\n"; }
+                    //if (tmpOctoTree.left == null) { debugging = debugging + "tmpOctoTree.left == null\n"; }
 
                     debugging = debugging + "\n";
 
@@ -403,10 +404,19 @@ namespace IngameScript
 
                     if(tmpOctoTree.axisDepth == 3)
                     {
-                        debugging = debugging + "tmpOctoTree.Point:"+ tmpOctoTree.Point + "\n";
-                        debugging = debugging + "-1:" + previousNodes[previousNodes.Count - 1].Point + "\n";
-                        debugging = debugging + "-2:" + previousNodes[previousNodes.Count - 2].Point + "\n";
+                        //debugging = debugging + "tmpOctoTree.Point:"+ tmpOctoTree.Point + "\n";
+                        //debugging = debugging + "-1:" + previousNodes[previousNodes.Count - 1].Point + "\n";
+                        //debugging = debugging + "-2:" + previousNodes[previousNodes.Count - 2].Point + "\n";
                     }
+
+                    double distanceXToNeighbors = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, 0);
+                    debugging = debugging + "dXToN:" + distanceXToNeighbors + "|";
+
+                    double distanceYToNeighbors = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, 1);
+                    debugging = debugging + "dYToN:" + distanceYToNeighbors + "|";
+
+                    double distanceZToNeighbors = distanceBetweenPointsOnSpecificAxis(tmpRightPoint, testAgainst, 2);
+                    debugging = debugging + "dZToN:" + distanceZToNeighbors + "\n";
 
 
 
@@ -420,8 +430,8 @@ namespace IngameScript
 
                 debugging = debugging + GetDebuggerDisplayWithLeafsRec(previousNodes[previousNodes.Count - 3]) + "\n";
 
-                return resultListV3D;
-                //return debugging;
+                //return resultListV3D;
+                return debugging;
             }
 
 
@@ -454,7 +464,7 @@ namespace IngameScript
             }
             public string GetDebuggerDisplayWithLeafsRec(OctoTree recOctree)
             {
-                string resultStr = "GetDebuggerRec(recOctree)";
+                string resultStr = "GetDebuggerRec(recOctree)\n";
                 //string resultStr = "";
                 resultStr = resultStr + GetDebuggerDisplay() + "\n";
                 if (recOctree.left != null) resultStr = resultStr + "left" + recOctree.left.GetDebuggerDisplayWithLeafsRec() + "\n";
@@ -499,6 +509,8 @@ namespace IngameScript
             // The method itself is required, but the arguments above
             // can be removed if not needed.
 
+            string toCustomStr = "";
+
             Vector3D point1 = new Vector3D(654, 566, 422);
             Vector3D point2 = new Vector3D(-20, 20, 0);
             Vector3D point3 = new Vector3D(-51, 21, 24);
@@ -535,8 +547,8 @@ namespace IngameScript
             */
             //N = N * 2;
 
-            //Random rnd = new Random(0);
-            Random rnd = new Random();
+            Random rnd = new Random(0);
+            //Random rnd = new Random();
 
             //N = (N + rnd.Next()) % 1000;
             //N = (N + 10) % 1000;
@@ -554,17 +566,18 @@ namespace IngameScript
                 listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
             }
 
-
-            Echo("listPointsNotSorted.Count:0 to " + (listPointsNotSorted.Count - 1));
-
+            toCustomStr = toCustomStr + "listPointsNotSorted.Count:0 to " + (listPointsNotSorted.Count - 1);
 
             rootOctoTree = new OctoTree(listPointsNotSorted,0);
-            Echo("rootOctoTree init done");
 
+            toCustomStr = toCustomStr + "rootOctoTree init done" + "\n";
 
-            Echo(""+ rootOctoTree.GetDebuggerDisplayWithLeafsRec(rootOctoTree));
+            toCustomStr = toCustomStr + "\n"+ "==================\n"+ "displaying the whole tree:\n"+"\n";
 
-            Echo("=========================");
+            toCustomStr = toCustomStr + "" + rootOctoTree.GetDebuggerDisplayWithLeafsRec(rootOctoTree) + "\n";
+
+            toCustomStr = toCustomStr + "==================\n";
+
 
             /*
             Echo("" + rootOctoTree.GetDebuggerDisplay());
@@ -588,8 +601,6 @@ namespace IngameScript
             Echo("======================");
             Echo("" + rootOctoTree.GetDebuggerDisplayWithLeafsRec());
             */
-
-
 
             //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4.3, 4.3, 4.3), 0);
             //List<Vector3D> testClosestneighbor = rootOctoTree.listOfPointsInBranch(new Vector3D(4, 4, 4), 0);
@@ -615,10 +626,17 @@ namespace IngameScript
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
 
-            
+            toCustomStr = toCustomStr + "=========================\n";
+
             //Echo("" + rootOctoTree.listOfPointsInBranch(positionToTest, 0));
+            string listOfPointsInBranchStr = rootOctoTree.listOfPointsInBranch(positionToTest, 0);
+            //Echo("" + listOfPointsInBranchStr);
+            toCustomStr = toCustomStr + listOfPointsInBranchStr;
+             //Me.CustomData = listOfPointsInBranchStr;
 
+            toCustomStr = toCustomStr + "=========================\n";
 
+            /*
             List<Vector3D> listPointsNotSorted2 = new List<Vector3D>();
             listPointsNotSorted2 = rootOctoTree.listOfPointsInBranch(positionToTest, 0);
             Vector3D closestPointInBranch = new Vector3D(0, 0, 0);
@@ -633,9 +651,9 @@ namespace IngameScript
                     closestPointForeach2 = vect;
                 }
             }
-            Echo("minDistanceForeach2:" + minDistanceForeach2);
+            Echo("minDistanceForeach2:" + Math.Round(minDistanceForeach2,2));
             Echo("closestPointForeach2:" + closestPointForeach2);
-
+            */
 
             double minDistanceForeach = 500000;
             Vector3D closestPointForeach = new Vector3D(0,0,0);
@@ -649,9 +667,12 @@ namespace IngameScript
                 }
             }
 
-            Echo("minDistanceForeach:" + minDistanceForeach);
-            Echo("closestPointForeach:" + closestPointForeach);
-            
+            toCustomStr = toCustomStr + "=========================\n";
+
+            toCustomStr = toCustomStr + "minDistanceForeach:" + Math.Round(minDistanceForeach, 2) + "\n";
+            toCustomStr = toCustomStr + "closestPointForeach: " + closestPointForeach+"\n";
+
+            Me.CustomData = toCustomStr;
         }
     }
 }
