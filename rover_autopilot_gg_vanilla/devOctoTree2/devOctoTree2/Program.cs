@@ -28,12 +28,21 @@ namespace devOctoTree2
 
             public octoNode left, right;
 
+            /*
+            public octoNode(Vector3D v)
+            {
+                x[0] = v.X;
+                x[1] = v.Y;
+                x[2] = v.Z;
+            }
+            */
 
         }
 
-        public double dist(octoNode a, octoNode b, int dim)
+        static public double dist(octoNode a, octoNode b, int dim)
         {
             double t, d = 0;
+            dim = dim - 1;
             while (dim!=0)
             {
                 t = a.x[dim] - b.x[dim];
@@ -53,10 +62,10 @@ namespace devOctoTree2
         }
 
 
-        int visited;
+        static int visited;
 
 
-        void nearest(octoNode root, octoNode nd, int i, int dim,
+        static void nearest(octoNode root, octoNode nd, int i, int dim,
         ref octoNode best,ref double best_dist)
         {
             double d, dx, dx2;
@@ -200,6 +209,21 @@ namespace devOctoTree2
             rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
 
 
+            octoNode rootOctoNodeNearest;
+
+            Vector3D v3d = new Vector3D(-49, -140, 107);
+
+            octoNode testON = new octoNode();
+            octoNode test_Best = new octoNode();
+
+            testON.x[0] = v3d.X;
+            testON.x[1] = v3d.Y;
+            testON.x[2] = v3d.Z;
+
+            double best_dist = 500000;
+
+            nearest(rootOctoNode, testON, 0, 3,
+            ref test_Best, ref best_dist);
 
 
             Console.WriteLine("Hello World!");
