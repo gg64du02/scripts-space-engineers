@@ -43,7 +43,7 @@ namespace devOctoTree2
         {
             double t, d = 0;
             dim = dim - 1;
-            while (dim!=0)
+            while (dim >= 0)
             {
                 t = a.x[dim] - b.x[dim];
                 d += t * t;
@@ -51,36 +51,38 @@ namespace devOctoTree2
             }
             return d;
         }
-
-        public void swap(ref octoNode x, ref octoNode y)
+        static public double dist2(Vector3D a, Vector3D b)
         {
-            double[] tmp = new double[3];
-
-            tmp = x.x;
-            x.x = y.x;
-            y.x = tmp;
+            double d;
+            d = (a - b).LengthSquared();
+            return d;
         }
 
 
-        static int visited;
+        static int visited=0;
 
 
-        static void nearest(octoNode root, octoNode nd, int i, int dim,
-        ref octoNode best,ref double best_dist)
+        static void nearest(octoNode root, octoNode nd, int i, int dim, ref octoNode best,ref double best_dist)
         {
             double d, dx, dx2;
 
             if (root==null) return;
             d = dist(root, nd, dim);
-                dx = root.x[i] - nd.x[i];
+            //d = dist2(convertOctoNodeToV3D(root), convertOctoNodeToV3D(nd));
+            dx = root.x[i] - nd.x[i];
             dx2 = dx* dx;
 
-                visited ++;
+            visited ++;
 
             if ((best==null) || d< best_dist) {
                 best_dist = d;
                 best = root;
             }
+
+
+            Console.WriteLine("best:" + convertOctoNodeToV3D(best));
+            Console.WriteLine("root:" + convertOctoNodeToV3D(root));
+            Console.WriteLine("=============");
 
             /* if chance of exact match is high */
             if (best_dist == null) return;
@@ -137,6 +139,12 @@ namespace devOctoTree2
             List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
 
             i = (i + 1) % dim;
+
+            //storing the point
+            n.x[0] = listSorted[intIndexPoint].X;
+            n.x[1] = listSorted[intIndexPoint].Y;
+            n.x[2] = listSorted[intIndexPoint].Z;
+
             if (subListLeft.Count != 0)
             {
                 n.left = maketree2(subListLeft, i, dim);
@@ -145,10 +153,6 @@ namespace devOctoTree2
             {
                 n.right = maketree2(subListRight, i, dim);
             }
-            //storing the point
-            n.x[0] = listSorted[intIndexPoint].X;
-            n.x[1] = listSorted[intIndexPoint].Y;
-            n.x[2] = listSorted[intIndexPoint].Z;
 
             return n;
             
@@ -180,26 +184,29 @@ namespace devOctoTree2
 
             //return newResult;
         }
+        
+        static public Vector3D convertOctoNodeToV3D(octoNode ON)
+        {
+            Vector3D v = new Vector3D();
+            v.X = ON.x[0];
+            v.Y = ON.x[1];
+            v.Z = ON.x[2];
+            return v;
+        }
 
 
          static void Main(string[] args)
         {
             octoNode rootOctoNode;
-
             
             Random rnd = new Random(0);
             //Random rnd = new Random();
 
-            //N = (N + rnd.Next()) % 1000;
-            //N = (N + 10) % 1000;
             int N = 35;
 
             List<Vector3D>  listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
             {
-                //int numCoordx = rnd.Next() % 1024;
-                //int numCoordy = rnd.Next() % 1024;
-                //int numCoordz = rnd.Next() % 1024;
                 int numCoordx = -512 + rnd.Next() % 1024;
                 int numCoordy = -512 + rnd.Next() % 1024;
                 int numCoordz = -512 + rnd.Next() % 1024;
@@ -208,10 +215,12 @@ namespace devOctoTree2
 
             rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
 
-
-            octoNode rootOctoNodeNearest;
-
-            Vector3D v3d = new Vector3D(-49, -140, 107);
+            //Vector3D v3d = new Vector3D(-49, -140, 107);
+            //Vector3D v3d = new Vector3D(-49, -140, 87);
+            //Vector3D v3d = new Vector3D(-45, -120, 60);
+            //Vector3D v3d = new Vector3D(0,0,0);
+            //Vector3D v3d = new Vector3D(11.9, 11.9, 11.9);
+            Vector3D v3d = new Vector3D(119, 119, 119);
 
             octoNode testON = new octoNode();
             octoNode test_Best = new octoNode();
@@ -222,9 +231,27 @@ namespace devOctoTree2
 
             double best_dist = 500000;
 
-            nearest(rootOctoNode, testON, 0, 3,
-            ref test_Best, ref best_dist);
+            nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
 
+            Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
+
+            string infos_clos = "" + (v3d_test_Best - v3d).Length();
+
+            Vector3D actualClosest = new Vector3D(500000, 500000, 500000);
+            double actualClosestDist = 500000;
+
+            foreach(Vector3D VD in listPointsNotSorted)
+            {
+
+                double tmpDist = (v3d - VD).Length();
+                if(actualClosestDist > tmpDist)
+                {
+                    actualClosestDist = tmpDist;
+                    actualClosest = VD;
+                }
+            }
+
+            Console.WriteLine("visited:"+visited);
 
             Console.WriteLine("Hello World!");
         }
