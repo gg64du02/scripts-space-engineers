@@ -22,7 +22,56 @@ namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
+        IEnumerator<bool> _stateMachine;
 
+        // ***MARKER: Coroutine Execution
+        public void RunStateMachine()
+        {
+            // If there is an active state machine, run its next instruction set.
+            if (_stateMachine != null)
+            {
+                // machine.
+                bool hasMoreSteps = _stateMachine.MoveNext();
+
+                // If there are no more instructions, we stop and release the state machine.
+                if (hasMoreSteps)
+                {
+                    // The state machine still has more work to do, so signal another run again, 
+                    // just like at the beginning.
+                    Runtime.UpdateFrequency |= UpdateFrequency.Once;
+                }
+                else
+                {
+                    _stateMachine.Dispose();
+
+                    _stateMachine = null;
+                }
+            }
+        }
+
+        // ***MARKER: Coroutine Example
+        // The return value (bool in this case) is not important for this example. It is not
+        // actually in use.
+        public IEnumerator<bool> RunStuffOverTime()
+        {
+            // For the very first instruction set, we will just switch on the light.
+
+            yield return true;
+
+            int i = 0;
+
+            while (true)
+            {
+                i++;
+
+                yield return true;
+            }
+
+
+
+
+
+        }
 
         public class octoNode
         {
@@ -31,14 +80,6 @@ namespace IngameScript
 
             public octoNode left, right;
 
-            /*
-            public octoNode(Vector3D v)
-            {
-                x[0] = v.X;
-                x[1] = v.Y;
-                x[2] = v.Z;
-            }
-            */
 
         }
 
@@ -164,6 +205,45 @@ namespace IngameScript
 
         }
 
+        public void maketree2iter(ref octoNode octoNode, List<Vector3D> listToBeSorted, int i, int dim){
+
+
+            List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, i);
+
+            yieldsAmount = yieldsAmount + 1;
+
+
+            int intIndexPoint = (listSorted.Count - 1) / 2;
+
+            int startLeft = 0;
+            int endLeft = intIndexPoint - 1;
+
+            int startRight = intIndexPoint + 1;
+            int endtRight = listSorted.Count - 1;
+
+            List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
+            List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
+
+            i = (i + 1) % dim;
+
+            //storing the point
+            octoNode.x[0] = listSorted[intIndexPoint].X;
+            octoNode.x[1] = listSorted[intIndexPoint].Y;
+            octoNode.x[2] = listSorted[intIndexPoint].Z;
+
+            if (subListLeft.Count != 0)
+            {
+                octoNode.left = new octoNode();
+                maketree2iter(ref octoNode.left, subListLeft, i, dim);
+            }
+            if (subListRight.Count != 0)
+            {
+                octoNode.right = new octoNode();
+                maketree2iter(ref octoNode.right, subListRight, i, dim);
+            }
+        }
+
+
         public static List<Vector3D> sortingOnSpecificAxises(List<Vector3D> listToSort, int axisOnWhichToSort)
         {
             List<Vector3D> newResult = new List<Vector3D>();
@@ -234,6 +314,10 @@ namespace IngameScript
             // It's recommended to set Runtime.UpdateFrequency 
             // here, which will allow your script to run itself without a 
             // timer block.
+            // Initialize our state machine
+            _stateMachine = RunStuffOverTime();
+
+            Runtime.UpdateFrequency |= UpdateFrequency.Once;
         }
 
         public void Save()
@@ -246,6 +330,7 @@ namespace IngameScript
             // needed.
         }
 
+        octoNode rootOctoNode;
         public void Main(string argument, UpdateType updateSource)
         {
             // The main entry point of the script, invoked every time
@@ -257,13 +342,17 @@ namespace IngameScript
             // 
             // The method itself is required, but the arguments above
             // can be removed if not needed.
-
-            octoNode rootOctoNode;
+            /*
+            if ((updateSource & UpdateType.Once) == UpdateType.Once)
+            {
+                RunStateMachine();
+            }
+            */
 
             Random rnd = new Random(0);
             //Random rnd = new Random();
 
-            int N = 850;
+            int N = 34;
 
             List<Vector3D> listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
@@ -274,14 +363,19 @@ namespace IngameScript
                 listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
             }
 
-            rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
+            //rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
+
+            Echo("using iter");
+            rootOctoNode = new octoNode();
+            maketree2iter(ref rootOctoNode, listPointsNotSorted, 0, 3);
+
 
             //Vector3D v3d = new Vector3D(-49, -140, 107);
             //Vector3D v3d = new Vector3D(-49, -140, 87);
             //Vector3D v3d = new Vector3D(-45, -120, 60);
             //Vector3D v3d = new Vector3D(0,0,0);
-            //Vector3D v3d = new Vector3D(11.9, 11.9, 11.9);
-            Vector3D v3d = new Vector3D(119, 119, 119);
+            Vector3D v3d = new Vector3D(11.9, 11.9, 11.9);
+            //Vector3D v3d = new Vector3D(119, 119, 119);
 
             octoNode testON = new octoNode();
             octoNode test_Best = new octoNode();
