@@ -24,6 +24,12 @@ namespace IngameScript
     {
         IEnumerator<bool> _stateMachine;
 
+        octoNode rootOctoNode;
+
+        List<Vector3D> listPointsNotSorted = new List<Vector3D>();
+
+        List<subTreeNeedsProcessing> subTreeNeedsProcessingVar = new List<subTreeNeedsProcessing>();
+
         // ***MARKER: Coroutine Execution
         public void RunStateMachine()
         {
@@ -243,6 +249,110 @@ namespace IngameScript
             }
         }
 
+        public class subTreeNeedsProcessing
+        {
+            public octoNode r;
+            public List<Vector3D> listVectors;
+            public int i;
+            public int dim;
+            public subTreeNeedsProcessing( octoNode ri, List<Vector3D> lVectors, int axisI, int dimI)
+            {
+                r = ri;
+                listVectors = lVectors;
+                i = axisI;
+                dim = dimI;
+            }
+        }
+
+        public IEnumerator<bool> makeTreeIEnumerator()
+        {
+
+            int testI = 0;
+
+            while (subTreeNeedsProcessingVar.Count != 0)
+            {
+
+                subTreeNeedsProcessing nProc = subTreeNeedsProcessingVar[0];
+                //Echo("this2");
+                octoNode n = nProc.r;
+                List<Vector3D> listToBeSorted = nProc.listVectors;
+                int i = nProc.i;
+                int dim = nProc.dim;
+
+                Echo("testI:" + testI);
+                Echo("listToBeSorted.Count:" + listToBeSorted.Count);
+                //Echo("listToBeSorted.Distinct().ToList().Count:" + listToBeSorted.Distinct().ToList().Count);
+                List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, i);
+
+
+
+                testI = testI + 1;
+
+
+                int intIndexPoint = (listSorted.Count - 1) / 2;
+
+                int startLeft = 0;
+                int endLeft = intIndexPoint - 1;
+
+                int startRight = intIndexPoint + 1;
+                int endtRight = listSorted.Count - 1;
+
+                List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
+                List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
+
+                i = (i + 1) % dim;
+
+                //storing the point
+                n.x[0] = listSorted[intIndexPoint].X;
+                n.x[1] = listSorted[intIndexPoint].Y;
+                n.x[2] = listSorted[intIndexPoint].Z;
+                //subTreeNeedsProcessingVar[0].r.x[0] = listSorted[intIndexPoint].X;
+                //subTreeNeedsProcessingVar[0].r.x[1] = listSorted[intIndexPoint].Y;
+                //subTreeNeedsProcessingVar[0].r.x[2] = listSorted[intIndexPoint].Z;
+
+                if (subListLeft.Count != 0)
+                {
+                    n.left = new octoNode();
+                    subTreeNeedsProcessingVar.Add(
+                        new subTreeNeedsProcessing(n.left,
+                        subListLeft, i, dim));
+                }
+                if (subListRight.Count != 0)
+                {
+                    n.right = new octoNode();
+                    subTreeNeedsProcessingVar.Add(
+                        new subTreeNeedsProcessing(n.right,
+                        subListRight, i, dim));
+                }
+
+                //todo remove the processed node;
+                subTreeNeedsProcessingVar.RemoveAt(0);
+
+                if (testI % 800 == 0)
+                {
+                    Echo("% 50 == 0");
+                    //break;
+                     yield return true;
+                }
+                if (subTreeNeedsProcessingVar.Count == 0)
+                {
+                    Echo(".Count == 0");
+                    //break;
+                    yield return true;
+                }
+
+                if (Runtime.CurrentInstructionCount > 40000)
+                {
+                    Echo("Count > 40000");
+                    break;
+                    yield return true;
+                }
+            }
+
+            yield return true ;
+
+        }
+
 
         public static List<Vector3D> sortingOnSpecificAxises(List<Vector3D> listToSort, int axisOnWhichToSort)
         {
@@ -315,9 +425,41 @@ namespace IngameScript
             // here, which will allow your script to run itself without a 
             // timer block.
             // Initialize our state machine
-            _stateMachine = RunStuffOverTime();
+            //_stateMachine = RunStuffOverTime();
+            _stateMachine = makeTreeIEnumerator();
+            
 
             Runtime.UpdateFrequency |= UpdateFrequency.Once;
+            Runtime.UpdateFrequency |= UpdateFrequency.Update10;
+
+
+            Random rnd = new Random(0);
+            //Random rnd = new Random();
+
+            //int N = 800;
+            //int N = 850;
+            //int N = 1875;
+            //int N = 889;
+            //int N = 900;
+            //int N = 1800;
+            //int N = 2500;
+            //int N = 3500;
+            //ok
+            //int N = 3950;
+            int N = 4400;
+            //int N = 5000;
+
+            foreach (int testInt in Enumerable.Range(0, N))
+            {
+                
+                int numCoordx = -512 + rnd.Next() % 1024;
+                int numCoordy = -512 + rnd.Next() % 1024;
+                int numCoordz = -512 + rnd.Next() % 1024;
+                /*int numCoordx = -1024 + rnd.Next() % 2048;
+                int numCoordy = -1024 + rnd.Next() % 2048;
+                int numCoordz = -1024 + rnd.Next() % 2048;*/
+                listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
+            }
         }
 
         public void Save()
@@ -325,12 +467,10 @@ namespace IngameScript
             // Called when the program needs to save its state. Use
             // this method to save your state to the Storage field
             // or some other means. 
-            // 
+            // subTreeNeedsProcessing
             // This method is optional and can be removed if not
             // needed.
         }
-
-        octoNode rootOctoNode;
         public void Main(string argument, UpdateType updateSource)
         {
             // The main entry point of the script, invoked every time
@@ -342,6 +482,40 @@ namespace IngameScript
             // 
             // The method itself is required, but the arguments above
             // can be removed if not needed.
+
+
+
+            /*
+            Echo("maketree2");
+            rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
+            */
+
+
+            /*
+            Echo("using iter");
+            rootOctoNode = new octoNode();
+            maketree2iter(ref rootOctoNode, listPointsNotSorted, 0, 3);
+            Echo("" + convertOctoNodeToV3D(rootOctoNode.left));
+            */
+
+
+            
+            Echo("IC" + Runtime.CurrentInstructionCount);
+            
+            Echo("using subTreeNeedsProcessingVar");
+            if(rootOctoNode == null) { 
+                rootOctoNode = new octoNode();
+                subTreeNeedsProcessingVar.Add(
+                    new subTreeNeedsProcessing( rootOctoNode,
+                    listPointsNotSorted, 0, 3));
+            }
+            else
+            {
+                //Echo("rootOctoNode.l.l:" + convertOctoNodeToV3D(rootOctoNode.left.left));
+                Echo("rootOctoNode.r:" + convertOctoNodeToV3D(rootOctoNode.right));
+                Echo("rootOctoNode.l:" + convertOctoNodeToV3D(rootOctoNode.left));
+                Echo("rootOctoNode:" + convertOctoNodeToV3D(rootOctoNode));
+            }
             /*
             if ((updateSource & UpdateType.Once) == UpdateType.Once)
             {
@@ -349,26 +523,97 @@ namespace IngameScript
             }
             */
 
-            Random rnd = new Random(0);
-            //Random rnd = new Random();
 
-            int N = 34;
+            Echo("Numbers of points:" + listPointsNotSorted.Count);
 
-            List<Vector3D> listPointsNotSorted = new List<Vector3D>();
-            foreach (int testInt in Enumerable.Range(0, N))
+            int testI = 0;
+
+            while (subTreeNeedsProcessingVar.Count != 0)
             {
-                int numCoordx = -512 + rnd.Next() % 1024;
-                int numCoordy = -512 + rnd.Next() % 1024;
-                int numCoordz = -512 + rnd.Next() % 1024;
-                listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
+
+                subTreeNeedsProcessing nProc = subTreeNeedsProcessingVar[0];
+                //Echo("this2");
+                octoNode n = nProc.r;
+                List<Vector3D> listToBeSorted = nProc.listVectors;
+                int i = nProc.i;
+                int dim = nProc.dim;
+
+                Echo("testI:" + testI);
+                Echo("listToBeSorted.Count:" + listToBeSorted.Count);
+                //Echo("listToBeSorted.Distinct().ToList().Count:" + listToBeSorted.Distinct().ToList().Count);
+                List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, i);
+
+
+
+                testI = testI + 1;
+
+
+                int intIndexPoint = (listSorted.Count - 1) / 2;
+
+                int startLeft = 0;
+                int endLeft = intIndexPoint - 1;
+
+                int startRight = intIndexPoint + 1;
+                int endtRight = listSorted.Count - 1;
+
+                List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
+                List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
+
+                i = (i + 1) % dim;
+
+                //storing the point
+                n.x[0] = listSorted[intIndexPoint].X;
+                n.x[1] = listSorted[intIndexPoint].Y;
+                n.x[2] = listSorted[intIndexPoint].Z;
+                //subTreeNeedsProcessingVar[0].r.x[0] = listSorted[intIndexPoint].X;
+                //subTreeNeedsProcessingVar[0].r.x[1] = listSorted[intIndexPoint].Y;
+                //subTreeNeedsProcessingVar[0].r.x[2] = listSorted[intIndexPoint].Z;
+
+                if (subListLeft.Count != 0)
+                {
+                    n.left = new octoNode();
+                    subTreeNeedsProcessingVar.Add(
+                        new subTreeNeedsProcessing(n.left,
+                        subListLeft, i, dim));
+                }
+                if (subListRight.Count != 0)
+                {
+                    n.right = new octoNode();
+                    subTreeNeedsProcessingVar.Add(
+                        new subTreeNeedsProcessing(n.right,
+                        subListRight, i, dim));
+                }
+
+                //todo remove the processed node;
+                subTreeNeedsProcessingVar.RemoveAt(0);
+
+                if (testI % 400 == 0)
+                {
+                    Echo("% 400 == 0");
+                    break;
+                    //yield return true;
+                }
+                if (subTreeNeedsProcessingVar.Count == 0)
+                {
+                    Echo(".Count == 0");
+                    break;
+                    //yield return true;
+                }
+
+                if (Runtime.CurrentInstructionCount > 3000)
+                {
+                    Echo("Count > 3000");
+                    break;
+                    //yield return true;
+                }
             }
 
-            //rootOctoNode = maketree2(listPointsNotSorted, 0, 3);
-
-            Echo("using iter");
-            rootOctoNode = new octoNode();
-            maketree2iter(ref rootOctoNode, listPointsNotSorted, 0, 3);
-
+            if (Runtime.CurrentInstructionCount > 3000)
+            {
+                Echo("Count > 3000");
+                return;
+                //yield return true;
+            }
 
             //Vector3D v3d = new Vector3D(-49, -140, 107);
             //Vector3D v3d = new Vector3D(-49, -140, 87);
@@ -386,6 +631,8 @@ namespace IngameScript
 
             double best_dist = 500000;
 
+
+            visited = 0;
             nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
 
             Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
@@ -413,6 +660,7 @@ namespace IngameScript
             Echo("actualClosest:" + actualClosest);
 
             Echo("Hello World!");
+            Echo("IC" + Runtime.CurrentInstructionCount);
 
         }
     }
