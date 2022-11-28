@@ -30,6 +30,10 @@ namespace IngameScript
 
         List<subTreeNeedsProcessing> subTreeNeedsProcessingVar = new List<subTreeNeedsProcessing>();
 
+        Vector3D v3d;
+
+        Vector3D actualClosest;
+
         // ***MARKER: Coroutine Execution
         public void RunStateMachine()
         {
@@ -430,12 +434,14 @@ namespace IngameScript
             
 
             Runtime.UpdateFrequency |= UpdateFrequency.Once;
-            Runtime.UpdateFrequency |= UpdateFrequency.Update10;
+            //Runtime.UpdateFrequency |= UpdateFrequency.Update10;
+            Runtime.UpdateFrequency |= UpdateFrequency.Update100;
 
 
             Random rnd = new Random(0);
             //Random rnd = new Random();
 
+            //int N = 16;
             //int N = 800;
             //int N = 850;
             //int N = 1875;
@@ -445,8 +451,8 @@ namespace IngameScript
             //int N = 2500;
             //int N = 3500;
             //ok
-            //int N = 3950;
-            int N = 4400;
+            int N = 3950;
+            //int N = 4400;
             //int N = 5000;
 
             foreach (int testInt in Enumerable.Range(0, N))
@@ -460,6 +466,28 @@ namespace IngameScript
                 int numCoordz = -1024 + rnd.Next() % 2048;*/
                 listPointsNotSorted.Add(new Vector3D(numCoordx, numCoordy, numCoordz));
             }
+
+
+            //Vector3D v3d = new Vector3D(-49, -140, 107);
+            //Vector3D v3d = new Vector3D(-49, -140, 87);
+            //Vector3D v3d = new Vector3D(-45, -120, 60);
+            //Vector3D v3d = new Vector3D(0,0,0);
+             v3d = new Vector3D(11.9, 11.9, 11.9);
+            //Vector3D v3d = new Vector3D(119, 119, 119);
+
+             actualClosest = new Vector3D(500000, 500000, 500000);
+            double actualClosestDist = 500000;
+
+            foreach (Vector3D VD in listPointsNotSorted)
+            {
+
+                double tmpDist = (v3d - VD).Length();
+                if (actualClosestDist > tmpDist)
+                {
+                    actualClosestDist = tmpDist;
+                    actualClosest = VD;
+                }
+            }
         }
 
         public void Save()
@@ -471,6 +499,22 @@ namespace IngameScript
             // This method is optional and can be removed if not
             // needed.
         }
+
+
+        public string printNode(octoNode point)
+        {
+            return "" + convertOctoNodeToV3D(point);
+        }
+
+        public string printTree(octoNode root, int depth)
+        {
+            string result = "";
+            result = result + "depth:" + depth + ":" + printNode(root) + "\n";
+            if (root.left != null) result = result + "left:" + printTree(root.left, depth + 1) + "\n";
+            if (root.right != null) result = result + "right:" + printTree(root.right, depth + 1) + "";
+            return result;
+        }
+
         public void Main(string argument, UpdateType updateSource)
         {
             // The main entry point of the script, invoked every time
@@ -523,6 +567,7 @@ namespace IngameScript
             }
             */
 
+            Me.CustomData = printTree(rootOctoNode,0);
 
             Echo("Numbers of points:" + listPointsNotSorted.Count);
 
@@ -600,27 +645,21 @@ namespace IngameScript
                     //yield return true;
                 }
 
-                if (Runtime.CurrentInstructionCount > 3000)
+                if (Runtime.CurrentInstructionCount > 30000)
                 {
-                    Echo("Count > 3000");
+                    Echo("Count > 30000");
                     break;
                     //yield return true;
                 }
             }
 
-            if (Runtime.CurrentInstructionCount > 3000)
+            if (Runtime.CurrentInstructionCount > 30000)
             {
-                Echo("Count > 3000");
+                Echo("Count > 30000");
                 return;
                 //yield return true;
             }
 
-            //Vector3D v3d = new Vector3D(-49, -140, 107);
-            //Vector3D v3d = new Vector3D(-49, -140, 87);
-            //Vector3D v3d = new Vector3D(-45, -120, 60);
-            //Vector3D v3d = new Vector3D(0,0,0);
-            Vector3D v3d = new Vector3D(11.9, 11.9, 11.9);
-            //Vector3D v3d = new Vector3D(119, 119, 119);
 
             octoNode testON = new octoNode();
             octoNode test_Best = new octoNode();
@@ -639,19 +678,6 @@ namespace IngameScript
 
             string infos_clos = "" + (v3d_test_Best - v3d).Length();
 
-            Vector3D actualClosest = new Vector3D(500000, 500000, 500000);
-            double actualClosestDist = 500000;
-
-            foreach (Vector3D VD in listPointsNotSorted)
-            {
-
-                double tmpDist = (v3d - VD).Length();
-                if (actualClosestDist > tmpDist)
-                {
-                    actualClosestDist = tmpDist;
-                    actualClosest = VD;
-                }
-            }
 
             Echo("visited:" + visited);
             Echo("yieldsAmount:" + yieldsAmount);
@@ -661,6 +687,7 @@ namespace IngameScript
 
             Echo("Hello World!");
             Echo("IC" + Runtime.CurrentInstructionCount);
+
 
         }
     }
