@@ -434,8 +434,8 @@ namespace IngameScript
             
 
             Runtime.UpdateFrequency |= UpdateFrequency.Once;
-            //Runtime.UpdateFrequency |= UpdateFrequency.Update10;
-            Runtime.UpdateFrequency |= UpdateFrequency.Update100;
+            Runtime.UpdateFrequency |= UpdateFrequency.Update10;
+            //Runtime.UpdateFrequency |= UpdateFrequency.Update100;
 
 
             Random rnd = new Random(0);
@@ -475,19 +475,6 @@ namespace IngameScript
              v3d = new Vector3D(11.9, 11.9, 11.9);
             //Vector3D v3d = new Vector3D(119, 119, 119);
 
-             actualClosest = new Vector3D(500000, 500000, 500000);
-            double actualClosestDist = 500000;
-
-            foreach (Vector3D VD in listPointsNotSorted)
-            {
-
-                double tmpDist = (v3d - VD).Length();
-                if (actualClosestDist > tmpDist)
-                {
-                    actualClosestDist = tmpDist;
-                    actualClosest = VD;
-                }
-            }
         }
 
         public void Save()
@@ -561,18 +548,23 @@ namespace IngameScript
                 Echo("rootOctoNode:" + convertOctoNodeToV3D(rootOctoNode));
             }
             /*
+             //coroutine way to build the tree
+            Echo("printTree in Custom Data, disabled it if you can");
             if ((updateSource & UpdateType.Once) == UpdateType.Once)
             {
                 RunStateMachine();
             }
             */
+            Echo("ICbeforeprintTree" + Runtime.CurrentInstructionCount);
 
-            Me.CustomData = printTree(rootOctoNode,0);
+            //Me.CustomData = printTree(rootOctoNode,0);
 
             Echo("Numbers of points:" + listPointsNotSorted.Count);
 
             int testI = 0;
 
+            Echo("ICbeforetreebuidling" + Runtime.CurrentInstructionCount);
+            //iterative way to build the tree
             while (subTreeNeedsProcessingVar.Count != 0)
             {
 
@@ -672,12 +664,31 @@ namespace IngameScript
 
 
             visited = 0;
+            Echo("ICnearestbefore" + Runtime.CurrentInstructionCount);
             nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
 
             Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
 
             string infos_clos = "" + (v3d_test_Best - v3d).Length();
 
+
+            actualClosest = new Vector3D(500000, 500000, 500000);
+            double actualClosestDist = 500000;
+
+            Echo("ICnearest after" + Runtime.CurrentInstructionCount);
+
+            foreach (Vector3D VD in listPointsNotSorted)
+            {
+
+                double tmpDist = (v3d - VD).Length();
+                if (actualClosestDist > tmpDist)
+                {
+                    actualClosestDist = tmpDist;
+                    actualClosest = VD;
+                }
+            }
+
+            Echo("ICclosestafter" + Runtime.CurrentInstructionCount);
 
             Echo("visited:" + visited);
             Echo("yieldsAmount:" + yieldsAmount);
