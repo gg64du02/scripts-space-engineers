@@ -378,3 +378,56 @@ for node in nodes:
     # exit()
 
 print(resultStr)
+
+#sorting the nodes for the kdtree
+pass
+print("sorting the nodes for the kdtree")
+nodesNpList = []
+for node in nodes:
+    key = node
+    values = nodes[node]
+    print("key", key)
+    print("values", values)
+    print("index",dictNodesIndex[key])
+    nodesNpList.append(node)
+
+resultStr = ""
+nodesNpList.sort()
+pass
+for sortedNode in nodesNpList:
+    print("sortedNode",sortedNode)
+
+    key = sortedNode
+    values = nodes[node]
+    print("key", key)
+    print("values", values)
+    print("index", dictNodesIndex[key])
+    print(convertToRangeForUnsignedConv(key))
+    print()
+
+    # key processing
+    for keySubInt in convertToRangeForUnsignedConv(key):
+        resultStr = resultStr + encodeToSigned4096m2048(keySubInt)
+
+    for index in dictOfRef[key]:
+        # if(index>4095):
+        #     print(index)
+        tmpCheckingFunction = encodeAsString___Range(index)
+        if (len(tmpCheckingFunction) % 3 != 0):
+            print("if(len(tmpCheckingFunction)%3!=0):")
+            print("tmpCheckingFunction", tmpCheckingFunction)
+            print(index)
+        resultStr = resultStr + tmpCheckingFunction
+
+    # # values processing
+    # for value in values:
+    #     tmpValueConverted = convertToRangeForUnsignedConv(value)
+    #     for valueSubInt in tmpValueConverted:
+    #         resultStr = resultStr + encodeToSigned4096m2048(valueSubInt)
+
+    resultStr = resultStr + '|'
+
+    # print(resultStr)
+    # exit()
+
+print(resultStr)
