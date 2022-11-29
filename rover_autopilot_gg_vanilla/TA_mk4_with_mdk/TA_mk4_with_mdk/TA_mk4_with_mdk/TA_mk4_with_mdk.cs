@@ -64,6 +64,7 @@ namespace IngameScript
 		List<subTreeNeedsProcessing> subTreeNeedsProcessingVar = new List<subTreeNeedsProcessing>();
 		bool pointsAreAllLoaded = false;
 		bool kdtreeIsDoneBuidling = false;
+		static int visited = 0;
 
 		public Program()
 		{
@@ -212,6 +213,59 @@ namespace IngameScript
 				return x.Z.CompareTo(y.Z);
 			}
 		}
+		//kd tree support
+		//nearest neighbors search
+		static void nearest(octoNode root, octoNode nd, int i, int dim, ref octoNode best, ref double best_dist)
+		{
+			double d, dx, dx2;
+
+			if (root == null) return;
+			d = dist(root, nd, dim);
+			//d = dist2(convertOctoNodeToV3D(root), convertOctoNodeToV3D(nd));
+			dx = root.x[i] - nd.x[i];
+			dx2 = dx * dx;
+
+			visited++;
+
+			if ((best == null) || d < best_dist)
+			{
+				best_dist = d;
+				best = root;
+			}
+
+
+			//Echo("best:" + convertOctoNodeToV3D(best));
+			//Echo("root:" + convertOctoNodeToV3D(root));
+			//Echo("=============");
+
+			/* if chance of exact match is high */
+			if (best_dist == null) return;
+
+			if (++i >= dim) i = 0;
+
+			nearest(dx > 0 ? root.left : root.right, nd, i, dim, ref best, ref best_dist);
+			if (dx2 >= best_dist) return;
+			nearest(dx > 0 ? root.right : root.left, nd, i, dim, ref best, ref best_dist);
+		}
+		static public double dist(octoNode a, octoNode b, int dim)
+		{
+			double t, d = 0;
+			dim = dim - 1;
+			while (dim >= 0)
+			{
+				t = a.x[dim] - b.x[dim];
+				d += t * t;
+				dim = dim - 1;
+			}
+			return d;
+		}
+		static public double dist2(Vector3D a, Vector3D b)
+		{
+			double d;
+			d = (a - b).LengthSquared();
+			return d;
+		}
+
 
 
 		public bool initThePlanetGraph()
@@ -996,22 +1050,17 @@ namespace IngameScript
 			{
 				if (rootOctoNode == null)
 				{
-					Echo("test1");
 					rootOctoNode = new octoNode();
-					Echo("test2");
 					subTreeNeedsProcessingVar.Add(
 						new subTreeNeedsProcessing(rootOctoNode,
 						sortListV3Dkdtree, 0, 3));
-					Echo("test3");
 				}
 				else
 				{
-					Echo("test4");
 					//Echo("rootOctoNode.l.l:" + convertOctoNodeToV3D(rootOctoNode.left.left));
 					Echo("rootOctoNode.r:" + convertOctoNodeToV3D(rootOctoNode.right));
 					Echo("rootOctoNode.l:" + convertOctoNodeToV3D(rootOctoNode.left));
 					Echo("rootOctoNode:" + convertOctoNodeToV3D(rootOctoNode));
-					Echo("test5");
 				}
 			}
 
@@ -1019,15 +1068,13 @@ namespace IngameScript
 			//iterative way to build the tree
 			while (subTreeNeedsProcessingVar.Count != 0)
 			{
-
 				subTreeNeedsProcessing nProc = subTreeNeedsProcessingVar[0];
-				//Echo("this2");
+
 				octoNode n = nProc.r;
 				List<Vector3D> listToBeSorted = nProc.listVectors;
 				int i = nProc.i;
 				int dim = nProc.dim;
 
-				//Echo("testI:" + testI);
 				//Echo("listToBeSorted.Count:" + listToBeSorted.Count);
 				
 				List<Vector3D> listSorted;
@@ -1061,9 +1108,6 @@ namespace IngameScript
 				n.x[0] = listSorted[intIndexPoint].X;
 				n.x[1] = listSorted[intIndexPoint].Y;
 				n.x[2] = listSorted[intIndexPoint].Z;
-				//subTreeNeedsProcessingVar[0].r.x[0] = listSorted[intIndexPoint].X;
-				//subTreeNeedsProcessingVar[0].r.x[1] = listSorted[intIndexPoint].Y;
-				//subTreeNeedsProcessingVar[0].r.x[2] = listSorted[intIndexPoint].Z;
 
 				if (subListLeft.Count != 0)
 				{
@@ -1129,6 +1173,46 @@ namespace IngameScript
 			}
 
 
+			Vector3D planetCenter = new Vector3D(0, 0, 0);
+
+			bool planetDetected = RemoteControl.TryGetPlanetPosition(out planetCenter);
+
+			Echo("planetCenter:" + planetCenter);
+
+			Vector3D myPos = RemoteControl.GetPosition();
+			Echo("myPos:" + Vector3D.Round(myPos, 2));
+
+			Vector3D myRelPosOnplanet = myPos - planetCenter;
+
+			Echo("myRelPosOnplanet:" + Vector3D.Round(myRelPosOnplanet, 2));
+
+
+			if (kdtreeIsDoneBuidling == true)
+            {
+				octoNode testON = new octoNode();
+				octoNode test_Best = new octoNode();
+
+				Vector3D v3d = myRelPosOnplanet;
+
+				testON.x[0] = v3d.X;
+				testON.x[1] = v3d.Y;
+				testON.x[2] = v3d.Z;
+
+				double best_dist = 500000;
+
+
+				Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
+				nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
+
+				Echo("visited:" + visited);
+
+				Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
+
+				string infos_clos = "" + (v3d_test_Best - v3d).Length();
+
+			}
+
+
 			Echo("myTerrainTarget:" + Vector3D.Round(myTerrainTarget, 3));
 
 			if (RemoteControl == null)
@@ -1138,9 +1222,6 @@ namespace IngameScript
 
 
 			float SLerror = (float)(RemoteControl.SpeedLimit - RemoteControl.GetShipSpeed());
-
-
-
 
 			spriteFrame = _drawingSurface.DrawFrame();
 
@@ -1231,18 +1312,6 @@ namespace IngameScript
 				//Point finalPointGoal = pixelPosCalculatedTarget;
 
 
-				Vector3D planetCenter = new Vector3D(0, 0, 0);
-
-				bool planetDetected = RemoteControl.TryGetPlanetPosition(out planetCenter);
-
-				Echo("planetCenter:" + planetCenter);
-
-				Vector3D myPos = RemoteControl.GetPosition();
-				Echo("myPos:" + Vector3D.Round(myPos,2));
-
-				Vector3D myRelPosOnplanet = myPos - planetCenter;
-
-				Echo("myRelPosOnplanet:" + Vector3D.Round(myRelPosOnplanet,2));
 
 				Vector3D startPointGoal = Vector3D.Round(myRelPosOnplanet,1);
 
