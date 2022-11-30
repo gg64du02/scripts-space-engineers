@@ -291,10 +291,19 @@ fig.colorbar(img)
 
 # plt.show()
 
+
+nodesNpList = []
+for node in nodes:
+    key = node
+    values = nodes[node]
+    nodesNpList.append(node)
+nodesNpList.sort()
+
+
 dictNodesIndex = {}
 # fixing nodes ref
 nodesIndexes = 0
-for node in nodes:
+for node in nodesNpList:
     key = node
     values = nodes[node]
     dictNodesIndex[key] = nodesIndexes
@@ -379,6 +388,8 @@ for node in nodes:
 
 print(resultStr)
 
+# exit()
+
 #sorting the nodes for the kdtree
 pass
 print("sorting the nodes for the kdtree")
@@ -398,7 +409,7 @@ for sortedNode in nodesNpList:
     print("sortedNode",sortedNode)
 
     key = sortedNode
-    values = nodes[node]
+    values = nodes[sortedNode]
     print("key", key)
     print("values", values)
     print("index", dictNodesIndex[key])
