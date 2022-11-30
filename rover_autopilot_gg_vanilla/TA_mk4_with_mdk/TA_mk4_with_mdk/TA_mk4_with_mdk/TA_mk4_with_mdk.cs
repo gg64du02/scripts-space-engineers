@@ -1058,9 +1058,9 @@ namespace IngameScript
 				else
 				{
 					//Echo("rootOctoNode.l.l:" + convertOctoNodeToV3D(rootOctoNode.left.left));
-					Echo("rootOctoNode.r:" + convertOctoNodeToV3D(rootOctoNode.right));
-					Echo("rootOctoNode.l:" + convertOctoNodeToV3D(rootOctoNode.left));
-					Echo("rootOctoNode:" + convertOctoNodeToV3D(rootOctoNode));
+					Echo("rootOctoNode.r:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.right),0));
+					Echo("rootOctoNode.l:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left),0));
+					Echo("rootOctoNode:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode),0));
 				}
 			}
 
@@ -1127,15 +1127,17 @@ namespace IngameScript
 				//todo remove the processed node;
 				subTreeNeedsProcessingVar.RemoveAt(0);
 
-				if (testI % 400 == 0)
+				if (testI % 4000 == 0)
 				{
-					Echo("% 400 == 0");
+					Echo("% 4000 == 0");
+					Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
 					break;
 					//yield return true;
 				}
 				if (subTreeNeedsProcessingVar.Count == 0)
 				{
 					Echo(".Count == 0");
+					Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
 					break;
 					//yield return true;
 				}
@@ -1143,6 +1145,7 @@ namespace IngameScript
 				if (Runtime.CurrentInstructionCount > 30000)
 				{
 					Echo("Count > 30000");
+					Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
 					break;
 					//yield return true;
 				}
@@ -1151,6 +1154,7 @@ namespace IngameScript
 			if (Runtime.CurrentInstructionCount > 30000)
 			{
 				Echo("Count > 30000");
+				Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
 				return;
 				//yield return true;
 			}
@@ -1198,17 +1202,26 @@ namespace IngameScript
 				testON.x[1] = v3d.Y;
 				testON.x[2] = v3d.Z;
 
-				double best_dist = 500000;
+				double best_dist = 5000000000;
 
-
+				visited = 0;
 				Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
 				nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
+				Echo("ICkdtreenearestafter" + Runtime.CurrentInstructionCount);
+
+				Echo(""+ Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
 
 				Echo("visited:" + visited);
 
+				Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testON), 1));
+				Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(test_Best), 1));
+
 				Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
 
-				string infos_clos = "" + (v3d_test_Best - v3d).Length();
+				Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best,1));
+				Echo("best_dist(squarred):" + Math.Round(best_dist,1));
+
+				Echo("infos_clos:"+Math.Round((v3d_test_Best - v3d).Length(), 1));
 
 			}
 
@@ -1517,6 +1530,7 @@ namespace IngameScript
 
 
 
+			Echo("ICkdtreeEnd" + Runtime.CurrentInstructionCount);
 
 			// if (!RemoteControl.IsAutoPilotEnabled) {
 			// }
