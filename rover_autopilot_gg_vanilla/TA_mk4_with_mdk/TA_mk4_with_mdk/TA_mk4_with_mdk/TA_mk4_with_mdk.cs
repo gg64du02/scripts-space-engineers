@@ -1272,64 +1272,69 @@ namespace IngameScript
 				{
 					Echo("no nodes init, no path available!");
 					return;
+                }
+
+                if (kdtreeIsDoneBuidling == true)
+                {
+                    octoNode testMyPosNode = new octoNode();
+                    octoNode startNode = new octoNode();
+
+                    Vector3D v3d = myRelPosOnplanet;
+
+                    testMyPosNode.x[0] = v3d.X;
+                    testMyPosNode.x[1] = v3d.Y;
+                    testMyPosNode.x[2] = v3d.Z;
+
+                    double best_dist = 5000000000;
+
+                    visited = 0;
+                    Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
+                    nearest(rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
+                    Echo("ICkdtreenearestafter" + Runtime.CurrentInstructionCount);
+
+                    Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
+
+                    Echo("visited:" + visited);
+
+                    Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testMyPosNode), 1));
+                    Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(startNode), 1));
+
+                    Vector3D v3d_test_Best = convertOctoNodeToV3D(startNode);
+
+                    Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best, 1));
+                    Echo("best_dist(squarred):" + Math.Round(best_dist, 1));
+
+                    Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
+
+
+                    octoNode goalNode = new octoNode();
+
+                    Vector3D v3dGoal = targetV3DrelToPlanet;
+
+                    testMyPosNode.x[0] = v3dGoal.X;
+                    testMyPosNode.x[1] = v3dGoal.Y;
+                    testMyPosNode.x[2] = v3dGoal.Z;
+
+                    double best_distGoal = 5000000000;
+
+                    Echo("ICkdtreenearestbeforeGoal" + Runtime.CurrentInstructionCount);
+                    nearest(rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
+                    Echo("ICkdtreenearestafterGoal" + Runtime.CurrentInstructionCount);
+
+					Echo("goalPos" + convertOctoNodeToV3D(goalNode));
+					//Echo("goalIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode)));
+					Echo("startPos" + convertOctoNodeToV3D(startNode));
+					//Echo("startIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(startNode)));
+
+
+					startInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(startNode));
+					endInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode));
+
 				}
 
-				if (kdtreeIsDoneBuidling == true)
-				{
-					octoNode testMyPosNode = new octoNode();
-					octoNode startNode = new octoNode();
-
-					Vector3D v3d = myRelPosOnplanet;
-
-					testMyPosNode.x[0] = v3d.X;
-					testMyPosNode.x[1] = v3d.Y;
-					testMyPosNode.x[2] = v3d.Z;
-
-					double best_dist = 5000000000;
-
-					visited = 0;
-					Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
-					nearest(rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
-					Echo("ICkdtreenearestafter" + Runtime.CurrentInstructionCount);
-
-					Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
-
-					Echo("visited:" + visited);
-
-					Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testMyPosNode), 1));
-					Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(startNode), 1));
-
-					Vector3D v3d_test_Best = convertOctoNodeToV3D(startNode);
-
-					Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best, 1));
-					Echo("best_dist(squarred):" + Math.Round(best_dist, 1));
-
-					Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
-
-
-					octoNode goalNode = new octoNode();
-
-					Vector3D v3dGoal = targetV3DrelToPlanet;
-
-					testMyPosNode.x[0] = v3dGoal.X;
-					testMyPosNode.x[1] = v3dGoal.Y;
-					testMyPosNode.x[2] = v3dGoal.Z;
-
-					double best_distGoal = 5000000000;
-
-					Echo("ICkdtreenearestbeforeGoal" + Runtime.CurrentInstructionCount);
-					nearest(rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
-					Echo("ICkdtreenearestafterGoal" + Runtime.CurrentInstructionCount);
-					/*
-					startInt = nodes[convertOctoNodeToV3D(goalNode)];
-					startInt = nodes[convertOctoNodeToV3D(goalNode)];
-					nodes.IndexOf(convertOctoNodeToV3D(startNode));
-					*/
-				}
-
-				//deubg purpose
-				startInt = 1;
-				endInt = 50;
+                //debug purpose
+                //startInt = 1;
+				//endInt = 50;
 
 				//aStarPathFinding(startPointGoal, finalPointGoal, out aStarPathNodeList1, out gscore1);
 				if (startInt >= 0)
