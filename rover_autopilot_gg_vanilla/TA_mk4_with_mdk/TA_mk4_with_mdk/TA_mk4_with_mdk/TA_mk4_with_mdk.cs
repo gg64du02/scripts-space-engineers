@@ -1097,14 +1097,14 @@ namespace IngameScript
 				if (testI % 4000 == 0)
 				{
 					Echo("% 4000 == 0");
-					Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
+					Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
 					break;
 					//yield return true;
 				}
 				if (subTreeNeedsProcessingVar.Count == 0)
 				{
 					Echo(".Count == 0");
-					Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
+					Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
 					break;
 					//yield return true;
 				}
@@ -1181,7 +1181,8 @@ namespace IngameScript
 			int facenumberCalculated = -1;
 			Point pixelPosCalculated = new Point(0, 0);
 
-			faceAndPointOnPlanetsCalculated(RemoteControl, out facenumberCalculated, out pixelPosCalculated, false, new Vector3D(0, 0, 0));
+			faceAndPointOnPlanetsCalculated(RemoteControl, out facenumberCalculated, out pixelPosCalculated, 
+				false, new Vector3D(0, 0, 0));
 
 			Echo("facenumberMain1:" + facenumberCalculated);
 			Echo("pixelPosMain1:" + pixelPosCalculated);
@@ -1193,7 +1194,8 @@ namespace IngameScript
 			Vector3D shipForwardVectorTip = 2 * 1024 * RemoteControl.WorldMatrix.Forward + Me.GetPosition();
 
 			Point pointShipForwardVector = new Point(0, 0);
-			faceAndPointOnPlanetsCalculated(RemoteControl, out faceNumberTipRover, out pointShipForwardVector, true, shipForwardVectorTip);
+			faceAndPointOnPlanetsCalculated(RemoteControl, out faceNumberTipRover, out pointShipForwardVector, 
+				true, shipForwardVectorTip);
 			Echo("shipForwardVectorTip:" + Vector3D.Round(shipForwardVectorTip, 3));
 			Echo("pointShipForwardVector:" + pointShipForwardVector);
 
@@ -1288,9 +1290,9 @@ namespace IngameScript
                     double best_dist = 5000000000;
 
                     visited = 0;
-                    Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
+                    Echo("ICkdtreenearestbefore:" + Runtime.CurrentInstructionCount);
                     nearest(rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
-                    Echo("ICkdtreenearestafter" + Runtime.CurrentInstructionCount);
+                    Echo("ICkdtreenearestafter:" + Runtime.CurrentInstructionCount);
 
                     Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
 
@@ -1316,10 +1318,10 @@ namespace IngameScript
                     testMyPosNode.x[2] = v3dGoal.Z;
 
                     double best_distGoal = 5000000000;
-
-                    Echo("ICkdtreenearestbeforeGoal" + Runtime.CurrentInstructionCount);
+					
+                    Echo("ICkdtreenearestbeforeGoal:" + Runtime.CurrentInstructionCount);
                     nearest(rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
-                    Echo("ICkdtreenearestafterGoal" + Runtime.CurrentInstructionCount);
+                    Echo("ICkdtreenearestafterGoal:" + Runtime.CurrentInstructionCount);
 
 					Echo("goalPos" + convertOctoNodeToV3D(goalNode));
 					//Echo("goalIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode)));
@@ -1344,6 +1346,11 @@ namespace IngameScript
 						aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
 					}
                 }
+
+				Vector3D gV3D = RemoteControl.GetNaturalGravity();
+				Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
+
+				displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
 
 
 				//getting vectors to help with angles proposals
@@ -1423,14 +1430,11 @@ namespace IngameScript
 				// myTerrainTarget = new Vector3D(0, 0, 0);
 				// }
 
-				if (facenumberCalculated == facenumberCalculatedTarget)
+				if (Math.Abs(pixelPosCalculated.X - pixelPosCalculatedTarget.X) <= 1)
 				{
-					if (Math.Abs(pixelPosCalculated.X - pixelPosCalculatedTarget.X) <= 1)
+					if (Math.Abs(pixelPosCalculated.Y - pixelPosCalculatedTarget.Y) <= 1)
 					{
-						if (Math.Abs(pixelPosCalculated.Y - pixelPosCalculatedTarget.Y) <= 1)
-						{
-							myTerrainTarget = new Vector3D(0, 0, 0);
-						}
+						myTerrainTarget = new Vector3D(0, 0, 0);
 					}
 				}
 
@@ -1457,10 +1461,108 @@ namespace IngameScript
 
 
 
-			Echo("ICkdtreeEnd" + Runtime.CurrentInstructionCount);
+			Echo("ICkdtreeEnd:" + Runtime.CurrentInstructionCount);
 
 			// if (!RemoteControl.IsAutoPilotEnabled) {
 			// }
+		}
+
+
+		public void displayThe3dPathCentered(List<Node> path, Vector3D grav,
+			Vector3D forward, Vector3D centeredOn)
+        {
+			Echo("displayThe3dPathCentered");
+			Echo("path.Count"+path.Count);
+			List<Vector3D> path3DProjWgrav = new List<Vector3D>();
+			List<Vector3D> path2DProjWgrav = new List<Vector3D>();
+
+			//Echo("" + RemoteControl.WorldMatrix.Forward);
+
+			if(path.Count< 2)
+            {
+				return;
+            }
+
+			//Vector2 plottingPath = new Vector2(0, 0);
+			Vector2 prevplottingPath = new Vector2(128, 128+64);
+			Vector2 plottingPath = new Vector2(128, 128+64);
+
+			int counter = 0;
+			foreach (Node node in path)
+            {
+				Vector3D nodePosition = node.position;
+				Vector3D tmpProj = nodePosition - VectorHelper.VectorProjection(nodePosition, grav);
+
+                path3DProjWgrav.Add(tmpProj);
+				
+
+				Vector3D bodyRCX = Vector3D.Normalize(grav.Cross(forward));
+				Vector3D bodyRCY = forward;
+
+				double projX = tmpProj.Dot(bodyRCX);
+				double projY = -tmpProj.Dot(bodyRCY);
+
+				if(counter == 0)
+				{
+					projX = projX - plottingPath.X;
+					projY = projY - plottingPath.Y;
+				}
+
+				//double df = 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+				double df =0.25* 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+				//double df = 1;
+				projX = projX * df;
+				projY = projY * df;
+				Echo("df:" + df);
+
+				//plottingPath = new Vector2(128, 128);
+				//prevplottingPath = new Vector2(128+64, 128+64);
+
+
+				plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
+
+				DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
+
+				//Echo("plottingPath:" + plottingPath);
+				//Echo("prevplottingPath:" + prevplottingPath);
+				//Echo("=================:");
+
+				if (counter != 0)
+                {
+					prevplottingPath = plottingPath;
+				}
+
+				if (counter > 5)
+                {
+					//break;
+                }
+
+				counter = counter + 1;
+			}
+
+
+		}
+
+		//TODO: add credit to description
+		public static class VectorHelper
+		{
+			// in radians
+			public static double VectorAngleBetween(Vector3D a, Vector3D b)
+			{
+				if (Vector3D.IsZero(a) || Vector3D.IsZero(b))
+					return 0;
+				else
+					return Math.Acos(MathHelper.Clamp(a.Dot(b) / Math.Sqrt(a.LengthSquared() * b.LengthSquared()), -1, 1));
+			}
+
+			public static Vector3D VectorProjection(Vector3D vectorToProject, Vector3D projectsToVector)
+			{
+				if (Vector3D.IsZero(projectsToVector))
+					return Vector3D.Zero;
+
+				return vectorToProject.Dot(projectsToVector) / projectsToVector.LengthSquared() * projectsToVector;
+			}
+
 		}
 
 
