@@ -1118,10 +1118,16 @@ namespace IngameScript
 				}
 			}
 
+			if( subTreeNeedsProcessingVar.Count != 0)
+            {
+				Echo("kdtree building in progress...");
+				return;
+			}
+
 			if (Runtime.CurrentInstructionCount > 30000)
 			{
-				Echo("Count > 30000");
-				Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
+				//Echo("Count > 30000");
+				//Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
 				return;
 				//yield return true;
 			}
@@ -1482,7 +1488,7 @@ namespace IngameScript
 
 			bool planetDetected = sc.TryGetPlanetPosition(out planetCenter);
 
-			Echo("planetCenter:" + planetCenter);
+			//Echo("planetCenter:" + planetCenter);
 
 			// planet_radius = (int) (planetCenter-myPos).Length();
 			planet_radius = (int)(myPos - planetCenter).Length();
