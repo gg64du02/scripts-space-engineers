@@ -24,7 +24,6 @@ namespace IngameScript
 	{
 		public List<IMyMotorSuspension> Wheels = new List<IMyMotorSuspension>();
 		public IMyRemoteControl RemoteControl;
-		public IMySensorBlock Sensor;
 
 		public Vector3D myTerrainTarget = new Vector3D(0, 0, 0);
 
@@ -126,7 +125,6 @@ namespace IngameScript
 		//kdtree suport
 		public class octoNode
 		{
-			public int index;
 			public double[] x = new double[3];
 			public octoNode left, right;
 		}
@@ -303,9 +301,6 @@ namespace IngameScript
 					//int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
 					//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
 
-					//int radius = 0;
-					//TODO: encode this
-					int radius = 500;
 					// int indexNumber = int.Parse(subsub[2]);
 					//int indexNumber = currentNodeIndexDecoded;
 					nodes.Add(new Node(indexNumber, position));
@@ -796,7 +791,6 @@ namespace IngameScript
 			// tutorial.
 			yield return true;
 
-			int i = 0;
 			// The following would seemingly be an illegal operation, because the script would
 			// keep running until the instruction count overflows. However, using yield return,
 			// you can get around this limitation - without breaking the rules and while remaining
@@ -1346,51 +1340,6 @@ namespace IngameScript
                 }
 
 
-
-
-				// isThisPointInThisRegion(int roverCurrentFaceNumber, Point currentRoverPosition, faceRegionPolygon fRP)
-
-				int currentRegionN = -1;
-				int targetRegionN = -1;
-
-				Echo("faceRegionPolyList.Count:" + faceRegionPolygonList.Count);
-				foreach (faceRegionPolygon faceRegionPolygonCT in faceRegionPolygonList)
-				{
-					int RegionNumber = faceRegionPolygonCT.regionNumber;
-					bool testedRover = isThisPointInThisRegion(facenumberCalculated, pixelPosCalculated, faceRegionPolygonCT);
-					if (testedRover == true)
-					{
-						Echo("testedRover:RegNumber:" + RegionNumber);
-						currentRegionN = RegionNumber;
-					}
-					bool testedTarget = isThisPointInThisRegion(facenumberCalculatedTarget, pixelPosCalculatedTarget, faceRegionPolygonCT);
-					if (testedTarget == true)
-					{
-						Echo("testedTarget:RegNumber:" + RegionNumber);
-						targetRegionN = RegionNumber;
-					}
-				}
-				Echo("currentRegionN:" + currentRegionN);
-				Echo("targetRegionN:" + targetRegionN);
-
-				// Echo("If any of the two is -1 the script won't run");
-				// if(currentRegionN==-1||targetRegionN==-1){
-				// str_to_display = "target or rover not in region";
-				// return;
-				// }
-
-				bool targetIsOnTheSameRegion = false;
-				if (currentRegionN == targetRegionN)
-				{
-					targetIsOnTheSameRegion = true;
-				}
-				else
-				{
-					targetIsOnTheSameRegion = false;
-				}
-				Echo("targetIsSameRegion:" + targetIsOnTheSameRegion);
-
-
 				//getting vectors to help with angles proposals
 				Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
 				Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
@@ -1401,10 +1350,6 @@ namespace IngameScript
 				// steerOverride*=100;
 				// Echo("steerOverride:"+Math.Round(steerOverride,3))
 				// ;
-				Point testGetCen1 = getCentroidPointForThisRegion(currentRegionN);
-				Echo("testGetCen1:" + testGetCen1);
-
-
 
 				Vector3D targetV3Drel = RemoteControl.GetPosition() - targetV3Dabs;
 
