@@ -915,7 +915,7 @@ namespace IngameScript
 
 			// return heuristicZero(a,b);
 			return euclideanDistance(a, b);
-			// return 0;
+			//return 0;
 			// return manhattanDistance(a,b);
 			// return distanceSquarred(a,b);
 		}
@@ -1540,15 +1540,20 @@ namespace IngameScript
 			Echo("nodePosition:" + Vector3D.Round(lines,1));
 			Echo("==================");
 
+			List<Node> path2 = path;
+
+			path2.Reverse();
+
 			//return;
 			//prevnodePosition = centeredOn;
-			prevnodePosition = path[0].position;
+			prevnodePosition = path2[0].position;
 			//prevnodePosition = path[path.Count-1].position;
 
 			int counter = 0;
-			foreach (Node node in path)
+
+			foreach (Node node in path2)
 			//foreach (int i in Enumerable.Range(path.Count-1,0))
-				{
+			{
 
 				nodePosition = node.position;
 				//nodePosition = path[i].position;
@@ -1572,10 +1577,10 @@ namespace IngameScript
 
 				plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
 
-				Echo("plottingPath:" + plottingPath);
-				Echo("prevplottingPath:" + prevplottingPath);
-				Echo("node.position:" + Vector3D.Round(nodePosition, 1));
-				Echo("==================");
+				//Echo("plottingPath:" + plottingPath);
+				//Echo("prevplottingPath:" + prevplottingPath);
+				//Echo("node.position:" + Vector3D.Round(nodePosition, 1));
+				//Echo("==================");
 
 
 				DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
