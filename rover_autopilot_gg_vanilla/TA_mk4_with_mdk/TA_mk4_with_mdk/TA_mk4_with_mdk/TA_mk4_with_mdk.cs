@@ -690,7 +690,7 @@ namespace IngameScript
 				gps_number = gps_number + 1;
 			}
 
-			toCustomData = toCustomData + "]";
+			toCustomData = "\n\n" + toCustomData + "]" + "\n\n";
 
 			Me.CustomData = toCustomData;
 		}
@@ -879,9 +879,6 @@ namespace IngameScript
 					//int currentNodeIndexDecoded = decodeStr__NumberMax4095(encodedIndexes.Substring(0, 2));
 					//Echo("currentNodeIndexDecoded:" + currentNodeIndexDecoded);
 
-					//int radius = 0;
-					//TODO: encode this
-					int radius = 500;
 					// int indexNumber = int.Parse(subsub[2]);
 					//int indexNumber = currentNodeIndexDecoded;
 					nodes.Add(new Node(indexNumber, position));
@@ -918,6 +915,7 @@ namespace IngameScript
 
 			// return heuristicZero(a,b);
 			return euclideanDistance(a, b);
+			// return 0;
 			// return manhattanDistance(a,b);
 			// return distanceSquarred(a,b);
 		}
@@ -1463,8 +1461,6 @@ namespace IngameScript
 
 			Echo("ICkdtreeEnd:" + Runtime.CurrentInstructionCount);
 
-			// if (!RemoteControl.IsAutoPilotEnabled) {
-			// }
 		}
 
 
@@ -1473,69 +1469,125 @@ namespace IngameScript
         {
 			Echo("displayThe3dPathCentered");
 			Echo("path.Count"+path.Count);
-			List<Vector3D> path3DProjWgrav = new List<Vector3D>();
-			List<Vector3D> path2DProjWgrav = new List<Vector3D>();
-
-			//Echo("" + RemoteControl.WorldMatrix.Forward);
 
 			if(path.Count< 2)
             {
 				return;
             }
 
-			//Vector2 plottingPath = new Vector2(0, 0);
+			//spot from which to draw from
 			Vector2 prevplottingPath = new Vector2(128, 128+64);
 			Vector2 plottingPath = new Vector2(128, 128+64);
+
+			//double df = 0.25 * 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+			//double df = 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+			double df = 0.25 * 0.25 * 1024.0 / 30000.0;
+
+			Echo("dfF:"+(path[0].position - path[path.Count-1].position).Length());
+			double dfF = (path[0].position - path[path.Count - 1].position).Length();
+			/*
+			if (dfF > 30000)
+				df = df * 1.0;
+			if (dfF > 15000)
+				df = df * 4.0;
+			if (dfF > 7500)
+				df = df * 4.0;
+			if (dfF > 3500)*
+				df = df * 8.0;
+			*/
+
+			//first line from myPos to the first node:
+
+			//centeredOn = new Vector3D(26000, -13000, 3000);
+
+			Vector3D prevnodePosition = Vector3D.Normalize(centeredOn)*30000;
+
+
+			Vector3D nodePosition = path[0].position;
+			Vector3D lines = nodePosition - prevnodePosition;
+
+			Vector3D tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
+			//Vector3D tmpProj = VectorHelper.VectorProjection(lines, grav);
+
+
+			Vector3D bodyRCX = Vector3D.Normalize(grav.Cross(forward));
+			Vector3D bodyRCY = forward;
+
+			double projX = tmpProj.Dot(bodyRCX);
+			double projY = -tmpProj.Dot(bodyRCY);
+
+			//offset for the first line
+			projX = projX - plottingPath.X;
+			projY = projY - plottingPath.Y;
+
+			//factor according the the disance from the goal
+			projX = projX * df;
+			projY = projY * df;
+
+
+			plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
+
+			DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
+
+			prevplottingPath = plottingPath;
+
+			//debugging
+			//return;
+
+			Echo("==================");
+			Echo("plottingPath:" + plottingPath);
+			Echo("prevplottingPath:" + prevplottingPath);
+			Echo("nodePosition:" + Vector3D.Round(lines,1));
+			Echo("==================");
+
+			//return;
+
 
 			int counter = 0;
 			foreach (Node node in path)
             {
-				Vector3D nodePosition = node.position;
-				Vector3D tmpProj = nodePosition - VectorHelper.VectorProjection(nodePosition, grav);
 
-                path3DProjWgrav.Add(tmpProj);
-				
+				nodePosition = node.position;
+				lines = nodePosition - prevnodePosition;
 
-				Vector3D bodyRCX = Vector3D.Normalize(grav.Cross(forward));
-				Vector3D bodyRCY = forward;
+				tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
+				//tmpProj = VectorHelper.VectorProjection(lines, grav);
 
-				double projX = tmpProj.Dot(bodyRCX);
-				double projY = -tmpProj.Dot(bodyRCY);
+				projX = tmpProj.Dot(bodyRCX);
+				projY = -tmpProj.Dot(bodyRCY);
 
 				if(counter == 0)
 				{
-					projX = projX - plottingPath.X;
-					projY = projY - plottingPath.Y;
+					//projX = projX - plottingPath.X;
+					//projY = projY - plottingPath.Y;
 				}
 
-				//double df = 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
-				double df =0.25* 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
-				//double df = 1;
 				projX = projX * df;
 				projY = projY * df;
-				Echo("df:" + df);
-
-				//plottingPath = new Vector2(128, 128);
-				//prevplottingPath = new Vector2(128+64, 128+64);
 
 
 				plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
 
+				Echo("plottingPath:" + plottingPath);
+				Echo("prevplottingPath:" + prevplottingPath);
+				Echo("node.position:" + Vector3D.Round(node.position,1));
+				Echo("==================");
+
+
 				DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
 
-				//Echo("plottingPath:" + plottingPath);
-				//Echo("prevplottingPath:" + prevplottingPath);
-				//Echo("=================:");
+				//debug
+				//break;
 
-				if (counter != 0)
-                {
-					prevplottingPath = plottingPath;
-				}
+				//v2d
+				prevplottingPath = plottingPath;
+				//v3d
+				prevnodePosition = nodePosition;
 
 				if (counter > 5)
-                {
+				{
 					//break;
-                }
+				}
 
 				counter = counter + 1;
 			}
