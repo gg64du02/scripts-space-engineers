@@ -1525,9 +1525,9 @@ namespace IngameScript
 			projY = projY * df;
 
 
-			plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
+			//plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
 
-			DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
+			//DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
 
 			prevplottingPath = plottingPath;
 
@@ -1541,13 +1541,17 @@ namespace IngameScript
 			Echo("==================");
 
 			//return;
-
+			//prevnodePosition = centeredOn;
+			prevnodePosition = path[0].position;
+			//prevnodePosition = path[path.Count-1].position;
 
 			int counter = 0;
 			foreach (Node node in path)
-            {
+			//foreach (int i in Enumerable.Range(path.Count-1,0))
+				{
 
 				nodePosition = node.position;
+				//nodePosition = path[i].position;
 				lines = nodePosition - prevnodePosition;
 
 				tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
@@ -1570,7 +1574,7 @@ namespace IngameScript
 
 				Echo("plottingPath:" + plottingPath);
 				Echo("prevplottingPath:" + prevplottingPath);
-				Echo("node.position:" + Vector3D.Round(node.position,1));
+				Echo("node.position:" + Vector3D.Round(nodePosition, 1));
 				Echo("==================");
 
 
