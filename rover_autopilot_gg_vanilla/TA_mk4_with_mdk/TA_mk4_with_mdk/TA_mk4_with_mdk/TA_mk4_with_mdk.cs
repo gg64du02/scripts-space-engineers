@@ -1439,7 +1439,7 @@ namespace IngameScript
 
 
 			}
-
+			/*
 			Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X) / 8;
 			Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X) / 8;
 			DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
@@ -1447,7 +1447,7 @@ namespace IngameScript
 			Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X) / 8;
 			Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X) / 8;
 			DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green);
-
+			*/
 			// x 0 y 0 w 256 h 256
 
 			Echo("_viewport:" + _viewport);
@@ -1470,7 +1470,8 @@ namespace IngameScript
 			Echo("displayThe3dPathCentered");
 			Echo("path.Count"+path.Count);
 
-			if(path.Count< 2)
+
+			if (path.Count< 2)
             {
 				return;
             }
@@ -1478,6 +1479,12 @@ namespace IngameScript
 			//spot from which to draw from
 			Vector2 prevplottingPath = new Vector2(128, 128+64);
 			Vector2 plottingPath = new Vector2(128, 128+64);
+
+
+			Vector2 leftMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y-3) / 1;
+			Vector2 rightMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y+3) / 1;
+			DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
+
 
 			//double df = 0.25 * 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
 			//double df = 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
