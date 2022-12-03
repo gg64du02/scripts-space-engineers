@@ -552,6 +552,7 @@ namespace IngameScript
 					Echo("ran out of heap content, no path found");
 					break;
 				}
+				//listHeapNodes.Sort();
 				node = listHeapNodes[listHeapNodes.Count - 1];
 				listHeapNodes.RemoveAt(listHeapNodes.Count - 1);
 				//Echo("node.index:" + node.index);
@@ -615,6 +616,7 @@ namespace IngameScript
 					}
 
 					foreach (KeyValuePair<Node, double> entry in NodeFscore.OrderByDescending(key => key.Value))
+					//foreach (KeyValuePair<Node, double> entry in NodeFscore.OrderBy(key => key.Value))
 					{
 						//Echo("entry.Key:"+entry.Key);
 						listHeapNodes.Add(entry.Key);
@@ -915,6 +917,7 @@ namespace IngameScript
 
 			// return heuristicZero(a,b);
 			return euclideanDistance(a, b);
+			//*return 0.1*euclideanDistance(a, b);
 			//return 0;
 			// return manhattanDistance(a,b);
 			// return distanceSquarred(a,b);
@@ -1345,6 +1348,10 @@ namespace IngameScript
 					}
                 }
 
+				List<List<Node>> randomAttempts = new List<List<Node>>();
+
+				attemptingRandomPaths(aStarPathNodeList1, gscore1, ref randomAttempts);
+
 				Vector3D gV3D = RemoteControl.GetNaturalGravity();
 				Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
 
@@ -1463,6 +1470,79 @@ namespace IngameScript
 
 		}
 
+
+		void attemptingRandomPaths(List<Node> path, Dictionary<Node, double> gscore,
+			ref List<List<Node>> attempts)
+		{
+			//Random rdmGen = new Random(0);
+			Random rdmGen = new Random();
+
+			int path_count = path.Count;
+
+			int rdmIdx_path = rdmGen.Next() % path_count;
+
+			Node rdm_Node = path[rdmIdx_path];
+
+			List<int> nodeIndexes = rdm_Node.neighborsNodesIndex;
+
+			int nodeIndexesCount = nodeIndexes.Count;
+
+			int rdmIdx_node_neighbors = rdmGen.Next() % nodeIndexesCount;
+
+			Echo("path[0].index:" + path[0].index);
+			Echo("path[path.Count-1].index:" + path[path.Count - 1].index);
+			Echo("gscore[path[0]]:" + gscore[path[0]]);
+			Echo("gscore[path[path.Count - 1]]:" + gscore[path[path.Count - 1]]);
+
+			int maxCounter = 5;
+
+			int startIdx = rdmIdx_node_neighbors;
+
+
+			while (maxCounter > 0)
+            {
+
+				rdmIdx_path = rdmGen.Next() % path_count;
+
+				//rdm_Node = path[rdmIdx_path];
+				rdm_Node = nodes[rdmIdx_node_neighbors];
+
+				nodeIndexes = rdm_Node.neighborsNodesIndex;
+
+				nodeIndexesCount = nodeIndexes.Count;
+
+				rdmIdx_node_neighbors = nodeIndexes[rdmGen.Next() % nodeIndexesCount];
+
+				//Echo("nodeIndexesCount:" + nodeIndexesCount);
+				//Echo("nodes[rdmIdx].pos" + Vector3D.Round(nodes[rdmIdx_node_neighbors].position,3));
+
+				if (path.Contains(nodes[rdmIdx_node_neighbors]) == true)
+				{
+					Echo("rdmIdx_node_neighbors:" + rdmIdx_node_neighbors);
+
+                    if (startIdx == rdmIdx_node_neighbors)
+                    {
+						Echo("went back to start");
+                    }
+                    else
+					{
+						Echo("!went back to start");
+					}
+
+					Echo("attemptingRandomPaths true");
+				}
+                else
+				{
+					Echo("attemptingRandomPaths false");
+				}
+
+
+				maxCounter = maxCounter - 1;
+            }
+
+
+			return;
+        }
 
 		public void displayThe3dPathCentered(List<Node> path, Vector3D grav,
 			Vector3D forward, Vector3D centeredOn)
