@@ -537,8 +537,11 @@ namespace IngameScript
 
 			int debugCount = 0;
 
-			List<Node> listHeapNodes = new List<Node>();
-			listHeapNodes.Add(nodeStarting);
+			//List<Node> listHeapNodes = new List<Node>();
+			//listHeapNodes.Add(nodeStarting);
+
+			Dictionary<Node, double> dictHeapNodes = new Dictionary<Node, double>();
+			dictHeapNodes[nodeStarting] = fscore[nodeStarting];
 
 			Echo("start.position:" + node.position);
 			Echo("goal.position:" + ourDestinationNode.position);
@@ -546,15 +549,19 @@ namespace IngameScript
 			while (true)
 			{
 
-				//Echo("heap.C:" + listHeapNodes.Count);
-				if (listHeapNodes.Count == 0)
+				//Echo("dict.C:" + dictHeapNodes.Count);
+				if (dictHeapNodes.Count == 0)
 				{
 					Echo("ran out of heap content, no path found");
 					break;
 				}
-				//listHeapNodes.Sort();
-				node = listHeapNodes[listHeapNodes.Count - 1];
-				listHeapNodes.RemoveAt(listHeapNodes.Count - 1);
+				//Echo("test1");
+				KeyValuePair<Node, double> entry = dictHeapNodes.OrderBy(a => a.Value).First();
+				node = entry.Key;
+				//Echo("" + Runtime.CurrentInstructionCount);
+				//Echo("test2");
+				dictHeapNodes.Remove(node);
+				//Echo("test3");
 				//Echo("node.index:" + node.index);
 				// Echo("debugCount=====================:");
 				// Echo("fscore["+node.index+"]:"+fscore[node]);
@@ -603,7 +610,7 @@ namespace IngameScript
 						}
 
 						double gscoreTmp2 = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
-						if (tentative_g_score < gscoreTmp2 || listHeapNodes.Contains(neighbor) == false)
+						if (tentative_g_score < gscoreTmp2 || dictHeapNodes.ContainsKey(neighbor) == false)
 						{
 							// Echo("here1");
 							came_from[neighbor] = node;
@@ -612,14 +619,10 @@ namespace IngameScript
 							NodeFscore[neighbor] = fscore[neighbor];
 							//listHeapNodes.Add(neighbor);
 							// Echo("here2");
-						}
-					}
 
-					foreach (KeyValuePair<Node, double> entry in NodeFscore.OrderByDescending(key => key.Value))
-					//foreach (KeyValuePair<Node, double> entry in NodeFscore.OrderBy(key => key.Value))
-					{
-						//Echo("entry.Key:"+entry.Key);
-						listHeapNodes.Add(entry.Key);
+							dictHeapNodes[neighbor] = fscore[neighbor];
+
+						}
 					}
 				}
 
@@ -1348,9 +1351,9 @@ namespace IngameScript
 					}
                 }
 
-				List<List<Node>> randomAttempts = new List<List<Node>>();
+				//List<List<Node>> randomAttempts = new List<List<Node>>();
 
-				attemptingRandomPaths(aStarPathNodeList1, gscore1, ref randomAttempts);
+				//attemptingRandomPaths(aStarPathNodeList1, gscore1, ref randomAttempts);
 
 				Vector3D gV3D = RemoteControl.GetNaturalGravity();
 				Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
