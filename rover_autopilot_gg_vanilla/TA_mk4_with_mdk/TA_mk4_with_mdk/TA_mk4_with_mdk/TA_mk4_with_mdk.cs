@@ -555,6 +555,13 @@ namespace IngameScript
 					Echo("ran out of heap content, no path found");
 					break;
 				}
+
+                if (Runtime.CurrentInstructionCount > 45000)
+				{
+					Echo("astarIC:" + Runtime.CurrentInstructionCount);
+					Echo("move somewhere else to find a path");
+					break;
+				}
 				//Echo("test1");
 				KeyValuePair<Node, double> entry = dictHeapNodes.OrderBy(a => a.Value).First();
 				node = entry.Key;
