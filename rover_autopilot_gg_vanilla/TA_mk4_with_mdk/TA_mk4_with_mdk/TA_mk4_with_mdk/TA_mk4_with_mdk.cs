@@ -1020,8 +1020,17 @@ namespace IngameScript
 			}
 
 
+			if (RemoteControl.IsFunctional == true)
+			{
+				Echo("RemoteControl functionnal");
+			}
+			else
+			{
+				Echo("=======\nWarning RemoteControl NOT functionnal\n=======");
+			}
 
-			Echo("if the script don't refresh the screen, the Remote Control might be gone, please hit Recompile");
+
+			Echo("if the script don't refresh the screen, the Remote Control might be gone, fix it and please hit Recompile");
 
 			Echo("using subTreeNeedsProcessingVar");
 			if(pointsAreAllLoaded == true)
@@ -1213,7 +1222,6 @@ namespace IngameScript
 			Echo("nodes.CountMain:" + nodes.Count);
 
 
-
 			if (myTerrainTarget == new Vector3D(0, 0, 0))
 			{
 
@@ -1383,6 +1391,7 @@ namespace IngameScript
 				Echo("aStarPathNodeList1[end]:" + Vector3D.Round(aStarPathNodeList1[aStarPathNodeList1.Count-1].position,0));
 
 				targetV3Dabs = planetCenter + aStarPathNodeList1[0].position;
+				//targetV3Dabs = planetCenter + aStarPathNodeList1[1].position;
 
 
 
