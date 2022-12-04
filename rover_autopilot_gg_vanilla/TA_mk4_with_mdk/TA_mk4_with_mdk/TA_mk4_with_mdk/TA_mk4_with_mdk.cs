@@ -1379,6 +1379,13 @@ namespace IngameScript
 				// Echo("steerOverride:"+Math.Round(steerOverride,3))
 				// ;
 
+				Echo("aStarPathNodeList1[0]:" + Vector3D.Round(aStarPathNodeList1[0].position,0));
+				Echo("aStarPathNodeList1[end]:" + Vector3D.Round(aStarPathNodeList1[aStarPathNodeList1.Count-1].position,0));
+
+				targetV3Dabs = planetCenter + aStarPathNodeList1[0].position;
+
+
+
 				Vector3D targetV3Drel = RemoteControl.GetPosition() - targetV3Dabs;
 
 				Vector3D crossForwardTT = shipForwardVector.Cross((targetV3Drel));
@@ -1413,37 +1420,37 @@ namespace IngameScript
 				steerOverride = MyMath.Clamp(Convert.ToSingle(steerOverride), Convert.ToSingle(-1), Convert.ToSingle(1));
 
 
-				// foreach (IMyMotorSuspension Wheel in Wheels)
-				// {
-				// double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
-				// Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
+				foreach (IMyMotorSuspension Wheel in Wheels)
+				{
+				double areThisFrontWheel = shipForwardVector.Dot(Wheel.GetPosition() - RemoteControl.GetPosition());
+				Echo("areThisFrontWheel:"+Math.Round(areThisFrontWheel,3));
 
-				// float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
+				float MultiplierPO = (float) Vector3D.Dot(Wheel.WorldMatrix.Up, RemoteControl.WorldMatrix.Right);
 
-				// // str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
-				// // Echo(str_to_display);
-				// //SLerror = -0.2f;
+				// str_to_display = ""+"MultiplierPO:"+Math.Round(MultiplierPO,3);
+				// Echo(str_to_display);
+				//SLerror = -0.2f;
 
-				// float localPO = -MultiplierPO * SLerror;
+				float localPO = -MultiplierPO * SLerror;
 
-				// str_to_display = ""+"localPO:"+Math.Round(localPO,3);
+				str_to_display = ""+"localPO:"+Math.Round(localPO,3);
 
-				// if(areThisFrontWheel>0){
-				// Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
-				// Wheel.SetValue<float>("Propulsion override", localPO);
+				if(areThisFrontWheel>0){
+				Wheel.SetValue<Single>("Steer override", Convert.ToSingle(steerOverride));
+				Wheel.SetValue<float>("Propulsion override", localPO);
 
-				// }
-				// else{
-				// // Wheel.SetValue<Single>("Steer override", Convert.ToSingle(-steerOverride));
-				// Wheel.SetValue<float>("Propulsion override", localPO);
-				// }
+				}
+				else{
+				// Wheel.SetValue<Single>("Steer override", Convert.ToSingle(-steerOverride));
+				Wheel.SetValue<float>("Propulsion override", localPO);
+				}
 
-				// }
+				}
 
-				// //stop when destination is reached
-				// if(targetV3Drel.Length()<5){
-				// myTerrainTarget = new Vector3D(0, 0, 0);
-				// }
+				//stop when destination is reached
+				if(targetV3Drel.Length()<5){
+				myTerrainTarget = new Vector3D(0, 0, 0);
+				}
 
 				if (Math.Abs(pixelPosCalculated.X - pixelPosCalculatedTarget.X) <= 1)
 				{
@@ -1579,6 +1586,7 @@ namespace IngameScript
 			//double df = 0.25 * 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
 			//double df = 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
 			double df = 0.25 * 0.25 * 1024.0 / 30000.0;
+			//double df = 1 * 1024.0 / 30000.0;
 
 			Echo("dfF:"+(path[0].position - path[path.Count-1].position).Length());
 			double dfF = (path[0].position - path[path.Count - 1].position).Length();
