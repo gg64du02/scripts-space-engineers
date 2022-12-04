@@ -1029,6 +1029,26 @@ namespace IngameScript
 				Echo("=======\nWarning RemoteControl NOT functionnal\n=======");
 			}
 
+            //TODO: RemoteControl speed must be higher than wheels speed
+            if (Wheels != null)
+			{
+				float msWheels = (float)Wheels[0].GetValue<Single>("Speed Limit")/3.6f;
+
+				//Echo("msWheels" + msWheels);
+				// test in km/h
+				//Echo("RemoteControl.SpeedLimit" + RemoteControl.SpeedLimit);
+				//SL is m/s 
+
+				if (msWheels > RemoteControl.SpeedLimit)
+				{
+					Echo("Warning RemoteControl speed must be higher than wheels speed!!!");
+				}
+                else
+                {
+					Echo("RC speed and wheels speed settings ok");
+                }
+			}
+
 
 			Echo("if the script don't refresh the screen, the Remote Control might be gone, fix it and please hit Recompile");
 
@@ -1182,8 +1202,6 @@ namespace IngameScript
 			Vector3D myRelPosOnplanet = myPos - planetCenter;
 
 			Echo("myRelPosOnplanet:" + Vector3D.Round(myRelPosOnplanet, 2));
-
-
 
 
 			Echo("myTerrainTarget:" + Vector3D.Round(myTerrainTarget, 3));
