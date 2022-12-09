@@ -1213,7 +1213,7 @@ namespace IngameScript
 
                 displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
 
-
+                /*
                 //getting vectors to help with angles proposals
                 Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
                 Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
@@ -1310,18 +1310,18 @@ namespace IngameScript
                     }
                 }
 
-
+                */
 
             }
-            /*
-			Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X) / 8;
-			Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X) / 8;
-			DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
+            
+			//Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X) / 8;
+			//Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X) / 8;
+			//DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
 
-			Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X) / 8;
-			Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X) / 8;
-			DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green);
-			*/
+			//Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X) / 8;
+			//Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X) / 8;
+			//DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green);
+			
             // x 0 y 0 w 256 h 256
 
             Echo("_viewport:" + _viewport);
@@ -1333,7 +1333,7 @@ namespace IngameScript
 
 
 
-            Echo("ICkdtreeEnd:" + Runtime.CurrentInstructionCount);
+            Echo("ICMainEnd:" + Runtime.CurrentInstructionCount);
 
         }
 
