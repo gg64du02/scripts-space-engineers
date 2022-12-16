@@ -367,14 +367,6 @@ namespace IngameScript
             frame.Add(sprite);
         }
 
-        //TODO:
-        //add new heuristic based on angles?
-        //do heuristic change mid path ?
-        //check for neighbors check at the beginning
-        //do best path based on path combining
-        //link faces
-        //store all faces
-        //display the current closest point and neighbors to help with changing path
         public void aStarPathFinding(int startIndex, int endIndex, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
         {
             listPathNode = new List<Node>();
@@ -388,7 +380,7 @@ namespace IngameScript
             //Echo("startPointGoal:" + startPointGoal);
             //Echo("finalPointGoal:" + finalPointGoal);
 
-            //TODO: trouver le bon node de start pour avoir l'heuristique correspondant
+            //trouver le bon node de start pour avoir l'heuristique correspondant
             //int startingIndex = closestNodeToPoint(startPointGoal);
             int startingIndex = startIndex;
 
@@ -1115,8 +1107,6 @@ namespace IngameScript
 
 
                 List<Node> aStarPathNodeList1 = new List<Node>();
-                List<Node> aStarPathNodeList2 = new List<Node>();
-
 
 
                 Vector3D startPointGoal = Vector3D.Round(myRelPosOnplanet, 1);
@@ -1126,7 +1116,6 @@ namespace IngameScript
                 Vector3D finalPointGoal = Vector3D.Round(targetV3DrelToPlanet, 1);
 
                 Dictionary<Node, double> gscore1 = new Dictionary<Node, double>();
-                Dictionary<Node, double> gscore2 = new Dictionary<Node, double>();
 
                 if (nodes.Count == 0)
                 {
