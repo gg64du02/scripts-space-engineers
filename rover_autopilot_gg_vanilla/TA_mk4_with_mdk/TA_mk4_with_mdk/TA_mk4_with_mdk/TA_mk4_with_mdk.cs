@@ -46,7 +46,20 @@ namespace IngameScript
         bool pointsAreAllLoaded = false;
         bool kdtreeIsDoneBuidling = false;
         static int visited = 0;
-
+        /*
+        int startIndex;
+        int endIndex; 
+        List<Node> listPathNode; 
+        Dictionary<Node, double> gscoreOut;
+        Dictionary<Node, double> dictHeapNodes = new Dictionary<Node, double>();
+        Dictionary<Node, double> gscore = new Dictionary<Node, double>();
+        Dictionary<Node, double> fscore = new Dictionary<Node, double>();
+        Dictionary<Node, Node> came_from = new Dictionary<Node, Node>();
+        Node ourDestinationNode;
+        Node node;
+        int debugCount = 0;
+        List<Node> closelist = new List<Node>();
+        */
         public Program()
         {
             // The constructor, called only once every session and
@@ -367,6 +380,243 @@ namespace IngameScript
             frame.Add(sprite);
         }
 
+        /*
+        public void aStarPathFindingIter()
+        {
+
+            Echo("debugCount:" + debugCount);
+            Echo("dictHeapNodes.Count:"+dictHeapNodes.Count);
+            
+            if (dictHeapNodes.Count == 0) { 
+                listPathNode = new List<Node>();
+
+                //Vector3D startPointGoal = startPoint;
+                //Vector3D finalPointGoal = endPoint;
+
+
+                Echo("nodes.Count" + nodes.Count);
+
+                //Echo("startPointGoal:" + startPointGoal);
+                //Echo("finalPointGoal:" + finalPointGoal);
+
+                //trouver le bon node de start pour avoir l'heuristique correspondant
+                //int startingIndex = closestNodeToPoint(startPointGoal);
+                int startingIndex = startIndex;
+
+                Node nodeStarting = nodes[startingIndex];
+
+                Echo("nodeStarting.position" + Vector3D.Round(nodeStarting.position, 3));
+
+                //1 make an openlist containing only the starting node
+                List<Node> openlist = new List<Node>();
+                // openlist.Add(nodes[3]);
+                openlist.Add(nodeStarting);
+
+                //2 make an empty closed list
+                List<Node> closelist = new List<Node>();
+
+                //int endingIndex = closestNodeToPoint(finalPointGoal);
+                int endingIndex = endIndex;
+
+                List<double> nodeGvalue = new List<double>();
+
+
+                // Node ourDestinationNode = nodes[50];
+                //Node ourDestinationNode = nodes[endingIndex];
+                 ourDestinationNode = nodes[endingIndex];
+                // Node node = null;
+                //Node node = nodeStarting;
+                 node = nodeStarting;
+
+                Echo("ourDestinationNode.position" + Vector3D.Round(ourDestinationNode.position, 1));
+
+
+                gscore = new Dictionary<Node, double>();
+                fscore = new Dictionary<Node, double>();
+
+                // is 0 because it does not cost anything to move from starting node
+                gscore.Add(node, 0);
+                fscore.Add(node, gscore[node] + heuristic(node.position, ourDestinationNode.position));
+
+                Echo("nodeStarting.index:" + nodeStarting.index);
+                Echo("ourDestinationNode.index:" + ourDestinationNode.index);
+
+
+                //int debugCount = 0;
+                 debugCount = 0;
+
+                //List<Node> listHeapNodes = new List<Node>();
+                //listHeapNodes.Add(nodeStarting);
+
+                dictHeapNodes[nodeStarting] = fscore[nodeStarting];
+
+                Echo("start.position:" + node.position);
+                Echo("goal.position:" + ourDestinationNode.position);
+            }
+            while (dictHeapNodes.Count != 0)
+            {
+                Echo("debugCount:" + debugCount);
+
+                //Echo("dict.C:" + dictHeapNodes.Count);
+                if (dictHeapNodes.Count == 0)
+                {
+                    Echo("ran out of heap content, no path found");
+                    break;
+                }
+
+                if (Runtime.CurrentInstructionCount > 45000)
+                {
+                    Echo("astarIC:" + Runtime.CurrentInstructionCount);
+                    Echo("move somewhere else to find a path");
+                    break;
+                }
+                //Echo("test1");
+                KeyValuePair<Node, double> entry = dictHeapNodes.OrderBy(a => a.Value).First();
+                node = entry.Key;
+                //Echo("" + Runtime.CurrentInstructionCount);
+                //Echo("test2");
+                dictHeapNodes.Remove(node);
+                //Echo("test3");
+                //Echo("node.index:" + node.index);
+                // Echo("debugCount=====================:");
+                // Echo("fscore["+node.index+"]:"+fscore[node]);
+                // Echo("gscore["+node.index+"]:"+gscore[node]);
+                // Echo("h:"+heuristic(node.position,ourDestinationNode.position));
+                // Echo("node.position:"+node.position);
+                // Echo(""+Math.Sqrt(distanceSquarred(node.position,ourDestinationNode.position)));
+
+                if (ourDestinationNode == node)
+                {
+                    Echo("goal reached");
+                    break;
+                }
+                else
+                {
+                    if (closelist.Contains(node) == false)
+                    {
+                        closelist.Add(node);
+                    }
+                    List<Node> neighbors = new List<Node>();
+                    // Echo("nodes.Count:"+nodes.Count);
+                    // Echo("node.neighborsNodesIndex.Count:"+node.neighborsNodesIndex.Count);
+                    foreach (int index in node.neighborsNodesIndex)
+                    {
+                        //Echo("index:" + index);
+                        if (closelist.Contains(nodes[index]) == false)
+                        {
+                            neighbors.Add(nodes[index]);
+                        }
+                    }
+                    // Echo("neighbors.Count:"+neighbors.Count);
+
+                    Dictionary<Node, double> NodeFscore = new Dictionary<Node, double>();
+                    foreach (Node neighbor in neighbors)
+                    {
+                        // Echo("here11");
+                        //Echo("neighbor.index:"+neighbor.index);
+                        double tentative_g_score = gscore[node] + heuristic(node.position, neighbor.position);
+                        if (closelist.Contains(neighbor) == true)
+                        {
+                            double gscoreTmp = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
+                            if (tentative_g_score >= gscoreTmp)
+                            {
+                                continue;
+                            }
+                        }
+
+                        double gscoreTmp2 = gscore.ContainsKey(neighbor) ? gscore[neighbor] : 0;
+                        if (tentative_g_score < gscoreTmp2 || dictHeapNodes.ContainsKey(neighbor) == false)
+                        {
+                            // Echo("here1");
+                            came_from[neighbor] = node;
+                            gscore[neighbor] = tentative_g_score;
+                            fscore[neighbor] = tentative_g_score + heuristic(neighbor.position, ourDestinationNode.position);
+                            NodeFscore[neighbor] = fscore[neighbor];
+                            //listHeapNodes.Add(neighbor);
+                            // Echo("here2");
+
+                            dictHeapNodes[neighbor] = fscore[neighbor];
+
+                        }
+                    }
+                }
+
+                if (debugCount == 2000)
+                {
+                    Echo("if (debugCount == 2000)");
+                    break;
+                }
+                debugCount = debugCount + 1;
+            }
+            Echo("debugCount:" + debugCount);
+
+            gscoreOut = gscore;
+
+            List<Node> data = new List<Node>();
+
+            while (came_from.ContainsKey(node))
+            {
+                //Echo("node.positionR:"+Vector3D.Round(node.position, 0));
+                //Echo("gscore[node]:" + Math.Round(gscore[node], 3));
+                data.Add(node);
+                node = came_from[node];
+            }
+
+            listPathNode = data;
+
+            string toCustomData = "points_gened = [";
+
+            int gps_number = 0;
+
+            Point previousPointDebug = new Point(0, 0);
+
+            foreach (Node pathNode in data)
+            {
+                // public Vector3D convertPointToV3D(IMyRemoteControl sc, int faceNumber, Point pointToV3D){
+                //toCustomData = toCustomData + pathNode.position;
+                //Vector3D nodeConverted = convertPointToV3D(RemoteControl, 4, pathNode.position);
+
+                // MyWaypointInfo tmpWPINode  = new MyWaypointInfo("inter", nodeConverted);
+                //MyWaypointInfo tmpWPINode = new MyWaypointInfo(gps_number.ToString(), nodeConverted);
+
+                // toCustomData = toCustomData + tmpWPINode.ToString() + '\n';
+
+                //toCustomData = toCustomData +"displayLarger(["+pathNode.position.X +","+pathNode.position.Y + "])" + '\n';
+                
+				//if (previousPointDebug == new Point(0, 0))
+				//{
+				//	previousPointDebug = pathNode.position;
+				//}
+				//else
+				//{
+				//	toCustomData = toCustomData + "displayLine([" + pathNode.position.X + "," + pathNode.position.Y + "],[" + previousPointDebug.X + "," + previousPointDebug.Y + "])" + '\n';
+				//	previousPointDebug = pathNode.position;
+				//}
+				
+
+                double PRfactorReverse = 1024.0 / 30000.0;
+
+                //Echo("PRfactorReverse:" + PRfactorReverse);
+                Vector3D pointTI = Vector3D.Round(PRfactorReverse * pathNode.position, 0);
+                if (gps_number == 0)
+                {
+                    toCustomData = toCustomData + "(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
+                }
+                else
+                {
+                    toCustomData = toCustomData + ",(" + pointTI.X + "," + pointTI.Y + "," + pointTI.Z + ")";
+                }
+
+                gps_number = gps_number + 1;
+            }
+
+            toCustomData = "\n\n" + toCustomData + "]" + "\n\n";
+
+            Me.CustomData = toCustomData;
+        }
+*/
+
+
         public void aStarPathFinding(int startIndex, int endIndex, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
         {
             listPathNode = new List<Node>();
@@ -395,6 +645,7 @@ namespace IngameScript
 
             //2 make an empty closed list
             List<Node> closelist = new List<Node>();
+            //closelist = new List<Node>();
 
             //int endingIndex = closestNodeToPoint(finalPointGoal);
             int endingIndex = endIndex;
@@ -1137,23 +1388,23 @@ namespace IngameScript
                     double best_dist = 5000000000;
 
                     visited = 0;
-                    Echo("ICkdtreenearestbefore:" + Runtime.CurrentInstructionCount);
+                    //Echo("ICkdtreenearestbefore:" + Runtime.CurrentInstructionCount);
                     nearest(rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
-                    Echo("ICkdtreenearestafter:" + Runtime.CurrentInstructionCount);
+                    //Echo("ICkdtreenearestafter:" + Runtime.CurrentInstructionCount);
 
-                    Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
+                    //Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
 
                     Echo("visited:" + visited);
 
-                    Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testMyPosNode), 1));
-                    Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(startNode), 1));
+                    //Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testMyPosNode), 1));
+                    //Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(startNode), 1));
 
                     Vector3D v3d_test_Best = convertOctoNodeToV3D(startNode);
 
-                    Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best, 1));
-                    Echo("best_dist(squarred):" + Math.Round(best_dist, 1));
+                    //Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best, 1));
+                    //Echo("best_dist(squarred):" + Math.Round(best_dist, 1));
 
-                    Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
+                    //Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
 
 
                     octoNode goalNode = new octoNode();
@@ -1166,9 +1417,11 @@ namespace IngameScript
 
                     double best_distGoal = 5000000000;
 
-                    Echo("ICkdtreenearestbeforeGoal:" + Runtime.CurrentInstructionCount);
+                    //Echo("ICkdtreenearestbeforeGoal:" + Runtime.CurrentInstructionCount);
+                    visited = 0;
                     nearest(rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
-                    Echo("ICkdtreenearestafterGoal:" + Runtime.CurrentInstructionCount);
+                    Echo("visited:" + visited);
+                    //Echo("ICkdtreenearestafterGoal:" + Runtime.CurrentInstructionCount);
 
                     Echo("goalPos" + convertOctoNodeToV3D(goalNode));
                     //Echo("goalIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode)));
@@ -1179,7 +1432,12 @@ namespace IngameScript
                     startInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(startNode));
                     endInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode));
 
+                    Echo("startInt:" + startInt);
+                    Echo("endInt:" + endInt);
+
                 }
+
+
 
                 //debug purpose
                 //startInt = 1;
@@ -1190,6 +1448,8 @@ namespace IngameScript
                     if (endInt >= 0)
                     {
                         aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
+
+                        //aStarPathFindingIter();
                     }
                 }
 
