@@ -46,7 +46,7 @@ namespace IngameScript
         bool pointsAreAllLoaded = false;
         bool kdtreeIsDoneBuidling = false;
         static int visited = 0;
-        /*
+        
         int startIndex;
         int endIndex; 
         List<Node> listPathNode; 
@@ -59,7 +59,9 @@ namespace IngameScript
         Node node;
         int debugCount = 0;
         List<Node> closelist = new List<Node>();
-        */
+        bool goalReached = false;
+        List<Node> aStarPathNodeList1;
+
         public Program()
         {
             // The constructor, called only once every session and
@@ -380,14 +382,15 @@ namespace IngameScript
             frame.Add(sprite);
         }
 
-        /*
-        public void aStarPathFindingIter()
+        
+        public void aStarPathFindingMT()
         {
-
+            Echo("\naStarPathFindingMT:start");
             Echo("debugCount:" + debugCount);
             Echo("dictHeapNodes.Count:"+dictHeapNodes.Count);
             
-            if (dictHeapNodes.Count == 0) { 
+            if (dictHeapNodes.Count == 0)
+            {
                 listPathNode = new List<Node>();
 
                 //Vector3D startPointGoal = startPoint;
@@ -417,9 +420,6 @@ namespace IngameScript
 
                 //int endingIndex = closestNodeToPoint(finalPointGoal);
                 int endingIndex = endIndex;
-
-                List<double> nodeGvalue = new List<double>();
-
 
                 // Node ourDestinationNode = nodes[50];
                 //Node ourDestinationNode = nodes[endingIndex];
@@ -453,9 +453,10 @@ namespace IngameScript
                 Echo("start.position:" + node.position);
                 Echo("goal.position:" + ourDestinationNode.position);
             }
+             goalReached = false;
             while (dictHeapNodes.Count != 0)
             {
-                Echo("debugCount:" + debugCount);
+                //Echo("debugCount:" + debugCount);
 
                 //Echo("dict.C:" + dictHeapNodes.Count);
                 if (dictHeapNodes.Count == 0)
@@ -488,6 +489,7 @@ namespace IngameScript
                 if (ourDestinationNode == node)
                 {
                     Echo("goal reached");
+                    goalReached = true;
                     break;
                 }
                 else
@@ -541,14 +543,20 @@ namespace IngameScript
                     }
                 }
 
-                if (debugCount == 2000)
+                if (debugCount == 4307)
                 {
-                    Echo("if (debugCount == 2000)");
+                    Echo("if (debugCount == 4307)");
                     break;
                 }
                 debugCount = debugCount + 1;
             }
             Echo("debugCount:" + debugCount);
+            Echo("goalReached:" + goalReached);
+
+            if (goalReached == false)
+            {
+                return;
+            }
 
             gscoreOut = gscore;
 
@@ -613,8 +621,10 @@ namespace IngameScript
             toCustomData = "\n\n" + toCustomData + "]" + "\n\n";
 
             Me.CustomData = toCustomData;
+
+            Echo("aStarPathFindingMT:end\n");
         }
-*/
+
 
 
         public void aStarPathFinding(int startIndex, int endIndex, out List<Node> listPathNode, out Dictionary<Node, double> gscoreOut)
@@ -649,9 +659,6 @@ namespace IngameScript
 
             //int endingIndex = closestNodeToPoint(finalPointGoal);
             int endingIndex = endIndex;
-
-            List<double> nodeGvalue = new List<double>();
-
 
             // Node ourDestinationNode = nodes[50];
             Node ourDestinationNode = nodes[endingIndex];
@@ -995,8 +1002,8 @@ namespace IngameScript
         {
 
             // return heuristicZero(a,b);
-            return euclideanDistance(a, b);
-            //return 0;
+            //return euclideanDistance(a, b);
+            return 0;
             // return manhattanDistance(a,b);
             // return distanceSquarred(a,b);
         }
@@ -1077,6 +1084,8 @@ namespace IngameScript
                         //x,y,z coords is global to remember between each loop
                         myTerrainTarget = myWaypointInfoTarget.Coords;
                         myWaypointInfoTerrainTarget = myWaypointInfoTarget;
+
+                        goalReached = false;
                     }
                 }
             }
@@ -1357,8 +1366,6 @@ namespace IngameScript
                 Echo("targetIsOnTheSameFace:" + targetIsOnTheSameFace);
 
 
-                List<Node> aStarPathNodeList1 = new List<Node>();
-
 
                 Vector3D startPointGoal = Vector3D.Round(myRelPosOnplanet, 1);
 
@@ -1447,9 +1454,13 @@ namespace IngameScript
                 {
                     if (endInt >= 0)
                     {
-                        aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
-
-                        //aStarPathFindingIter();
+                        //aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
+                        
+                        if (goalReached == false) { 
+                            startIndex = startInt;
+                            endIndex = endInt;
+                            aStarPathFindingMT();
+                        }
                     }
                 }
 
@@ -1460,7 +1471,9 @@ namespace IngameScript
                 Vector3D gV3D = RemoteControl.GetNaturalGravity();
                 Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
 
-                displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
+                //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
+                displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
+                
 
                 /*
                 //getting vectors to help with angles proposals
@@ -1598,6 +1611,9 @@ namespace IngameScript
             {
                 return;
             }
+
+            Echo("path[0].index" + path[0].index);
+            Echo("path[path.Count-1].index" + path[path.Count-1].index);
 
             //spot from which to draw from
             Vector2 prevplottingPath = new Vector2(128, 128 + 64);
