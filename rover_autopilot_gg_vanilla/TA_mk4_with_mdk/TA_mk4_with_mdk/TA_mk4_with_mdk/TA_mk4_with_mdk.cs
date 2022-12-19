@@ -57,11 +57,11 @@ namespace IngameScript
         Dictionary<Node, Node> came_from = new Dictionary<Node, Node>();
         Node ourDestinationNode;
         Node node;
-        int debugCount = 0;
         List<Node> closelist = new List<Node>();
         bool goalReached = false;
-        List<Node> aStarPathNodeList1;
-
+        int prev_startInt = -1;
+        
+        int debugCount = 0;
         public Program()
         {
             // The constructor, called only once every session and
@@ -391,6 +391,24 @@ namespace IngameScript
             
             if (dictHeapNodes.Count == 0)
             {
+                //=============start updated ==========
+
+
+                listPathNode = new List<Node>();
+                gscoreOut = new Dictionary<Node, double>();
+                dictHeapNodes = new Dictionary<Node, double>();
+                gscore = new Dictionary<Node, double>();
+                fscore = new Dictionary<Node, double>();
+                came_from = new Dictionary<Node, Node>();
+                ourDestinationNode = null;
+                node = null;
+                debugCount = 0;
+                closelist = new List<Node>();
+
+                //=============start updated ==========
+
+
+
                 listPathNode = new List<Node>();
 
                 //Vector3D startPointGoal = startPoint;
@@ -416,7 +434,7 @@ namespace IngameScript
                 openlist.Add(nodeStarting);
 
                 //2 make an empty closed list
-                List<Node> closelist = new List<Node>();
+                //List<Node> closelist = new List<Node>();
 
                 //int endingIndex = closestNodeToPoint(finalPointGoal);
                 int endingIndex = endIndex;
@@ -571,6 +589,9 @@ namespace IngameScript
             }
 
             listPathNode = data;
+
+            //reversing the path once :
+            listPathNode.Reverse();
 
             string toCustomData = "points_gened = [";
 
@@ -1002,8 +1023,8 @@ namespace IngameScript
         {
 
             // return heuristicZero(a,b);
-            //return euclideanDistance(a, b);
-            return 0;
+            return euclideanDistance(a, b);
+            //return 0;
             // return manhattanDistance(a,b);
             // return distanceSquarred(a,b);
         }
@@ -1442,9 +1463,16 @@ namespace IngameScript
                     Echo("startInt:" + startInt);
                     Echo("endInt:" + endInt);
 
+                    if (startInt != prev_startInt)
+                    {
+                        goalReached = false;
+                    }
+
+                    prev_startInt = startInt;
+                    Echo("prev_startInt:" + prev_startInt);
                 }
 
-
+                Echo("goalReached:" + goalReached);
 
                 //debug purpose
                 //startInt = 1;
@@ -1456,23 +1484,32 @@ namespace IngameScript
                     {
                         //aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
                         
-                        if (goalReached == false) { 
+                        if (goalReached == false) {
                             startIndex = startInt;
                             endIndex = endInt;
+                            Echo("startIndex:" + startIndex);
+                            Echo("endIndex:" + endIndex);
                             aStarPathFindingMT();
                         }
                     }
                 }
 
-                //List<List<Node>> randomAttempts = new List<List<Node>>();
-
-                //attemptingRandomPaths(aStarPathNodeList1, gscore1, ref randomAttempts);
 
                 Vector3D gV3D = RemoteControl.GetNaturalGravity();
                 Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
 
+                if (listPathNode != null)
+                {
+                    if (listPathNode.Count > 2)
+                    {
+                        //Echo("Main:lPN[0].index" + listPathNode[0].index);
+                        //Echo("Main:lPN[lPN.Count-1].index" + listPathNode[listPathNode.Count - 1].index);
+                    }
+                    Echo("lPN.Count:" + listPathNode.Count);
+                    displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
+                }
+
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
-                displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
                 
 
                 /*
@@ -1689,7 +1726,7 @@ namespace IngameScript
 
             List<Node> path2 = path;
 
-            path2.Reverse();
+            //path2.Reverse();
 
             //return;
             //prevnodePosition = centeredOn;
