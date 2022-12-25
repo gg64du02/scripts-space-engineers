@@ -1788,28 +1788,6 @@ namespace IngameScript
 
         }
 
-        //TODO: add credit to description
-        public static class VectorHelper
-        {
-            // in radians
-            public static double VectorAngleBetween(Vector3D a, Vector3D b)
-            {
-                if (Vector3D.IsZero(a) || Vector3D.IsZero(b))
-                    return 0;
-                else
-                    return Math.Acos(MathHelper.Clamp(a.Dot(b) / Math.Sqrt(a.LengthSquared() * b.LengthSquared()), -1, 1));
-            }
-
-            public static Vector3D VectorProjection(Vector3D vectorToProject, Vector3D projectsToVector)
-            {
-                if (Vector3D.IsZero(projectsToVector))
-                    return Vector3D.Zero;
-
-                return vectorToProject.Dot(projectsToVector) / projectsToVector.LengthSquared() * projectsToVector;
-            }
-
-        }
-
 
         //check from down6 gps to down3 gps
         //GPS:down3:-3957044.93:-55637.06:-748943.78:#FF75C9F1:

@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA_mk4_with_mdk", "TA_mk4_with_mdk\TA_mk4_with_mdk.csproj", "{E6563A43-7C03-473C-848A-695E8BBB417F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VectorHelper", "..\..\Mixins\VectorHelper\VectorHelper.shproj", "{53AD9F20-BFAA-4A01-9199-DEE96E86A9A2}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Mixins\VectorHelper\VectorHelper.projitems*{53ad9f20-bfaa-4a01-9199-dee96e86a9a2}*SharedItemsImports = 13
+		..\..\Mixins\VectorHelper\VectorHelper.projitems*{e6563a43-7c03-473c-848a-695e8bbb417f}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 	EndGlobalSection
