@@ -7,9 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA_mk4_with_mdk", "TA_mk4_w
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VectorHelper", "..\..\Mixins\VectorHelper\VectorHelper.shproj", "{53AD9F20-BFAA-4A01-9199-DEE96E86A9A2}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PlanetPositioningUtilities", "..\..\Mixins\PlanetPositioningUtilities\PlanetPositioningUtilities.shproj", "{D87A867D-5AD8-4333-86E5-8D5C89DC1512}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Mixins\VectorHelper\VectorHelper.projitems*{53ad9f20-bfaa-4a01-9199-dee96e86a9a2}*SharedItemsImports = 13
+		..\..\Mixins\PlanetPositioningUtilities\PlanetPositioningUtilities.projitems*{d87a867d-5ad8-4333-86e5-8d5c89dc1512}*SharedItemsImports = 13
+		..\..\Mixins\PlanetPositioningUtilities\PlanetPositioningUtilities.projitems*{e6563a43-7c03-473c-848a-695e8bbb417f}*SharedItemsImports = 4
 		..\..\Mixins\VectorHelper\VectorHelper.projitems*{e6563a43-7c03-473c-848a-695e8bbb417f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
