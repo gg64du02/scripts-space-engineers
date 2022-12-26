@@ -39,14 +39,6 @@ namespace IngameScript
         int startInt = -1;
         int endInt = -1;
 
-        //kdtree suport
-        List<Vector3D> sortListV3Dkdtree = new List<Vector3D>();
-        octoNode rootOctoNode;
-        List<subTreeNeedsProcessing> subTreeNeedsProcessingVar = new List<subTreeNeedsProcessing>();
-        bool pointsAreAllLoaded = false;
-        bool kdtreeIsDoneBuidling = false;
-        static int visited = 0;
-        
         int startIndex;
         int endIndex; 
         List<Node> listPathNode; 
@@ -62,6 +54,275 @@ namespace IngameScript
         int prev_startInt = -1;
         
         int debugCount = 0;
+
+        //feeding the kdTree class
+        List<Vector3D> sortListV3Dkdtree = new List<Vector3D>();
+        bool pointsAreAllLoaded = false;
+        kdTree kdTreeGlobal = null;
+
+        void printII(string msg)
+        {
+            Echo(msg);
+        }
+        public class kdTree
+        {
+
+            //kdtree suport
+            List<Vector3D> sortListV3Dkdtree = new List<Vector3D>();
+            public octoNode rootOctoNode;
+            List<subTreeNeedsProcessing> subTreeNeedsProcessingVar = new List<subTreeNeedsProcessing>();
+            bool kdtreeIsDoneBuidling = false;
+            static int visited = 0;
+
+            IMyGridProgramRuntimeInfo runtime;
+
+            int testI = 0;
+
+            public kdTree(IMyGridProgramRuntimeInfo runtimeTmp, List<Vector3D> sortListV3DkdtreeTmp)
+            {
+                runtime = runtimeTmp;
+
+                sortListV3Dkdtree = sortListV3DkdtreeTmp;
+                
+                rootOctoNode = new octoNode();
+                subTreeNeedsProcessingVar.Add(
+                    new subTreeNeedsProcessing(rootOctoNode,
+                    sortListV3Dkdtree, 0, 3));
+            }
+
+            //kdtree suport
+            public class subTreeNeedsProcessing
+            {
+                public octoNode r;
+                public List<Vector3D> listVectors;
+                public int i;
+                public int dim;
+                public subTreeNeedsProcessing(octoNode ri, List<Vector3D> lVectors, int axisI, int dimI)
+                {
+                    r = ri;
+                    listVectors = lVectors;
+                    i = axisI;
+                    dim = dimI;
+                }
+            }
+            //kdtree suport
+            public class octoNode
+            {
+                public double[] x = new double[3];
+                public octoNode left, right;
+            }
+            //kdtree support
+            public List<Vector3D> sortingOnSpecificAxises(List<Vector3D> listToSort, int axisOnWhichToSort)
+            {
+                List<Vector3D> newResult = new List<Vector3D>();
+
+                if (axisOnWhichToSort == 0)
+                {
+                    SorterByAxisesOnVector3Dx storerX = new SorterByAxisesOnVector3Dx();
+                    listToSort.Sort(storerX);
+                }
+                if (axisOnWhichToSort == 1)
+                {
+                    SorterByAxisesOnVector3Dy storerY = new SorterByAxisesOnVector3Dy();
+                    listToSort.Sort(storerY);
+                }
+                if (axisOnWhichToSort == 2)
+                {
+                    SorterByAxisesOnVector3Dz storerZ = new SorterByAxisesOnVector3Dz();
+                    listToSort.Sort(storerZ);
+                }
+
+
+                //debug
+                return listToSort;
+
+                //return newResult;
+            }
+            //kdtree support
+            static public Vector3D convertOctoNodeToV3D(octoNode ON)
+            {
+                Vector3D v = new Vector3D();
+                v.X = ON.x[0];
+                v.Y = ON.x[1];
+                v.Z = ON.x[2];
+                return v;
+            }
+            //kdtree support
+            class SorterByAxisesOnVector3Dx : IComparer<Vector3D>
+            {
+                public int Compare(Vector3D x, Vector3D y)
+                {
+                    return x.X.CompareTo(y.X);
+                }
+            }
+            class SorterByAxisesOnVector3Dy : IComparer<Vector3D>
+            {
+                public int Compare(Vector3D x, Vector3D y)
+                {
+                    return x.Y.CompareTo(y.Y);
+                }
+            }
+            class SorterByAxisesOnVector3Dz : IComparer<Vector3D>
+            {
+                public int Compare(Vector3D x, Vector3D y)
+                {
+                    return x.Z.CompareTo(y.Z);
+                }
+            }
+            //kd tree support
+            //nearest neighbors search
+             public void nearest(octoNode root, octoNode nd, int i, int dim, ref octoNode best, ref double best_dist)
+            {
+                double d, dx, dx2;
+
+                if (root == null) return;
+                d = dist(root, nd, dim);
+                //d = dist2(convertOctoNodeToV3D(root), convertOctoNodeToV3D(nd));
+                dx = root.x[i] - nd.x[i];
+                dx2 = dx * dx;
+
+                //visited++;
+
+                if ((best == null) || d < best_dist)
+                {
+                    best_dist = d;
+                    best = root;
+                }
+
+
+                //Echo("best:" + convertOctoNodeToV3D(best));
+                //Echo("root:" + convertOctoNodeToV3D(root));
+                //Echo("=============");
+
+                /* if chance of exact match is high */
+                if (best_dist == null) return;
+
+                if (++i >= dim) i = 0;
+
+                nearest(dx > 0 ? root.left : root.right, nd, i, dim, ref best, ref best_dist);
+                if (dx2 >= best_dist) return;
+                nearest(dx > 0 ? root.right : root.left, nd, i, dim, ref best, ref best_dist);
+            }
+             public double dist(octoNode a, octoNode b, int dim)
+            {
+                double t, d = 0;
+                dim = dim - 1;
+                while (dim >= 0)
+                {
+                    t = a.x[dim] - b.x[dim];
+                    d += t * t;
+                    dim = dim - 1;
+                }
+                return d;
+            }
+             public double dist2(Vector3D a, Vector3D b)
+            {
+                double d;
+                d = (a - b).LengthSquared();
+                return d;
+            }
+
+            public bool computeThekdTreeBuilt()
+            {
+                //iterative way to build the tree
+                while (subTreeNeedsProcessingVar.Count != 0)
+                {
+                    subTreeNeedsProcessing nProc = subTreeNeedsProcessingVar[0];
+
+                    octoNode n = nProc.r;
+                    List<Vector3D> listToBeSorted = nProc.listVectors;
+                    int i = nProc.i;
+                    int dim = nProc.dim;
+
+                    //Echo("listToBeSorted.Count:" + listToBeSorted.Count);
+
+                    List<Vector3D> listSorted;
+                    if (listToBeSorted.Count < 3950)
+                    {
+                        listSorted = sortingOnSpecificAxises(listToBeSorted, i);
+                    }
+                    else
+                    {
+                        listSorted = listToBeSorted;
+
+                    }
+
+                    testI = testI + 1;
+
+
+                    int intIndexPoint = (listSorted.Count - 1) / 2;
+
+                    int startLeft = 0;
+                    int endLeft = intIndexPoint - 1;
+
+                    int startRight = intIndexPoint + 1;
+                    int endtRight = listSorted.Count - 1;
+
+                    List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
+                    List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
+
+                    i = (i + 1) % dim;
+
+                    //storing the point
+                    n.x[0] = listSorted[intIndexPoint].X;
+                    n.x[1] = listSorted[intIndexPoint].Y;
+                    n.x[2] = listSorted[intIndexPoint].Z;
+
+                    if (subListLeft.Count != 0)
+                    {
+                        n.left = new octoNode();
+                        subTreeNeedsProcessingVar.Add(
+                            new subTreeNeedsProcessing(n.left,
+                            subListLeft, i, dim));
+                    }
+                    if (subListRight.Count != 0)
+                    {
+                        n.right = new octoNode();
+                        subTreeNeedsProcessingVar.Add(
+                            new subTreeNeedsProcessing(n.right,
+                            subListRight, i, dim));
+                    }
+
+                    //todo remove the processed node;
+                    subTreeNeedsProcessingVar.RemoveAt(0);
+
+                    if (testI % 4000 == 0)
+                    {
+                        /*Echo("% 4000 == 0");
+                        Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
+                        break;
+                        //yield return true;*/
+                        return false;
+                    }
+                    if (subTreeNeedsProcessingVar.Count == 0)
+                    {
+                        /*Echo(".Count == 0");
+                        Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
+                        break;
+                        //yield return true;*/
+                        return false;
+                    }
+
+                    if (this.runtime.CurrentInstructionCount > 25000)
+                    {
+                        /*Echo("Count > 30000");
+                        Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
+                        break;
+                        //yield return true;*/
+                        return false;
+                    }
+                }
+
+                kdtreeIsDoneBuidling = true;
+                return true;
+
+            }
+            public bool kdtreeIsDoneBuidlingMeth()
+            {
+                return kdtreeIsDoneBuidling;
+            }
+        }
+
         public Program()
         {
             // The constructor, called only once every session and
@@ -108,138 +369,6 @@ namespace IngameScript
 
             Runtime.UpdateFrequency |= UpdateFrequency.Once;
         }
-        //kdtree suport
-        public class subTreeNeedsProcessing
-        {
-            public octoNode r;
-            public List<Vector3D> listVectors;
-            public int i;
-            public int dim;
-            public subTreeNeedsProcessing(octoNode ri, List<Vector3D> lVectors, int axisI, int dimI)
-            {
-                r = ri;
-                listVectors = lVectors;
-                i = axisI;
-                dim = dimI;
-            }
-        }
-        //kdtree suport
-        public class octoNode
-        {
-            public double[] x = new double[3];
-            public octoNode left, right;
-        }
-        //kdtree support
-        public static List<Vector3D> sortingOnSpecificAxises(List<Vector3D> listToSort, int axisOnWhichToSort)
-        {
-            List<Vector3D> newResult = new List<Vector3D>();
-
-            if (axisOnWhichToSort == 0)
-            {
-                SorterByAxisesOnVector3Dx storerX = new SorterByAxisesOnVector3Dx();
-                listToSort.Sort(storerX);
-            }
-            if (axisOnWhichToSort == 1)
-            {
-                SorterByAxisesOnVector3Dy storerY = new SorterByAxisesOnVector3Dy();
-                listToSort.Sort(storerY);
-            }
-            if (axisOnWhichToSort == 2)
-            {
-                SorterByAxisesOnVector3Dz storerZ = new SorterByAxisesOnVector3Dz();
-                listToSort.Sort(storerZ);
-            }
-
-
-            //debug
-            return listToSort;
-
-            //return newResult;
-        }
-        //kdtree support
-        static public Vector3D convertOctoNodeToV3D(octoNode ON)
-        {
-            Vector3D v = new Vector3D();
-            v.X = ON.x[0];
-            v.Y = ON.x[1];
-            v.Z = ON.x[2];
-            return v;
-        }
-        //kdtree support
-        class SorterByAxisesOnVector3Dx : IComparer<Vector3D>
-        {
-            public int Compare(Vector3D x, Vector3D y)
-            {
-                return x.X.CompareTo(y.X);
-            }
-        }
-        class SorterByAxisesOnVector3Dy : IComparer<Vector3D>
-        {
-            public int Compare(Vector3D x, Vector3D y)
-            {
-                return x.Y.CompareTo(y.Y);
-            }
-        }
-        class SorterByAxisesOnVector3Dz : IComparer<Vector3D>
-        {
-            public int Compare(Vector3D x, Vector3D y)
-            {
-                return x.Z.CompareTo(y.Z);
-            }
-        }
-        //kd tree support
-        //nearest neighbors search
-        static void nearest(octoNode root, octoNode nd, int i, int dim, ref octoNode best, ref double best_dist)
-        {
-            double d, dx, dx2;
-
-            if (root == null) return;
-            d = dist(root, nd, dim);
-            //d = dist2(convertOctoNodeToV3D(root), convertOctoNodeToV3D(nd));
-            dx = root.x[i] - nd.x[i];
-            dx2 = dx * dx;
-
-            visited++;
-
-            if ((best == null) || d < best_dist)
-            {
-                best_dist = d;
-                best = root;
-            }
-
-
-            //Echo("best:" + convertOctoNodeToV3D(best));
-            //Echo("root:" + convertOctoNodeToV3D(root));
-            //Echo("=============");
-
-            /* if chance of exact match is high */
-            if (best_dist == null) return;
-
-            if (++i >= dim) i = 0;
-
-            nearest(dx > 0 ? root.left : root.right, nd, i, dim, ref best, ref best_dist);
-            if (dx2 >= best_dist) return;
-            nearest(dx > 0 ? root.right : root.left, nd, i, dim, ref best, ref best_dist);
-        }
-        static public double dist(octoNode a, octoNode b, int dim)
-        {
-            double t, d = 0;
-            dim = dim - 1;
-            while (dim >= 0)
-            {
-                t = a.x[dim] - b.x[dim];
-                d += t * t;
-                dim = dim - 1;
-            }
-            return d;
-        }
-        static public double dist2(Vector3D a, Vector3D b)
-        {
-            double d;
-            d = (a - b).LengthSquared();
-            return d;
-        }
-
 
         public int decodeSignedStr(string EncodedStr)
         {
@@ -1150,137 +1279,47 @@ namespace IngameScript
 
             Echo("if the script don't refresh the screen, the Remote Control might be gone, fix it and please hit Recompile");
 
+
+            Echo("test1");
+
+            int testI = 0;
+
+            if (pointsAreAllLoaded == false)
+            {
+                return;
+            }
+
             Echo("using subTreeNeedsProcessingVar");
             if (pointsAreAllLoaded == true)
             {
-                if (rootOctoNode == null)
+                if(kdTreeGlobal == null)
                 {
-                    rootOctoNode = new octoNode();
-                    subTreeNeedsProcessingVar.Add(
-                        new subTreeNeedsProcessing(rootOctoNode,
-                        sortListV3Dkdtree, 0, 3));
-                }
-                else
-                {
-                    //Echo("rootOctoNode.l.l:" + convertOctoNodeToV3D(rootOctoNode.left.left));
-                    //Echo("rootOctoNode.r:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.right),0));
-                    //Echo("rootOctoNode.l:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left),0));
-                    //Echo("rootOctoNode:" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode),0));
+                    Echo("starting a new kdTree (temp message)");
+                    kdTreeGlobal = new kdTree(Runtime, sortListV3Dkdtree);
                 }
             }
 
-            int testI = 0;
-            //iterative way to build the tree
-            while (subTreeNeedsProcessingVar.Count != 0)
-            {
-                subTreeNeedsProcessing nProc = subTreeNeedsProcessingVar[0];
 
-                octoNode n = nProc.r;
-                List<Vector3D> listToBeSorted = nProc.listVectors;
-                int i = nProc.i;
-                int dim = nProc.dim;
+            Echo("test2");
 
-                //Echo("listToBeSorted.Count:" + listToBeSorted.Count);
+            //Echo("" + kdTreeGlobal.);
 
-                List<Vector3D> listSorted;
-                if (listToBeSorted.Count < 3950)
-                {
-                    listSorted = sortingOnSpecificAxises(listToBeSorted, i);
-                }
-                else
-                {
-                    listSorted = listToBeSorted;
-
-                }
-
-                testI = testI + 1;
-
-
-                int intIndexPoint = (listSorted.Count - 1) / 2;
-
-                int startLeft = 0;
-                int endLeft = intIndexPoint - 1;
-
-                int startRight = intIndexPoint + 1;
-                int endtRight = listSorted.Count - 1;
-
-                List<Vector3D> subListLeft = listSorted.GetRange(startLeft, endLeft - startLeft + 1);
-                List<Vector3D> subListRight = listSorted.GetRange(startRight, endtRight - startRight + 1);
-
-                i = (i + 1) % dim;
-
-                //storing the point
-                n.x[0] = listSorted[intIndexPoint].X;
-                n.x[1] = listSorted[intIndexPoint].Y;
-                n.x[2] = listSorted[intIndexPoint].Z;
-
-                if (subListLeft.Count != 0)
-                {
-                    n.left = new octoNode();
-                    subTreeNeedsProcessingVar.Add(
-                        new subTreeNeedsProcessing(n.left,
-                        subListLeft, i, dim));
-                }
-                if (subListRight.Count != 0)
-                {
-                    n.right = new octoNode();
-                    subTreeNeedsProcessingVar.Add(
-                        new subTreeNeedsProcessing(n.right,
-                        subListRight, i, dim));
-                }
-
-                //todo remove the processed node;
-                subTreeNeedsProcessingVar.RemoveAt(0);
-
-                if (testI % 4000 == 0)
-                {
-                    Echo("% 4000 == 0");
-                    Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
-                    break;
-                    //yield return true;
-                }
-                if (subTreeNeedsProcessingVar.Count == 0)
-                {
-                    Echo(".Count == 0");
-                    Echo("ICkdtreebuilding:" + Runtime.CurrentInstructionCount);
-                    break;
-                    //yield return true;
-                }
-
-                if (Runtime.CurrentInstructionCount > 30000)
-                {
-                    Echo("Count > 30000");
-                    Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
-                    break;
-                    //yield return true;
-                }
-            }
-
-            if (subTreeNeedsProcessingVar.Count != 0)
+            if (kdTreeGlobal.computeThekdTreeBuilt() == false)
             {
                 Echo("kdtree building in progress...");
                 return;
             }
-
-            if (Runtime.CurrentInstructionCount > 30000)
-            {
-                //Echo("Count > 30000");
-                //Echo("ICkdtreebuilding" + Runtime.CurrentInstructionCount);
-                return;
-                //yield return true;
-            }
-
+            Echo("test3");
 
             Echo("testI" + testI);
 
             Echo("pointsAreAllLoaded:" + pointsAreAllLoaded);
             if (pointsAreAllLoaded == true)
             {
-                if (testI == 0)
+                if(kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
                 {
-                    kdtreeIsDoneBuidling = true;
+                    Echo("kdtreeIsDoneBuidlingMeth is true");
                 }
-                Echo("kdtreeIsDoneBuidling:" + kdtreeIsDoneBuidling);
             }
             else
             {
@@ -1402,10 +1441,10 @@ namespace IngameScript
                     return;
                 }
 
-                if (kdtreeIsDoneBuidling == true)
+                if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
                 {
-                    octoNode testMyPosNode = new octoNode();
-                    octoNode startNode = new octoNode();
+                    kdTree.octoNode testMyPosNode = new kdTree.octoNode();
+                    kdTree.octoNode startNode = new kdTree.octoNode();
 
                     Vector3D v3d = myRelPosOnplanet;
 
@@ -1415,19 +1454,19 @@ namespace IngameScript
 
                     double best_dist = 5000000000;
 
-                    visited = 0;
+                    //visited = 0;
                     //Echo("ICkdtreenearestbefore:" + Runtime.CurrentInstructionCount);
-                    nearest(rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
+                    kdTreeGlobal.nearest(kdTreeGlobal.rootOctoNode, testMyPosNode, 0, 3, ref startNode, ref best_dist);
                     //Echo("ICkdtreenearestafter:" + Runtime.CurrentInstructionCount);
 
                     //Echo("" + Vector3D.Round(convertOctoNodeToV3D(rootOctoNode.left.left), 1));
 
-                    Echo("visited:" + visited);
+                    //Echo("visited:" + visited);
 
                     //Echo("testON:" + Vector3D.Round(convertOctoNodeToV3D(testMyPosNode), 1));
                     //Echo("test_Best:" + Vector3D.Round(convertOctoNodeToV3D(startNode), 1));
 
-                    Vector3D v3d_test_Best = convertOctoNodeToV3D(startNode);
+                    Vector3D v3d_test_Best = kdTree.convertOctoNodeToV3D(startNode);
 
                     //Echo("v3d_test_Best:" + Vector3D.Round(v3d_test_Best, 1));
                     //Echo("best_dist(squarred):" + Math.Round(best_dist, 1));
@@ -1435,7 +1474,7 @@ namespace IngameScript
                     //Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
 
 
-                    octoNode goalNode = new octoNode();
+                    kdTree.octoNode goalNode = new kdTree.octoNode();
 
                     Vector3D v3dGoal = targetV3DrelToPlanet;
 
@@ -1446,19 +1485,19 @@ namespace IngameScript
                     double best_distGoal = 5000000000;
 
                     //Echo("ICkdtreenearestbeforeGoal:" + Runtime.CurrentInstructionCount);
-                    visited = 0;
-                    nearest(rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
-                    Echo("visited:" + visited);
+                    //visited = 0;
+                    kdTreeGlobal.nearest(kdTreeGlobal.rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
+                    //Echo("visited:" + visited);
                     //Echo("ICkdtreenearestafterGoal:" + Runtime.CurrentInstructionCount);
 
-                    Echo("goalPos" + convertOctoNodeToV3D(goalNode));
+                    Echo("goalPos" + kdTree.convertOctoNodeToV3D(goalNode));
                     //Echo("goalIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode)));
-                    Echo("startPos" + convertOctoNodeToV3D(startNode));
+                    Echo("startPos" + kdTree.convertOctoNodeToV3D(startNode));
                     //Echo("startIdx:" + sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(startNode)));
 
 
-                    startInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(startNode));
-                    endInt = sortListV3Dkdtree.IndexOf(convertOctoNodeToV3D(goalNode));
+                    startInt = sortListV3Dkdtree.IndexOf(kdTree.convertOctoNodeToV3D(startNode));
+                    endInt = sortListV3Dkdtree.IndexOf(kdTree.convertOctoNodeToV3D(goalNode));
 
                     Echo("startInt:" + startInt);
                     Echo("endInt:" + endInt);
