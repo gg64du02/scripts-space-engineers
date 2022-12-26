@@ -60,10 +60,6 @@ namespace IngameScript
         bool pointsAreAllLoaded = false;
         kdTree kdTreeGlobal = null;
 
-        void printII(string msg)
-        {
-            Echo(msg);
-        }
         public class kdTree
         {
 
@@ -320,6 +316,18 @@ namespace IngameScript
             public bool kdtreeIsDoneBuidlingMeth()
             {
                 return kdtreeIsDoneBuidling;
+            }
+
+            public int amountsOfProcessingLeft()
+            {
+                if(subTreeNeedsProcessingVar == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return subTreeNeedsProcessingVar.Count;
+                }
             }
         }
 
@@ -1183,6 +1191,178 @@ namespace IngameScript
             return 0;
         }
 
+        public void displayThe3dPathCentered(List<Node> path, Vector3D grav,
+            Vector3D forward, Vector3D centeredOn)
+        {
+            Echo("displayThe3dPathCentered");
+            Echo("path.Count" + path.Count);
+
+
+            if (path.Count < 2)
+            {
+                return;
+            }
+
+            Echo("path[0].index" + path[0].index);
+            Echo("path[path.Count-1].index" + path[path.Count - 1].index);
+
+            //spot from which to draw from
+            Vector2 prevplottingPath = new Vector2(128, 128 + 64);
+            Vector2 plottingPath = new Vector2(128, 128 + 64);
+
+
+            Vector2 leftMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y - 3) / 1;
+            Vector2 rightMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y + 3) / 1;
+            DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
+
+
+            //double df = 0.25 * 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+            //double df = 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
+            double df = 0.25 * 0.25 * 1024.0 / 30000.0;
+            //double df = 1 * 1024.0 / 30000.0;
+
+            Echo("dfF:" + (path[0].position - path[path.Count - 1].position).Length());
+            double dfF = (path[0].position - path[path.Count - 1].position).Length();
+            /*
+			if (dfF > 30000)
+				df = df * 1.0;
+			if (dfF > 15000)
+				df = df * 4.0;
+			if (dfF > 7500)
+				df = df * 4.0;
+			if (dfF > 3500)*
+				df = df * 8.0;
+			*/
+
+            //first line from myPos to the first node:
+
+            //centeredOn = new Vector3D(26000, -13000, 3000);
+
+            Vector3D prevnodePosition = Vector3D.Normalize(centeredOn) * 30000;
+
+
+            Vector3D nodePosition = path[0].position;
+            Vector3D lines = nodePosition - prevnodePosition;
+
+            Vector3D tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
+            //Vector3D tmpProj = VectorHelper.VectorProjection(lines, grav);
+
+
+            Vector3D bodyRCX = Vector3D.Normalize(grav.Cross(forward));
+            Vector3D bodyRCY = forward;
+
+            double projX = tmpProj.Dot(bodyRCX);
+            double projY = -tmpProj.Dot(bodyRCY);
+
+            //offset for the first line
+            projX = projX - plottingPath.X;
+            projY = projY - plottingPath.Y;
+
+            //factor according the the disance from the goal
+            projX = projX * df;
+            projY = projY * df;
+
+
+            //plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
+
+            //DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
+
+            prevplottingPath = plottingPath;
+
+            //debugging
+            //return;
+
+            Echo("==================");
+            Echo("plottingPath:" + plottingPath);
+            Echo("prevplottingPath:" + prevplottingPath);
+            Echo("nodePosition:" + Vector3D.Round(lines, 1));
+            Echo("==================");
+
+            List<Node> path2 = path;
+
+            //path2.Reverse();
+
+            //return;
+            //prevnodePosition = centeredOn;
+            prevnodePosition = path2[0].position;
+            //prevnodePosition = path[path.Count-1].position;
+
+            int counter = 0;
+
+            foreach (Node node in path2)
+            //foreach (int i in Enumerable.Range(path.Count-1,0))
+            {
+
+                nodePosition = node.position;
+                //nodePosition = path[i].position;
+                lines = nodePosition - prevnodePosition;
+
+                tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
+                //tmpProj = VectorHelper.VectorProjection(lines, grav);
+
+                projX = tmpProj.Dot(bodyRCX);
+                projY = -tmpProj.Dot(bodyRCY);
+
+                if (counter == 0)
+                {
+                    //projX = projX - plottingPath.X;
+                    //projY = projY - plottingPath.Y;
+                }
+
+                projX = projX * df;
+                projY = projY * df;
+
+
+                plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
+
+                //Echo("plottingPath:" + plottingPath);
+                //Echo("prevplottingPath:" + prevplottingPath);
+                //Echo("node.position:" + Vector3D.Round(nodePosition, 1));
+                //Echo("==================");
+
+
+                DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
+
+                //debug
+                //break;
+
+                //v2d
+                prevplottingPath = plottingPath;
+                //v3d
+                prevnodePosition = nodePosition;
+
+                if (counter > 5)
+                {
+                    //break;
+                }
+
+                counter = counter + 1;
+            }
+
+
+        }
+
+
+        public class Node
+        {
+            // voronoi vertex
+            public int index;
+            public Vector3D position;
+            public List<int> neighborsNodesIndex;
+
+            public Node(int index, Vector3D position)
+            {
+                this.index = index;
+                this.position = position;
+                this.neighborsNodesIndex = new List<int>();
+            }
+
+            public String toString()
+            {
+                return "index is:" + index + "\n" + "position is:" + position + "\n";
+            }
+
+        }
 
         public void Main(string argument, UpdateType updateSource)
         {
@@ -1286,10 +1466,10 @@ namespace IngameScript
 
             if (pointsAreAllLoaded == false)
             {
+                Echo("if (pointsAreAllLoaded == false)");
                 return;
             }
 
-            Echo("using subTreeNeedsProcessingVar");
             if (pointsAreAllLoaded == true)
             {
                 if(kdTreeGlobal == null)
@@ -1302,7 +1482,7 @@ namespace IngameScript
 
             Echo("test2");
 
-            //Echo("" + kdTreeGlobal.);
+            Echo("kdTG.ProcLeft:" + kdTreeGlobal.amountsOfProcessingLeft());
 
             if (kdTreeGlobal.computeThekdTreeBuilt() == false)
             {
@@ -1473,7 +1653,6 @@ namespace IngameScript
 
                     //Echo("infos_clos:" + Math.Round((v3d_test_Best - v3d).Length(), 1));
 
-
                     kdTree.octoNode goalNode = new kdTree.octoNode();
 
                     Vector3D v3dGoal = targetV3DrelToPlanet;
@@ -1533,7 +1712,6 @@ namespace IngameScript
                     }
                 }
 
-
                 Vector3D gV3D = RemoteControl.GetNaturalGravity();
                 Vector3D fowardRC = RemoteControl.WorldMatrix.Forward;
 
@@ -1550,8 +1728,9 @@ namespace IngameScript
 
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
                 
-
                 /*
+                //self drving code
+                
                 //getting vectors to help with angles proposals
                 Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
                 Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
@@ -1652,206 +1831,17 @@ namespace IngameScript
 
             }
             
-			//Vector2 leftMyPosVector2 = new Vector2((float)pixelPosCalculated.Y - 24, (float)pixelPosCalculated.X) / 8;
-			//Vector2 rightMyPosVector2 = new Vector2((float)pixelPosCalculated.Y + 24, (float)pixelPosCalculated.X) / 8;
-			//DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
-
-			//Vector2 leftMyRoverTipVector2 = new Vector2((float)pixelPosCalculated.Y, (float)pixelPosCalculated.X) / 8;
-			//Vector2 rightMyRoverTipVector2 = new Vector2((float)pointShipForwardVector.Y, (float)pointShipForwardVector.X) / 8;
-			//DrawLine(ref spriteFrame, leftMyRoverTipVector2, rightMyRoverTipVector2, 3.0f, Color.Green);
-			
             // x 0 y 0 w 256 h 256
 
             Echo("_viewport:" + _viewport);
             // DrawSprites(ref spriteFrame);
             spriteFrame.Dispose();
 
-
             Echo("planetRegionPolynsLd:" + planetRegionPolygonsLoaded);
-
-
 
             Echo("ICMainEnd:" + Runtime.CurrentInstructionCount);
 
         }
-
-
-        public void displayThe3dPathCentered(List<Node> path, Vector3D grav,
-            Vector3D forward, Vector3D centeredOn)
-        {
-            Echo("displayThe3dPathCentered");
-            Echo("path.Count" + path.Count);
-
-
-            if (path.Count < 2)
-            {
-                return;
-            }
-
-            Echo("path[0].index" + path[0].index);
-            Echo("path[path.Count-1].index" + path[path.Count-1].index);
-
-            //spot from which to draw from
-            Vector2 prevplottingPath = new Vector2(128, 128 + 64);
-            Vector2 plottingPath = new Vector2(128, 128 + 64);
-
-
-            Vector2 leftMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y - 3) / 1;
-            Vector2 rightMyPosVector2 = new Vector2((float)plottingPath.X, (float)plottingPath.Y + 3) / 1;
-            DrawLine(ref spriteFrame, leftMyPosVector2, rightMyPosVector2, 6.0f, Color.Green);
-
-
-            //double df = 0.25 * 0.25 * 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
-            //double df = 0.25 * 0.25 * 0.25 * 1024.0 / 30000.0;
-            double df = 0.25 * 0.25 * 1024.0 / 30000.0;
-            //double df = 1 * 1024.0 / 30000.0;
-
-            Echo("dfF:" + (path[0].position - path[path.Count - 1].position).Length());
-            double dfF = (path[0].position - path[path.Count - 1].position).Length();
-            /*
-			if (dfF > 30000)
-				df = df * 1.0;
-			if (dfF > 15000)
-				df = df * 4.0;
-			if (dfF > 7500)
-				df = df * 4.0;
-			if (dfF > 3500)*
-				df = df * 8.0;
-			*/
-
-            //first line from myPos to the first node:
-
-            //centeredOn = new Vector3D(26000, -13000, 3000);
-
-            Vector3D prevnodePosition = Vector3D.Normalize(centeredOn) * 30000;
-
-
-            Vector3D nodePosition = path[0].position;
-            Vector3D lines = nodePosition - prevnodePosition;
-
-            Vector3D tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
-            //Vector3D tmpProj = VectorHelper.VectorProjection(lines, grav);
-
-
-            Vector3D bodyRCX = Vector3D.Normalize(grav.Cross(forward));
-            Vector3D bodyRCY = forward;
-
-            double projX = tmpProj.Dot(bodyRCX);
-            double projY = -tmpProj.Dot(bodyRCY);
-
-            //offset for the first line
-            projX = projX - plottingPath.X;
-            projY = projY - plottingPath.Y;
-
-            //factor according the the disance from the goal
-            projX = projX * df;
-            projY = projY * df;
-
-
-            //plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
-
-            //DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
-
-            prevplottingPath = plottingPath;
-
-            //debugging
-            //return;
-
-            Echo("==================");
-            Echo("plottingPath:" + plottingPath);
-            Echo("prevplottingPath:" + prevplottingPath);
-            Echo("nodePosition:" + Vector3D.Round(lines, 1));
-            Echo("==================");
-
-            List<Node> path2 = path;
-
-            //path2.Reverse();
-
-            //return;
-            //prevnodePosition = centeredOn;
-            prevnodePosition = path2[0].position;
-            //prevnodePosition = path[path.Count-1].position;
-
-            int counter = 0;
-
-            foreach (Node node in path2)
-            //foreach (int i in Enumerable.Range(path.Count-1,0))
-            {
-
-                nodePosition = node.position;
-                //nodePosition = path[i].position;
-                lines = nodePosition - prevnodePosition;
-
-                tmpProj = lines - VectorHelper.VectorProjection(lines, grav);
-                //tmpProj = VectorHelper.VectorProjection(lines, grav);
-
-                projX = tmpProj.Dot(bodyRCX);
-                projY = -tmpProj.Dot(bodyRCY);
-
-                if (counter == 0)
-                {
-                    //projX = projX - plottingPath.X;
-                    //projY = projY - plottingPath.Y;
-                }
-
-                projX = projX * df;
-                projY = projY * df;
-
-
-                plottingPath = new Vector2((float)(plottingPath.X + projX), (float)(plottingPath.Y + projY));
-
-                //Echo("plottingPath:" + plottingPath);
-                //Echo("prevplottingPath:" + prevplottingPath);
-                //Echo("node.position:" + Vector3D.Round(nodePosition, 1));
-                //Echo("==================");
-
-
-                DrawLine(ref spriteFrame, prevplottingPath, plottingPath, 1.5f, Color.Red);
-
-                //debug
-                //break;
-
-                //v2d
-                prevplottingPath = plottingPath;
-                //v3d
-                prevnodePosition = nodePosition;
-
-                if (counter > 5)
-                {
-                    //break;
-                }
-
-                counter = counter + 1;
-            }
-
-
-        }
-
-        
-
-
-
-        public class Node
-        {
-            // voronoi vertex
-            public int index;
-            public Vector3D position;
-            public List<int> neighborsNodesIndex;
-
-            public Node(int index, Vector3D position)
-            {
-                this.index = index;
-                this.position = position;
-                this.neighborsNodesIndex = new List<int>();
-            }
-
-            public String toString()
-            {
-                return "index is:" + index + "\n" + "position is:" + position + "\n";
-            }
-
-        }
-
 
     }
 }
