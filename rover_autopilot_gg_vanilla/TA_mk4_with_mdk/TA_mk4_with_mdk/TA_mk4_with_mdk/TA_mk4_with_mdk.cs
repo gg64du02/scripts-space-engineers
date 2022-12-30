@@ -74,7 +74,17 @@ namespace IngameScript
 
             int testI = 0;
             public int printInitDebug = 0;
+            public int restoreInitDebug = 0;
+            public int intDebug = 0;
 
+            public string leftString = "";
+            public string rightString = "";
+
+            public int ipp = 0;
+            public int ils = 0;
+            public int ile = 0;
+            public int irs = 0;
+            public int ire = 0;
 
             public kdTree(IMyGridProgramRuntimeInfo runtimeTmp, List<Vector3D> sortListV3DkdtreeTmp)
             {
@@ -374,45 +384,66 @@ namespace IngameScript
 
             public void restoreKdTree(string extractFromThis)
             {
+                restoreInitDebug = restoreInitDebug + 1;
                 string[] subsString = extractFromThis.Split('\n');
+                subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
                 rootOctoNode = restoreRoot(subsString[0]);
                 int intTmpLen = subsString.Count();
-                int intStart = 1;
-                int intLeftEnd = (intTmpLen / 2) - 1;
-                int intRightStart = (intTmpLen / 2);
-                int intTmpLenEnd = intTmpLen - 1;
 
-                if (intLeftEnd - intStart != 0)
+                int intStartLeft = 1;
+                int intIndexPoint = (subsString.Length - 1) / 2 + intStartLeft;
+                int intLeftEnd = intIndexPoint ;
+                int intRightStart = intIndexPoint + 1;
+                int intRightEnd = subsString.Length - 1;
+
+                ipp = intIndexPoint;
+                ils = intStartLeft;
+                ile = intLeftEnd;
+                irs = intRightStart;
+                ire = intRightEnd;
+
+                if (intLeftEnd - intStartLeft >= 0)
                 {
-                    rootOctoNode.left = reconstructOctoNode(subsString.Skip(1).Take(intLeftEnd- intStart).ToArray());
+                    rootOctoNode.left = reconstructOctoNode(subsString.Skip(intStartLeft).Take(intLeftEnd - intStartLeft+1).ToArray());
                 }
-                if (intRightStart - intTmpLenEnd != 0)
+                if (intRightEnd - intRightStart >= 0)
                 {
-                    rootOctoNode.right = reconstructOctoNode(subsString.Skip(intRightStart).Take(intTmpLenEnd - intRightStart).ToArray());
+                    rootOctoNode.right = reconstructOctoNode(subsString.Skip(intRightStart).Take(intRightEnd - intRightStart+1).ToArray());
                 }
             }
 
             octoNode reconstructOctoNode(string[] reconstrucFromStr)
             {
+                restoreInitDebug = restoreInitDebug + 1;
                 octoNode tmpOctoNode = restoreRoot(reconstrucFromStr[0]);
-                if (reconstrucFromStr.Length > 2)
+                if (reconstrucFromStr.Length > 1)
                 {
-                    int intTmpLen = reconstrucFromStr.Length;
-                    int intStart = 1;
-                    int intLeftEnd = (intTmpLen / 2) - 1;
-                    int intRightStart = (intTmpLen / 2);
-                    int intTmpLenEnd = intTmpLen - 1;
-                    if (intLeftEnd - intStart != 0)
+                    int intStartLeft = 1;
+                    int intIndexPoint = (reconstrucFromStr.Length - 1) / 2 + intStartLeft;
+                    int intLeftEnd = intIndexPoint;
+                    int intRightStart = intIndexPoint + 1;
+                    int intRightEnd = reconstrucFromStr.Length - 1;
+
+                    
+                    ipp = intIndexPoint;
+                    ils = intStartLeft;
+                    ile = intLeftEnd;
+                    irs = intRightStart;
+                    ire = intRightEnd;
+                    
+
+                    if (intLeftEnd - intStartLeft >= 0)
                     {
-                        rootOctoNode.left = reconstructOctoNode(reconstrucFromStr.Skip(1).Take(intLeftEnd - intStart).ToArray());
+                        rootOctoNode.left = reconstructOctoNode(reconstrucFromStr.Skip(intStartLeft).Take(intLeftEnd - intStartLeft+1).ToArray());
                     }
-                    if (intRightStart - intTmpLenEnd != 0)
+                    if (intRightEnd - intRightStart  >= 0)
                     {
-                        rootOctoNode.right = reconstructOctoNode(reconstrucFromStr.Skip(intRightStart).Take(intTmpLenEnd - intRightStart).ToArray());
+                        rootOctoNode.right = reconstructOctoNode(reconstrucFromStr.Skip(intRightStart).Take(intRightEnd - intRightStart+1).ToArray());
                     }
                 }
                 return tmpOctoNode;
             }
+
 
 
         }
@@ -1820,10 +1851,47 @@ namespace IngameScript
                     if (enableDebugInitPrint)
                     {
                         kdTreeGlobal.printInitDebug = 0;
-                        string test = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
+                        string testInitStr = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
                         Echo("printing the init:");
                         Echo("printInitDebug:" + kdTreeGlobal.printInitDebug);
-                        Me.CustomData = test;
+                        Me.CustomData = testInitStr;
+                        Echo("before the restore1");
+
+
+                        kdTree testRestoreFromStr = new kdTree(Runtime, new List<Vector3D>());
+                        
+                        testRestoreFromStr.restoreInitDebug = 0;
+
+                        Echo("before the restore2");
+
+                        //string[] subsString = testInitStr.Split('\n');
+                        //Echo("subsString.Length:" + subsString.Length);
+                        //subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
+                        //Echo("subsString.Length:" + subsString.Length);
+                        try
+                        {
+                            testRestoreFromStr.restoreKdTree(testInitStr);
+                        }
+                        catch
+                        {
+                            Echo("left:" + testRestoreFromStr.leftString);
+                            Echo("intDebug:" + testRestoreFromStr.intDebug);
+
+                            Echo("ipp:" + testRestoreFromStr.ipp);
+                            Echo("ils:" + testRestoreFromStr.ils);
+                            Echo("ile:" + testRestoreFromStr.ile);
+                            Echo("irs:" + testRestoreFromStr.irs);
+                            Echo("ire:" + testRestoreFromStr.ire);
+                        }
+                        /*
+                        Echo("ipp:" + testRestoreFromStr.ipp);
+                        Echo("ils:" + testRestoreFromStr.ils);
+                        Echo("ile:" + testRestoreFromStr.ile);
+                        Echo("irs:" + testRestoreFromStr.irs);
+                        Echo("ire:" + testRestoreFromStr.ire);
+                        */
+                        Echo("restoring the init:");
+                        Echo("restoreInitDebug:" + testRestoreFromStr.restoreInitDebug);
                     }
                 }
 
