@@ -73,6 +73,8 @@ namespace IngameScript
             IMyGridProgramRuntimeInfo runtime;
 
             int testI = 0;
+            public int printInitDebug = 0;
+
 
             public kdTree(IMyGridProgramRuntimeInfo runtimeTmp, List<Vector3D> sortListV3DkdtreeTmp)
             {
@@ -329,6 +331,90 @@ namespace IngameScript
                     return subTreeNeedsProcessingVar.Count;
                 }
             }
+            string printCurrentRoot(octoNode root)
+            {
+                printInitDebug = printInitDebug + 1;
+                return root.x[0] + "|" + root.x[1] + "|" + root.x[2] + "\n";
+            }
+            public string printCurrentNode(octoNode node)
+            {
+                string tmpStr = "";
+                if(node != null)
+                {
+                    tmpStr = tmpStr + printCurrentRoot(node);
+                }
+
+                if (node.left != null)
+                {
+                    tmpStr = tmpStr + printCurrentNode(node.left);
+                }
+                if (node.right != null)
+                {
+                    tmpStr = tmpStr + printCurrentNode(node.right);
+                }
+                
+                return tmpStr;
+            }
+            public string saveAsString()
+            {
+                string resultSaveString = "";
+                resultSaveString = printCurrentNode(rootOctoNode);
+                return resultSaveString;
+            }
+
+            octoNode restoreRoot(string dataStr)
+            {
+                string[] subsString = dataStr.Split('|');
+                octoNode tmpOctoNode = new octoNode();
+                tmpOctoNode.x[0] = Convert.ToDouble(subsString[0]);
+                tmpOctoNode.x[1] = Convert.ToDouble(subsString[1]);
+                tmpOctoNode.x[2] = Convert.ToDouble(subsString[2]);
+                return new octoNode();
+            }
+
+            public void restoreKdTree(string extractFromThis)
+            {
+                string[] subsString = extractFromThis.Split('\n');
+                rootOctoNode = restoreRoot(subsString[0]);
+                int intTmpLen = subsString.Count();
+                int intStart = 1;
+                int intLeftEnd = (intTmpLen / 2) - 1;
+                int intRightStart = (intTmpLen / 2);
+                int intTmpLenEnd = intTmpLen - 1;
+
+                if (intLeftEnd - intStart != 0)
+                {
+                    rootOctoNode.left = reconstructOctoNode(subsString.Skip(1).Take(intLeftEnd- intStart).ToArray());
+                }
+                if (intRightStart - intTmpLenEnd != 0)
+                {
+                    rootOctoNode.right = reconstructOctoNode(subsString.Skip(intRightStart).Take(intTmpLenEnd - intRightStart).ToArray());
+                }
+            }
+
+            octoNode reconstructOctoNode(string[] reconstrucFromStr)
+            {
+                octoNode tmpOctoNode = restoreRoot(reconstrucFromStr[0]);
+                if (reconstrucFromStr.Length > 2)
+                {
+                    int intTmpLen = reconstrucFromStr.Length;
+                    int intStart = 1;
+                    int intLeftEnd = (intTmpLen / 2) - 1;
+                    int intRightStart = (intTmpLen / 2);
+                    int intTmpLenEnd = intTmpLen - 1;
+                    if (intLeftEnd - intStart != 0)
+                    {
+                        rootOctoNode.left = reconstructOctoNode(reconstrucFromStr.Skip(1).Take(intLeftEnd - intStart).ToArray());
+                    }
+                    if (intRightStart - intTmpLenEnd != 0)
+                    {
+                        rootOctoNode.right = reconstructOctoNode(reconstrucFromStr.Skip(intRightStart).Take(intTmpLenEnd - intRightStart).ToArray());
+                    }
+                }
+                return tmpOctoNode;
+            }
+
+
         }
 
         public Program()
@@ -778,7 +864,7 @@ namespace IngameScript
 
             toCustomData = "\n\n" + toCustomData + "]" + "\n\n";
 
-            Me.CustomData = toCustomData;
+            //Me.CustomData = toCustomData;
 
             Echo("aStarPathFindingMT:end\n");
         }
@@ -1008,7 +1094,7 @@ namespace IngameScript
 
             toCustomData = "\n\n" + toCustomData + "]" + "\n\n";
 
-            Me.CustomData = toCustomData;
+            //Me.CustomData = toCustomData;
         }
 
 
@@ -1724,6 +1810,21 @@ namespace IngameScript
                     }
                     Echo("lPN.Count:" + listPathNode.Count);
                     displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
+                }
+
+                bool enableDebugInitPrint = true;
+
+                if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
+                {
+
+                    if (enableDebugInitPrint)
+                    {
+                        kdTreeGlobal.printInitDebug = 0;
+                        string test = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
+                        Echo("printing the init:");
+                        Echo("printInitDebug:" + kdTreeGlobal.printInitDebug);
+                        Me.CustomData = test;
+                    }
                 }
 
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
