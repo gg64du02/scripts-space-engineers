@@ -80,12 +80,6 @@ namespace IngameScript
             public string leftString = "";
             public string rightString = "";
 
-            public int ipp = 0;
-            public int ils = 0;
-            public int ile = 0;
-            public int irs = 0;
-            public int ire = 0;
-
             public kdTree(IMyGridProgramRuntimeInfo runtimeTmp, List<Vector3D> sortListV3DkdtreeTmp)
             {
                 runtime = runtimeTmp;
@@ -396,12 +390,6 @@ namespace IngameScript
                 int intRightStart = intIndexPoint + 1;
                 int intRightEnd = subsString.Length - 1;
 
-                ipp = intIndexPoint;
-                ils = intStartLeft;
-                ile = intLeftEnd;
-                irs = intRightStart;
-                ire = intRightEnd;
-
                 if (intLeftEnd - intStartLeft >= 0)
                 {
                     rootOctoNode.left = reconstructOctoNode(subsString.Skip(intStartLeft).Take(intLeftEnd - intStartLeft+1).ToArray());
@@ -423,13 +411,6 @@ namespace IngameScript
                     int intLeftEnd = intIndexPoint;
                     int intRightStart = intIndexPoint + 1;
                     int intRightEnd = reconstrucFromStr.Length - 1;
-
-                    
-                    ipp = intIndexPoint;
-                    ils = intStartLeft;
-                    ile = intLeftEnd;
-                    irs = intRightStart;
-                    ire = intRightEnd;
                     
 
                     if (intLeftEnd - intStartLeft >= 0)
@@ -1864,32 +1845,8 @@ namespace IngameScript
 
                         Echo("before the restore2");
 
-                        //string[] subsString = testInitStr.Split('\n');
-                        //Echo("subsString.Length:" + subsString.Length);
-                        //subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
-                        //Echo("subsString.Length:" + subsString.Length);
-                        try
-                        {
-                            testRestoreFromStr.restoreKdTree(testInitStr);
-                        }
-                        catch
-                        {
-                            Echo("left:" + testRestoreFromStr.leftString);
-                            Echo("intDebug:" + testRestoreFromStr.intDebug);
+                        testRestoreFromStr.restoreKdTree(testInitStr);
 
-                            Echo("ipp:" + testRestoreFromStr.ipp);
-                            Echo("ils:" + testRestoreFromStr.ils);
-                            Echo("ile:" + testRestoreFromStr.ile);
-                            Echo("irs:" + testRestoreFromStr.irs);
-                            Echo("ire:" + testRestoreFromStr.ire);
-                        }
-                        /*
-                        Echo("ipp:" + testRestoreFromStr.ipp);
-                        Echo("ils:" + testRestoreFromStr.ils);
-                        Echo("ile:" + testRestoreFromStr.ile);
-                        Echo("irs:" + testRestoreFromStr.irs);
-                        Echo("ire:" + testRestoreFromStr.ire);
-                        */
                         Echo("restoring the init:");
                         Echo("restoreInitDebug:" + testRestoreFromStr.restoreInitDebug);
                     }
