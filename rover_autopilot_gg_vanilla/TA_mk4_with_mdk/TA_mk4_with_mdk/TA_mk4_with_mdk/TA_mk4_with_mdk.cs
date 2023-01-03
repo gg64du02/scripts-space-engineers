@@ -6,6 +6,8 @@ using System.Linq;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
+using VRage.Game.ModAPI.Ingame.Utilities;
+
 namespace IngameScript
 {
     partial class Program : MyGridProgram
@@ -60,6 +62,8 @@ namespace IngameScript
         bool pointsAreAllLoaded = false;
         kdTree kdTreeGlobal = null;
 
+        MyIni _ini = new MyIni();
+
         public class kdTree
         {
 
@@ -91,6 +95,16 @@ namespace IngameScript
                     new subTreeNeedsProcessing(rootOctoNode,
                     sortListV3Dkdtree, 0, 3));
             }
+
+            //meant to be use with the restore function upon Program()
+            public kdTree(IMyGridProgramRuntimeInfo runtimeTmp)
+            {
+                runtime = runtimeTmp;
+
+                rootOctoNode = new octoNode();
+            }
+
+
 
             //kdtree suport
             public class subTreeNeedsProcessing
@@ -474,6 +488,30 @@ namespace IngameScript
             _stateMachine = RunStuffOverTime();
 
             Runtime.UpdateFrequency |= UpdateFrequency.Once;
+
+
+            Me.CustomData = Me.CustomData + "\n\n" + "Program():start:";
+
+            Me.CustomData = Me.CustomData + "\n" + "Program():Storage.Length:" + Storage.Length;
+
+            if(Storage.Length> 1000)
+            {
+                if (_ini.TryParse(Storage))
+                {
+                    Me.CustomData = Me.CustomData + "\n" + "Program():if(_ini.TryParse(Storage))";
+                    //kdTreeGlobal = new kdTree(Runtime, null);
+                    kdTreeGlobal = new kdTree(Runtime);
+                    string tmpStr = _ini.Get("state", "kdtreeglobal").ToString();
+                    kdTreeGlobal.restoreKdTree(tmpStr);
+                }
+                else
+                {
+                    Me.CustomData = Me.CustomData + "\n" + "Program():!if(_ini.TryParse(Storage))";
+                }
+            }
+
+            Me.CustomData = Me.CustomData + "\n" + "Program():end:";
+
         }
 
         public int decodeSignedStr(string EncodedStr)
@@ -527,6 +565,27 @@ namespace IngameScript
             // 
             // This method is optional and can be removed if not
             // needed.
+
+
+            Me.CustomData = Me.CustomData + "\n\n" + "Save():start:";
+
+            Me.CustomData = Me.CustomData + "\n\n" + "Save():Storage.Length:" + Storage.Length;
+
+            if (Storage.Length < 1000)
+            {
+
+                string tmpStrSave = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
+
+                Me.CustomData = Me.CustomData + "\n\n" + "Save():tmpStrSave.Length:" + tmpStrSave.Length;
+
+                _ini.Set("state", "kdtreeglobal", tmpStrSave);
+
+                Storage = _ini.ToString();
+
+                Me.CustomData = Me.CustomData + "\n\n" + "Save():Storage.Length:" + Storage.Length;
+
+                Me.CustomData = Me.CustomData + "\n" + "Save():end:";
+            }
         }
 
 
@@ -1558,7 +1617,7 @@ namespace IngameScript
             Echo("if the script don't refresh the screen, the Remote Control might be gone, fix it and please hit Recompile");
 
 
-            Echo("test1");
+            Echo("Main:test1");
 
             int testI = 0;
 
@@ -1578,18 +1637,29 @@ namespace IngameScript
             }
 
 
-            Echo("test2");
+            Echo("Main:test2");
 
             Echo("kdTG.ProcLeft:" + kdTreeGlobal.amountsOfProcessingLeft());
+
+            if(kdTreeGlobal == null)
+            {
+                Echo("if(kdTreeGlobal == null)");
+            }
+            else
+            {
+                Echo("!if(kdTreeGlobal == null)");
+                string testStringOk = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
+                Echo("testStringOk.Length:" + testStringOk.Length);
+            }
 
             if (kdTreeGlobal.computeThekdTreeBuilt() == false)
             {
                 Echo("kdtree building in progress...");
                 return;
             }
-            Echo("test3");
+            Echo("Main:test3");
 
-            Echo("testI" + testI);
+            Echo("Main:testI" + testI);
 
             Echo("pointsAreAllLoaded:" + pointsAreAllLoaded);
             if (pointsAreAllLoaded == true)
@@ -1824,6 +1894,7 @@ namespace IngameScript
                     displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
                 }
 
+                /*
                 bool enableDebugInitPrint = true;
 
                 if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
@@ -1851,6 +1922,9 @@ namespace IngameScript
                         Echo("restoreInitDebug:" + testRestoreFromStr.restoreInitDebug);
                     }
                 }
+                */
+
+
 
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
                 
