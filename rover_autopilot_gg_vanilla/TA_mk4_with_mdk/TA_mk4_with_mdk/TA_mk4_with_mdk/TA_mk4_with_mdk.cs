@@ -1641,17 +1641,6 @@ namespace IngameScript
 
             Echo("kdTG.ProcLeft:" + kdTreeGlobal.amountsOfProcessingLeft());
 
-            if(kdTreeGlobal == null)
-            {
-                Echo("if(kdTreeGlobal == null)");
-            }
-            else
-            {
-                Echo("!if(kdTreeGlobal == null)");
-                string testStringOk = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
-                Echo("testStringOk.Length:" + testStringOk.Length);
-            }
-
             if (kdTreeGlobal.computeThekdTreeBuilt() == false)
             {
                 Echo("kdtree building in progress...");
@@ -1893,37 +1882,6 @@ namespace IngameScript
                     Echo("lPN.Count:" + listPathNode.Count);
                     displayThe3dPathCentered(listPathNode, gV3D, fowardRC, myRelPosOnplanet);
                 }
-
-                /*
-                bool enableDebugInitPrint = true;
-
-                if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
-                {
-
-                    if (enableDebugInitPrint)
-                    {
-                        kdTreeGlobal.printInitDebug = 0;
-                        string testInitStr = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
-                        Echo("printing the init:");
-                        Echo("printInitDebug:" + kdTreeGlobal.printInitDebug);
-                        Me.CustomData = testInitStr;
-                        Echo("before the restore1");
-
-
-                        kdTree testRestoreFromStr = new kdTree(Runtime, new List<Vector3D>());
-                        
-                        testRestoreFromStr.restoreInitDebug = 0;
-
-                        Echo("before the restore2");
-
-                        testRestoreFromStr.restoreKdTree(testInitStr);
-
-                        Echo("restoring the init:");
-                        Echo("restoreInitDebug:" + testRestoreFromStr.restoreInitDebug);
-                    }
-                }
-                */
-
 
 
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
