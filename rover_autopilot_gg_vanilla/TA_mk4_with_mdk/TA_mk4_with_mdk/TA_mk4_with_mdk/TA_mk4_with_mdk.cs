@@ -349,7 +349,7 @@ namespace IngameScript
                     return subTreeNeedsProcessingVar.Count;
                 }
             }
-            string printCurrentRoot(octoNode root)
+            public string printCurrentRoot(octoNode root)
             {
                 printInitDebug = printInitDebug + 1;
                 return root.x[0] + "|" + root.x[1] + "|" + root.x[2] + "\n";
@@ -394,7 +394,7 @@ namespace IngameScript
             {
                 restoreInitDebug = restoreInitDebug + 1;
                 string[] subsString = extractFromThis.Split('\n');
-                subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
+                //subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
 
                 rootOctoNode = restoreRoot(subsString[0]);
                 int intTmpLen = subsString.Count();
@@ -508,7 +508,21 @@ namespace IngameScript
                     Me.CustomData = Me.CustomData + "\n" + "Program():tmpStr.Length:" + tmpStr.Length;
 
                     kdTreeGlobal.restoreKdTree(tmpStr);
-                    
+
+
+                    Me.CustomData = Me.CustomData + "\n" + "Program():printCurrentRoot:" + kdTreeGlobal.printCurrentRoot(kdTreeGlobal.rootOctoNode);
+
+
+
+                    string[] tmpStrSaveArray = tmpStr.Split('\n');
+
+                    int countOfNewLine = tmpStrSaveArray.Count();
+
+                    Me.CustomData = Me.CustomData + "\n" + "Program():countOfNewLine:" + countOfNewLine;
+
+                    Me.CustomData = Me.CustomData + "\n" + "Program():tmpStrSaveArray[tmpStrSaveArray.Length-1]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 1];
+                    Me.CustomData = Me.CustomData + "\n" + "Program():tmpStrSaveArray[tmpStrSaveArray.Length-2]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 2];
+
                     /*
                     string testingPrintingInProgram = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
                     if(testingPrintingInProgram.Length<50)
@@ -585,23 +599,33 @@ namespace IngameScript
 
             Me.CustomData = Me.CustomData + "\n\n" + "Save():start:";
 
-            Me.CustomData = Me.CustomData + "\n\n" + "Save():Storage.Length:" + Storage.Length;
+            Me.CustomData = Me.CustomData + "\n" + "Save():Storage.Length:" + Storage.Length;
 
-            if (Storage.Length < 1000)
-            {
+            //if (Storage.Length < 1000)
+            //{
 
                 string tmpStrSave = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
 
-                Me.CustomData = Me.CustomData + "\n\n" + "Save():tmpStrSave.Length:" + tmpStrSave.Length;
+                Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSave.Length:" + tmpStrSave.Length;
 
                 _ini.Set("state", "kdtreeglobal", tmpStrSave);
 
                 Storage = _ini.ToString();
 
-                Me.CustomData = Me.CustomData + "\n\n" + "Save():Storage.Length:" + Storage.Length;
+                Me.CustomData = Me.CustomData + "\n" + "Save():Storage.Length:" + Storage.Length;
+
+                string[] tmpStrSaveArray = tmpStrSave.Split('\n');
+
+                int countOfNewLine = tmpStrSaveArray.Count();
+
+                Me.CustomData = Me.CustomData + "\n" + "Save():countOfNewLine:" + countOfNewLine;
+
+                Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-1]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 1];
+                Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-2]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 2];
+
 
                 Me.CustomData = Me.CustomData + "\n" + "Save():end:";
-            }
+            //}
         }
 
 
@@ -1675,7 +1699,7 @@ namespace IngameScript
             }
             Echo("Main:test3");
 
-            
+            /*
             bool enableDebugInitPrint = false;
 
             if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
@@ -1691,7 +1715,7 @@ namespace IngameScript
                     //Me.CustomData = testInitStr;
                     Echo("before the restore1");
 
-                    /*
+                    
                     kdTree testRestoreFromStr = new kdTree(Runtime);
                         
                     testRestoreFromStr.restoreInitDebug = 0;
@@ -1701,7 +1725,7 @@ namespace IngameScript
                     testRestoreFromStr.restoreKdTree(testInitStr);
 
                     string[] subsString = testInitStr.Split('\n');
-                    subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
+                    //subsString = subsString.Skip(0).Take(subsString.Length - 1).ToArray();
                     Echo("subsString[0]:" + subsString[0]);
                     Echo("subsString.Length:" + subsString.Length);
                     Echo("Storage.Length:" + Storage.Length);
@@ -1716,16 +1740,17 @@ namespace IngameScript
 
                     string retestingRestored = testRestoreFromStr.printCurrentNode(testRestoreFromStr.rootOctoNode);
 
-                    Echo("retestingRestored.Length:" + retestingRestored.Length);*/
+                    Echo("retestingRestored.Length:" + retestingRestored.Length);
                 }
             }
-                
+                */
 
+            /*
             if (kdTreeGlobal.kdtreeIsDoneBuidlingMeth() == true)
             {
                 string testingPrintingInProgram = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
                 Echo("testingPrintingInProgram.Length:" + testingPrintingInProgram.Length);
-            }
+            }*/
 
             Echo("Main:testI" + testI);
 
@@ -1902,8 +1927,8 @@ namespace IngameScript
                     //Echo("ICkdtreenearestbeforeGoal:" + Runtime.CurrentInstructionCount);
                     //visited = 0;
                     kdTreeGlobal.nearest(kdTreeGlobal.rootOctoNode, testMyPosNode, 0, 3, ref goalNode, ref best_distGoal);
-                    Echo("kdTreeGlobal.rootOctoNode.x:" + kdTreeGlobal.rootOctoNode.x);
-                    Echo("kdTreeGlobal.rootOctoNode.right.right:" + kdTreeGlobal.rootOctoNode.right.right);
+                    //Echo("kdTreeGlobal.rootOctoNode.x:" + kdTreeGlobal.rootOctoNode.x);
+                    //Echo("kdTreeGlobal.rootOctoNode.right.right:" + kdTreeGlobal.rootOctoNode.right.right);
                     //Echo("visited:" + visited);
                     //Echo("ICkdtreenearestafterGoal:" + Runtime.CurrentInstructionCount);
 
@@ -1939,8 +1964,9 @@ namespace IngameScript
                     if (endInt >= 0)
                     {
                         //aStarPathFinding(startInt, endInt, out aStarPathNodeList1, out gscore1);
-                        
-                        if (goalReached == false) {
+
+                        if (goalReached == false)
+                        {
                             startIndex = startInt;
                             endIndex = endInt;
                             Echo("startIndex:" + startIndex);
@@ -1966,7 +1992,7 @@ namespace IngameScript
 
 
                 //displayThe3dPathCentered(aStarPathNodeList1, gV3D, fowardRC, myRelPosOnplanet);
-                
+
                 /*
                 //self drving code
                 
@@ -2069,7 +2095,7 @@ namespace IngameScript
                 */
 
             }
-            
+
             // x 0 y 0 w 256 h 256
 
             Echo("_viewport:" + _viewport);
@@ -2078,7 +2104,13 @@ namespace IngameScript
 
             Echo("planetRegionPolynsLd:" + planetRegionPolygonsLoaded);
 
+            if (kdTreeGlobal != null)
+            {
+                Echo("Main:printCurrentRoot:\n" + kdTreeGlobal.printCurrentRoot(kdTreeGlobal.rootOctoNode));
+            }
+
             Echo("ICMainEnd:" + Runtime.CurrentInstructionCount);
+
 
         }
 
