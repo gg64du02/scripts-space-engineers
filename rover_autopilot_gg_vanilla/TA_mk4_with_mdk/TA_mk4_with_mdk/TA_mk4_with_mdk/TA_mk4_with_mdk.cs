@@ -380,7 +380,7 @@ namespace IngameScript
                 return resultSaveString;
             }
 
-            octoNode restoreRoot(string dataStr)
+            public octoNode restoreRoot(string dataStr)
             {
                 string[] subsString = dataStr.Split('|');
                 octoNode tmpOctoNode = new octoNode();
@@ -413,6 +413,8 @@ namespace IngameScript
                 {
                     rootOctoNode.right = reconstructOctoNode(subsString.Skip(intRightStart).Take(intRightEnd - intRightStart+1).ToArray());
                 }
+
+                kdtreeIsDoneBuidling = true;
             }
 
             octoNode reconstructOctoNode(string[] reconstrucFromStr)
@@ -507,8 +509,14 @@ namespace IngameScript
 
                     Me.CustomData = Me.CustomData + "\n" + "Program():tmpStr.Length:" + tmpStr.Length;
 
-                    kdTreeGlobal.restoreKdTree(tmpStr);
+                    kdTreeGlobal.restoreInitDebug = 0;
+                    Me.CustomData = Me.CustomData + "\n" + "Program():kdtreeIsDoneBuidlingMeth():" + kdTreeGlobal.kdtreeIsDoneBuidlingMeth();
 
+                    kdTreeGlobal.restoreKdTree(tmpStr);
+                    Me.CustomData = Me.CustomData + "\n" + "Program():kdtreeIsDoneBuidlingMeth():" + kdTreeGlobal.kdtreeIsDoneBuidlingMeth();
+
+
+                    Me.CustomData = Me.CustomData + "\n" + "Program():kdTreeGlobal.restoreInitDebug:" + kdTreeGlobal.restoreInitDebug;
 
                     Me.CustomData = Me.CustomData + "\n" + "Program():printCurrentRoot:" + kdTreeGlobal.printCurrentRoot(kdTreeGlobal.rootOctoNode);
 
@@ -603,8 +611,11 @@ namespace IngameScript
 
             //if (Storage.Length < 1000)
             //{
-
+            kdTreeGlobal.printInitDebug = 0;
                 string tmpStrSave = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
+
+                Me.CustomData = Me.CustomData + "\n" + "Save():removing last char:";
+                tmpStrSave = tmpStrSave.Remove(tmpStrSave.Length - 1);
 
                 Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSave.Length:" + tmpStrSave.Length;
 
@@ -622,9 +633,12 @@ namespace IngameScript
 
                 Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-1]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 1];
                 Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-2]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 2];
+            Me.CustomData = Me.CustomData + "\n" + "Save():kdTreeGlobal.printInitDebug:" + kdTreeGlobal.printInitDebug;
 
 
-                Me.CustomData = Me.CustomData + "\n" + "Save():end:";
+
+
+            Me.CustomData = Me.CustomData + "\n" + "Save():end:";
             //}
         }
 
@@ -1941,6 +1955,16 @@ namespace IngameScript
                     startInt = sortListV3Dkdtree.IndexOf(kdTree.convertOctoNodeToV3D(startNode));
                     endInt = sortListV3Dkdtree.IndexOf(kdTree.convertOctoNodeToV3D(goalNode));
 
+                    if (sortListV3Dkdtree.Contains(kdTree.convertOctoNodeToV3D(startNode)) == false)
+                    {
+                        Echo("does not contains startNode");
+                    }
+
+                    if (sortListV3Dkdtree.Contains(kdTree.convertOctoNodeToV3D(goalNode)) == false)
+                    {
+                        Echo("does not contains goalNode");
+                    }
+
                     Echo("startInt:" + startInt);
                     Echo("endInt:" + endInt);
 
@@ -2108,6 +2132,11 @@ namespace IngameScript
             {
                 Echo("Main:printCurrentRoot:\n" + kdTreeGlobal.printCurrentRoot(kdTreeGlobal.rootOctoNode));
             }
+
+            //kdTree kdTreeTest = new kdTree(Runtime);
+            //Echo("" + kdTreeTest.restoreRoot("22776.1727931663|15236.0140266786|12211.0535775862").x[0]);
+            Echo("" + kdTreeGlobal.rootOctoNode.x[0]);
+            Echo("" + kdTreeGlobal.rootOctoNode.right.x[0]);
 
             Echo("ICMainEnd:" + Runtime.CurrentInstructionCount);
 
