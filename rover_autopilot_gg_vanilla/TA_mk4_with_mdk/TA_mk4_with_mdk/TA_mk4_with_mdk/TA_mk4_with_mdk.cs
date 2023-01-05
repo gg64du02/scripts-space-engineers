@@ -609,9 +609,8 @@ namespace IngameScript
 
             Me.CustomData = Me.CustomData + "\n" + "Save():Storage.Length:" + Storage.Length;
 
-            //if (Storage.Length < 1000)
-            //{
-            kdTreeGlobal.printInitDebug = 0;
+            if (Storage.Length < 1000)
+            {
                 string tmpStrSave = kdTreeGlobal.printCurrentNode(kdTreeGlobal.rootOctoNode);
 
                 Me.CustomData = Me.CustomData + "\n" + "Save():removing last char:";
@@ -632,14 +631,11 @@ namespace IngameScript
                 Me.CustomData = Me.CustomData + "\n" + "Save():countOfNewLine:" + countOfNewLine;
 
                 Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-1]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 1];
+
                 Me.CustomData = Me.CustomData + "\n" + "Save():tmpStrSaveArray[tmpStrSaveArray.Length-2]:" + tmpStrSaveArray[tmpStrSaveArray.Length - 2];
-            Me.CustomData = Me.CustomData + "\n" + "Save():kdTreeGlobal.printInitDebug:" + kdTreeGlobal.printInitDebug;
 
-
-
-
-            Me.CustomData = Me.CustomData + "\n" + "Save():end:";
-            //}
+                Me.CustomData = Me.CustomData + "\n" + "Save():end:";
+            }
         }
 
 
@@ -1314,6 +1310,9 @@ namespace IngameScript
                 double muFa = PR / 1024;
                 Vector3D position = new Vector3D(muFa * xNodeInit, muFa * yNodeInit, muFa * zNodeInit);
                 position = PR * Vector3D.Normalize(position);
+
+                //removing useless accuracy for Storage
+                position = Vector3D.Round(position, 0);
 
                 //adding kdtree list populating
                 sortListV3Dkdtree.Add(position);
@@ -2128,15 +2127,6 @@ namespace IngameScript
 
             Echo("planetRegionPolynsLd:" + planetRegionPolygonsLoaded);
 
-            if (kdTreeGlobal != null)
-            {
-                Echo("Main:printCurrentRoot:\n" + kdTreeGlobal.printCurrentRoot(kdTreeGlobal.rootOctoNode));
-            }
-
-            //kdTree kdTreeTest = new kdTree(Runtime);
-            //Echo("" + kdTreeTest.restoreRoot("22776.1727931663|15236.0140266786|12211.0535775862").x[0]);
-            Echo("" + kdTreeGlobal.rootOctoNode.x[0]);
-            Echo("" + kdTreeGlobal.rootOctoNode.right.x[0]);
 
             Echo("ICMainEnd:" + Runtime.CurrentInstructionCount);
 
