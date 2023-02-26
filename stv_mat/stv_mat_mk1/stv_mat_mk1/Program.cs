@@ -115,7 +115,8 @@ namespace IngameScript
 
             Vector3D vectorToAlignToward = new Vector3D(0, 0, 0);
 
-            Vector3D V3D_zero = new Vector3D(0, 0, 0);
+            //Vector3D V3D_zero = new Vector3D(0, 0, 0);
+            Vector3D V3D_zero = Vector3D.Zero;
 
             //note:
             //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
@@ -147,14 +148,34 @@ namespace IngameScript
                 }
             }
 
-            
             Vector3D gravityVector = RemoteControl.GetNaturalGravity();
 
             Vector3D VTT = vec3Dtarget - (Vector3D) RemoteControl.Position;
 
             Vector3D shipVelocities = RemoteControl.GetShipVelocities().LinearVelocity;
 
-            
+
+            double g = gravityVector.Length();
+
+            var physMass_kg = RemoteControl.CalculateShipMass().PhysicalMass;
+            double physMass_N = physMass_kg * g;
+            double maxEffectiveThrust_N = 0;
+            double currentThrust_N = 0;
+            var cs = new List<IMyThrust>();
+            GridTerminalSystem.GetBlocksOfType(cs);
+            foreach (var c in cs)
+            {
+                maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+            }
+            //debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
+            var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
+            //debugString += "\n" + "thr_to_weight_ratio:" + thr_to_weight_ratio;
+            double TWR = thr_to_weight_ratio;
+            double V_max = 55;
+
+            double leftOverTrust_N = maxEffectiveThrust_N - physMass_N;
+
+            Echo("TWR:" + Math.Round(TWR, 2));
 
             double elev;
             RemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
@@ -184,6 +205,20 @@ namespace IngameScript
                 Vector3D shipVelOnGravPlane = VectorHelper.VectorProjection(shipVelocities, gravNorm);
 
                 Vector3D oppShipVelOnGravPlane = -shipVelOnGravPlane;
+
+                Vector3D oppShipVelOnGravPlaneNorm = Vector3D.Normalize(oppShipVelOnGravPlane);
+
+
+                Vector3D v3d_grav_N = - gravityVector * physMass_kg ;
+
+
+                //to be done
+                Vector3D shipVelNormProjError = Vector3D.Zero - shipVelOnGravPlane;
+
+
+                vectorToAlignToward = -v3d_grav_N + leftOverTrust_N * shipVelNormProjError;
+
+                double trust_to_apply_N = vectorToAlignToward.Length();
 
 
 
