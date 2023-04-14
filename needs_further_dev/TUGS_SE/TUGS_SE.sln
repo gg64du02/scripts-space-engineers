@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32901.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUGS_SE", "TUGS_SE\TUGS_SE.csproj", "{AD905F26-FB99-4C6E-B1CE-02CE7ADE7F28}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD905F26-FB99-4C6E-B1CE-02CE7ADE7F28}.Debug|x64.ActiveCfg = Debug|x64
+		{AD905F26-FB99-4C6E-B1CE-02CE7ADE7F28}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8DF5D65-3FFE-4743-A129-C56FAFA32BF5}
+	EndGlobalSection
+EndGlobal
