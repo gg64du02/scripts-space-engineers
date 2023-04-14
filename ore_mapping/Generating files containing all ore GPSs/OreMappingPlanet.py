@@ -24,9 +24,10 @@ import array as arr
 # folder_planetsfiles = 'planets_files/Mars/'
 # folder_planetsfiles = 'planets_files/Moon/'
 # folder_planetsfiles = 'planets_files/Pertam/'
-folder_planetsfiles = 'planets_files/Titan/'
+# folder_planetsfiles = 'planets_files/Titan/'
 # folder_planetsfiles = 'planets_files/Triton/'
 # folder_planetsfiles = 'planets_files/Gea/'
+folder_planetsfiles = 'PlanetDataFiles/Pertam'
 
 # Alien
 # planet_radius = 60000 #in meters
@@ -61,6 +62,12 @@ folder_planetsfiles = 'planets_files/Titan/'
 # Titan
 planet_radius = 9300 #in meters
 center_of_planet = np.asarray([36384.50, 226384.50, 5796384.50])
+testThisGPSnpArray = np.asarray([33928,233308,5802166])
+
+
+# pertam pvp rover
+planet_radius = 30000 #in meters
+center_of_planet = np.asarray([.5, .5, .5])
 testThisGPSnpArray = np.asarray([33928,233308,5802166])
 
 # Triton
@@ -159,7 +166,8 @@ from skimage import measure
 import xml.etree.ElementTree as ET
 
 # file from https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/SpaceEngineers/Content/Data/PlanetGeneratorDefinitions.sbc
-mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
+# mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
+mytree = ET.parse("Pertam.sbc")
 myroot = mytree.getroot()
 # print(myroot)
 
@@ -174,8 +182,9 @@ AgValuesList = []
 MgValuesList = []
 UrValuesList = []
 AuValuesList = []
+PtValuesList = []
 
-for x in myroot[0]:
+for x in myroot[0][0]:
     # print(x.tag, x.attrib)
     if(x.tag == "OreMappings"):
         pass
@@ -187,6 +196,11 @@ for x in myroot[0]:
             oreValue = int(y.attrib["Value"])
             oreTypeStr = y.attrib["Type"]
 
+            pass
+            print("")
+            oreStartInt = int(y.attrib["Start"])
+            if(oreStartInt>20):
+                continue
 
             oreAbrStr = ""
             if("Iron" in oreTypeStr):
@@ -219,6 +233,10 @@ for x in myroot[0]:
                 oreAbrStr = "Ur"
                 if(oreValue not in UrValuesList):
                     UrValuesList.append(oreValue)
+            if("Platinum" in oreTypeStr):
+                oreAbrStr = "Pt"
+                if(oreValue not in PtValuesList):
+                    PtValuesList.append(oreValue)
             if("Gold" in oreTypeStr):
                 oreAbrStr = "Au"
                 if(oreValue not in AuValuesList):
@@ -239,6 +257,7 @@ def whatOreThatValueIs(valueInt):
     global MgValuesList
     global UrValuesList
     global AuValuesList
+    global PtValuesList
     if(valueInt in FeValuesList):
         return "Fe"
     if(valueInt in NiValuesList):
@@ -255,6 +274,8 @@ def whatOreThatValueIs(valueInt):
         return "Ur"
     if(valueInt in AuValuesList):
         return "Au"
+    if(valueInt in PtValuesList):
+        return "Pt"
     return "$"
 print("checking xml lists")
 # =============================================
@@ -265,31 +286,31 @@ for i in range(6):
     # print(i)
     print("folder_planetsfiles:",folder_planetsfiles)
     if(i==0):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'back_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'back.png')
         #verifie
         centerFacePosition = np.asarray([0, 0, planet_radius] )
     if(i==1):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'down_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'down.png')
         #verifie
         centerFacePosition = np.asarray([0, -planet_radius, 0] )
     if(i==2):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'front_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'front.png')
         #verifie
         centerFacePosition = np.asarray([0, 0, -planet_radius] )
     if(i==3):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'left_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'left.png')
         #verifie
         centerFacePosition = np.asarray([planet_radius, 0, 0] )
     if(i==4):
-        # continue
+        continue
         filename = os.path.join(folder_planetsfiles,'right_mat.png')
         filenameHeightmap = os.path.join(folder_planetsfiles,'right.png')
         #verifie
@@ -488,8 +509,8 @@ for i in range(6):
                     #     if(centroid_surface_lack_array[0]>900):
                     #         print("lower right:")
                     # print("i:",1)
-
-                    print(GPSString)
+                    if("Pt" in GPSString):
+                        print(GPSString)
 
                 except NameError:
                     print("tmpPointOnTheCubeFace computation failed")
