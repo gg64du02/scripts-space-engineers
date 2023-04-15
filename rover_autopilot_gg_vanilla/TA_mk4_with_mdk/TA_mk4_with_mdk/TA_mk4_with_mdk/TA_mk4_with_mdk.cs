@@ -470,8 +470,8 @@ namespace IngameScript
 
             theCockpit = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyCockpit) as IMyCockpit;
 
-            //Runtime.UpdateFrequency = UpdateFrequency.Update10;
-            Runtime.UpdateFrequency = UpdateFrequency.Update100;
+            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            //Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
 
             // use the PB big display with the keyboard placed toward gravity
