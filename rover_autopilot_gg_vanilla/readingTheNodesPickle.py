@@ -404,6 +404,20 @@ for node in nodes:
 
 resultStr = ""
 nodesNpList.sort()
+#
+# considering removing doubles way references but needs to be built back in the PB then.
+# for sortedNode in nodesNpList:
+#     key = sortedNode
+#     for index in dictOfRef[key]:
+#         ref_edKey = nodesNpList[index]
+#         #indexes for this key
+#         indexesToInspectAndRemoveRefFrom = dictOfRef[ref_edKey]
+#
+#         for removeMeIndex in indexesToInspectAndRemoveRefFrom:
+#             pass
+#             nodePoint = nodesNpList[removeMeIndex]
+#             dictOfRef[ref_edKey].remove(removeMeIndex)
+
 pass
 for sortedNode in nodesNpList:
     print("sortedNode",sortedNode)
@@ -421,6 +435,12 @@ for sortedNode in nodesNpList:
         resultStr = resultStr + encodeToSigned4096m2048(keySubInt)
 
     for index in dictOfRef[key]:
+
+        #ref_edKey = nodesNpList[index]
+
+        #indexes for this key
+        #dictOfRef[ref_edKey]
+
         # if(index>4095):
         #     print(index)
         tmpCheckingFunction = encodeAsString___Range(index)
