@@ -118,13 +118,15 @@ namespace devOctoTree2
         }
 
 
-
+        static int yieldsAmount = 0;
 
         public static octoNode maketree2(List<Vector3D> listToBeSorted, int i, int dim)
         {
             octoNode n = new octoNode();
 
             List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, i);
+
+            yieldsAmount = yieldsAmount + 1 ;
 
 
             int intIndexPoint = (listSorted.Count - 1) / 2;
@@ -194,6 +196,20 @@ namespace devOctoTree2
             return v;
         }
 
+        public string printNode(octoNode point)
+        {
+            return ""+convertOctoNodeToV3D(point);
+        }
+
+        public string pointTree(octoNode root, int depth)
+        {
+            string result = "";
+            result = result + "depth:" + depth + ":" + printNode(root) + "\n";
+            if (root.left != null) result = result + "left:" + pointTree(root.left, depth + 1) + "\n";
+            if (root.right != null) result = result + "right:" + pointTree(root.right , depth + 1) + "\n";
+            return result;
+        }
+
 
          static void Main(string[] args)
         {
@@ -202,7 +218,7 @@ namespace devOctoTree2
             Random rnd = new Random(0);
             //Random rnd = new Random();
 
-            int N = 35;
+            int N = 16;
 
             List<Vector3D>  listPointsNotSorted = new List<Vector3D>();
             foreach (int testInt in Enumerable.Range(0, N))
@@ -251,7 +267,8 @@ namespace devOctoTree2
                 }
             }
 
-            Console.WriteLine("visited:"+visited);
+            Console.WriteLine("visited:" + visited);
+            Console.WriteLine("yieldsAmount:" + yieldsAmount);
 
             Console.WriteLine("Hello World!");
         }

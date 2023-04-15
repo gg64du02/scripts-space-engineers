@@ -534,11 +534,14 @@ namespace IngameScript
             Echo("IC" + Runtime.CurrentInstructionCount);
             
             Echo("using subTreeNeedsProcessingVar");
-            if(rootOctoNode == null) { 
+            if(rootOctoNode == null) {
+                Echo("test1");
                 rootOctoNode = new octoNode();
+                Echo("test2");
                 subTreeNeedsProcessingVar.Add(
                     new subTreeNeedsProcessing( rootOctoNode,
                     listPointsNotSorted, 0, 3));
+                Echo("test3");
             }
             else
             {
@@ -581,7 +584,7 @@ namespace IngameScript
                 List<Vector3D> listSorted = sortingOnSpecificAxises(listToBeSorted, i);
 
 
-
+                
                 testI = testI + 1;
 
 
@@ -664,7 +667,7 @@ namespace IngameScript
 
 
             visited = 0;
-            Echo("ICnearestbefore" + Runtime.CurrentInstructionCount);
+            Echo("ICkdtreenearestbefore" + Runtime.CurrentInstructionCount);
             nearest(rootOctoNode, testON, 0, 3, ref test_Best, ref best_dist);
 
             Vector3D v3d_test_Best = convertOctoNodeToV3D(test_Best);
@@ -675,7 +678,7 @@ namespace IngameScript
             actualClosest = new Vector3D(500000, 500000, 500000);
             double actualClosestDist = 500000;
 
-            Echo("ICnearest after" + Runtime.CurrentInstructionCount);
+            Echo("ICkdtreenearestafter" + Runtime.CurrentInstructionCount);
 
             foreach (Vector3D VD in listPointsNotSorted)
             {
@@ -688,7 +691,7 @@ namespace IngameScript
                 }
             }
 
-            Echo("ICclosestafter" + Runtime.CurrentInstructionCount);
+            Echo("ICactualclosestafter" + Runtime.CurrentInstructionCount);
 
             Echo("visited:" + visited);
             Echo("yieldsAmount:" + yieldsAmount);
