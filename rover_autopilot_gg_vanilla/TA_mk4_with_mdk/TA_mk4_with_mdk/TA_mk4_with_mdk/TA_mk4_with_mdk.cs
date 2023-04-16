@@ -1413,8 +1413,8 @@ namespace IngameScript
                 return;
             }
 
-            Echo("path[0].index" + path[0].index);
-            Echo("path[path.Count-1].index" + path[path.Count - 1].index);
+            Echo("path[[0]].index" + path[0].index);
+            Echo("path[[path.Count-1]].index" + path[path.Count - 1].index);
 
             //spot from which to draw from
             Vector2 prevplottingPath = new Vector2(128, 128 + 64);
@@ -1765,7 +1765,7 @@ namespace IngameScript
                 Echo("testingPrintingInProgram.Length:" + testingPrintingInProgram.Length);
             }*/
 
-            Echo("Main:testI" + testI);
+            Echo("Main:testI:" + testI);
 
             Echo("pointsAreAllLoaded:" + pointsAreAllLoaded);
             if (pointsAreAllLoaded == true)
