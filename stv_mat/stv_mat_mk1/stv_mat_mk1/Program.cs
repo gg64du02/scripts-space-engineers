@@ -1,4 +1,5 @@
-﻿using Sandbox.Game.EntityComponents;
+﻿using Sandbox.Game.Entities;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -26,7 +27,7 @@ namespace IngameScript
 
         public List<IMyGyro> Gyros = new List<IMyGyro>();
 
-        public IMyRemoteControl RemoteControl;
+        public IMyShipController RemoteControl = null;
 
         public Vector3D myTerrainTarget = new Vector3D(0, 0, 0);
 
@@ -183,6 +184,8 @@ namespace IngameScript
             //thresholds for the vectorToAlignToward preping:
             if (vec3Dtarget != V3D_zero)
             {
+                //Got a target
+                //TODO: try to go there and land 
                 Echo("if (vec3Dtarget != V3D_zero)");
                 //todo
                 vectorToAlignToward = (-gravityVector);
@@ -193,6 +196,8 @@ namespace IngameScript
             }
             else
             {
+                //No target
+                //TODO: try to stop and land 
                 Echo("!if (vec3Dtarget != V3D_zero)");
                 //WIP
                 vectorToAlignToward = (-gravityVector);
@@ -225,24 +230,48 @@ namespace IngameScript
             }
 
 
+            
+
+            //getting vectors to help with angles proposals
+            Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
+            Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
+            Vector3D shipDownVector = RemoteControl.WorldMatrix.Down;
+
+            //todo: extract angles from vectorToAlignToward to apply to gyros:
+
+            Vector3D VectorToPointToward = Vector3D.Normalize(vectorToAlignToward);
+
+            MatrixD RCWorldMatrix = RemoteControl.WorldMatrix;
+            
+
+            //transform VectorToPointToward to local position ?
+            Vector3D anglesForGyros = Vector3D.TransformNormal(VectorToPointToward, RCWorldMatrix);
+
+            Echo("VectorToPointToward:" + Vector3D.Round(VectorToPointToward, 3));
+            Echo("anglesForGyros:" + Vector3D.Round(anglesForGyros, 3));
+
+
+
+
+            //===================
+            //space support WIP start
+            /*
+            Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
+            Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
+            double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
+
+            Echo("distRoll2:"+Math.Round(distRoll2,2));
+            angleRoll = 20*distRoll2;
+            //===================
+            Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
+            Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
+            //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+            double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
+            */
+
+
             //end main
         }
-
-        //===================
-        //space support WIP start
-        /*
-        Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
-        Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
-        double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
-
-        Echo("distRoll2:"+Math.Round(distRoll2,2));
-		angleRoll = 20*distRoll2;
-		//===================
-		Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
-        Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
-        //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-        double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
-        */
 
 
 
