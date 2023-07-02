@@ -213,7 +213,7 @@ namespace IngameScript
 
 
                 //to be done
-                Vector3D shipVelNormProjError = Vector3D.Zero - shipVelOnGravPlane;
+                Vector3D shipVelNormProjError = Vector3D.Normalize(Vector3D.Zero - shipVelOnGravPlane);
 
 
                 vectorToAlignToward = -v3d_grav_N + leftOverTrust_N * shipVelNormProjError;
@@ -227,6 +227,22 @@ namespace IngameScript
 
             //end main
         }
+
+        //===================
+        //space support WIP start
+        /*
+        Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
+        Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
+        double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
+
+        Echo("distRoll2:"+Math.Round(distRoll2,2));
+		angleRoll = 20*distRoll2;
+		//===================
+		Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
+        Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
+        //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
+        double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
+        */
 
 
 
