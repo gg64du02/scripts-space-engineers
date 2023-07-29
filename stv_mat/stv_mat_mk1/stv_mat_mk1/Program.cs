@@ -252,19 +252,29 @@ namespace IngameScript
 
                 //Vector3D shipSTV = (-shipSettingVelProj);
 
-
+                /*
                 wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, 55f)
-                   * Vector3D.Normalize(-shipSettingVelProj);
+                    * Vector3D.Normalize(-shipSettingVelProj);
+                */
 
-                error_sideways_speed = wanted_sideway_speed - shipVelProjError;
+                wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, 100f)
+                   * Vector3D.Normalize(shipSettingVelProj);
+
+                error_sideways_speed =  shipVelProjError - wanted_sideway_speed;
 
                 //displayMeV3D = shipSTV;
 
                 //vectorToAlignToward = gravNorm * (1) + Vector3D.Normalize(wanted_sideway_speed) * 1;
 
                 //vectorToAlignToward = (TWR - 1) * Vector3D.Normalize(error_sideways_speed) + 1 * gravNorm;
-                
-                vectorToAlignToward = (1) * Vector3D.Normalize(error_sideways_speed) + TWR * gravNorm;
+
+                //vectorToAlignToward = (1) * Vector3D.Normalize(error_sideways_speed) + (1) * gravNorm;
+                //vectorToAlignToward = (1) * error_sideways_speed + (1) * gravNorm;
+                //vectorToAlignToward = (1) * error_sideways_speed + (TWR-1) * gravNorm;
+
+
+                //vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravNorm;
+                vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravityVector;
                 //vectorToAlignToward = shipSettingVelProj;
 
                 //debug
@@ -366,13 +376,18 @@ namespace IngameScript
 
                 //ship wanted direction
                 Debug.DrawLine(RC_WP, RC_WP + shipSettingVelProj, Color.Yellow, thickness: 0.01f, onTop: true);
+                //ok
                 
                 // wanted sideways speed
-                Debug.DrawLine(RC_WP, RC_WP + wanted_sideway_speed, Color.Purple, thickness: 0.01f, onTop: true);
+                Debug.DrawLine(RC_WP, RC_WP + wanted_sideway_speed, Color.Purple, thickness: 0.02f, onTop: true);
+                //ok
+
+                // error sideways speed
+                Debug.DrawLine(RC_WP + new Vector3D(0, 0, 1), RC_WP + error_sideways_speed, Color.White, thickness: 0.03f, onTop: true);
 
 
-                // TODO error sideways speed
-                Debug.DrawLine(RC_WP, RC_WP + error_sideways_speed, Color.White, thickness: 0.01f, onTop: true);
+                //actual thrust vector
+                Debug.DrawLine(RC_WP + new Vector3D(0, 0, 2), RC_WP + vectorToAlignToward, Color.Pink, thickness: 0.03f, onTop: true);
 
 
                 Echo("RC_WP:" + RC_WP);
