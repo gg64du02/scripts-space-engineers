@@ -92,15 +92,8 @@ namespace IngameScript
             Gyros = Blocks.FindAll(x => x.IsSameConstructAs(Me) && x is IMyGyro).Select(x => x as IMyGyro).ToList();
 
             RemoteControl = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRemoteControl) as IMyRemoteControl;
-            //Sensor = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMySensorBlock) as IMySensorBlock;
-
-
+            
             theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
-
-            //theCockpit = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyCockpit) as IMyCockpit;
-
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
-            //Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
             Debug = new DebugAPI(this);
 
@@ -111,39 +104,21 @@ namespace IngameScript
             // For simplicity sake you should only call AddAdjustNumber() in the constructor here.
             Debug.DeclareAdjustNumber(out YellowLengthId, YellowLengthDefault, 0.05, DebugAPI.Input.R, "Yellow line length");
 
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            Runtime.UpdateFrequency = UpdateFrequency.Update100;
         }
 
         public void Save()
         {
-            // Called when the program needs to save its state. Use
-            // this method to save your state to the Storage field
-            // or some other means. 
-            // 
-            // This method is optional and can be removed if not
-            // needed.
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
-            // The main entry point of the script, invoked every time
-            // one of the programmable block's Run actions are invoked,
-            // or the script updates itself. The updateSource argument
-            // describes where the update came from. Be aware that the
-            // updateSource is a  bitfield  and might contain more than 
-            // one update type.
-            // 
-            // The method itself is required, but the arguments above
-            // can be removed if not needed.
 
             Vector3D vectorToAlignToward = new Vector3D(0, 0, 0);
 
             //Vector3D V3D_zero = new Vector3D(0, 0, 0);
             Vector3D V3D_zero = Vector3D.Zero;
 
-            //note:
-            //https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/VRage.Math/Vector3D.cs
-            //var targetGpsString = "";
             //Echo("targetGpsString:" + targetGpsString);
             MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
             //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
@@ -173,7 +148,7 @@ namespace IngameScript
 
             Vector3D gravityVector = RemoteControl.GetNaturalGravity();
 
-            Vector3D VTT = vec3Dtarget - (Vector3D) RemoteControl.Position;
+            Vector3D VTT = vec3Dtarget - (Vector3D)RemoteControl.Position;
 
             Vector3D shipVelocities = RemoteControl.GetShipVelocities().LinearVelocity;
 
@@ -217,13 +192,10 @@ namespace IngameScript
                 //Got a target
                 //TODO: try to go there and land 
                 Echo("if (vec3Dtarget == V3D_zero)");
-                //todo
-                vectorToAlignToward = (-gravityVector);
 
+                vectorToAlignToward = -(-gravityVector);
 
-                //vectorToAlignToward = ;
-
-                Echo("if");
+                Echo("if end");
             }
             else
             {
@@ -232,7 +204,7 @@ namespace IngameScript
                 Echo("!if (vec3Dtarget == V3D_zero)");
                 Echo("vec3Dtarget:" + Vector3D.Round(vec3Dtarget, 3));
                 //WIP
-                vectorToAlignToward = (-gravityVector);
+                vectorToAlignToward = -(-gravityVector);
 
                 //minus the ship velocities projected on the plane normal to gravity vector
                 //vectorToAlignToward += ;
@@ -241,38 +213,47 @@ namespace IngameScript
 
                 Vector3D shipVelOnGravPlane = VectorHelper.VectorProjection(shipVelocities, gravNorm);
 
-                Vector3D oppShipVelOnGravPlane = -shipVelOnGravPlane;
-
-                Vector3D oppShipVelOnGravPlaneNorm = Vector3D.Normalize(oppShipVelOnGravPlane);
-
                 //debug
                 //displayMeV3D = oppShipVelOnGravPlaneNorm;
 
-                Vector3D v3d_grav_N = - gravityVector * physMass_kg ;
+                Vector3D v3d_grav_N = -gravityVector * physMass_kg;
 
                 //ship velocities projected normal to the gravity
                 Vector3D shipVelProjError = shipVelocities - shipVelOnGravPlane;
 
                 Vector3D shipVelProjErrorNorm = Vector3D.Normalize(shipVelProjError);
 
+
+                Vector3D VTToffset = vec3Dtarget - RemoteControl.GetPosition();
+
+                //debug
+                //displayMeV3D = VTToffset;
+
+                //Vector3D shipSettingVel = 1 * Vector3D.Normalize(VTToffset);
+                Vector3D shipSettingVel = VTToffset;
+
+                Vector3D shipSettingVelOnGravPlane = VectorHelper.VectorProjection(shipSettingVel, gravNorm);
+                Vector3D shipSettingVelProj = shipSettingVel - shipSettingVelOnGravPlane;
+
+                double lenV3D = shipSettingVelProj.Length();
+
+                /*if (lenV3D > 55)
+                {
+                    shipSettingVelProj = 55 * Vector3D.Normalize(shipSettingVelProj);
+                }*/
+
+                Vector3D shipSTV = (-shipSettingVelProj);
+
+                displayMeV3D = shipSTV;
+
+                vectorToAlignToward = gravNorm * (1) + Vector3D.Normalize(shipSTV) * 1;
+                vectorToAlignToward = shipSettingVelProj;
+
                 //debug
                 //displayMeV3D = shipVelProjError;
 
-                //vectorToAlignToward = -v3d_grav_N + leftOverTrust_N * shipVelProjErrorNorm;
-
                 //debug
-                //vectorToAlignToward = -v3d_grav_N + leftOverTrust_N * shipVelProjErrorNorm;
-                //vectorToAlignToward = -v3d_grav_N + 0.1f * leftOverTrust_N * shipVelProjErrorNorm;
-                //vectorToAlignToward = -v3d_grav_N + 0.1f * 100 * shipVelProjErrorNorm;
-                //vectorToAlignToward = -v3d_grav_N ;
-
-                vectorToAlignToward = gravNorm * (TWR) + shipVelProjErrorNorm;
-
-
-                //toward the moving direction: shipVelProjError
-
-                //debug
-                displayMeV3D = vectorToAlignToward;
+                //displayMeV3D = vectorToAlignToward;
 
                 double trust_to_apply_N = vectorToAlignToward.Length();
 
@@ -281,13 +262,11 @@ namespace IngameScript
             }
 
 
-
-
             //getting vectors to help with angles proposals
             Vector3D shipForwardVector = RemoteControl.WorldMatrix.Forward;
             Vector3D shipLeftVector = RemoteControl.WorldMatrix.Left;
             Vector3D shipDownVector = RemoteControl.WorldMatrix.Down;
-            
+
 
             //todo: extract angles from vectorToAlignToward to apply to gyros:
 
@@ -357,30 +336,27 @@ namespace IngameScript
 
                 Echo("vec3Dtarget:" + Vector3D.Round(vectorToAlignToward, 1));
 
-                /*
-                Debug.DrawLine(RC_WP, RC_WP + RemoteControl.WorldMatrix.Forward * 10, Color.Yellow, thickness: 0.01f, onTop: true);
-                Debug.DrawLine(RC_WP, RC_WP + gravityVector * 1, Color.Red, thickness: 0.01f, onTop: true);
+
+                //Debug.DrawLine(RC_WP, RC_WP + displayMeV3D * 1, Color.Red, thickness: 0.11f, onTop: true);
 
 
-                Debug.DrawLine(RC_WP, RC_WP + gravityVector.Cross(RemoteControl.WorldMatrix.Right) * 1, Color.Pink, thickness: 0.01f, onTop: true);
-                Debug.DrawLine(RC_WP, RC_WP + gravityVector.Cross(RemoteControl.WorldMatrix.Forward) * 1, Color.Blue, thickness: 0.01f, onTop: true);
+                //gravity vector display
+                Debug.DrawLine(RC_WP, RC_WP + gravityVector, Color.Red, thickness: 0.11f, onTop: true);
 
+                //to target
+                Debug.DrawLine(RC_WP,  vec3Dtarget , Color.Green, thickness: 0.01f, onTop: true);
 
-                //The cube has Red/ Green / Blue sides(not the arrows that show keybinds),
-                //those point towards Right/ Up / Back(the + X / Y / Z directions), and that's pretty much it!
+                //TODO ship wanted velocities
+                Debug.DrawLine(RC_WP, RC_WP + vectorToAlignToward, Color.Yellow, thickness: 0.01f, onTop: true);
 
-                //tbd
-                Debug.DrawLine(RC_WP, RC_WP + bodyVectorLocal * 1, Color.Purple, thickness: 0.11f, onTop: false);
-                */
-
-
-                Debug.DrawLine(RC_WP, RC_WP + displayMeV3D * 1, Color.Red, thickness: 0.11f, onTop: true);
-
+                Echo("RC_WP:" + RC_WP);
+                Echo("vec3Dtarget:" + vec3Dtarget);
+                Echo("vec3Dtarget.Length():" + vec3Dtarget.Length());
 
 
                 Debug.PrintChat("drawing done");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // example way to get notified on error then allow PB to stop (crash)
                 Debug.PrintChat($"{e.Message}\n{e.StackTrace}", font: DebugAPI.Font.Red);
@@ -388,22 +364,13 @@ namespace IngameScript
                 throw;
             }
 
-            int factor 
-                = 3;
-            /*
-            //gravity aligning
-            float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
-            float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
-            */
-
-            //float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
-            //float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
-
+            int factor
+                = 1;
 
             float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
             float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
 
-            
+
             foreach (IMyGyro gyro in Gyros)
             {
                 gyro.GyroOverride = true;
@@ -412,29 +379,9 @@ namespace IngameScript
                 gyro.Roll = rollStg;
                 gyro.Pitch = pitchStg;
             }
-            
-    
 
-
-    //===================
-    //space support WIP start
-    /*
-    Vector3D leftProjectUp2 = VectorHelper.VectorProjection(shipLeftVector, shipDownVector);
-    Vector3D leftProjPlaneVector2 = shipLeftVector - leftProjectUp2;
-    double distRoll2 = -Vector3D.Dot(Vector3D.Normalize(leftProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
-
-    Echo("distRoll2:"+Math.Round(distRoll2,2));
-    angleRoll = 20*distRoll2;
-    //===================
-    Vector3D forwardProjectUp2 = VectorHelper.VectorProjection(shipForwardVector, shipDownVector);
-    Vector3D forwardProjPlaneVector2 = shipForwardVector - forwardProjectUp2;
-    //double distRoll = Vector3D.Dot(leftProjPlaneVector, VectToTarget);
-    double distPitch2 = -Vector3D.Dot(Vector3D.Normalize(forwardProjPlaneVector2), Vector3D.Normalize(V3D_V_error_space));
-    */
-
-
-    //end main
-}
+            //end main
+        }
 
 
 
