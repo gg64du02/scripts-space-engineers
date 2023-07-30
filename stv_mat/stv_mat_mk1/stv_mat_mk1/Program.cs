@@ -274,7 +274,28 @@ namespace IngameScript
 
 
                 //vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravNorm;
+
+
+
                 vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravityVector;
+
+                float speed_factor = 1f;
+                if (RemoteControl.WorldMatrix.Forward.Dot(vectorToAlignToward) < 0)
+                {
+                    speed_factor = 0.1f;  
+                }
+                else
+                {
+                    speed_factor = 1f;
+                }
+                error_sideways_speed *= speed_factor;
+
+                vectorToAlignToward = (1f) *
+                Vector3D.Normalize(error_sideways_speed) * MyMath.Clamp((float)error_sideways_speed.LengthSquared() * 0.2f, 0f, 100f)
+                    + (TWR - 1) * gravityVector;
+                
+
+
                 //vectorToAlignToward = shipSettingVelProj;
 
                 //debug
@@ -409,8 +430,7 @@ namespace IngameScript
                 throw;
             }
 
-            int factor
-                = 3;
+            int factor = 3;
 
             float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
             float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
@@ -426,6 +446,70 @@ namespace IngameScript
             }
 
             //end main
+
+            /*
+            //trust control start
+
+            float control = 0;
+
+            if(RemoteControl.WorldMatrix.Forward.Dot(vectorToAlignToward)<0)
+            {
+                control = 1f;
+
+            }
+            else
+            {
+                control = (float) 2f;
+            }
+
+
+            double remainingThrustToApply = -1;
+            double temp_thr_n = -1;
+
+            foreach (var c in cs)
+            {
+                if (c.IsFunctional == true)
+                {
+                   // if (c.IsSameConstructAs(flightIndicatorsShipController))
+                   // {
+                        if (remainingThrustToApply == -1)
+                        {
+                            remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
+                        }
+                        //Echo("physMass_N" + physMass_N);
+                        //Echo("c.MaxThrust"+c.MaxThrust);
+                        //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+                        //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+                        if (c.MaxThrust < remainingThrustToApply)
+                        {
+                            temp_thr_n = c.MaxThrust;
+                            remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
+                        }
+                        else
+                        {
+                            temp_thr_n = remainingThrustToApply;
+                            remainingThrustToApply = 0;
+                        }
+                        //Echo("temp_thr_n:" + temp_thr_n);
+                        //Echo("remainingThrustToApply:" + remainingThrustToApply);
+                        if (temp_thr_n < 0)
+                        {
+                            c.ThrustOverride = Convert.ToSingle(200f);
+                        }
+                        else
+                        {
+                            c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+                        }
+
+                        if (remainingThrustToApply == 0)
+                        {
+                            c.ThrustOverridePercentage = 0.00001f;
+                        }
+                   // }
+                }
+            }*/
+
+            //trust control end
         }
 
 
