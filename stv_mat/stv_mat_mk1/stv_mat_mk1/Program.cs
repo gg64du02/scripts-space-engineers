@@ -226,17 +226,25 @@ namespace IngameScript
                 Vector3D v3d_grav_N = -gravityVector * physMass_kg;
 
                 //ship velocities projected normal to the gravity
-                Vector3D shipVelProjError = shipVelocities - shipVelOnGravPlane;
+                Vector3D shipVelProj = shipVelocities - shipVelOnGravPlane;
 
-                Vector3D shipVelProjErrorNorm = Vector3D.Normalize(shipVelProjError);
+                Vector3D shipVelProjErrorNorm = Vector3D.Normalize(shipVelProj);
 
 
                 Vector3D VTToffset = vec3Dtarget - RemoteControl.GetPosition();
+
+                //VTToffset *= .1d * VTToffset;
+                //VTToffset = .1d * VTToffset;
+                VTToffset = VTToffset / 13;
 
                 //debug
                 //displayMeV3D = VTToffset;
 
                 //Vector3D shipSettingVel = 1 * Vector3D.Normalize(VTToffset);
+                Vector3D VTToffsetOnGravPlane = VectorHelper.VectorProjection(VTToffset, gravNorm);
+                Vector3D VTToffsetProj = VTToffset - VTToffsetOnGravPlane;
+
+
                 Vector3D shipSettingVel = VTToffset;
 
                 Vector3D shipSettingVelOnGravPlane = VectorHelper.VectorProjection(shipSettingVel, gravNorm);
@@ -245,64 +253,45 @@ namespace IngameScript
 
                 double lenV3D = shipSettingVelProj.Length();
 
-                /*if (lenV3D > 55)
-                {
-                    shipSettingVelProj = 55 * Vector3D.Normalize(shipSettingVelProj);
-                }*/
-
-                //Vector3D shipSTV = (-shipSettingVelProj);
-
-                /*
-                wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, 55f)
-                    * Vector3D.Normalize(-shipSettingVelProj);
-                */
 
                 wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, 100f)
                    * Vector3D.Normalize(shipSettingVelProj);
 
-                error_sideways_speed =  shipVelProjError - wanted_sideway_speed;
 
-                //displayMeV3D = shipSTV;
+                float temp_speed_math = (float) Math.Sqrt((float)VTToffset.Length() * 2 * (1) * 9.8 );
 
-                //vectorToAlignToward = gravNorm * (1) + Vector3D.Normalize(wanted_sideway_speed) * 1;
+                //float temp_speed_math_res = MyMath.Clamp(temp_speed_math, -100f, 100f);
+                float temp_speed_math_res = MyMath.Clamp(temp_speed_math, -98f, 98f);
 
-                //vectorToAlignToward = (TWR - 1) * Vector3D.Normalize(error_sideways_speed) + 1 * gravNorm;
+                //shipVelOnGravPlane is the vertical vel
+                //shipVelProj is the sideways/surface speed
 
-                //vectorToAlignToward = (1) * Vector3D.Normalize(error_sideways_speed) + (1) * gravNorm;
-                //vectorToAlignToward = (1) * error_sideways_speed + (1) * gravNorm;
-                //vectorToAlignToward = (1) * error_sideways_speed + (TWR-1) * gravNorm;
+                //error_sideways_speed = shipVelProj; //cancel out the surface speed
 
-
-                //vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravNorm;
+                //error_sideways_speed = Vector3D.Normalize(-VTT) * temp_speed_math_res;
 
 
+                //error_sideways_speed =  Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res  ; //pointing at the target starting from zero
 
-                vectorToAlignToward = (1) * error_sideways_speed + (TWR - 1) * gravityVector;
 
-                float speed_factor = 1f;
-                if (RemoteControl.WorldMatrix.Forward.Dot(vectorToAlignToward) < 0)
-                {
-                    speed_factor = 0.1f;  
-                }
-                else
-                {
-                    speed_factor = 1f;
-                }
-                error_sideways_speed *= speed_factor;
+                error_sideways_speed = Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res + shipVelProj;
 
-                vectorToAlignToward = (1f) *
-                Vector3D.Normalize(error_sideways_speed) * MyMath.Clamp((float)error_sideways_speed.LengthSquared() * 0.2f, 0f, 100f)
-                    + (TWR - 1) * gravityVector;
+
+                str_to_display = "1:" + Math.Round(shipVelProj.Length(), 2) + "\n";
+                str_to_display += "2:" + Math.Round(temp_speed_math, 2) + " | " + Math.Round(temp_speed_math_res, 2) + "\n";
+                str_to_display += "3:" + Math.Round(error_sideways_speed.Length(), 2) + "\n";
+
+
+                //vectorToAlignToward = error_sideways_speed * Vector3D.Normalize(shipSettingVelProj);
+                //vectorToAlignToward = error_sideways_speed;
+
+                vectorToAlignToward = error_sideways_speed + gravityVector;
+
+                //vectorToAlignToward = vectorToAlignToward + shipVelOnGravPlane;
                 
 
+                str_to_display += "4:" + Math.Round(vectorToAlignToward.Length(), 2) + "\n";
 
-                //vectorToAlignToward = shipSettingVelProj;
-
-                //debug
-                //displayMeV3D = shipVelProjError;
-
-                //debug
-                //displayMeV3D = vectorToAlignToward;
 
                 double trust_to_apply_N = vectorToAlignToward.Length();
 
@@ -343,7 +332,6 @@ namespace IngameScript
             Echo("speedForGyros:" + Vector3D.Round(speedForGyros, 3));
 
 
-            str_to_display = "";
 
             Vector3D worldDirection = gravityVector;
             //Vector3D worldDirection = vectorToAlignToward;
@@ -357,7 +345,8 @@ namespace IngameScript
             //str_to_display = "" + Math.Round(shipForwardVector.Dot(vectorToAlignToward), 2);
             //str_to_display = "" + Math.Round(shipForwardVector.Dot(bodyVector), 2);
             //if we got a local vector, use a local matrix/vector to do the product
-            str_to_display = "" + Math.Round(RemoteControl.WorldMatrix.Backward.Dot(bodyVectorLocal), 2);
+            //str_to_display = "" + Math.Round(RemoteControl.WorldMatrix.Backward.Dot(bodyVectorLocal), 2);
+            //str_to_display = "" + Math.Round(vectorToAlignToward.Length(), 2);
 
             //help for debugging
             if (theAntenna != null)
@@ -430,7 +419,7 @@ namespace IngameScript
                 throw;
             }
 
-            int factor = 3;
+            int factor = 1;
 
             float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
             float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
