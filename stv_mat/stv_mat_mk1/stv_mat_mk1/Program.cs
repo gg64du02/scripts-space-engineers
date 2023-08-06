@@ -48,6 +48,17 @@ namespace IngameScript
 
 
 
+        float control = 0;
+
+        double altitude_m = 0;
+        double altitude_error_m = 0;
+        double altitude_settings_m = 0;
+        double last_altitude_m = 0;
+
+        double altitude_error_m_s = 0;
+        double altitude_settings_m_s = 0;
+        double altitude_speed_m_s = 0;
+
         //x,y,z coords
         Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
 
@@ -187,6 +198,16 @@ namespace IngameScript
             Vector3D displayMeV3D = Vector3D.Zero;
 
 
+            double dts = Runtime.TimeSinceLastRun.TotalSeconds;
+            Echo("dts:" + dts);
+            double dts2 = Runtime.LastRunTimeMs;
+            Echo("dts2:" + dts2);
+
+            if (dts == 0)
+            {
+                return;
+            }
+
 
             Vector3D shipSettingVelProj = Vector3D.Zero;
             Vector3D wanted_sideway_speed = Vector3D.Zero;
@@ -289,8 +310,8 @@ namespace IngameScript
                 str_to_display += "2:" + Math.Round(temp_speed_math, 2) + " | " + Math.Round(temp_speed_math_res, 2) + "\n";
                 str_to_display += "3:" + Math.Round(error_sideways_speed.Length(), 2) + "\n";
 
-                //error_sideways_speed = MyMath.Clamp((float)error_sideways_speed.Length(), 0f, 11f)
-                 //  * Vector3D.Normalize(error_sideways_speed);
+                error_sideways_speed = MyMath.Clamp((float)error_sideways_speed.Length(), 0f, 11f)
+                   * Vector3D.Normalize(error_sideways_speed);
 
                 //vectorToAlignToward = error_sideways_speed * Vector3D.Normalize(shipSettingVelProj);
                 //vectorToAlignToward = error_sideways_speed;
@@ -307,7 +328,57 @@ namespace IngameScript
 
                 Echo("else");
 
+
+                altitude_m = elev;
+
+                altitude_error_m = altitude_settings_m - altitude_m;
+
+                altitude_speed_m_s = (altitude_m - last_altitude_m ) / dts;
+
+                //alti
+
+                // .5 * m * v^2 = m g h
+                // v^2 = 2gh
+                // v = sqrt (2gh)
+
+                altitude_settings_m_s = Math.Sign(altitude_error_m) *
+                    Math.Sqrt((double) (2 * gravityVector.Length() * (float) Math.Abs(altitude_error_m)));
+
+                altitude_error_m_s = altitude_settings_m_s - altitude_speed_m_s;
+
+                //altitude_settings_m_s = MyMath.Clamp( (float) altitude_settings_m_s, -100f, 100f);
+
+                control = (float) altitude_error_m_s;
+
+
+                control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
+
+
+                if (VTToffsetProj.Length() < 900)
+                {
+                    altitude_settings_m = 125;
+                }
+                else
+                {
+                    altitude_settings_m = 500;
+                }
+
+                last_altitude_m = elev;
+
+                //str_to_display = "" + "control:" + control;
+                str_to_display = "";
+                str_to_display += "\n1:" + Math.Round(altitude_m,3);
+                str_to_display += "\n2:" + Math.Round(altitude_speed_m_s, 3);
+                str_to_display += "\n3:" + Math.Round(altitude_error_m_s, 3);
+                str_to_display += "\n4:" + Math.Round(altitude_settings_m_s, 3);
+                str_to_display += "\n5:" + Math.Round(control, 3);
+
+                Echo("str_to_display:" + str_to_display);
+
             }
+
+
+
 
 
             //getting vectors to help with angles proposals
@@ -448,7 +519,6 @@ namespace IngameScript
 
             /*
             //trust control start
-
             float control = 0;
 
             if(RemoteControl.WorldMatrix.Forward.Dot(vectorToAlignToward)<0)
@@ -460,8 +530,9 @@ namespace IngameScript
             {
                 control = (float) 2f;
             }
+            */
 
-
+            /*
             double remainingThrustToApply = -1;
             double temp_thr_n = -1;
 
@@ -506,7 +577,8 @@ namespace IngameScript
                         }
                    // }
                 }
-            }*/
+            }
+            */
 
             //trust control end
         }
