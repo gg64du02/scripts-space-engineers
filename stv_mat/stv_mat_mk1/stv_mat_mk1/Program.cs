@@ -235,7 +235,7 @@ namespace IngameScript
 
                 //VTToffset *= .1d * VTToffset;
                 //VTToffset = .1d * VTToffset;
-                VTToffset = VTToffset / 13;
+                //VTToffset = VTToffset / 13;
 
                 //debug
                 //displayMeV3D = VTToffset;
@@ -273,6 +273,14 @@ namespace IngameScript
 
                 //error_sideways_speed =  Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res  ; //pointing at the target starting from zero
 
+                if (VTToffsetProj.Length() < 100)
+                {
+                    temp_speed_math_res = temp_speed_math_res / 10;
+                }
+                if (VTToffsetProj.Length() < 4)
+                {
+                    temp_speed_math_res = temp_speed_math_res / 10;
+                }
 
                 error_sideways_speed = Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res + shipVelProj;
 
@@ -281,6 +289,8 @@ namespace IngameScript
                 str_to_display += "2:" + Math.Round(temp_speed_math, 2) + " | " + Math.Round(temp_speed_math_res, 2) + "\n";
                 str_to_display += "3:" + Math.Round(error_sideways_speed.Length(), 2) + "\n";
 
+                //error_sideways_speed = MyMath.Clamp((float)error_sideways_speed.Length(), 0f, 11f)
+                 //  * Vector3D.Normalize(error_sideways_speed);
 
                 //vectorToAlignToward = error_sideways_speed * Vector3D.Normalize(shipSettingVelProj);
                 //vectorToAlignToward = error_sideways_speed;
