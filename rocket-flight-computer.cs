@@ -1334,7 +1334,6 @@ public class LCDHelper
 
     public void DisplayMessage(string message, IMyTextPanel myTextPanel, bool append = false)
     {
-        myTextPanel.WritePublicText(message, append);
     }
 	
 
@@ -1391,7 +1390,6 @@ public class LCDHelper
 
     public void InitDisplay(IMyTextPanel myTextPanel, Color color, float fontSize)
     {
-        myTextPanel.ShowPublicTextOnScreen();
         myTextPanel.FontColor = color;
         myTextPanel.FontSize = fontSize;
         myTextPanel.ApplyAction("OnOff_On");
