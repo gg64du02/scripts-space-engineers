@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using VRage;
 using VRage.Collections;
@@ -115,7 +116,8 @@ namespace IngameScript
             // For simplicity sake you should only call AddAdjustNumber() in the constructor here.
             Debug.DeclareAdjustNumber(out YellowLengthId, YellowLengthDefault, 0.05, DebugAPI.Input.R, "Yellow line length");
 
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            //Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            Runtime.UpdateFrequency = UpdateFrequency.Update1;
         }
 
         public void Save()
@@ -306,11 +308,9 @@ namespace IngameScript
                 error_sideways_speed = Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res + shipVelProj;
 
 
-                str_to_display = "1:" + Math.Round(shipVelProj.Length(), 2) + "\n";
-                str_to_display += "2:" + Math.Round(temp_speed_math, 2) + " | " + Math.Round(temp_speed_math_res, 2) + "\n";
-                str_to_display += "3:" + Math.Round(error_sideways_speed.Length(), 2) + "\n";
 
                 error_sideways_speed = MyMath.Clamp((float)error_sideways_speed.Length(), 0f, 11f)
+                //error_sideways_speed = MyMath.Clamp((float)error_sideways_speed.Length(), 0f, .1f)
                    * Vector3D.Normalize(error_sideways_speed);
 
                 //vectorToAlignToward = error_sideways_speed * Vector3D.Normalize(shipSettingVelProj);
@@ -321,7 +321,6 @@ namespace IngameScript
                 //vectorToAlignToward = vectorToAlignToward + shipVelOnGravPlane;
                 
 
-                str_to_display += "4:" + Math.Round(vectorToAlignToward.Length(), 2) + "\n";
 
 
                 double trust_to_apply_N = vectorToAlignToward.Length();
@@ -330,6 +329,30 @@ namespace IngameScript
 
 
                 altitude_m = elev;
+
+
+                
+                if (VTToffsetProj.Length() < 840)
+                {
+                    altitude_settings_m = 125;
+                    if (VTToffsetProj.Length() < 200)
+                    {
+                        altitude_settings_m = 15;
+                        if (VTToffsetProj.Length() < 3)
+                        {
+                            altitude_settings_m = 5;
+                            if (VTToffsetProj.Length() < 1)
+                            {
+                                altitude_settings_m = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    altitude_settings_m = 500;
+                }
+                
 
                 altitude_error_m = altitude_settings_m - altitude_m;
 
@@ -352,28 +375,35 @@ namespace IngameScript
 
 
                 control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
-
-
-                if (VTToffsetProj.Length() < 900)
-                {
-                    altitude_settings_m = 125;
-                }
-                else
-                {
-                    altitude_settings_m = 500;
-                }
+                //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
+                //control = 1f;
 
                 last_altitude_m = elev;
 
                 //str_to_display = "" + "control:" + control;
                 str_to_display = "";
                 str_to_display += "\n1:" + Math.Round(altitude_m,3);
-                str_to_display += "\n2:" + Math.Round(altitude_speed_m_s, 3);
-                str_to_display += "\n3:" + Math.Round(altitude_error_m_s, 3);
-                str_to_display += "\n4:" + Math.Round(altitude_settings_m_s, 3);
+                str_to_display += "\n2:" + Math.Round(altitude_settings_m_s, 3);
+                str_to_display += "\n3:" + Math.Round(altitude_speed_m_s, 3);
+                str_to_display += "\n4:" + Math.Round(altitude_error_m_s, 3);
                 str_to_display += "\n5:" + Math.Round(control, 3);
 
                 Echo("str_to_display:" + str_to_display);
+
+                //Me.CustomData = debugOK;
+                Debug.RemoveAll();
+
+                float cellSize = Me.CubeGrid.GridSize;
+                MatrixD pbm = Me.WorldMatrix;
+                //Debug.DrawGPS("I'm here!", pbm.Translation + pbm.Backward * (cellSize / 2), Color.Blue);
+
+                Debug.DrawGPS("ship", Me.GetPosition() + pbm.Backward * (cellSize / 2), Color.Blue);
+                //Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + vectorToAlignToward, Color.Red, 0.1f, 0.016f);
+                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Left,
+                    Color.Yellow, 0.1f, 0.016f);
+                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Forward,
+                    Color.Purple, 0.1f, 0.016f);
 
             }
 
@@ -405,7 +435,7 @@ namespace IngameScript
             Echo("shipForwardVector:" + Vector3D.Round(shipForwardVector, 3));
             Vector3D shipRightVector = RemoteControl.WorldMatrix.Right;
             Echo("shipRightVector:" + Vector3D.Round(shipRightVector, 3));
-
+            
             int max_rpm = 1;
 
             Vector3D speedForGyros = anglesForGyros * max_rpm;
@@ -435,84 +465,36 @@ namespace IngameScript
                 theAntenna.HudText = str_to_display;
             }
 
-            //ADD THE MOD TO THE WORLD YOU ARE TESTING ON
-            try
-            {
-                Debug.RemoveDraw();
-                //Debug.PrintChat("test");
-                //Debug.PrintHUD($"Time is now: {DateTime.Now.ToLongTimeString()}");
-                Debug.PrintChat(str_to_display);
-
-                //Debug.PrintChat("" + Me.Position);
-                Debug.PrintChat("=========");
-                //Debug.PrintChat("" + bodyVectorLocal.Length());
-                //Debug.PrintChat("" + RemoteControl.WorldMatrix.Up.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Right));
-                //Debug.PrintChat("" + RemoteControl.WorldMatrix.Up.Cross(gravityVector.Normalized()).Dot(RemoteControl.WorldMatrix.Forward));
-
-
-                Debug.PrintChat("pitch:" + (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left));
-                Debug.PrintChat("roll:" + (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward));
-
-                Echo("vec3Dtarget:" + Vector3D.Round(vectorToAlignToward, 1));
-
-
-                //Debug.DrawLine(RC_WP, RC_WP + displayMeV3D * 1, Color.Red, thickness: 0.11f, onTop: true);
-
-
-                //gravity vector display
-                Debug.DrawLine(RC_WP, RC_WP + gravityVector, Color.Red, thickness: 0.11f, onTop: true);
-
-                //to target
-                Debug.DrawLine(RC_WP,  vec3Dtarget , Color.Green, thickness: 0.01f, onTop: true);
-
-                //ship wanted direction
-                Debug.DrawLine(RC_WP, RC_WP + shipSettingVelProj, Color.Yellow, thickness: 0.01f, onTop: true);
-                //ok
-                
-                // wanted sideways speed
-                Debug.DrawLine(RC_WP, RC_WP + wanted_sideway_speed, Color.Purple, thickness: 0.02f, onTop: true);
-                //ok
-
-                // error sideways speed
-                Debug.DrawLine(RC_WP + new Vector3D(0, 0, 1), RC_WP + error_sideways_speed, Color.White, thickness: 0.03f, onTop: true);
-
-
-                //actual thrust vector
-                Debug.DrawLine(RC_WP + new Vector3D(0, 0, 2), RC_WP + vectorToAlignToward, Color.Pink, thickness: 0.03f, onTop: true);
-
-
-                Echo("RC_WP:" + RC_WP);
-                Echo("vec3Dtarget:" + vec3Dtarget);
-                Echo("vec3Dtarget.Length():" + vec3Dtarget.Length());
-
-                Echo("wanted_sideway_speed:" + wanted_sideway_speed);
-                Echo("error_sideways_speed:" + error_sideways_speed);
-
-
-
-                Debug.PrintChat("drawing done");
-            }
-            catch (Exception e)
-            {
-                // example way to get notified on error then allow PB to stop (crash)
-                Debug.PrintChat($"{e.Message}\n{e.StackTrace}", font: DebugAPI.Font.Red);
-                Me.CustomData = e.ToString();
-                throw;
-            }
 
             int factor = 1;
+            /*
+            float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(
+                vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
+            float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(
+                vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
+            */
 
-            float pitchStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
-            float rollStg = factor * (float)RemoteControl.WorldMatrix.Down.Cross(vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
-
+            /*
+             //
+            UploadDataCompletedEventHandler;IMyOreDetector stqblem still zrong though
+            float pitchStg = factor * (float)RemoteControl.WorldMatrix.Left.Cross(
+                vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Left);
+            float rollStg = factor * (float)RemoteControl.WorldMatrix.Forward.Cross(
+                vectorToAlignToward.Normalized()).Dot(RemoteControl.WorldMatrix.Forward);
+            */
+            float pitchStg = factor * (float)vectorToAlignToward.Normalized().
+                Dot(RemoteControl.WorldMatrix.Left);
+            float rollStg = factor * (float)vectorToAlignToward.Normalized().
+                Dot(RemoteControl.WorldMatrix.Forward); ;
+            
 
             foreach (IMyGyro gyro in Gyros)
             {
                 gyro.GyroOverride = true;
                 //gyro.Roll = (float)speedForGyros.X;
                 //gyro.Pitch = (float)speedForGyros.Y;
-                gyro.Roll = rollStg;
-                gyro.Pitch = pitchStg;
+                gyro.Roll = -rollStg;
+                gyro.Pitch = -pitchStg;
             }
 
             //end main
@@ -532,7 +514,7 @@ namespace IngameScript
             }
             */
 
-            /*
+            
             double remainingThrustToApply = -1;
             double temp_thr_n = -1;
 
@@ -578,7 +560,7 @@ namespace IngameScript
                    // }
                 }
             }
-            */
+            
 
             //trust control end
         }
