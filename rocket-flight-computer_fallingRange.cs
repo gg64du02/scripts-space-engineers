@@ -647,7 +647,13 @@ public void Main(string argument)
 		if (vec3Dtarget != new Vector3D(0, 0, 0)){
 			
 			//fallingRange(gravityVector, linearSpeedsShip, dts, myPos);
-			fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter  );
+			float falling_range = 0;
+			falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter  );
+			
+			if( falling_range< 30.0f){
+                wantedAltitude = 125;
+			}
+			
 		}
 	}
 	
