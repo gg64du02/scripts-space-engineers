@@ -397,6 +397,8 @@ namespace IngameScript
                 //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
                 //control = 1f;
 
+                Echo("control:" + control);
+
                 last_altitude_m = elev;
 
                 //str_to_display = "" + "control:" + control;
@@ -487,8 +489,15 @@ namespace IngameScript
                 Dot(RemoteControl.WorldMatrix.Forward); ;
 
 
+            //TODO: warning mind the axises of gyros and remote control axises
+
             foreach (IMyGyro gyro in Gyros)
             {
+                //both must be 1 or 0.98
+                Echo("gyroFor and RCLeft aligned:" + gyro.WorldMatrix.Forward.Dot(RemoteControl.WorldMatrix.Left));
+
+                Echo("gyroLeft and RCBack aligned:" + gyro.WorldMatrix.Left.Dot(RemoteControl.WorldMatrix.Backward));
+
                 gyro.GyroOverride = true;
                 //gyro.Roll = (float)speedForGyros.X;
                 //gyro.Pitch = (float)speedForGyros.Y;
@@ -621,12 +630,14 @@ namespace IngameScript
 
                 resultVertical += (float)lastStepDoneVer * (float)timeStep;
 
+                /*
                 if (maximumInt % 100 == 0)
                 {
                     Echo("lastStepDoneHorInter:" + Math.Round(lastStepDoneHor, 3));
                     Echo("resultHorInter:" + Math.Round(resultHorizontal, 3));
                     Echo("resultVerInter:" + Math.Round(resultVertical, 3));
                 }
+                */
 
                 if (maximumFallingAltitude < resultVertical)
                 {
@@ -655,6 +666,11 @@ namespace IngameScript
 
                 if (dist_POI_target < 20.0f) { break; }
 
+                //POI distance to target
+                fallingRange = (float)Math.Round((resultShipPosition - target).Length(), 1);
+
+                if (fallingRange < 20.0f) { break; }
+
                 //stop looping if the trajectory overshoot
                 if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f) { break; }
 
@@ -673,7 +689,7 @@ namespace IngameScript
             debugOK += Math.Round(resultShipPosition.Y, 0) + ":";
             debugOK += Math.Round(resultShipPosition.Z, 0) + ":";
 
-            Echo(debugOK);
+            //Echo(debugOK);
 
             Me.CustomData = debugOK;
             Debug.RemoveAll();
@@ -682,8 +698,11 @@ namespace IngameScript
             MatrixD pbm = Me.WorldMatrix;
             //Debug.DrawGPS("I'm here!", pbm.Translation + pbm.Backward * (cellSize / 2), Color.Blue);
 
-            Debug.DrawGPS("ship", shipPosition + pbm.Backward * (cellSize / 2), Color.Blue);
-            Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+            //Debug.DrawGPS("ship", shipPosition + pbm.Backward * (cellSize / 2), Color.Blue);
+            //Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+            //Debug.DrawGPS("" + Math.Round(fallingRange, 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+            Debug.DrawGPS("" + Math.Round((resultShipPosition - target).Length(), 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.OrangeRed);
+
 
             return fallingRange;
 
