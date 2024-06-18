@@ -483,31 +483,43 @@ namespace IngameScript
 
             int factor = 1;
 
-            float pitchStg = factor * (float)vectorToAlignToward.Normalized().
-                Dot(RemoteControl.WorldMatrix.Left);
-            float rollStg = factor * (float)vectorToAlignToward.Normalized().
-                Dot(RemoteControl.WorldMatrix.Forward); ;
 
 
             //TODO: warning mind the axises of gyros and remote control axises
 
             foreach (IMyGyro gyro in Gyros)
             {
-                //both must be 1 or 0.98
-                Echo("gyroFor and RCLeft aligned:" + gyro.WorldMatrix.Forward.Dot(RemoteControl.WorldMatrix.Left));
-
-                Echo("gyroLeft and RCBack aligned:" + gyro.WorldMatrix.Left.Dot(RemoteControl.WorldMatrix.Backward));
-
                 gyro.GyroOverride = true;
-                //gyro.Roll = (float)speedForGyros.X;
-                //gyro.Pitch = (float)speedForGyros.Y;
+
+                //both must be 1 or 0.98
+
+                //float rollStg = factor * (float)vectorToAlignToward.Normalized().
+                //    Dot(RemoteControl.WorldMatrix.Forward);
+                float rollStg = factor * (float)vectorToAlignToward.Normalized().
+                    Dot(gyro.WorldMatrix.Right);
+                Echo("gyroFor and RCLeft aligned:" + gyro.WorldMatrix.Forward.
+                    Dot(RemoteControl.WorldMatrix.Left));
                 gyro.Roll = -rollStg;
+
+                //Roll is on the Left/Right axis
+
+
+                //float pitchStg = factor * (float)vectorToAlignToward.Normalized().
+                //   Dot(RemoteControl.WorldMatrix.Left);
+                float pitchStg = factor * (float)vectorToAlignToward.Normalized().
+                    Dot(gyro.WorldMatrix.Forward);
+                Echo("gyroLeft and RCBack aligned:" + gyro.WorldMatrix.Left.
+                    Dot(RemoteControl.WorldMatrix.Backward));
+
                 gyro.Pitch = -pitchStg;
+
+                //Pitch is on the Forward/Backward axis
+
+                //rollStg is Right
+                //pitch is Forward
             }
 
             //end main
-
-
 
 
 
