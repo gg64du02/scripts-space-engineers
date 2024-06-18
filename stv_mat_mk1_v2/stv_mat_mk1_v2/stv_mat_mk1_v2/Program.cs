@@ -17,6 +17,7 @@ using VRage.Game.ModAPI.Ingame;
 using VRage.Game.ModAPI.Ingame.Utilities;
 using VRage.Game.ObjectBuilders.Definitions;
 using VRageMath;
+using VRageRender;
 
 namespace IngameScript
 {
@@ -326,7 +327,7 @@ namespace IngameScript
                 altitude_m = elev;
 
 
-
+                /*
                 if (VTToffsetProj.Length() < 840)
                 {
                     altitude_settings_m = 125;
@@ -346,7 +347,7 @@ namespace IngameScript
                 else
                 {
                     altitude_settings_m = 500;
-                }
+                }*/
                 
                 //generating a vector from the current position to the center of the planet
                 Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
@@ -366,6 +367,10 @@ namespace IngameScript
                         if (falling_range < 30.0f)
                         {
                             altitude_settings_m = 25;
+                        }
+                        else
+                        {
+                            altitude_settings_m = 125;
                         }
 
                     }
@@ -604,6 +609,8 @@ namespace IngameScript
             float lastStepDoneHor = 10.0f;
             float lastStepDoneVer = 10.0f;
 
+            float tmpFallingRange = 60000f;
+
             Vector3D tmpShipSeed = shipSpeed;
 
             Vector3D tmpLocalTarget = target - centerPlanet;
@@ -616,8 +623,6 @@ namespace IngameScript
             //trying to look in the futur where it would land
             while (true)
             {
-
-                if (lastStepDoneHor < thesholdToStopAt) { break; }
 
                 tmpShipSeed += timeStep * gravity;
 
@@ -642,14 +647,6 @@ namespace IngameScript
 
                 resultVertical += (float)lastStepDoneVer * (float)timeStep;
 
-                /*
-                if (maximumInt % 100 == 0)
-                {
-                    Echo("lastStepDoneHorInter:" + Math.Round(lastStepDoneHor, 3));
-                    Echo("resultHorInter:" + Math.Round(resultHorizontal, 3));
-                    Echo("resultVerInter:" + Math.Round(resultVertical, 3));
-                }
-                */
 
                 if (maximumFallingAltitude < resultVertical)
                 {
@@ -672,27 +669,32 @@ namespace IngameScript
 
                 float dist_POI_target = (float)tmpDistancePOI_target.Length();
 
-                fallingRange = dist_POI_target;
-
-                //Echo("dist_POI_target:" + dist_POI_target);
-
-                if (dist_POI_target < 20.0f) { break; }
-
                 //POI distance to target
                 fallingRange = (float)Math.Round((resultShipPosition - target).Length(), 1);
 
-                if (fallingRange < 20.0f) { break; }
+                if (fallingRange < 5.0f)
+                {
+                    Debug.PrintChat("if (fallingRange < 5.0f)");
+                    break;
+                }
 
                 //stop looping if the trajectory overshoot
-                if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f) { break; }
+                if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f)
+                {
+                    Debug.PrintChat("if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f)");
+                    break;
+                }
 
-                if (lastStepDoneHor < thesholdToStopAt) { break; }
             }
 
             Echo("maximumInt:" + maximumInt);
             Echo("resultHor:" + resultHorizontal);
             Echo("resultVer:" + resultVertical);
-            Echo("resultShipPosition:" + Vector3D.Round(resultShipPosition, 3));
+            Echo("resultShipPosition:" + Vector3D.Round(resultShipPosition, 1));
+
+            Echo("fallingRange:" + Math.Round(fallingRange, 1));
+
+
 
             //GPS:OuiOuiOui #2:1076588.43:114319.88:1670351.32:#FF82F175:
 
@@ -715,6 +717,8 @@ namespace IngameScript
             //Debug.DrawGPS("" + Math.Round(fallingRange, 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
             Debug.DrawGPS("" + Math.Round((resultShipPosition - target).Length(), 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.OrangeRed);
 
+
+            Debug.PrintChat("IC:"+ Runtime.CurrentInstructionCount);
 
             return fallingRange;
 
