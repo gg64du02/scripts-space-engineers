@@ -293,7 +293,7 @@ namespace IngameScript
 
 
                 //error_sideways_speed =  Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res  ; //pointing at the target starting from zero
-
+                
                 if (VTToffsetProj.Length() < 100)
                 {
                     temp_speed_math_res = temp_speed_math_res / 10;
@@ -302,7 +302,7 @@ namespace IngameScript
                 {
                     temp_speed_math_res = temp_speed_math_res / 10;
                 }
-
+                
                 error_sideways_speed = Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res + shipVelProj;
 
 
@@ -327,7 +327,7 @@ namespace IngameScript
                 altitude_m = elev;
 
 
-                /*
+                
                 if (VTToffsetProj.Length() < 840)
                 {
                     altitude_settings_m = 125;
@@ -347,7 +347,9 @@ namespace IngameScript
                 else
                 {
                     altitude_settings_m = 500;
-                }*/
+                }
+
+                Echo("altitude_settings_m:" + altitude_settings_m);
                 
                 //generating a vector from the current position to the center of the planet
                 Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
@@ -367,10 +369,20 @@ namespace IngameScript
                         if (falling_range < 30.0f)
                         {
                             altitude_settings_m = 25;
+                            if (VTToffsetProj.Length() < 1)
+                            {
+                                altitude_settings_m = 0;
+                            }
+                            //vectorToAlignToward = vectorToAlignToward - gravityVector;
                         }
                         else
                         {
                             altitude_settings_m = 125;
+                            //altitude_settings_m = 25;
+                            if (falling_range > 1500.0f)
+                            {
+                                altitude_settings_m = 1500;
+                            }
                         }
 
                     }
@@ -381,6 +393,8 @@ namespace IngameScript
                 altitude_error_m = altitude_settings_m - altitude_m;
 
                 altitude_speed_m_s = (altitude_m - last_altitude_m) / dts;
+
+                
 
                 //alti
 
@@ -397,24 +411,31 @@ namespace IngameScript
 
                 control = (float)altitude_error_m_s;
 
+                //;ini;u; set to one to avoid bad crashes during debugging
+                //control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
 
-                control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
+                //survival settings
+                control = MyMath.Clamp((float)altitude_error_m_s, 0f, 100f); ;
                 //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
                 //control = 1f;
 
                 Echo("control:" + control);
 
+                //control = MyMath.Clamp((float)altitude_error_m_s, 0f, 4f); ;
+
                 last_altitude_m = elev;
 
                 //str_to_display = "" + "control:" + control;
                 str_to_display = "";
-                str_to_display += "\n1:" + Math.Round(altitude_m, 3);
-                str_to_display += "\n2:" + Math.Round(altitude_settings_m_s, 3);
-                str_to_display += "\n3:" + Math.Round(altitude_speed_m_s, 3);
-                str_to_display += "\n4:" + Math.Round(altitude_error_m_s, 3);
+                str_to_display += "\n1:" + Math.Round(altitude_m, 1);
+                str_to_display += "\n2:" + Math.Round(altitude_settings_m_s, 1);
+                str_to_display += "\n3:" + Math.Round(altitude_speed_m_s, 1);
+                str_to_display += "\n4:" + Math.Round(altitude_error_m_s, 1);
                 str_to_display += "\n5:" + Math.Round(control, 3);
 
                 Echo("str_to_display:" + str_to_display);
+
+
                 /*
                 //Me.CustomData = debugOK;
                 Debug.RemoveAll();
@@ -617,7 +638,7 @@ namespace IngameScript
             Vector3D tmpLocalPOI = new Vector3D(0, 0, 0);
 
             Echo("timeStep:" + timeStep);
-            Echo("maximumInt:" + maximumInt);
+            Echo("maximumInt:start:" + maximumInt);
 
 
             //trying to look in the futur where it would land
@@ -687,7 +708,7 @@ namespace IngameScript
 
             }
 
-            Echo("maximumInt:" + maximumInt);
+            Echo("maximumInt:end:" + maximumInt);
             Echo("resultHor:" + resultHorizontal);
             Echo("resultVer:" + resultVertical);
             Echo("resultShipPosition:" + Vector3D.Round(resultShipPosition, 1));
@@ -718,7 +739,8 @@ namespace IngameScript
             Debug.DrawGPS("" + Math.Round((resultShipPosition - target).Length(), 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.OrangeRed);
 
 
-            Debug.PrintChat("IC:"+ Runtime.CurrentInstructionCount);
+            Debug.PrintChat("IC:" + Runtime.CurrentInstructionCount);
+            Echo("IC:" + Runtime.CurrentInstructionCount);
 
             return fallingRange;
 
