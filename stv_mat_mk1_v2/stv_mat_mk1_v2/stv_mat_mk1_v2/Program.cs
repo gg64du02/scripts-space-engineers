@@ -132,8 +132,7 @@ namespace IngameScript
 
             //Echo("targetGpsString:" + targetGpsString);
             MyWaypointInfo myWaypointInfoTarget = new MyWaypointInfo("lol", 0, 0, 0);
-            //MyWaypointInfo.TryParse("GPS:/// #4:53590.85:-26608.05:11979.08:", out myWaypointInfoTarget);
-
+            
             if (argument != null)
             {
                 if (argument != "")
@@ -159,7 +158,11 @@ namespace IngameScript
 
             Vector3D gravityVector = RemoteControl.GetNaturalGravity();
 
-            Vector3D VTT = vec3Dtarget - (Vector3D)RemoteControl.Position;
+            //Vector3D RC_WP = RemoteControl.GetPosition();
+
+            Vector3D RC_WP = RemoteControl.CenterOfMass;
+
+            Vector3D VTT = vec3Dtarget - RC_WP;
 
             Vector3D shipVelocities = RemoteControl.GetShipVelocities().LinearVelocity;
 
@@ -176,9 +179,9 @@ namespace IngameScript
             {
                 maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
             }
-            //debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
+
             var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
-            //debugString += "\n" + "thr_to_weight_ratio:" + thr_to_weight_ratio;
+
             double TWR = thr_to_weight_ratio;
             double V_max = 55;
 
@@ -190,8 +193,6 @@ namespace IngameScript
             RemoteControl.TryGetPlanetElevation(MyPlanetElevation.Surface, out elev);
 
 
-
-            Vector3D RC_WP = RemoteControl.GetPosition();
 
             Echo("vec3Dtarget:" + Vector3D.Round(vec3Dtarget, 1));
 
@@ -218,7 +219,7 @@ namespace IngameScript
             if (vec3Dtarget == V3D_zero)
             {
                 //Got a target
-                //TODO: try to go there and land 
+                // try to go there and land 
                 Echo("if (vec3Dtarget == V3D_zero)");
 
                 vectorToAlignToward = -(-gravityVector);
@@ -252,16 +253,12 @@ namespace IngameScript
                 Vector3D shipVelProjErrorNorm = Vector3D.Normalize(shipVelProj);
 
 
-                Vector3D VTToffset = vec3Dtarget - RemoteControl.GetPosition();
+                Vector3D VTToffset = vec3Dtarget - RC_WP;
 
-                //VTToffset *= .1d * VTToffset;
-                //VTToffset = .1d * VTToffset;
-                //VTToffset = VTToffset / 13;
 
                 //debug
                 //displayMeV3D = VTToffset;
 
-                //Vector3D shipSettingVel = 1 * Vector3D.Normalize(VTToffset);
                 Vector3D VTToffsetOnGravPlane = VectorHelper.VectorProjection(VTToffset, gravNorm);
                 Vector3D VTToffsetProj = VTToffset - VTToffsetOnGravPlane;
 
@@ -269,7 +266,7 @@ namespace IngameScript
                 Vector3D shipSettingVel = VTToffset;
 
                 Vector3D shipSettingVelOnGravPlane = VectorHelper.VectorProjection(shipSettingVel, gravNorm);
-                //Vector3D shipSettingVelProj = shipSettingVel - shipSettingVelOnGravPlane;
+                
                 shipSettingVelProj = shipSettingVel - shipSettingVelOnGravPlane;
 
                 double lenV3D = shipSettingVelProj.Length();
@@ -327,7 +324,7 @@ namespace IngameScript
                 altitude_m = elev;
 
 
-                
+                /*
                 if (VTToffsetProj.Length() < 840)
                 {
                     altitude_settings_m = 125;
@@ -346,9 +343,9 @@ namespace IngameScript
                 }
                 else
                 {
-                    altitude_settings_m = 500;
+                    altitude_settings_m = 1250;
                 }
-
+                */
                 Echo("altitude_settings_m:" + altitude_settings_m);
                 
                 //generating a vector from the current position to the center of the planet
@@ -356,7 +353,8 @@ namespace IngameScript
                 RemoteControl.TryGetPlanetPosition(out VecPlanetCenter);
                 MyShipVelocities myShipVel = RemoteControl.GetShipVelocities();
                 Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
-                Vector3D myPos = RemoteControl.GetPosition();
+
+                Vector3D myPos = RC_WP;
                 if (dts > 0)
                 {
                     if (vec3Dtarget != new Vector3D(0, 0, 0))
@@ -366,12 +364,13 @@ namespace IngameScript
                         float falling_range = 0;
                         falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
 
+                        /*
                         if (falling_range < 30.0f)
                         {
-                            altitude_settings_m = 25;
+                            altitude_settings_m = -90;
                             if (VTToffsetProj.Length() < 1)
                             {
-                                altitude_settings_m = 0;
+                                altitude_settings_m = -90;
                             }
                             //vectorToAlignToward = vectorToAlignToward - gravityVector;
                         }
@@ -382,6 +381,25 @@ namespace IngameScript
                             if (falling_range > 1500.0f)
                             {
                                 altitude_settings_m = 1500;
+                            }
+                        }*/
+                        
+                        if (falling_range < 30.0f)
+                        {
+                            altitude_settings_m = 25;
+                            if (VTToffsetProj.Length() < 1)
+                            {
+                               // altitude_settings_m = 0;
+                            }
+                            //vectorToAlignToward = vectorToAlignToward - gravityVector;
+                        }
+                        else
+                        {
+                            altitude_settings_m = 125;
+                            //altitude_settings_m = 25;
+                            if (falling_range > 1500.0f)
+                            {
+                                //altitude_settings_m = 1500;
                             }
                         }
 
@@ -695,14 +713,14 @@ namespace IngameScript
 
                 if (fallingRange < 5.0f)
                 {
-                    Debug.PrintChat("if (fallingRange < 5.0f)");
+                   // Debug.PrintChat("if (fallingRange < 5.0f)");
                     break;
                 }
 
                 //stop looping if the trajectory overshoot
                 if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f)
                 {
-                    Debug.PrintChat("if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f)");
+                    //Debug.PrintChat("if (tmpLocalTarget.Length() > tmpLocalPOI.Length() + 30.0f)");
                     break;
                 }
 
@@ -734,12 +752,12 @@ namespace IngameScript
             //Debug.DrawGPS("I'm here!", pbm.Translation + pbm.Backward * (cellSize / 2), Color.Blue);
 
             //Debug.DrawGPS("ship", shipPosition + pbm.Backward * (cellSize / 2), Color.Blue);
-            //Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+            Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
             //Debug.DrawGPS("" + Math.Round(fallingRange, 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
-            Debug.DrawGPS("" + Math.Round((resultShipPosition - target).Length(), 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.OrangeRed);
+            //Debug.DrawGPS("" + Math.Round((resultShipPosition - target).Length(), 1), resultShipPosition + pbm.Backward * (cellSize / 2), Color.OrangeRed);
 
 
-            Debug.PrintChat("IC:" + Runtime.CurrentInstructionCount);
+            //Debug.PrintChat("IC:" + Runtime.CurrentInstructionCount);
             Echo("IC:" + Runtime.CurrentInstructionCount);
 
             return fallingRange;
