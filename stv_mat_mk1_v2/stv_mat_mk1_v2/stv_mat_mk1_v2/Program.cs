@@ -158,9 +158,9 @@ namespace IngameScript
 
             Vector3D gravityVector = RemoteControl.GetNaturalGravity();
 
-            //Vector3D RC_WP = RemoteControl.GetPosition();
+            Vector3D RC_WP = RemoteControl.GetPosition();
 
-            Vector3D RC_WP = RemoteControl.CenterOfMass;
+            //Vector3D RC_WP = RemoteControl.CenterOfMass;
 
             Vector3D VTT = vec3Dtarget - RC_WP;
 
@@ -324,28 +324,6 @@ namespace IngameScript
                 altitude_m = elev;
 
 
-                /*
-                if (VTToffsetProj.Length() < 840)
-                {
-                    altitude_settings_m = 125;
-                    if (VTToffsetProj.Length() < 200)
-                    {
-                        altitude_settings_m = 15;
-                        if (VTToffsetProj.Length() < 3)
-                        {
-                            altitude_settings_m = 5;
-                            if (VTToffsetProj.Length() < 1)
-                            {
-                                altitude_settings_m = 0;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    altitude_settings_m = 1250;
-                }
-                */
                 Echo("altitude_settings_m:" + altitude_settings_m);
                 
                 //generating a vector from the current position to the center of the planet
@@ -364,32 +342,18 @@ namespace IngameScript
                         float falling_range = 0;
                         falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
 
-                        /*
-                        if (falling_range < 30.0f)
-                        {
-                            altitude_settings_m = -90;
-                            if (VTToffsetProj.Length() < 1)
-                            {
-                                altitude_settings_m = -90;
-                            }
-                            //vectorToAlignToward = vectorToAlignToward - gravityVector;
-                        }
-                        else
-                        {
-                            altitude_settings_m = 125;
-                            //altitude_settings_m = 25;
-                            if (falling_range > 1500.0f)
-                            {
-                                altitude_settings_m = 1500;
-                            }
-                        }*/
+                        //TODO: use a spreasheet to make an array of the rules for the controls
                         
                         if (falling_range < 30.0f)
                         {
                             altitude_settings_m = 25;
+                            if (VTToffsetProj.Length() < 30)
+                            {
+                                altitude_settings_m = 50;
+                            }
                             if (VTToffsetProj.Length() < 1)
                             {
-                               // altitude_settings_m = 0;
+                                altitude_settings_m = 0;
                             }
                             //vectorToAlignToward = vectorToAlignToward - gravityVector;
                         }
@@ -397,9 +361,17 @@ namespace IngameScript
                         {
                             altitude_settings_m = 125;
                             //altitude_settings_m = 25;
-                            if (falling_range > 1500.0f)
+                            if (VTToffsetProj.Length() > 1500.0f)
                             {
-                                //altitude_settings_m = 1500;
+                                altitude_settings_m = 1500;
+                            }
+                            if (VTToffsetProj.Length() < 30)
+                            {
+                                altitude_settings_m = 50;
+                            }
+                            if (VTToffsetProj.Length() < 1)
+                            {
+                                altitude_settings_m = 0;
                             }
                         }
 
