@@ -23,6 +23,7 @@ namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
+
         public List<IMyMotorSuspension> Wheels = new List<IMyMotorSuspension>();
 
         public List<IMyGyro> Gyros = new List<IMyGyro>();
@@ -332,7 +333,12 @@ namespace IngameScript
                 MyShipVelocities myShipVel = RemoteControl.GetShipVelocities();
                 Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
 
+
                 Vector3D myPos = RC_WP;
+
+                bool slow_landing_now = false;
+
+
                 if (dts > 0)
                 {
                     if (vec3Dtarget != new Vector3D(0, 0, 0))
@@ -343,17 +349,24 @@ namespace IngameScript
                         falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
 
                         //TODO: use a spreasheet to make an array of the rules for the controls
-                        
+
+                        float offset_alt = 30;
+
                         if (falling_range < 30.0f)
                         {
-                            altitude_settings_m = 25;
+                            altitude_settings_m = 35 + offset_alt;
+                            if (VTToffsetProj.Length() < 600)
+                            {
+                                //altitude_settings_m = 50 + offset_alt;
+                            }
                             if (VTToffsetProj.Length() < 30)
                             {
-                                altitude_settings_m = 50;
+                                altitude_settings_m = 50 + offset_alt;
                             }
                             if (VTToffsetProj.Length() < 1)
                             {
                                 altitude_settings_m = 0;
+                                slow_landing_now = true;
                             }
                             //vectorToAlignToward = vectorToAlignToward - gravityVector;
                         }
@@ -367,24 +380,25 @@ namespace IngameScript
                             }
                             if (VTToffsetProj.Length() < 30)
                             {
-                                altitude_settings_m = 50;
+                                altitude_settings_m = 50 + offset_alt;
                             }
-                            if (VTToffsetProj.Length() < 1)
+                            if (VTToffsetProj.Length() < .5)
                             {
                                 altitude_settings_m = 0;
+                                //slow_landing_now = true;
                             }
+                            
                         }
 
                     }
                 }
                 
 
-
                 altitude_error_m = altitude_settings_m - altitude_m;
 
                 altitude_speed_m_s = (altitude_m - last_altitude_m) / dts;
 
-                
+
 
                 //alti
 
@@ -392,8 +406,15 @@ namespace IngameScript
                 // v^2 = 2gh
                 // v = sqrt (2gh)
 
-                altitude_settings_m_s = Math.Sign(altitude_error_m) *
+                if (slow_landing_now == false)
+                {
+                    altitude_settings_m_s = Math.Sign(altitude_error_m) *
                     Math.Sqrt((double)(2 * gravityVector.Length() * (float)Math.Abs(altitude_error_m)));
+                }
+                else
+                {
+                    altitude_settings_m_s = -1;
+                }
 
                 altitude_error_m_s = altitude_settings_m_s - altitude_speed_m_s;
 
