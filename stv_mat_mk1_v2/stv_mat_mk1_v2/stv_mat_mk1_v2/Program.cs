@@ -413,7 +413,7 @@ namespace IngameScript
                 }
                 else
                 {
-                    altitude_settings_m_s = -1;
+                    altitude_settings_m_s = -5;
                 }
 
                 altitude_error_m_s = altitude_settings_m_s - altitude_speed_m_s;
