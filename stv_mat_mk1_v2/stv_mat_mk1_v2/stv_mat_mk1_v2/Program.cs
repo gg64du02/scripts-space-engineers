@@ -346,9 +346,9 @@ namespace IngameScript
 
                         //fallingRange(gravityVector, linearSpeedsShip, dts, myPos);
                         float falling_range = 0;
-                        falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
+                        //falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
                         float speedFactor = 10.0f;
-                        //falling_range = fallingRange(gravityVector, linearSpeedsShip, speedFactor * dts, myPos, vec3Dtarget, VecPlanetCenter);
+                        falling_range = fallingRange(gravityVector, linearSpeedsShip, speedFactor * dts, myPos, vec3Dtarget, VecPlanetCenter);
 
                         //TODO: use a spreasheet to make an array of the rules for the controls
 
@@ -676,7 +676,7 @@ namespace IngameScript
 
 
                 //display the curve
-                //Debug.DrawLine(resultShipPosition, resultShipPosition + tmpShipSeed * timeStep, Color.Red, 1.11f, 0.016f);
+                Debug.DrawLine(resultShipPosition, resultShipPosition + tmpShipSeed * timeStep, Color.Red, 1.11f, 0.016f);
 
                 Vector3D VectorProjFuturHor = tmpShipSeed - VectorHelper.VectorProjection(tmpShipSeed, gravity);
                 Vector3D VectorProjFuturVer = VectorHelper.VectorProjection(tmpShipSeed, gravity);
@@ -833,7 +833,24 @@ namespace IngameScript
                 endOfCurveLine.Z * t + endOfCurvePoint.Z);
 
 
-            Debug.DrawGPS("POI!", pointOfIntersect + pbm.Backward * (cellSize / 2), Color.Purple);
+            //Debug.DrawGPS("POI!2", pointOfIntersect + pbm.Backward * (cellSize / 2), Color.Purple);
+
+
+            PlaneD planeGrav = new PlaneD(target,gravity);
+
+            RayD rayCurve = new RayD(resultShipPosition, tmpShipSeed);
+
+            double? interReturn = rayCurve.Intersects(planeGrav);
+
+            if(interReturn.HasValue == true)
+            {
+                Vector3D result = rayCurve.Position + ((double)interReturn) * rayCurve.Direction;
+
+                Debug.DrawGPS("POI!3", result + pbm.Backward * (cellSize / 2), Color.Orange);
+            }
+
+
+
 
             return fallingRange;
 
