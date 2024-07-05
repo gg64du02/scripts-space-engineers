@@ -347,6 +347,8 @@ namespace IngameScript
                         //fallingRange(gravityVector, linearSpeedsShip, dts, myPos);
                         float falling_range = 0;
                         falling_range = fallingRange(gravityVector, linearSpeedsShip, dts, myPos, vec3Dtarget, VecPlanetCenter);
+                        float speedFactor = 10.0f;
+                        //falling_range = fallingRange(gravityVector, linearSpeedsShip, speedFactor * dts, myPos, vec3Dtarget, VecPlanetCenter);
 
                         //TODO: use a spreasheet to make an array of the rules for the controls
 
@@ -652,6 +654,9 @@ namespace IngameScript
             Echo("maximumInt:start:" + maximumInt);
 
 
+            Debug.RemoveAll();
+
+
             //trying to look in the futur where it would land
             while (true)
             {
@@ -663,8 +668,15 @@ namespace IngameScript
                     tmpShipSeed = maxSpeed * Vector3D.Normalize(tmpShipSeed);
                 }
 
+                //display as a "field" of vector
+                //Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + tmpShipSeed * timeStep, Color.Red, 0.01f, 0.016f);
+
+
                 resultShipPosition += tmpShipSeed * timeStep;
 
+
+                //display the curve
+                //Debug.DrawLine(resultShipPosition, resultShipPosition + tmpShipSeed * timeStep, Color.Red, 1.11f, 0.016f);
 
                 Vector3D VectorProjFuturHor = tmpShipSeed - VectorHelper.VectorProjection(tmpShipSeed, gravity);
                 Vector3D VectorProjFuturVer = VectorHelper.VectorProjection(tmpShipSeed, gravity);
@@ -717,6 +729,9 @@ namespace IngameScript
                     break;
                 }
 
+
+                
+
             }
 
             Echo("maximumInt:end:" + maximumInt);
@@ -738,7 +753,6 @@ namespace IngameScript
             //Echo(debugOK);
 
             Me.CustomData = debugOK;
-            Debug.RemoveAll();
 
             float cellSize = Me.CubeGrid.GridSize;
             MatrixD pbm = Me.WorldMatrix;
