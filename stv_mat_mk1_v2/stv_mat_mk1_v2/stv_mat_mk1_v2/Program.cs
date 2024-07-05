@@ -767,6 +767,74 @@ namespace IngameScript
             //Debug.PrintChat("IC:" + Runtime.CurrentInstructionCount);
             Echo("IC:" + Runtime.CurrentInstructionCount);
 
+            /*
+            public float fallingRange(Vector3D gravity, Vector3D shipSpeed,
+            double timeStep, Vector3D shipPosition, Vector3D target, Vector3D centerPlanet)
+            */
+
+            //gravity is the vector normal to the plane we to get the intersect of the curve with
+            //Plane equation is : ax + by + cz + d = 0
+            //with (a,b,c) normal to the plane
+
+            //target belongs to this plane
+
+            float interX1, interY1, interZ1, offsetD = 0.0f;
+            /*
+            gravity.X * (interX1 - target.X) + gravity.Y * (interY1 - target.Y)
+                + gravity.Z * (interZ1 - target.Z) + offsetD = 0;
+            */
+
+            //make a point that belong to the gravity plane (to compute D):
+            Vector3D anyVector = gravity.Cross(tmpShipSeed) + target;//todo check this
+
+            offsetD = (float) - ( gravity.X * (anyVector.X - target.X) + gravity.Y * (anyVector.Y - target.Y) + gravity.Z * (anyVector.Z - target.Z));//
+
+            //Line is resultShipPosition + tmpShipSeed * timeStep
+            //a point belong to resultShipPosition
+
+            Vector3D endOfCurveLine = tmpShipSeed * timeStep;
+            Vector3D endOfCurvePoint = resultShipPosition;
+
+            // x = endOfCurveLine.X * t + endOfCurvePoint.X
+            // y = endOfCurveLine.Y * t + endOfCurvePoint.Y
+            // z = endOfCurveLine.Z * t + endOfCurvePoint.Z
+
+            /*
+            gravity.X * (endOfCurveLine.X * t + endOfCurvePoint.X - target.X) 
+                + gravity.Y * (endOfCurveLine.Y * t + endOfCurvePoint.Y - target.Y)
+                + gravity.Z * (endOfCurveLine.Z * t + endOfCurvePoint.Z - target.Z) + offsetD = 0;
+            */
+
+
+            /*            gravity.X * (endOfCurveLine.X * t) 
+                + gravity.Y * (endOfCurveLine.Y * t)
+                + gravity.Z * (endOfCurveLine.Z * t)  = 
+            - offsetD 
+            - gravity.X * (endOfCurvePoint.X - target.X)
+            - gravity.Y * (endOfCurvePoint.Y - target.Y)
+            - gravity.Z * (endOfCurvePoint.Z - target.Z);
+             */
+            float t = 0.0f;
+
+            float top = (float)
+            (offsetD + gravity.X * (endOfCurvePoint.X - target.X) + gravity.Y * (endOfCurvePoint.Y - target.Y) + gravity.Z * (endOfCurvePoint.Z - target.Z));
+            float bottom = (float)
+                ( gravity.X * endOfCurveLine.X + gravity.Y * endOfCurveLine.Y+ gravity.Z * endOfCurveLine.Z);
+
+            t = (float)(-top / bottom);
+
+            Echo("t:" + t);
+
+            //Plugging t in the line equation:
+
+            Vector3D pointOfIntersect = new Vector3D(
+                endOfCurveLine.X * t + endOfCurvePoint.X, 
+                endOfCurveLine.Y * t + endOfCurvePoint.Y, 
+                endOfCurveLine.Z * t + endOfCurvePoint.Z);
+
+
+            Debug.DrawGPS("POI!", pointOfIntersect + pbm.Backward * (cellSize / 2), Color.Purple);
+
             return fallingRange;
 
         }
