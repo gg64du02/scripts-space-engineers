@@ -23,3 +23,7 @@ rover_autopilot_gg_vanilla/TA_mk4_with_mdk/TA_mk4_with_mdk/TA_mk4_with_mdk/bin/T
 rover_autopilot_gg_vanilla/TA_mk4_with_mdk/TA_mk4_with_mdk/TA_mk4_with_mdk/bin/TA_mk4_with_mdk.exe.config
 rover_autopilot_gg_vanilla/TA_mk4_with_mdk/TA_mk4_with_mdk/TA_mk4_with_mdk/bin/MDK/MDK.paths.props
 rover_autopilot_gg_vanilla/TA_mk4_with_mdk/TA_mk4_with_mdk/.vs/TA_mk4_with_mdk/v16/.suo
+stv_mat_mk1_v2/stv_mat_mk1_v2/*
+*.zip
+*.vsidx
+*.bin
