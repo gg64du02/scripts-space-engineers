@@ -27,3 +27,5 @@ stv_mat_mk1_v2/stv_mat_mk1_v2/*
 *.zip
 *.vsidx
 *.bin
+*.lock
+*.suo
