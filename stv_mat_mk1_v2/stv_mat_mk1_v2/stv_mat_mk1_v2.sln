@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stv_mat_mk1_v2", "stv_mat_mk1_v2\stv_mat_mk1_v2.csproj", "{25630A3F-A3F7-42B1-BDE6-CE670688324D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25630A3F-A3F7-42B1-BDE6-CE670688324D}.Debug|x64.ActiveCfg = Debug|x64
+		{25630A3F-A3F7-42B1-BDE6-CE670688324D}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0F62AFA-2A6A-4DB4-BD90-6858B8B1E59D}
+	EndGlobalSection
+EndGlobal
