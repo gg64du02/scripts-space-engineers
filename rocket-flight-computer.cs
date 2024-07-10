@@ -61,6 +61,8 @@ IMyShipController myRemoteControl = null;
 List<IMyRadioAntenna> listAntenna = new List<IMyRadioAntenna>();
 
 IMyRadioAntenna theAntenna = null;
+
+int runtimeActivity = 0;
 	
 public Program()
 {
@@ -98,6 +100,13 @@ public void Main(string argument)
     DateTime dt1970 = new DateTime(1970, 1, 1);
     DateTime current = DateTime.Now;//DateTime.UtcNow for unix timestamp
     TimeSpan span = current - dt1970;
+	
+	runtimeActivity++;
+	int runtimeActivity_int = (91 + runtimeActivity%4);
+	char runtimeActivityChr = 'a';
+	runtimeActivityChr = (char) runtimeActivity_int;
+	Echo(""+runtimeActivityChr+runtimeActivityChr);
+	
 	//Echo("temp:" + temp);
     Echo("now:" + now);
     Echo("deltaTime = now - lastTime:" + deltaTime);
@@ -666,24 +675,15 @@ public void Main(string argument)
 
 
     //debug roll
-    var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+    var str_to_display = runtimeActivityChr +
+		"\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
         + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
         + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
         + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
         + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
         + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
         + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
-    //str_to_display = "\n8|elev|" + Math.Round((elev), 0)
-    //    + "\n9|elevD|" + Math.Round((alt_speed_ms_1), 0)
-    //    + "\n10|" + Math.Round((0.0f), 0)
-    //    + "\n11|wAS|" + Math.Round((wantedAlitudeSpeed), 0)
-    //    + "\n12|wA|" + Math.Round((wantedAltitude), 0)
-    //    + "\n13|con|" + Math.Round((control), 0);
-    //var str_to_display = "lol";
-	//Echo("myRemoteControl.CubeGrid.CustomName:"+myRemoteControl.CubeGrid.CustomName);
-    // if(myRemoteControl.CubeGrid.CustomName.Contains("\n|") == true){
-			// myRemoteControl.CubeGrid.CustomName = "stv ship controlled";
-	// }
+    
 	if(theAntenna != null){
 		theAntenna.HudText = str_to_display;
 	}
@@ -1152,9 +1152,9 @@ bool TryInit()
 	}
 	else{
 		//TODO add fonts settings put to Text and Image , size, color,
-		flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.TEXT_AND_IMAGE;
-        flightIndicatorsSurfaceDisplay[0].FontColor = new Color(255, 255, 255);
-        flightIndicatorsSurfaceDisplay[0].FontSize = 1.5f;
+		//flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.TEXT_AND_IMAGE;
+        //flightIndicatorsSurfaceDisplay[0].FontColor = new Color(255, 255, 255);
+        //flightIndicatorsSurfaceDisplay[0].FontSize = 1.5f;
 	}
 	
     // LCD
