@@ -847,6 +847,18 @@ namespace IngameScript
 
                 Debug.DrawGPS("POI!3", result + pbm.Backward * (cellSize / 2), Color.Orange);
             }
+            else
+            {
+
+                rayCurve = new RayD(resultShipPosition, -tmpShipSeed);
+
+                interReturn = rayCurve.Intersects(planeGrav);
+
+                Vector3D result = rayCurve.Position + ((double)interReturn) * rayCurve.Direction;
+
+                Debug.DrawGPS("POI!4", result + pbm.Backward * (cellSize / 2), Color.Black);
+
+            }
 
 
 
