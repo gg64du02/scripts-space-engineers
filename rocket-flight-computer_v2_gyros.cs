@@ -354,10 +354,21 @@ public void Main(string argument)
     double currentThrust_N = 0;
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
+	var Blocks = new List<IMyTerminalBlock>();
+    // theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+	//int numCS = 0;
     foreach (var c in cs)
     {
-        maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+		if(c.IsSameConstructAs(Me)){
+			if(c.IsWorking == true){
+				//numCS++;
+				//Echo("numCS:"+numCS);
+				maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+			}
+		}
+		
     }
+	// Echo("numCS:end:"+numCS);
     debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
     debugString += "\n" + "currentThrust_N:" + currentThrust_N;
 
@@ -1046,6 +1057,30 @@ public class FightStabilizator
     {
         if (gyroscopes.Count == 0)
         {
+			List<IMyGyro> listGyro = new List<IMyGyro>();
+			gyroscopes  = new List<IMyGyro>();
+            basicLibrary.GetBlocksOfType(listGyro);
+            foreach (var gyro in listGyro)
+            {
+				if(gyro != null){
+					if (gyro.IsSameConstructAs(shipController))
+					{
+						gyroscopes.Add(gyro);
+					}
+				}
+            }
+			if (gyroscopes.Count == 0)
+            {
+                WarningMessage = "Warning no gyro found.";
+                Echo(WarningMessage);
+                return;
+            }
+            InitGyroscopesOverride();
+		}
+		
+		/*
+        if (gyroscopes.Count == 0)
+        {
             basicLibrary.GetBlocksOfType(gyroscopes);
 
             //using just one gyroscope on the same grid as the shipController
@@ -1069,7 +1104,7 @@ public class FightStabilizator
                 return;
             }
             InitGyroscopesOverride();
-        }
+        }*/
     }
 
     void InitGyroscopesOverride()
