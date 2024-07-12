@@ -365,7 +365,14 @@ public void Main(string argument)
     GridTerminalSystem.GetBlocksOfType(cs);
     foreach (var c in cs)
     {
-        maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+		if(c.IsSameConstructAs(Me)){
+			if(c.IsWorking == true){
+				//numCS++;
+				//Echo("numCS:"+numCS);
+				maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+			}
+		}
+		
     }
     debugString += "\n" + "maxEffectiveThrust_N:" + maxEffectiveThrust_N;
     debugString += "\n" + "currentThrust_N:" + currentThrust_N;
@@ -684,7 +691,7 @@ public void Main(string argument)
 		
 		double remainingThrustToApply = -1;
 		double temp_thr_n = -1;
-
+		//space thrust management
 		foreach (var c in cs)
 		{
 			if (c.IsFunctional == true)
@@ -883,7 +890,7 @@ public void Main(string argument)
 
 								if (elev > 140)
 								{
-									clampWantedAlitudeSpeed = 75;
+									clampWantedAlitudeSpeed = 95;
 								}
 
 								//wantedAlitudeSpeed = -10;
@@ -978,8 +985,17 @@ public void Main(string argument)
 		// call this next line at each run
 		fightStabilizator.Stabilize(stalizableRoll, stalizablePitch, stalizableYaw);
 
+		string isIt = "";
+		if(PlanetisTargetInTheSameGravityWheel == true){
+			isIt = "yes";
+		}
+		else{
+			isIt = "no";
+		}
+
 		//debug roll
-		var str_to_display = "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+		var str_to_display = isIt 
+			+ "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
 			+ "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
 			+ "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
 			+ "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
@@ -1012,7 +1028,7 @@ public void Main(string argument)
 					}
 					if (remainingThrustToApply == -1)
 					{
-						remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
+						remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1)* 10);
 						Echo("atmoRemainThrust:"+Math.Round(remainingThrustToApply,3));
 					}
 					//Echo("physMass_N" + physMass_N);
