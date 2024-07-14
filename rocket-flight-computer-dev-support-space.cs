@@ -878,10 +878,6 @@ public void Main(string argument)
 				if (dts > 0)
 				{
 					if(isTargetAboveTheHor ==true){
-						if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
-						{
-							clampWantedAlitudeSpeed = 75;
-						}
 						if (Math.Abs(distPitch) < 500)
 						{
 							if (Math.Abs(distRoll) < 500)
@@ -900,6 +896,11 @@ public void Main(string argument)
 								//}
 							}
 						}
+						else{
+							//if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
+							clampWantedAlitudeSpeed = 75;
+						}
+						
 						altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
 						Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
 
@@ -1028,7 +1029,7 @@ public void Main(string argument)
 					}
 					if (remainingThrustToApply == -1)
 					{
-						remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1)* 10);
+						remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1)* 1);
 						Echo("atmoRemainThrust:"+Math.Round(remainingThrustToApply,3));
 					}
 					//Echo("physMass_N" + physMass_N);
