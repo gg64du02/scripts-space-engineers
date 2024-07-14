@@ -790,15 +790,19 @@ public void Main(string argument)
 			PlanetmaxR = distToPlanetCenter;
 		}
 		
-		if(grabOncePlanetmaxAtmoRadius == false){
+		//if(grabOncePlanetmaxAtmoRadius == false){
 			PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
-		}
+		//}
 		PlanetisTargetInTheSameGravityWheel = false;
 		if(maxAtmoAltComingFromSpace == 0.0){
 			grabOncePlanetmaxAtmoRadius = true;
 			maxAtmoAltComingFromSpace = distToPlanetCenter;
 			PlanetmaxAtmoRadius = maxAtmoAltComingFromSpace;
 		}
+		
+		Echo("CenterToTarget:"+Math.Round((VecPlanetCenter-vec3Dtarget).Length(),1));
+		Echo("PlanetmaxAtmoRadius:"+Math.Round(PlanetmaxAtmoRadius,1));
+		Echo("formula:"+Math.Round((PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7))),1));
 		if((VecPlanetCenter-vec3Dtarget).Length()<PlanetmaxAtmoRadius){
 			PlanetisTargetInTheSameGravityWheel = true;
 		}
@@ -995,7 +999,8 @@ public void Main(string argument)
 		}
 
 		//debug roll
-		var str_to_display = isIt 
+		var str_to_display = Math.Round(PlanetmaxAtmoRadius,1)
+			+ "\n" + isIt 
 			+ "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
 			+ "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
 			+ "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
