@@ -23,6 +23,7 @@ namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
+        //LEGACY: done with MDK (MDK1)
 
         public List<IMyMotorSuspension> Wheels = new List<IMyMotorSuspension>();
 
