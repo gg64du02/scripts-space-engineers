@@ -644,7 +644,7 @@ namespace IngameScript
 
             float tmpFallingRange = 60000f;
 
-            Vector3D tmpShipSeed = shipSpeed;
+            Vector3D tmpShipSpeed = shipSpeed;
 
             Vector3D tmpLocalTarget = target - centerPlanet;
             Vector3D tmpLocalPOI = new Vector3D(0, 0, 0);
@@ -660,25 +660,25 @@ namespace IngameScript
             while (true)
             {
 
-                tmpShipSeed += timeStep * gravity;
+                tmpShipSpeed += timeStep * gravity;
 
-                if (tmpShipSeed.LengthSquared() > 10000)
+                if (tmpShipSpeed.LengthSquared() > 10000)
                 {
-                    tmpShipSeed = maxSpeed * Vector3D.Normalize(tmpShipSeed);
+                    tmpShipSpeed = maxSpeed * Vector3D.Normalize(tmpShipSpeed);
                 }
 
                 //display as a "field" of vector
-                //Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + tmpShipSeed * timeStep, Color.Red, 0.01f, 0.016f);
+                //Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + tmpShipSpeed * timeStep, Color.Red, 0.01f, 0.016f);
 
 
-                resultShipPosition += tmpShipSeed * timeStep;
+                resultShipPosition += tmpShipSpeed * timeStep;
 
 
                 //display the curve
-                Debug.DrawLine(resultShipPosition, resultShipPosition + tmpShipSeed * timeStep, Color.Red, 1.11f, 0.016f);
+                Debug.DrawLine(resultShipPosition, resultShipPosition + tmpShipSpeed * timeStep, Color.Red, 1.11f, 0.016f);
 
-                Vector3D VectorProjFuturHor = tmpShipSeed - VectorHelper.VectorProjection(tmpShipSeed, gravity);
-                Vector3D VectorProjFuturVer = VectorHelper.VectorProjection(tmpShipSeed, gravity);
+                Vector3D VectorProjFuturHor = tmpShipSpeed - VectorHelper.VectorProjection(tmpShipSpeed, gravity);
+                Vector3D VectorProjFuturVer = VectorHelper.VectorProjection(tmpShipSpeed, gravity);
 
 
                 //last speed made on the plane normal to gravity (on the ground)
@@ -784,14 +784,14 @@ namespace IngameScript
             */
 
             //make a point that belong to the gravity plane (to compute D):
-            Vector3D anyVector = gravity.Cross(tmpShipSeed) + target;//todo check this
+            Vector3D anyVector = gravity.Cross(tmpShipSpeed) + target;//todo check this
 
             offsetD = (float)-(gravity.X * (anyVector.X - target.X) + gravity.Y * (anyVector.Y - target.Y) + gravity.Z * (anyVector.Z - target.Z));//
 
-            //Line is resultShipPosition + tmpShipSeed * timeStep
+            //Line is resultShipPosition + tmpShipSpeed * timeStep
             //a point belong to resultShipPosition
 
-            Vector3D endOfCurveLine = tmpShipSeed * timeStep;
+            Vector3D endOfCurveLine = tmpShipSpeed * timeStep;
             Vector3D endOfCurvePoint = resultShipPosition;
 
             // x = endOfCurveLine.X * t + endOfCurvePoint.X
@@ -837,7 +837,7 @@ namespace IngameScript
 
             PlaneD planeGrav = new PlaneD(target, gravity);
 
-            RayD rayCurve = new RayD(resultShipPosition, tmpShipSeed);
+            RayD rayCurve = new RayD(resultShipPosition, tmpShipSpeed);
 
             double? interReturn = rayCurve.Intersects(planeGrav);
 
@@ -850,7 +850,7 @@ namespace IngameScript
             else
             {
 
-                rayCurve = new RayD(resultShipPosition, -tmpShipSeed);
+                rayCurve = new RayD(resultShipPosition, -tmpShipSpeed);
 
                 interReturn = rayCurve.Intersects(planeGrav);
 
