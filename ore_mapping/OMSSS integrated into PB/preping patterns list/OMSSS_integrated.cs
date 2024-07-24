@@ -1157,7 +1157,7 @@ public void Main(string argument, UpdateType updateSource)
 					int intXsubPattern = 0;
 					int intYsubPattern = 0;
 					
-					int[] subIntSubPattern = Enumerable.Range(0, constantNumbersOfSubPatternToGenerate-1).ToArray();
+					int[] subIntSubPattern = Enumerable.Range(0, constantNumbersOfSubPatternToGenerate).ToArray();
 					
 					double intX = 0;
 					double intY = 0;
@@ -1295,6 +1295,7 @@ public void Main(string argument, UpdateType updateSource)
 	Me.CustomData = customDataStrBuild;
 	
 
+	Echo("IC:" + Runtime.CurrentInstructionCount);
 
     //generate all coordinates to the cube planet
 
