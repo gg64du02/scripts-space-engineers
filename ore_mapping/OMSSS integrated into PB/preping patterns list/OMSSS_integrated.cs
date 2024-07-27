@@ -1010,6 +1010,15 @@ public void Main(string argument, UpdateType updateSource)
 				}
 				Vector3D centerFacePosition = detectedPlanet + centerFacePositionOffset;
 				
+				int intActivatedZero  = 1      * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -120;
+				int intActivatedOne   = intTmp * 1            * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / 24;
+				int intActivatedTwo   = intTmp * (intTmp - 1) * 1            * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -12;
+				int intActivatedThree = intTmp * (intTmp - 1) * (intTmp - 2) *  1           * (intTmp - 4) * (intTmp - 5) / 12 ;
+				int intActivatedFour  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) *  1           * (intTmp - 5) / -24;
+				int intActivatedFive  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) *  1           / 120;
+				
+				Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive+"-IC:" + Runtime.CurrentInstructionCount);
+				
 				//Echo("centerFacePosition "+centerFacePosition);
 				
 				Vector3D vectorToFaceCenter = myPos - centerFacePosition;
@@ -1078,12 +1087,6 @@ public void Main(string argument, UpdateType updateSource)
 								}
 								*/
 								
-								int intActivatedZero  = 1      * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -120;
-								int intActivatedOne   = intTmp * 1            * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / 24;
-								int intActivatedTwo   = intTmp * (intTmp - 1) * 1            * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -12;
-								int intActivatedThree = intTmp * (intTmp - 1) * (intTmp - 2) *  1           * (intTmp - 4) * (intTmp - 5) / 12 ;
-								int intActivatedFour  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) *  1           * (intTmp - 5) / -24;
-								int intActivatedFive  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) *  1           / 120;
 								/*
 								Echo("=="+intTmp);
 								Echo("--"+intActivatedZero);
@@ -1096,7 +1099,7 @@ public void Main(string argument, UpdateType updateSource)
 								Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive);
 								Echo("IC:" + Runtime.CurrentInstructionCount);
 								*/
-								//Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive+"IC:" + Runtime.CurrentInstructionCount);
+								
 								
 								
 								//if(intTmp==0){
