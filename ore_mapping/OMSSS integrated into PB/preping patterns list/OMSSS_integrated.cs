@@ -905,6 +905,16 @@ public void Main(string argument, UpdateType updateSource)
 		}
 		
 		
+		int activeEarthLife = 0;
+		int activeMoon      = 0;
+		int activeMars      = 0;
+		int activeEuropa      = 0;
+		int activeTriton    = 0;
+		int activePertam    = 0;
+		int activeAlien     = 0;
+		int activeTitan     = 0;
+
+		
 		//detect if it is a known planet
 		if(detectedPlanet != new Vector3D(0,0,0)){
 			//Echo("tmpTestPlanetCenter"+tmpTestPlanetCenter);
@@ -931,22 +941,27 @@ public void Main(string argument, UpdateType updateSource)
 			if(planetsName == "Alien"){
 				addEarthLikeAlienTritonSubPattern();
 				subPatternSize = 128;
+				activeAlien = 1;
 			}
 			if(planetsName == "EarthLike"){
 				addEarthLikeAlienTritonSubPattern();
 				subPatternSize = 128;
+				activeEarthLife = 1;
 			}
 			if(planetsName == "Europa"){
 				addEuropaMoonTitanSubPattern();
 				subPatternSize = 256;
+				activeEuropa = 1;
 			}
 			if(planetsName == "Mars"){
 				addMarsSubPattern();
 				subPatternSize = 128;
+				activeMars = 1;
 			}
 			if(planetsName == "Moon"){
 				addEuropaMoonTitanSubPattern();
 				subPatternSize = 256;
+				activeMoon = 1;
 			}
 			if(planetsName == "Pertam"){
 			//	planet_radius = 30000;
@@ -957,16 +972,22 @@ public void Main(string argument, UpdateType updateSource)
 				customDataStrBuild += "I will make false positive disappear eventually.\n";
 				addPertamSubPattern();
 				subPatternSize = 512;
+				activePertam = 1;
 			}
 			if(planetsName == "Titan"){
 				addEuropaMoonTitanSubPattern();
 				subPatternSize = 256;
+				activeTitan = 1;
 			}
 			if(planetsName == "Triton"){
 				addEarthLikeAlienTritonSubPattern();
 				subPatternSize = 128;
+				activeTriton = 1;
 			}
 
+			int allActiveButPertam = (activeEarthLife | activeMoon | activeMars | activeEuropa | activeTriton | activeAlien | activeTitan);
+			
+			Echo("planets-"+activeEarthLife+"-"+activeMoon+"-"+activeMars+"-"+activeEuropa+"-"+activeTriton+"-"+activeAlien+"-"+activeTitan+"-"+allActiveButPertam+"-"+activePertam);
 
 			//Don't change unless you know what you are doing: 128 * 16 = 2048
 			int constantNumbersOfSubPatternToGenerate = 16;
@@ -1117,12 +1138,10 @@ public void Main(string argument, UpdateType updateSource)
 									
 									//pertam ok tested
 									//rotating 90 clock wise
-									/*
 									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									//intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-									generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
-									*/
+									Vector3D oneV2 = new Vector3D(intX,-planet_radius, intZ);
 								//}
 								//if(intTmp==2){
 									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
@@ -1151,16 +1170,21 @@ public void Main(string argument, UpdateType updateSource)
 									
 									//up petarm to be tested (need same rotation as the down face) look at 553 1176 the leaf shape as a land mark
 									//rotating 90 clock wise
-									/*
 									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									// intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
-									generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
-									*/
+									Vector3D fiveV2 = new Vector3D(intX,planet_radius, intZ);
 								//}
-								generated_gps_point_on_cube = intActivatedZero * zeroV + intActivatedOne * oneV + intActivatedTwo * twoV;
-								generated_gps_point_on_cube += intActivatedThree * threeV + intActivatedFour * fourV + intActivatedFive * fiveV ;
+								generated_gps_point_on_cube = intActivatedZero   * zeroV ;
+								generated_gps_point_on_cube += intActivatedOne   * oneV * (allActiveButPertam);
+								generated_gps_point_on_cube += intActivatedTwo   * twoV;
+								generated_gps_point_on_cube += intActivatedThree * threeV;
+								generated_gps_point_on_cube += intActivatedFour  * fourV;
+								generated_gps_point_on_cube += intActivatedFive  * fiveV * (allActiveButPertam);
+								
+								generated_gps_point_on_cube += intActivatedTwo * oneV2 * (activePertam);
+								generated_gps_point_on_cube += intActivatedFive * fiveV2 * (activePertam);
 					
 								Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
 								
