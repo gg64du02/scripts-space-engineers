@@ -13,11 +13,13 @@ folder_planetsfiles = 'planets_files/Titan/'
 
 
 # filename = os.path.join(folder_planetsfiles, 'back_mat.png')
-# filename = os.path.join('', 'back_mat.png')
-filename = os.path.join('', 'back_mat_256_256_moon.png')
+# filename = os.path.join('', 'pertam_mat_512_512_512_512_down_2.png')
+# filename = os.path.join('', 'back_mat_256_256_moon.png')
 # filename = os.path.join('', 'pertam_mat_512_512_512_512.png')
-# filename = os.path.join('', 'right_mat - Copie_2048_2048__pertam.png')
+filename = os.path.join('', 'prepped_pertam.png')
 # filename = os.path.join('', 'back_mat_mars_128_128.png')
+
+
 
 
 
@@ -44,7 +46,8 @@ data_ore_layer = data_ore_layer.astype('int16')
 import xml.etree.ElementTree as ET
 
 # file from https://github.com/KeenSoftwareHouse/SpaceEngineers/blob/master/Sources/SpaceEngineers/Content/Data/PlanetGeneratorDefinitions.sbc
-mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
+# mytree = ET.parse("PlanetGeneratorDefinitions.sbc")
+mytree = ET.parse("Pertam.sbc")
 myroot = mytree.getroot()
 # print(myroot)
 
@@ -58,62 +61,10 @@ UrValuesList = []
 AuValuesList = []
 PtValuesList = []
 
-# for x in myroot[0]:
-#     # print(x.tag, x.attrib)
-#     if(x.tag == "OreMappings"):
-#         pass
-#         for y in x:
-#             # i += 1
-#             # print("i:",i)
-#             # print(y.tag, y.attrib)
-#             # print(y.attrib["Value"])
-#             oreValue = int(y.attrib["Value"])
-#             oreTypeStr = y.attrib["Type"]
-#
-#
-#             oreAbrStr = ""
-#             if("Iron" in oreTypeStr):
-#                 oreAbrStr = "Fe"
-#                 # print("yyy")
-#                 if(oreValue not in FeValuesList):
-#                     FeValuesList.append(oreValue)
-#                 # print("FeValuesList:",FeValuesList)
-#             if("Nickel" in oreTypeStr):
-#                 oreAbrStr = "Ni"
-#                 if(oreValue not in NiValuesList):
-#                     NiValuesList.append(oreValue)
-#             if("Silicon" in oreTypeStr):
-#                 oreAbrStr = "Si"
-#                 if(oreValue not in SiValuesList):
-#                     SiValuesList.append(oreValue)
-#             if("Cobalt" in oreTypeStr):
-#                 oreAbrStr = "Co"
-#                 if(oreValue not in CoValuesList):
-#                     CoValuesList.append(oreValue)
-#             if("Silver" in oreTypeStr):
-#                 oreAbrStr = "Ag"
-#                 if(oreValue not in AgValuesList):
-#                     AgValuesList.append(oreValue)
-#             if("Magnesium" in oreTypeStr):
-#                 oreAbrStr = "Mg"
-#                 if(oreValue not in MgValuesList):
-#                     MgValuesList.append(oreValue)
-#             if("Uraninite" in oreTypeStr):
-#                 oreAbrStr = "Ur"
-#                 if(oreValue not in UrValuesList):
-#                     UrValuesList.append(oreValue)
-#             if("Gold" in oreTypeStr):
-#                 oreAbrStr = "Au"
-#                 if(oreValue not in AuValuesList):
-#                     AuValuesList.append(oreValue)
-#             # print("oreAbrStr:",oreAbrStr)
-#             # else:
-#             #     pass
-#             #     # print("nnn")
-#         break
 
 # myroot[5] is Titan line 3894
-for x in myroot[5]:
+# for x in myroot[5]:
+for x in myroot[0][0]:
     print(x.tag, x.attrib)
     for y in x:
         if(y.tag=="Ore"):
@@ -217,8 +168,8 @@ def centeroidnp(arr):
 
 converted_to_bool_surface_array = np.zeros_like(data_lack_layer)
 converted_to_bool_underground_array = np.zeros_like(data_lack_layer)
-for j in range(256):
-    for k in range(256):
+for j in range(512):
+    for k in range(512):
         # if (data_lack_layer[j, k] == (constant_surface_lack)):
         #     converted_to_bool_surface_array[j, k] = 1
         # print("data_ore_layer[j,k]",data_ore_layer[j,k])
@@ -249,8 +200,8 @@ labeledOre = measure.label(converted_to_bool_underground_array, background=False
 patternNUmber = 0
 
 tmp_region_size = 0
-for j in range(256):
-    for k in range(256):
+for j in range(512):
+    for k in range(512):
 
         if ((converted_to_bool_underground_array[j, k] == 1)):
             # continue
@@ -323,7 +274,7 @@ for j in range(256):
             # List<int> numberList = new List<int>();
             # numberList.Add(32);
             # print("List<String> stringList = new List<String>();")
-            print("stringList.Add("+"\""+str(centroid_underground_lack_array[0])+","+str(centroid_underground_lack_array[1])+","+gpsNameOres+"\");")
+            print("stringList.Add("+"\""+str(round(centroid_underground_lack_array[0],1))+","+str(round(centroid_underground_lack_array[1],1))+","+gpsNameOres+"\");")
 
 
         pass

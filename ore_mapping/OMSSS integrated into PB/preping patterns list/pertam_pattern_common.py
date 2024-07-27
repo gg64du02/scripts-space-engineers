@@ -176,8 +176,8 @@ def centeroidnp(arr):
 
 converted_to_bool_surface_array = np.zeros_like(data_lack_layer)
 converted_to_bool_underground_array = np.zeros_like(data_lack_layer)
-for j in range(512):
-    for k in range(512):
+for j in range(2048):
+    for k in range(2048):
         # if (data_lack_layer[j, k] == (constant_surface_lack)):
         #     converted_to_bool_surface_array[j, k] = 1
         # print("data_ore_layer[j,k]",data_ore_layer[j,k])
@@ -229,26 +229,33 @@ import png
 
 width = 2048
 height = 2048
+# width = 2048
+# height = 2048
 img = []
-for y in range(height):
+for y in range(512,1024):
     row = ()
-    for x in range(width):
-        pixel = (0,0,0)
+    for x in range(512,1024):
+        # pixel = (0,0,0)
+        pixel = (0,0,255)
         if(x==0):
             if(y==0):
                 pixel= (255, 255, 255)
         #row = row + (x, max(0, 255 - x - y), y)
         # if (data_ore_layer[j, k] == 255):
         #     if (data_ore_layer2[j, k] == 255):
-        if (data_ore_layer[y, x] != data_ore_layer2[y, x]):
+        # if (data_ore_layer[y, x] != data_ore_layer2[y, x]):
+        if (data_ore_layer[y, x] == data_ore_layer2[y, x]):
             # pixel= (0, 0, 255)
-            pixel= (255, 255, 255)
-            print("pixel white", data_ore_layer[y, x], data_ore_layer2[y, x])
+            # pixel= (255, 255, 255)
+            pixel= (0, 0, data_ore_layer2[y, x])
+            # print("pixel white", data_ore_layer[y, x], data_ore_layer2[y, x])
+            if(data_ore_layer2[y, x] == 168 or data_ore_layer2[y, x] == 172 or data_ore_layer2[y, x] == 176 or data_ore_layer2[y, x] == 180 or data_ore_layer2[y, x] == 184  or data_ore_layer2[y, x] == 188):
+                print("gold")
         row = row + pixel
 
     img.append(row)
-with open('gradient.png', 'wb') as f:
-    w = png.Writer(width, height, greyscale=False)
+with open('prepped_pertam.png', 'wb') as f:
+    w = png.Writer(512, 512, greyscale=False)
     w.write(f, img)
 
 
