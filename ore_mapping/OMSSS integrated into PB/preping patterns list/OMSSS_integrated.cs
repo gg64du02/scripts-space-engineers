@@ -1096,7 +1096,7 @@ public void Main(string argument, UpdateType updateSource)
 								Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive);
 								Echo("IC:" + Runtime.CurrentInstructionCount);
 								*/
-								//Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive+"IC:" + Runtime.CurrentInstructionCount);
+								Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive+"IC:" + Runtime.CurrentInstructionCount);
 								
 								//if(intTmp==0){
 									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
@@ -1198,8 +1198,8 @@ public void Main(string argument, UpdateType updateSource)
 											generatedGPSs.Add(tmpWPI.ToString());
 										//}
 									//}
-									//generatedGPSs.Add("===========");Echo("one close enough");
-									
+									//generatedGPSs.Add("===========");
+									Echo("one close enough");
 								}
 								
 								
