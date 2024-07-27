@@ -1077,18 +1077,39 @@ public void Main(string argument, UpdateType updateSource)
 									display =  true;
 								}
 								*/
-								if(intTmp==0){
+								
+								int intActivatedZero  = 1      * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -120;
+								int intActivatedOne   = intTmp * 1            * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / 24;
+								int intActivatedTwo   = intTmp * (intTmp - 1) * 1            * (intTmp - 3) * (intTmp - 4) * (intTmp - 5) / -12;
+								int intActivatedThree = intTmp * (intTmp - 1) * (intTmp - 2) *  1           * (intTmp - 4) * (intTmp - 5) / 12 ;
+								int intActivatedFour  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) *  1           * (intTmp - 5) / -24;
+								int intActivatedFive  = intTmp * (intTmp - 1) * (intTmp - 2) * (intTmp - 3) * (intTmp - 4) *  1           / 120;
+								/*
+								Echo("=="+intTmp);
+								Echo("--"+intActivatedZero);
+								Echo("--"+intActivatedOne);
+								Echo("--"+intActivatedTwo);
+								Echo("--"+intActivatedThree);
+								Echo("--"+intActivatedFour);
+								Echo("--"+intActivatedFive);
+								
+								Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive);
+								Echo("IC:" + Runtime.CurrentInstructionCount);
+								*/
+								Echo(intTmp+"--"+intActivatedZero+"-"+intActivatedOne+"-"+intActivatedTwo+"-"+intActivatedThree+"-"+intActivatedFour+"-"+intActivatedFive+"IC:" + Runtime.CurrentInstructionCount);
+								
+								//if(intTmp==0){
 									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-									generated_gps_point_on_cube = new Vector3D(intX, intY,planet_radius);
-								}
-								if(intTmp==1){
+									Vector3D zeroV = new Vector3D(intX, intY,planet_radius);
+								//}
+								//if(intTmp==1){
 									//original
 									intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									//intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
-									generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
+									Vector3D oneV = new Vector3D(intX,-planet_radius, intZ);
 									
 									//pertam ok tested
 									//rotating 90 clock wise
@@ -1098,31 +1119,31 @@ public void Main(string argument, UpdateType updateSource)
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									generated_gps_point_on_cube = new Vector3D(intX,-planet_radius, intZ);
 									*/
-								}
-								if(intTmp==2){
+								//}
+								//if(intTmp==2){
 									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									//intZ = planet_radius * (centroid_surface_lack[1]-2048/2) * planet_radius;
-									generated_gps_point_on_cube = new Vector3D(intX, intY,-planet_radius);	
-								}
-								if(intTmp==3){
+									Vector3D twoV = new Vector3D(intX, intY,-planet_radius);	
+								//}
+								//if(intTmp==3){
 									// intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-									generated_gps_point_on_cube = new Vector3D(planet_radius,intY, intZ);
-								}
-								if(intTmp==4){
+									Vector3D threeV = new Vector3D(planet_radius,intY, intZ);
+								//}
+								//if(intTmp==4){
 									//intX = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = 1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
-									generated_gps_point_on_cube = new Vector3D(-planet_radius,intY, intZ);
-								}
-								if(intTmp==5){
+									Vector3D fourV = new Vector3D(-planet_radius,intY, intZ);
+								//}
+								//if(intTmp==5){
 									intX = -1*(- planet_radius+centroid_surface_lack_planetSized[1]*1);
 									// intY = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									intZ = -1*(- planet_radius+centroid_surface_lack_planetSized[0]*1);
 									//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
-									generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
+									Vector3D fiveV = new Vector3D(intX,planet_radius, intZ);
 									
 									//up petarm to be tested (need same rotation as the down face) look at 553 1176 the leaf shape as a land mark
 									//rotating 90 clock wise
@@ -1133,7 +1154,9 @@ public void Main(string argument, UpdateType updateSource)
 									//generated_gps_point_on_cube = arr.array('d', [intX,planet_radius, intZ,]+center_of_planet);
 									generated_gps_point_on_cube = new Vector3D(intX,planet_radius, intZ);
 									*/
-								}
+								//}
+								generated_gps_point_on_cube = intActivatedZero * zeroV + intActivatedOne * oneV + intActivatedTwo * twoV;
+								generated_gps_point_on_cube += intActivatedThree * threeV + intActivatedFour * fourV + intActivatedFive * fiveV ;
 					
 								Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
 								
