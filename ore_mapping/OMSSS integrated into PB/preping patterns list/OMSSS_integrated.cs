@@ -1183,7 +1183,7 @@ public void Main(string argument, UpdateType updateSource)
 								generated_gps_point_on_cube += intActivatedFour  * fourV;
 								generated_gps_point_on_cube += intActivatedFive  * fiveV * (allActiveButPertam);
 								
-								generated_gps_point_on_cube += intActivatedTwo * oneV2 * (activePertam);
+								generated_gps_point_on_cube += intActivatedOne * oneV2 * (activePertam);
 								generated_gps_point_on_cube += intActivatedFive * fiveV2 * (activePertam);
 					
 								Vector3D generated_gps_point_on_planet = new Vector3D(0,0,0);
