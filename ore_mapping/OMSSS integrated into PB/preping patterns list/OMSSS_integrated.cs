@@ -765,7 +765,8 @@ public void addPertamSubPattern(){
         
         oreCoords2DSubPattern.Add(new Vector2D(tmpx, tmpy));
     }
-    Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
+    //Echo("-"+oreCoords2DSubPattern.Count+" ore spot pattern loaded for the current planet\n");
+    Echo("-"+oreCoords2DSubPattern.Count+" in pattern");
 }
 
 public void clearSubPattern(){
@@ -822,7 +823,8 @@ public void Main(string argument, UpdateType updateSource)
 		clearSubPattern();
 	}
 	
-	string customDataStrBuild = "";
+	//string customDataStrBuild = "";
+	StringBuilder customDataStrBuilder =  new StringBuilder("", 65000);
 
     //Get the PB Position:
     Vector3D myPos = Me.GetPosition();
@@ -897,9 +899,9 @@ public void Main(string argument, UpdateType updateSource)
 			
 			if(distanceToPlanetCenter < 100000){
 				detectedPlanet = tmpVector3DplanetCenter;
-				customDataStrBuild += "planet's center:\n\n";
-				customDataStrBuild += str;
-				customDataStrBuild += "\n\n\nalign this planet's center with one in the following list:\n";
+				customDataStrBuilder.Append( "planet's center:\n\n");
+				customDataStrBuilder.Append( str);
+				customDataStrBuilder.Append( "\n\n\nalign this planet's center with one in the following list:\n");
 				break;
 			}
 		}
@@ -931,7 +933,7 @@ public void Main(string argument, UpdateType updateSource)
 			
 			double distanceToCenter = (cubeCenter - myPos).Length();
 			
-			Echo("distanceToCenter"+distanceToCenter);
+			Echo("distanceToCenter"+Math.Round(distanceToCenter,1));
 			
 			planet_radius = distanceToCenter;
 			
@@ -965,11 +967,11 @@ public void Main(string argument, UpdateType updateSource)
 			}
 			if(planetsName == "Pertam"){
 			//	planet_radius = 30000;
-				//customDataStrBuild += "Pertam is not yet supported\n";
+				//customDataStrBuilder.Append( "Pertam is not yet supported\n";
 				//Me.CustomData = customDataStrBuild;
-				customDataStrBuild += "on Pertam \"flat\" areas would be most likely filled with false positives,\n";
-				customDataStrBuild += "if there is nothing there seek somewhere not as even terrain wise.\n";
-				customDataStrBuild += "I will make false positive disappear eventually.\n";
+				customDataStrBuilder.Append( "on Pertam \"flat\" areas would be most likely filled with false positives,\n");
+				customDataStrBuilder.Append( "if there is nothing there seek somewhere not as even terrain wise.\n");
+				customDataStrBuilder.Append( "I will make false positive disappear eventually.\n");
 				addPertamSubPattern();
 				subPatternSize = 512;
 				activePertam = 1;
@@ -992,7 +994,8 @@ public void Main(string argument, UpdateType updateSource)
 			//Don't change unless you know what you are doing: 128 * 16 = 2048
 			int constantNumbersOfSubPatternToGenerate = 16;
 			constantNumbersOfSubPatternToGenerate = 2048 / subPatternSize;
-			Echo("constantNumbersOfSubPatternToGenerate" + constantNumbersOfSubPatternToGenerate);
+			//Echo("constantNumbersOfSubPatternToGenerate" + constantNumbersOfSubPatternToGenerate);
+			Echo("cNOSPTG:" + constantNumbersOfSubPatternToGenerate);
 
 			List<int> intIndexFaces = new List<int>(6);
 			intIndexFaces.Add(0);
@@ -1055,7 +1058,7 @@ public void Main(string argument, UpdateType updateSource)
 				//Let s simplify the logic and just use one for the 3d
 				if (distanceToFaceCenter < 1 * planet_radius)
 				{
-						Echo("face close enough to try to generate");
+					Echo("face close enough to try to generate");
 					
 					int intXsubPattern = 0;
 					int intYsubPattern = 0;
@@ -1223,11 +1226,12 @@ public void Main(string argument, UpdateType updateSource)
 									//generatedGPSs.Add(generated_gps_point_on_cube.ToString());
 									//if(display == true){
 										//if(intTmp==5){
-											generatedGPSs.Add(tmpWPI.ToString());
+											//generatedGPSs.Add(tmpWPI.ToString());
+											customDataStrBuilder.Append(tmpWPI.ToString()+"\n");
 										//}
 									//}
 									//generatedGPSs.Add("===========");
-									Echo("one close enough");
+									//Echo("one close enough");
 								}
 								
 								
@@ -1251,12 +1255,14 @@ public void Main(string argument, UpdateType updateSource)
 		}
 	}
 	
+	//StringBuilder myStringBuilder =
+	/*
 	foreach(string stcTmp in generatedGPSs){
-		customDataStrBuild += "\n"+stcTmp;
+		customDataStrBuilder.Append( "\n"+stcTmp;
 	}
+	*/
 	
-	
-	Me.CustomData = customDataStrBuild;
+	Me.CustomData = customDataStrBuilder.ToString();
 	
 
 	Echo("IC:" + Runtime.CurrentInstructionCount);
