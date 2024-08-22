@@ -178,7 +178,10 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(cs);
             foreach (var c in cs)
             {
-                maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+                if (c.IsSameConstructAs(Me))
+                {
+                    maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
+                }
             }
 
             var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
@@ -292,6 +295,15 @@ namespace IngameScript
 
                 //error_sideways_speed =  Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res  ; //pointing at the target starting from zero
 
+
+                if (VTToffsetProj.Length() <400)
+                {
+                    if (VTToffsetProj.Length() > 100)
+                    {
+                        temp_speed_math_res = temp_speed_math_res / 2;
+                    }
+                }
+
                 if (VTToffsetProj.Length() < 100)
                 {
                     temp_speed_math_res = temp_speed_math_res / 10;
@@ -378,7 +390,7 @@ namespace IngameScript
                             //altitude_settings_m = 25;
                             if (VTToffsetProj.Length() > 1500.0f)
                             {
-                                altitude_settings_m = 1500;
+                                altitude_settings_m = 150;
                             }
                             if (VTToffsetProj.Length() < 30)
                             {
@@ -567,44 +579,47 @@ namespace IngameScript
 
             foreach (var c in cs)
             {
-                if (c.IsFunctional == true)
+                if (c.IsSameConstructAs(Me))
                 {
-                    // if (c.IsSameConstructAs(flightIndicatorsShipController))
-                    // {
-                    if (remainingThrustToApply == -1)
+                    if (c.IsFunctional == true)
                     {
-                        remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
-                    }
-                    //Echo("physMass_N" + physMass_N);
-                    //Echo("c.MaxThrust"+c.MaxThrust);
-                    //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
-                    //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
-                    if (c.MaxThrust < remainingThrustToApply)
-                    {
-                        temp_thr_n = c.MaxThrust;
-                        remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
-                    }
-                    else
-                    {
-                        temp_thr_n = remainingThrustToApply;
-                        remainingThrustToApply = 0;
-                    }
-                    //Echo("temp_thr_n:" + temp_thr_n);
-                    //Echo("remainingThrustToApply:" + remainingThrustToApply);
-                    if (temp_thr_n < 0)
-                    {
-                        c.ThrustOverride = Convert.ToSingle(200f);
-                    }
-                    else
-                    {
-                        c.ThrustOverride = Convert.ToSingle(temp_thr_n);
-                    }
+                        // if (c.IsSameConstructAs(flightIndicatorsShipController))
+                        // {
+                        if (remainingThrustToApply == -1)
+                        {
+                            remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
+                        }
+                        //Echo("physMass_N" + physMass_N);
+                        //Echo("c.MaxThrust"+c.MaxThrust);
+                        //Echo("c.MaxEffectiveThrust"+c.MaxEffectiveThrust);
+                        //(1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control))
+                        if (c.MaxThrust < remainingThrustToApply)
+                        {
+                            temp_thr_n = c.MaxThrust;
+                            remainingThrustToApply = remainingThrustToApply - c.MaxThrust;
+                        }
+                        else
+                        {
+                            temp_thr_n = remainingThrustToApply;
+                            remainingThrustToApply = 0;
+                        }
+                        //Echo("temp_thr_n:" + temp_thr_n);
+                        //Echo("remainingThrustToApply:" + remainingThrustToApply);
+                        if (temp_thr_n < 0)
+                        {
+                            c.ThrustOverride = Convert.ToSingle(200f);
+                        }
+                        else
+                        {
+                            c.ThrustOverride = Convert.ToSingle(temp_thr_n);
+                        }
 
-                    if (remainingThrustToApply == 0)
-                    {
-                        c.ThrustOverridePercentage = 0.00001f;
+                        if (remainingThrustToApply == 0)
+                        {
+                            c.ThrustOverridePercentage = 0.00001f;
+                        }
+                        // }
                     }
-                    // }
                 }
             }
 
