@@ -74,6 +74,8 @@ double maxAtmoAltComingFromSpace = 0;
 bool grabOncePlanetmaxAtmoRadius = false;
 bool PlanetisTargetInTheSameGravityWheel = false;
 
+Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
+
 public Program()
 {
     Runtime.UpdateFrequency = UpdateFrequency.Update10;
@@ -222,8 +224,45 @@ public void Main(string argument)
     //derivative of elev
     //known as alt_speed_ms_1
     //generating a vector from the current position to the center of the planet
-    Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
-    flightIndicatorsShipController.TryGetPlanetPosition(out VecPlanetCenter);
+	Vector3D tmpCenterPlanet = new Vector3D(0,0,0);
+    if(flightIndicatorsShipController.TryGetPlanetPosition(out tmpCenterPlanet) == true){
+		Echo("==true");
+		VecPlanetCenter = tmpCenterPlanet;
+	}
+	else{
+		Echo("!=true");
+		
+		//GPS: Pertam: -3967231.50:-32231.50:-767231.50:
+
+		int radiusPertam = 48527;
+
+		Vector3D centerPertam = new Vector3D(-3967231.50, -32231.50, -767231.50);
+
+
+		Vector3D BBPertamMinV3 = centerPertam - radiusPertam;
+		Vector3D BBPertamMaxV3 = centerPertam + radiusPertam;
+
+		BoundingBoxD BBPertam = new BoundingBoxD(BBPertamMinV3, BBPertamMaxV3);
+
+		ContainmentType ct = BBPertam.Contains((Vector3) myPos);
+
+		if (ct == ContainmentType.Contains)
+		{
+			Echo("==Contains");
+			Vector3D tpmG = myRemoteControl.GetNaturalGravity();
+			if (tpmG != Vector3D.Zero)
+			{
+				Echo("tpmG != ");
+				VecPlanetCenter = centerPertam;
+			}
+			else{
+				Echo("tpmG == ");
+			}
+		}
+		else{
+			Echo("!=Contains");
+		}
+	}
     Vector3D negateVecPlanetCenter = new Vector3D(0, 0, 0);
     Vector3D.Negate(ref VecPlanetCenter, out negateVecPlanetCenter);
     Vector3D vecToPlanetCenter = Vector3D.Add(myPos, negateVecPlanetCenter);
@@ -787,11 +826,14 @@ public void Main(string argument)
 			PlanetminR = distToPlanetCenter;
 		}
 		if(PlanetmaxR<distToPlanetCenter){
-			PlanetmaxR = distToPlanetCenter;
+			//if(distToPlanetCenter<3500000){
+				PlanetmaxR = distToPlanetCenter;
+			//}
 		}
 		
 		//if(grabOncePlanetmaxAtmoRadius == false){
-			PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetMaxG/0.05,(1.0/7));
+			//PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetCurrentG/0.05,(1.0/7));
+			PlanetmaxAtmoRadius = distToPlanetCenter * Math.Pow(PlanetCurrentG/0.05,(1.0/7));
 		//}
 		PlanetisTargetInTheSameGravityWheel = false;
 		if(maxAtmoAltComingFromSpace == 0.0){
@@ -1001,6 +1043,13 @@ public void Main(string argument)
 		//debug roll
 		var str_to_display = Math.Round(PlanetmaxAtmoRadius,1)
 			+ "\n" + isIt 
+			//+ "\n" + Math.Round(PlanetMaxG,3)
+			//+ "\n" + Math.Round(PlanetminR,0)
+			//+ "\n" + Math.Round(PlanetmaxR,0)
+			//+ "\n" + Math.Round(PlanetCurrentG,3)
+			//+ "\n" + Math.Round(PlanetCurrentG/0.05,3)
+			
+			//+ "\n" 
 			+ "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
 			+ "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
 			+ "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
