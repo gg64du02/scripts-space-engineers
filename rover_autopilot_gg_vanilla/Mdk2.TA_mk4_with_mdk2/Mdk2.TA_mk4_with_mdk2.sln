@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mdk2.TA_mk4_with_mdk2", "Mdk2.TA_mk4_with_mdk2.csproj", "{42C42377-BFB3-4171-AAB3-6AF44CFCDCE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42C42377-BFB3-4171-AAB3-6AF44CFCDCE4}.Debug|x64.ActiveCfg = Debug|x64
+		{42C42377-BFB3-4171-AAB3-6AF44CFCDCE4}.Debug|x64.Build.0 = Debug|x64
+		{42C42377-BFB3-4171-AAB3-6AF44CFCDCE4}.Release|x64.ActiveCfg = Release|x64
+		{42C42377-BFB3-4171-AAB3-6AF44CFCDCE4}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B97B127D-2EEC-47F1-9F70-3A33ADF5D83B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\Mixins\PlanetPositioningUtilities\PlanetPositioningUtilities.projitems*{42c42377-bfb3-4171-aab3-6af44cfcdce4}*SharedItemsImports = 5
+		..\Mixins\VectorHelper\VectorHelper.projitems*{42c42377-bfb3-4171-aab3-6af44cfcdce4}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
