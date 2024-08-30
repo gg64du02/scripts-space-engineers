@@ -1660,20 +1660,23 @@ namespace IngameScript
             //TODO: RemoteControl speed must be higher than wheels speed
             if (Wheels != null)
             {
-                float msWheels = (float)Wheels[0].GetValue<Single>("Speed Limit") / 3.6f;
-
-                //Echo("msWheels" + msWheels);
-                // test in km/h
-                //Echo("RemoteControl.SpeedLimit" + RemoteControl.SpeedLimit);
-                //SL is m/s 
-
-                if (msWheels > RemoteControl.SpeedLimit)
+                if(Wheels.Count > 0)
                 {
-                    Echo("Warning RemoteControl speed must be higher than wheels speed!!!");
-                }
-                else
-                {
-                    Echo("RC speed and wheels speed settings ok");
+                    float msWheels = (float)Wheels[0].GetValue<Single>("Speed Limit") / 3.6f;
+
+                    //Echo("msWheels" + msWheels);
+                    // test in km/h
+                    //Echo("RemoteControl.SpeedLimit" + RemoteControl.SpeedLimit);
+                    //SL is m/s 
+
+                    if (msWheels > RemoteControl.SpeedLimit)
+                    {
+                        Echo("Warning RemoteControl speed must be higher than wheels speed!!!");
+                    }
+                    else
+                    {
+                        Echo("RC speed and wheels speed settings ok");
+                    }
                 }
             }
 
