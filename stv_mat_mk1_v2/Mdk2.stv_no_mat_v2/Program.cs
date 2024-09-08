@@ -36,8 +36,6 @@ namespace IngameScript
 
         string str_to_display = "";
 
-        IMyCockpit theCockpit = null;
-
         //using the visual debugging API:
         DebugAPI Debug;
 
@@ -59,6 +57,10 @@ namespace IngameScript
 
         //x,y,z coords
         Vector3D vec3Dtarget = new Vector3D(0, 0, 0);
+
+
+        bool slow_landing_now = false;
+
         // This file contains your actual script.
         //
         // You can either keep all your code here, or you can create separate
@@ -187,7 +189,6 @@ namespace IngameScript
             var thr_to_weight_ratio = maxEffectiveThrust_N / physMass_N;
 
             double TWR = thr_to_weight_ratio;
-            double V_max = 55;
 
             double leftOverTrust_N = maxEffectiveThrust_N - physMass_N;
 
@@ -219,14 +220,40 @@ namespace IngameScript
 
             Vector3D error_sideways_speed = Vector3D.Zero;
 
+
+            //generating a vector from the current position to the center of the planet
+            Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
+            RemoteControl.TryGetPlanetPosition(out VecPlanetCenter);
+            MyShipVelocities myShipVel = RemoteControl.GetShipVelocities();
+            Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
+
+
             //thresholds for the vectorToAlignToward preping:
             if (vec3Dtarget == V3D_zero)
             {
-                //Got a target
+                //Got a target//
                 // try to go there and land 
                 Echo("if (vec3Dtarget == V3D_zero)");
 
                 vectorToAlignToward = -(-gravityVector);
+                //minus the ship velocities projected on the plane normal to gravity vector
+                //vectorToAlignToward += ;
+
+                Vector3D gravNorm = Vector3D.Normalize(gravityVector);
+
+                Vector3D shipVelOnGravPlane = VectorHelper.VectorProjection(shipVelocities, gravNorm);
+
+                //debug
+                //displayMeV3D = oppShipVelOnGravPlaneNorm;
+
+                Vector3D v3d_grav_N = -gravityVector * physMass_kg;
+
+                //ship velocities projected normal to the gravity
+                Vector3D shipVelProj = shipVelocities - shipVelOnGravPlane;
+
+                vectorToAlignToward = -(-gravityVector) + shipVelProj;
+
+
 
                 Echo("if end");
             }
@@ -296,7 +323,7 @@ namespace IngameScript
                 //error_sideways_speed =  Vector3D.Normalize(-VTToffsetProj) * temp_speed_math_res  ; //pointing at the target starting from zero
 
 
-                if (VTToffsetProj.Length() <400)
+                if (VTToffsetProj.Length() < 400)
                 {
                     if (VTToffsetProj.Length() > 100)
                     {
@@ -339,16 +366,10 @@ namespace IngameScript
 
                 Echo("altitude_settings_m:" + altitude_settings_m);
 
-                //generating a vector from the current position to the center of the planet
-                Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
-                RemoteControl.TryGetPlanetPosition(out VecPlanetCenter);
-                MyShipVelocities myShipVel = RemoteControl.GetShipVelocities();
-                Vector3D linearSpeedsShip = myShipVel.LinearVelocity;
 
 
                 Vector3D myPos = RC_WP;
 
-                bool slow_landing_now = false;
 
 
                 if (dts > 0)
@@ -399,7 +420,6 @@ namespace IngameScript
                             if (VTToffsetProj.Length() < .5)
                             {
                                 altitude_settings_m = 0;
-                                //slow_landing_now = true;
                             }
 
                         }
@@ -408,77 +428,102 @@ namespace IngameScript
                 }
 
 
-                altitude_error_m = altitude_settings_m - altitude_m;
-
-                altitude_speed_m_s = (altitude_m - last_altitude_m) / dts;
-
-
-
-                //alti
-
-                // .5 * m * v^2 = m g h
-                // v^2 = 2gh
-                // v = sqrt (2gh)
-
-                if (slow_landing_now == false)
+            }
+            bool hitRecompile = false;
+            if (vec3Dtarget == Vector3D.Zero)
+            {
+                altitude_settings_m = 125;
+                // 10 * 10 must be above the slow landing speed !!! (-3 squared right now)
+                if(linearSpeedsShip.LengthSquared()<10 * 10)
                 {
-                    altitude_settings_m_s = Math.Sign(altitude_error_m) *
-                    Math.Sqrt((double)(2 * gravityVector.Length() * (float)Math.Abs(altitude_error_m)));
+                    hitRecompile = true;
                 }
-                else
-                {
-                    altitude_settings_m_s = -5;
-                }
+            }
 
-                altitude_error_m_s = altitude_settings_m_s - altitude_speed_m_s;
+            altitude_m = elev;
 
-                //altitude_settings_m_s = MyMath.Clamp( (float) altitude_settings_m_s, -100f, 100f);
+            altitude_error_m = altitude_settings_m - altitude_m;
 
-                control = (float)altitude_error_m_s;
-
-                //;ini;u; set to one to avoid bad crashes during debugging
-                //control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
-
-                //survival settings
-                control = MyMath.Clamp((float)altitude_error_m_s, 0f, 100f); ;
-                //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
-                //control = 1f;
-
-                Echo("control:" + control);
-
-                //control = MyMath.Clamp((float)altitude_error_m_s, 0f, 4f); ;
-
-                last_altitude_m = elev;
-
-                //str_to_display = "" + "control:" + control;
-                str_to_display = "";
-                str_to_display += "\n1:" + Math.Round(altitude_m, 1);
-                str_to_display += "\n2:" + Math.Round(altitude_settings_m_s, 1);
-                str_to_display += "\n3:" + Math.Round(altitude_speed_m_s, 1);
-                str_to_display += "\n4:" + Math.Round(altitude_error_m_s, 1);
-                str_to_display += "\n5:" + Math.Round(control, 3);
-
-                Echo("str_to_display:" + str_to_display);
+            altitude_speed_m_s = (altitude_m - last_altitude_m) / dts;
 
 
-                /*
-                //Me.CustomData = debugOK;
-                Debug.RemoveAll();
 
-                float cellSize = Me.CubeGrid.GridSize;
-                MatrixD pbm = Me.WorldMatrix;
-                //Debug.DrawGPS("I'm here!", pbm.Translation + pbm.Backward * (cellSize / 2), Color.Blue);
+            //alti
+
+            // .5 * m * v^2 = m g h
+            // v^2 = 2gh
+            // v = sqrt (2gh)
+
+            if (slow_landing_now == false)
+            {
+                altitude_settings_m_s = Math.Sign(altitude_error_m) *
+                Math.Sqrt((double)(2 * gravityVector.Length() * (float)Math.Abs(altitude_error_m)));
+            }
+            else
+            {
+                altitude_settings_m_s = -3;
+            }
+
+            if (hitRecompile == true)
+            {
+                altitude_settings_m_s = -3;
+            }
+
+            altitude_error_m_s = altitude_settings_m_s - altitude_speed_m_s;
+
+            //altitude_settings_m_s = MyMath.Clamp( (float) altitude_settings_m_s, -100f, 100f);
+
+            control = (float)altitude_error_m_s;
+
+            //;ini;u; set to one to avoid bad crashes during debugging
+            //control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
+
+            //survival settings
+            control = MyMath.Clamp((float)altitude_error_m_s, 0f, 100f); ;
+            //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
+            //control = 1f;
+
+            Echo("control:" + control);
+
+            //control = MyMath.Clamp((float)altitude_error_m_s, 0f, 4f); ;
+
+            last_altitude_m = elev;
+
+            //str_to_display = "" + "control:" + control;
+            str_to_display = "";
+            //str_to_display += "\n1:" + slow_landing_now;
+            //str_to_display += "\n1:" + hitRecompile;
+            //str_to_display += "\n1:" + Math.Round(linearSpeedsShip.LengthSquared(), 1);
+            str_to_display += "\n1:" + Math.Round(altitude_settings_m, 1);
+            str_to_display += "\n2:" + Math.Round(altitude_error_m, 1);
+            str_to_display += "\n31:" + Math.Round(altitude_m, 3);
+            //str_to_display += "\n32:" + Math.Round(last_altitude_m, 3);
+            str_to_display += "\n5:" + Math.Round(altitude_error_m_s, 1);
+            str_to_display += "\n6:" + Math.Round(altitude_speed_m_s, 1);
+            //str_to_display += "\n7:" + "====";
+            str_to_display += "\n8:" + Math.Round(control, 3);
+
+            Echo("str_to_display:" + str_to_display);
+
+
+            /*
+            //Me.CustomData = debugOK;
+            Debug.RemoveAll();
+
+            float cellSize = Me.CubeGrid.GridSize;
+            MatrixD pbm = Me.WorldMatrix;
+            //Debug.DrawGPS("I'm here!", pbm.Translation + pbm.Backward * (cellSize / 2), Color.Blue);
 
                 
-                Debug.DrawGPS("ship", Me.GetPosition() + pbm.Backward * (cellSize / 2), Color.Blue);
-                //Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
-                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + vectorToAlignToward, Color.Red, 0.1f, 0.016f);
-                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Left,
-                    Color.Yellow, 0.1f, 0.016f);
-                Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Forward,
-                    Color.Purple, 0.1f, 0.016f);
-                */
-            }
+            Debug.DrawGPS("ship", Me.GetPosition() + pbm.Backward * (cellSize / 2), Color.Blue);
+            //Debug.DrawGPS("POI!", resultShipPosition + pbm.Backward * (cellSize / 2), Color.Red);
+            Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + vectorToAlignToward, Color.Red, 0.1f, 0.016f);
+            Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Left,
+                Color.Yellow, 0.1f, 0.016f);
+            Debug.DrawLine(Me.GetPosition(), Me.GetPosition() + RemoteControl.WorldMatrix.Forward,
+                Color.Purple, 0.1f, 0.016f);
+            */
+            //}
 
 
 
@@ -652,12 +697,8 @@ namespace IngameScript
             float maximumFallingAltitude = 2000;
 
             //local variables
-            float thesholdToStopAt = 1f;
-
             float lastStepDoneHor = 10.0f;
             float lastStepDoneVer = 10.0f;
-
-            float tmpFallingRange = 60000f;
 
             Vector3D tmpShipSpeed = shipSpeed;
 
@@ -792,8 +833,9 @@ namespace IngameScript
 
             //target belongs to this plane
 
-            float interX1, interY1, interZ1, offsetD = 0.0f;
+            float offsetD = 0.0f;
             /*
+             *  float interX1, interY1, interZ1 = 0.0f;
             gravity.X * (interX1 - target.X) + gravity.Y * (interY1 - target.Y)
                 + gravity.Z * (interZ1 - target.Z) + offsetD = 0;
             */
