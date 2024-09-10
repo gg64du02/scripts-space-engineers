@@ -141,16 +141,35 @@ namespace IngameScript
                 if (argument != "")
                 {
                     Echo("argument:" + argument);
-                    if (argument.Contains(":#") == true)
+                    String arg = argument;
+                    int count = arg.Count(x => x == ':');
+                    string filteredString = "";
+                    String[] argSplitted = arg.Split(':');
+                    Echo("count:" + count);
+                    if (count < 5)
                     {
-                        Echo("if (argument.Contains(:#) == true)");
-                        MyWaypointInfo.TryParse(argument.Substring(0, argument.Length - 10), out myWaypointInfoTarget);
+                        //something is wrong with the gps
+                        return;
                     }
-                    else
+                    if (count == 5)
+                    { //do nothing, ok
+                    }
+                    if (count == 6)
+                    { //trim color
+                    }
+                    if (count == 7)
+                    { //trim color and folder
+                    }
+                    if (count > 7)
                     {
-                        Echo("not if (argument.Contains(:#) == true)");
-                        MyWaypointInfo.TryParse(argument, out myWaypointInfoTarget);
+                        //something is wrong with the gps
+                        return;
                     }
+                    filteredString = argSplitted[0] + ":" + argSplitted[1] + ":" + argSplitted[2] + ":" + argSplitted[3] + ":" + argSplitted[4] + ":";
+                    Echo("filteredString:" + filteredString);
+
+                    MyWaypointInfo.TryParse(filteredString, out myWaypointInfoTarget);
+
                     if (myWaypointInfoTarget.Coords != new Vector3D(0, 0, 0))
                     {
                         //x,y,z coords is global to remember between each loop
