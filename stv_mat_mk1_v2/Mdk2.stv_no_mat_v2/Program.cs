@@ -155,6 +155,8 @@ namespace IngameScript
                     {
                         //x,y,z coords is global to remember between each loop
                         vec3Dtarget = myWaypointInfoTarget.Coords;
+                        //no need to hit Recompile anymore, would take off if drifting because of wheels though
+                        slow_landing_now = false;
                     }
                 }
             }
@@ -411,7 +413,7 @@ namespace IngameScript
                             //altitude_settings_m = 25;
                             if (VTToffsetProj.Length() > 1500.0f)
                             {
-                                altitude_settings_m = 150;
+                                altitude_settings_m = 1250;
                             }
                             if (VTToffsetProj.Length() < 30)
                             {
