@@ -86,12 +86,12 @@ namespace IngameScript
 
             var Blocks = new List<IMyTerminalBlock>();
             GridTerminalSystem.GetBlocks(Blocks);
-            //Wheels = Blocks.FindAll(x => x.IsSameConstructAs(Me) && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
-            Gyros = Blocks.FindAll(x => x.IsSameConstructAs(Me) && x is IMyGyro).Select(x => x as IMyGyro).ToList();
+            //Wheels = Blocks.FindAll(x => (x.CubeGrid == Me.CubeGrid) && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
+            Gyros = Blocks.FindAll(x => (x.CubeGrid == Me.CubeGrid) && x is IMyGyro).Select(x => x as IMyGyro).ToList();
 
-            RemoteControl = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRemoteControl) as IMyRemoteControl;
+            RemoteControl = Blocks.Find(x => (x.CubeGrid == Me.CubeGrid) && x is IMyRemoteControl) as IMyRemoteControl;
 
-            theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+            theAntenna = Blocks.Find(x => (x.CubeGrid == Me.CubeGrid) && x is IMyRadioAntenna) as IMyRadioAntenna;
 
             Debug = new DebugAPI(this);
 
@@ -201,7 +201,7 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(cs);
             foreach (var c in cs)
             {
-                if (c.IsSameConstructAs(Me))
+                if (c.CubeGrid == Me.CubeGrid)
                 {
                     maxEffectiveThrust_N += c.MaxEffectiveThrust; currentThrust_N += c.CurrentThrust;
                 }
@@ -645,12 +645,10 @@ namespace IngameScript
 
             foreach (var c in cs)
             {
-                if (c.IsSameConstructAs(Me))
+                if (c.CubeGrid == Me.CubeGrid)
                 {
                     if (c.IsFunctional == true)
                     {
-                        // if (c.IsSameConstructAs(flightIndicatorsShipController))
-                        // {
                         if (remainingThrustToApply == -1)
                         {
                             remainingThrustToApply = (1f * physMass_N * c.MaxThrust / c.MaxEffectiveThrust + (physMass_N * control * 1));
@@ -684,7 +682,6 @@ namespace IngameScript
                         {
                             c.ThrustOverridePercentage = 0.00001f;
                         }
-                        // }
                     }
                 }
             }
