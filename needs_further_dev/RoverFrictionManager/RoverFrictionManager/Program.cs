@@ -61,10 +61,10 @@ namespace IngameScript
 
             var Blocks = new List<IMyTerminalBlock>();
             GridTerminalSystem.GetBlocks(Blocks);
-            Wheels = Blocks.FindAll(x => x.IsSameConstructAs(Me) && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
+            Wheels = Blocks.FindAll(x => (x.CubeGrid == Me.CubeGrid) && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
 
 
-            RemoteControl = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRemoteControl) as IMyRemoteControl;
+            RemoteControl = Blocks.Find(x => (x.CubeGrid == Me.CubeGrid) && x is IMyRemoteControl) as IMyRemoteControl;
 
             Runtime.UpdateFrequency = UpdateFrequency.Update10;
 

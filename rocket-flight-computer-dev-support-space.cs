@@ -417,7 +417,7 @@ public void Main(string argument)
     GridTerminalSystem.GetBlocksOfType(cs);
     foreach (var c in cs)
     {
-		if(c.IsSameConstructAs(Me)){
+		if(c.CubeGrid == Me.CubeGrid){
 			if(c.IsWorking == true){
 				//numCS++;
 				//Echo("numCS:"+numCS);
@@ -748,7 +748,7 @@ public void Main(string argument)
 		{
 			if (c.IsFunctional == true)
 			{
-				if (c.IsSameConstructAs(flightIndicatorsShipController))
+				if (c.CubeGrid == flightIndicatorsShipController.CubeGrid)
 				{
 					//Echo("c.MaxEffectiveThrust:"+c.MaxEffectiveThrust);
 					c.ThrustOverride = Convert.ToSingle(200f);
@@ -1072,7 +1072,7 @@ public void Main(string argument)
 		{
 			if (c.IsFunctional == true)
 			{
-				if (c.IsSameConstructAs(flightIndicatorsShipController))
+				if (c.CubeGrid == flightIndicatorsShipController.CubeGrid)
 				{
 					c.ThrustOverride = Convert.ToSingle(200f);
 					if(c.MaxEffectiveThrust == 0){
@@ -1433,7 +1433,7 @@ public class FightStabilizator
             IMyGyro tmpGyroscope = null;
             foreach (var gyro in gyroscopes)
             {
-                if (gyro.IsSameConstructAs(shipController))
+                if (gyro.CubeGrid == shipController.CubeGrid)
                 {
                     tmpGyroscope = gyro;
                 }
@@ -1592,7 +1592,7 @@ bool TryInit()
             {
                 foreach (var sc in remoteControllers)
                 {
-                    if (sc.IsSameConstructAs(Me))
+                    if (sc.CubeGrid == Me.CubeGrid)
                     {
                         flightIndicatorsShipController = (IMyShipController)sc;
                     }
