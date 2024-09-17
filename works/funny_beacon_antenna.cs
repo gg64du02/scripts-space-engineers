@@ -42,8 +42,8 @@ public Program()
 	
 	var Blocks = new List<IMyTerminalBlock>();
 	GridTerminalSystem.GetBlocks(Blocks);
-	Beacon = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyBeacon) as IMyBeacon;
-	Antenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+	Beacon = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMyBeacon) as IMyBeacon;
+	Antenna = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMyRadioAntenna) as IMyRadioAntenna;
 	
 }
 

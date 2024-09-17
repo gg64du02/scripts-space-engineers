@@ -355,7 +355,7 @@ public void Main(string argument)
     var cs = new List<IMyThrust>();
     GridTerminalSystem.GetBlocksOfType(cs);
 	var Blocks = new List<IMyTerminalBlock>();
-    // theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+    // theAntenna = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMyRadioAntenna) as IMyRadioAntenna;
 	//int numCS = 0;
     foreach (var c in cs)
     {
