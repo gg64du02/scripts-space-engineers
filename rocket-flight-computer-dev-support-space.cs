@@ -46,8 +46,6 @@ double alt_acc_ms_2 = 0f;
 double derivateDistToPlanetCenter = 0f;
 double lastDistToPlanetCenter = 0f;
 
-bool recompileButton = false;
-
 System.DateTime lastTime = System.DateTime.UtcNow;
 System.DateTime lastRunTs = System.DateTime.UtcNow;
 
@@ -71,7 +69,6 @@ double PlanetCurrentG = 0;
 double PlanetMaxG = 0;
 bool firstRunComingFromSpace = false;
 double maxAtmoAltComingFromSpace = 0;
-bool grabOncePlanetmaxAtmoRadius = false;
 bool PlanetisTargetInTheSameGravityWheel = false;
 
 Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
@@ -201,7 +198,6 @@ public void Main(string argument)
     {
         //using the expected remote control to give us the center of the current planet
         flightIndicatorsShipController.TryGetPlanetPosition(out vec3Dtarget);
-		recompileButton = true;
     }
 
 
@@ -825,7 +821,6 @@ public void Main(string argument)
 		 PlanetMaxG = 0;
 		 firstRunComingFromSpace = true;
 		 maxAtmoAltComingFromSpace = 0.0;
-	     grabOncePlanetmaxAtmoRadius = false;
 	}
 	//space support WIP end
 	//===================
@@ -843,18 +838,13 @@ public void Main(string argument)
 			PlanetminR = distToPlanetCenter;
 		}
 		if(PlanetmaxR<distToPlanetCenter){
-			//if(distToPlanetCenter<3500000){
-				PlanetmaxR = distToPlanetCenter;
-			//}
+			PlanetmaxR = distToPlanetCenter;
 		}
 		
-		//if(grabOncePlanetmaxAtmoRadius == false){
-			//PlanetmaxAtmoRadius = PlanetmaxR * Math.Pow(PlanetCurrentG/0.05,(1.0/7));
-			PlanetmaxAtmoRadius = distToPlanetCenter * Math.Pow(PlanetCurrentG/0.05,(1.0/7));
-		//}
+		PlanetmaxAtmoRadius = distToPlanetCenter * Math.Pow(PlanetCurrentG/0.05,(1.0/7));
+		
 		PlanetisTargetInTheSameGravityWheel = false;
 		if(maxAtmoAltComingFromSpace == 0.0){
-			grabOncePlanetmaxAtmoRadius = true;
 			maxAtmoAltComingFromSpace = distToPlanetCenter;
 			PlanetmaxAtmoRadius = maxAtmoAltComingFromSpace;
 		}
@@ -936,43 +926,36 @@ public void Main(string argument)
 		//Echo("distToTarget:"+distToTarget);
 		//Echo("vec3Dtarget:"+vec3Dtarget);
 		if(PlanetisTargetInTheSameGravityWheel == false){
-			if(recompileButton == false){
-				Echo("dts:" + dts);
-				if (dts > 0)
-				{
-					if(isTargetAboveTheHor ==true){
-						if (Math.Abs(distPitch) < 500)
+			Echo("dts:" + dts);
+			if (dts > 0)
+			{
+				if(isTargetAboveTheHor ==true){
+					if (Math.Abs(distPitch) < 500)
+					{
+						if (Math.Abs(distRoll) < 500)
 						{
-							if (Math.Abs(distRoll) < 500)
+							//very high value to force the control value to maintain about 75 vertical speed
+							wantedAltitude = 411250;
+
+							if (elev > 140)
 							{
-								wantedAltitude = 41125;
-
-								if (elev > 140)
-								{
-									clampWantedAlitudeSpeed = 95;
-								}
-
-								//wantedAlitudeSpeed = -10;
-								//if (elev < 50)
-								//{
-								//    wantedAlitudeSpeed = -1;
-								//}
+								clampWantedAlitudeSpeed = 95;
 							}
-						}
-						else{
-							//if (distPitch * distPitch + distRoll * distRoll > 500 * 500)
-							clampWantedAlitudeSpeed = 75;
-						}
-						
-						altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
-						Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
 
-						controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
-						Echo("controlAltSpeed1:" + Math.Round((controlAltSpeed), 3));
-
-						//feedback loop to counter the wrong speed
-						control = controlAltSpeed;
+						}
 					}
+					else{
+						clampWantedAlitudeSpeed = 75;
+					}
+					
+					altitudeSpeedError = (clampWantedAlitudeSpeed - alt_speed_ms_1);
+					Echo("altitudeSpeedError1:" + Math.Round((altitudeSpeedError), 3));
+
+					controlAltSpeed = downwardSpeedAltRegulator.Control(altitudeSpeedError, dts);
+					Echo("controlAltSpeed1:" + Math.Round((controlAltSpeed), 3));
+
+					//feedback loop to counter the wrong speed
+					control = controlAltSpeed;
 				}
 			}
 		}
