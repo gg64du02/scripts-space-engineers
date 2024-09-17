@@ -84,7 +84,7 @@ public Program()
 	
     if (listAntenna.Count != 0){
 		foreach (IMyRadioAntenna antenna in listAntenna){
-			if(antenna.IsSameConstructAs(Me)){
+			if((antenna.CubeGrid == Me.CubeGrid)){
 				theAntenna = antenna;
 			}
 		}

@@ -28,12 +28,12 @@ public Program()
 	
 	var Blocks = new List<IMyTerminalBlock>();
 	GridTerminalSystem.GetBlocks(Blocks);
-	Wheels = Blocks.FindAll(x => x.IsSameConstructAs(Me) && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
-	RemoteControl = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRemoteControl) as IMyRemoteControl;
-	//Sensor = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMySensorBlock) as IMySensorBlock;
+	Wheels = Blocks.FindAll(x => x.CubeGrid == Me.CubeGrid && x is IMyMotorSuspension).Select(x => x as IMyMotorSuspension).ToList();
+	RemoteControl = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMyRemoteControl) as IMyRemoteControl;
+	//Sensor = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMySensorBlock) as IMySensorBlock;
 
 	
-	theAntenna = Blocks.Find(x => x.IsSameConstructAs(Me) && x is IMyRadioAntenna) as IMyRadioAntenna;
+	theAntenna = Blocks.Find(x => x.CubeGrid == Me.CubeGrid && x is IMyRadioAntenna) as IMyRadioAntenna;
 
 	Runtime.UpdateFrequency = UpdateFrequency.Update10;
 	

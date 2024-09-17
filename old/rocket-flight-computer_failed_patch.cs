@@ -1077,16 +1077,16 @@ public class FightStabilizator
             foreach (var gyro in gyroscopes)
             {
                 //Echo("gyro.CName:" + gyro.CustomName);
-                if (gyro.IsSameConstructAs(shipController))
+                if (gyro.CubeGrid == shipController.CubeGrid)
                 {
-                    //Echo("if (gyro.IsSameConstructAs(shipController))");
+                    //Echo("if (gyro.CubeGrid == shipController.CubeGrid)");
                     //Echo("lol1");
                     tmpGyroscope = gyro;
                     //Echo("lol2");
                 }
                 //else
                 //{
-                //    Echo("NOT if (gyro.IsSameConstructAs(shipController))");
+                //    Echo("NOT if (gyro.CubeGrid == shipController.CubeGrid)");
                 //    //tmpGyroscope.Remove(gyro);
                 //}
                 //Echo("=========================");
@@ -1237,7 +1237,7 @@ bool TryInit()
                 foreach( var sc in shipControllers)
                 {
                     Echo("sc1:" + sc);
-                    if (sc.IsSameConstructAs(Me))
+                    if (sc.CubeGrid == Me.CubeGrid)
                     {
                         if (sc is IMyRemoteControl)
                         {

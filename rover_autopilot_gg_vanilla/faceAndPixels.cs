@@ -554,7 +554,7 @@ public void testingFacePixelFunctions(){
 	{
 		foreach (var sc in remoteControllers)
 		{
-			if (sc.IsSameConstructAs(Me))
+			if (sc.CubeGrid == Me.CubeGrid)
 			{
 				myRemoteControl = (IMyRemoteControl)sc;
 			}
@@ -682,7 +682,7 @@ public void Main(string argument, UpdateType updateSource)
 	{
 		foreach (var sc in remoteControllers)
 		{
-			if (sc.IsSameConstructAs(Me))
+			if (sc.CubeGrid == Me.CubeGrid)
 			{
 				myRemoteControl = (IMyRemoteControl)sc;
 			}

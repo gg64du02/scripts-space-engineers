@@ -75,7 +75,7 @@ public Program()
 	
     if (listAntenna.Count != 0){
 		foreach (IMyRadioAntenna antenna in listAntenna){
-			if(antenna.IsSameConstructAs(Me)){
+			if((antenna.CubeGrid == Me.CubeGrid)){
 				theAntenna = antenna;
 			}
 		}
@@ -705,7 +705,7 @@ public void Main(string argument)
     {
         if (c.IsFunctional == true)
         {
-            if (c.IsSameConstructAs(flightIndicatorsShipController))
+            if (c.CubeGrid == flightIndicatorsShipController.CubeGrid)
             {
                 if (remainingThrustToApply == -1)
                 {
@@ -1054,7 +1054,7 @@ public class FightStabilizator
             IMyGyro tmpGyroscope = null;
             foreach (var gyro in gyroscopes)
             {
-                if (gyro.IsSameConstructAs(shipController))
+                if (gyro.CubeGrid == shipController.CubeGrid)
                 {
                     tmpGyroscope = gyro;
                 }
@@ -1213,7 +1213,7 @@ bool TryInit()
             {
                 foreach (var sc in remoteControllers)
                 {
-                    if (sc.IsSameConstructAs(Me))
+                    if (sc.CubeGrid == Me.CubeGrid)
                     {
                         flightIndicatorsShipController = (IMyShipController)sc;
                     }
