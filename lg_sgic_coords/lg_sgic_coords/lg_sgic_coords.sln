@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lg_sgic_coords", "lg_sgic_coords.csproj", "{2EB00856-E66E-4846-9279-E491521A3BE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EB00856-E66E-4846-9279-E491521A3BE8}.Debug|x64.ActiveCfg = Debug|x64
+		{2EB00856-E66E-4846-9279-E491521A3BE8}.Debug|x64.Build.0 = Debug|x64
+		{2EB00856-E66E-4846-9279-E491521A3BE8}.Release|x64.ActiveCfg = Release|x64
+		{2EB00856-E66E-4846-9279-E491521A3BE8}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26C411B0-938C-415E-9DF3-1DB410398707}
+	EndGlobalSection
+EndGlobal
