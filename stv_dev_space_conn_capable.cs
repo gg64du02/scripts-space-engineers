@@ -680,12 +680,22 @@ public void Main(string argument)
 		//}
 		Echo("approachSpeed:"+approachSpeed);
 		
+		
+		if(distToGoal<250){
+			V3Dgoal_speed = 10 * V3Dgoal_speed;
+		}
+		
+		
 		Vector3D V3D_V_error_space = linearSpeedsShip-V3Dgoal_speed;
 		
 		double V_error_space = (linearSpeedsShip-V3Dgoal_speed).Length();
 		
 		double dot_linearSpeedsShip_V3Dgoal_speed = linearSpeedsShip.Dot(V3Dgoal_speed);
 		Echo("dot_linearSpeedsShip_V3Dgoal_speed:"+dot_linearSpeedsShip_V3Dgoal_speed);
+		
+		if(distToGoal<250){
+			V_error_space = 50 * V_error_space;
+		}
 		
 		Echo("V_error_space:"+V_error_space);
 		 
@@ -722,18 +732,36 @@ public void Main(string argument)
 				}
 			}
 		}
+		/*
+		if(Math.Abs(V_error_space)>1){
+			if(Math.Abs(anglePitch)<.3){
+				if(Math.Abs(angleRoll)<.3){
+					control =  50*V_error_space;
+				}
+			}
+		}
 		
+		if(Math.Abs(distToGoal)<70){
+			if(Math.Abs(anglePitch)<.3){
+				if(Math.Abs(angleRoll)<.3){
+					control =  50*V_error_space;
+				}
+			}
+		}
+		*/
 		//TODO: set 0,0,0 as a no action coords ?
 		 //stopping the thrust and 
+		 /*
 		 if(distToTarget<5){
-		 if(linearSpeedsShip.Length()<0.01){
-			 if(distToGoal<safety_k*distWhenToStartBraking){
-				 control = 0;
-				// release gyros when you stop stabilization
-				fightStabilizator.Release(); 
+			 if(linearSpeedsShip.Length()<0.01){
+				 if(distToGoal<safety_k*distWhenToStartBraking){
+					 control = 0;
+					// release gyros when you stop stabilization
+					fightStabilizator.Release(); 
+				 }
 			 }
 		 }
-		 }
+		 */
 		
 		//TODO control PID for thrust in space
 		//control = 0;
