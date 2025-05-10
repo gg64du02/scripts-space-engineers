@@ -297,6 +297,7 @@ namespace IngameScript
                     {
                         Echo("tpmG != ");
                         VecPlanetCenter = centerPertam;
+                        elev = (Me.GetPosition() - VecPlanetCenter).Length() - 30230;
                     }
                     else
                     {
