@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mdk2.stv_dev_space_conn_capable", "Mdk2.stv_dev_space_conn_capable.csproj", "{21A69663-A504-4F3E-9C21-24EDAE106F91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21A69663-A504-4F3E-9C21-24EDAE106F91}.Debug|x64.ActiveCfg = Debug|x64
+		{21A69663-A504-4F3E-9C21-24EDAE106F91}.Debug|x64.Build.0 = Debug|x64
+		{21A69663-A504-4F3E-9C21-24EDAE106F91}.Release|x64.ActiveCfg = Release|x64
+		{21A69663-A504-4F3E-9C21-24EDAE106F91}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58D5E3DB-FAF2-4318-99C2-3B7D67220C6D}
+	EndGlobalSection
+EndGlobal
