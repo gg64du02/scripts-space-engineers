@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Sandbox.Game.EntityComponents;
@@ -725,6 +726,7 @@ namespace IngameScript
                 if (distToGoal < 250)
                 {
                     V3Dgoal_speed = 10 * V3Dgoal_speed;
+                    V3Dgoal_speed = V3Dgoal_speed.Normalized() * MyMath.Clamp((float)V3Dgoal_speed.Length(), 0, (float)10f); ;
                 }
 
 
@@ -738,6 +740,8 @@ namespace IngameScript
                 if (distToGoal < 250)
                 {
                     V_error_space = 50 * V_error_space;
+
+                    V_error_space = MyMath.Clamp((float)V_error_space, 0, (float)8f);
                 }
 
                 Echo("V_error_space:" + V_error_space);
@@ -901,6 +905,31 @@ namespace IngameScript
                 PlanetMaxG = 0;
                 firstRunComingFromSpace = true;
                 maxAtmoAltComingFromSpace = 0.0;
+
+
+
+                //debug roll
+                var str_to_display = "space mode\n"
+                    + "\n1|" + Math.Round((V3Dgoal_speed.Length()), 1)
+                    + "\n2|" + Math.Round((V3D_V_error_space.Length()), 1)
+                    + "\n3|" + Math.Round((V_error_space), 1)
+                    + "\n4|" + Math.Round((control), 2);
+
+                    //+ "\n" 
+                    /*
+                    + "\n1|" + Math.Round((distPitch), 0) + "|1|" + Math.Round((distRoll), 0)
+                    + "\n2|" + Math.Round((clampedDistPitch), 0) + "|2|" + Math.Round((clampedDistRoll), 0)
+                    + "\n3|" + Math.Round((wantedSpeedPitch), 0) + "|3|" + Math.Round((wantedSpeedRoll), 0)
+                    + "\n4|" + Math.Round((speedPitchError), 0) + "|4|" + Math.Round((speedRollError), 0)
+                    + "\n5|" + Math.Round((anglePitch), 2) + "|5|" + Math.Round((angleRoll), 2)
+                    + "\n6|" + Math.Round((forwardProjectUp.Length()), 2) + "|6|" + Math.Round((leftProjectUp.Length()), 2)
+                    + "\n7|" + Math.Round((forwardProjPlaneVectorLength), 2) + "|7|" + Math.Round((leftProjPlaneVectorLength), 2);
+                    */
+
+                if (theAntenna != null)
+                {
+                    theAntenna.HudText = str_to_display;
+                }
             }
             //space support WIP end
             //===================
