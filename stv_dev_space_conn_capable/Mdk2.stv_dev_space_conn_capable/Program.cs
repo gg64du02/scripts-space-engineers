@@ -680,7 +680,7 @@ namespace IngameScript
                 //assuming the g_constant
                 g = 9.81;
                 thr_to_weight_ratio = maxEffectiveThrust_N / (physMass_kg * g);
-                Echo("thr_to_weight_ratioInSpace:" + thr_to_weight_ratio);
+                Echo("thr_to_weight_ratioInSpace:" + Math.Round(thr_to_weight_ratio,3) );
 
                 //thr_to_weight_ratio = MyMath.Clamp((float)thr_to_weight_ratio,(float) 0,(float) 0.3);
 
@@ -699,7 +699,7 @@ namespace IngameScript
                * (V_max_space * V_max_space) / (2 * max_g_space);
                 //double distWhenToStartBraking  = distToTarget * linearSpeedsShip.Length();
 
-                Echo("distWhenToStartBraking:" + distWhenToStartBraking);
+                Echo("distWhenToStartBraking:" + Math.Round(distWhenToStartBraking, 3));
 
                 //vec3Dtarget = new Vector3D(0, 0, 0);
 
@@ -711,7 +711,7 @@ namespace IngameScript
                 //start thrust control
                 double distToGoal = V3Dgoal.Length();
 
-                Echo("distToGoal:" + distToGoal);
+                Echo("distToGoal:" + Math.Round(distToGoal, 3));
 
                 Vector3D V3Dgoal_speed = V_max_space * Vector3D.Normalize(V3Dgoal);
 
@@ -736,7 +736,7 @@ namespace IngameScript
                 double V_error_space = (linearSpeedsShip - V3Dgoal_speed).Length();
 
                 double dot_linearSpeedsShip_V3Dgoal_speed = linearSpeedsShip.Dot(V3Dgoal_speed);
-                Echo("dot_linearSpeedsShip_V3Dgoal_speed:" + dot_linearSpeedsShip_V3Dgoal_speed);
+                Echo("dot_linearSpeedsShip_V3Dgoal_speed:\n" + dot_linearSpeedsShip_V3Dgoal_speed);
 
                 if (distToGoal < 250)
                 {
@@ -745,11 +745,11 @@ namespace IngameScript
                     V_error_space = MyMath.Clamp((float)V_error_space, 0, (float)8f);
                 }
 
-                Echo("V_error_space:" + V_error_space);
+                Echo("V_error_space:" + Math.Round(V_error_space,3));
 
                 double negIfThrustIsOpp = V3D_V_error_space.Dot(shipDownVector);
 
-                Echo("negIfThrustIsOpp" + negIfThrustIsOpp);
+                Echo("negIfThrustIsOpp" + Math.Round(negIfThrustIsOpp, 3));
 
                 //===================
                 //space support WIP start
@@ -822,7 +822,7 @@ namespace IngameScript
                 //control = MyMath.Clamp((float)control,(float) 0,(float) 0.3);
 
                 physMass_N = physMass_kg * g;
-                Echo("physMass_N:" + physMass_N);
+                Echo("physMass_N:\n" + physMass_N);
 
                 double remainingThrustToApply = -1;
                 double temp_thr_n = -1;
