@@ -33,6 +33,9 @@ namespace IngameScript
         const bool stalizableYaw = false; // do you want to stablize yaw to 0°
         const bool isPlanetWorld = true; // this should be true for every easy start or star system scenario, false if no planet in your scenario
 
+
+        const bool enablePBdisplay = false;
+
         // end of config
 
         enum FlightMode { STABILIZATION, STANDY };
@@ -98,6 +101,8 @@ namespace IngameScript
 
         Vector3D VecPlanetCenter = new Vector3D(0, 0, 0);
 
+        int runtimeActivity = 0;
+
         public Program()
         {
             Runtime.UpdateFrequency = UpdateFrequency.Update10;
@@ -125,6 +130,12 @@ namespace IngameScript
             {
                 return;
             }
+
+            runtimeActivity++;
+            int runtimeActivity_int = (91 + runtimeActivity % 4);
+            char runtimeActivityChr = 'a';
+            runtimeActivityChr = (char)runtimeActivity_int;
+            Echo("" + runtimeActivityChr + runtimeActivityChr);
 
             System.DateTime now = System.DateTime.UtcNow;
             var deltaTime = (float)(now - lastTime).Milliseconds / 1000f;
@@ -822,7 +833,7 @@ namespace IngameScript
                 //control = MyMath.Clamp((float)control,(float) 0,(float) 0.3);
 
                 physMass_N = physMass_kg * g;
-                Echo("physMass_N:\n" + physMass_N);
+                Echo("physMass_N:\n" + Math.Round(physMass_N, 3));
 
                 double remainingThrustToApply = -1;
                 double temp_thr_n = -1;
@@ -910,7 +921,8 @@ namespace IngameScript
 
 
                 //debug roll
-                var str_to_display = "space mode\n"
+                var str_to_display = runtimeActivityChr 
+                    + "\nspace mode\n"
                     + "\n1|" + Math.Round((V3Dgoal_speed.Length()), 1)
                     + "\n2|" + Math.Round((V3D_V_error_space.Length()), 1)
                     + "\n3|" + Math.Round((V_error_space), 1)
@@ -1164,7 +1176,8 @@ namespace IngameScript
                 }
 
                 //debug roll
-                var str_to_display = Math.Round(PlanetmaxAtmoRadius, 1)
+                var str_to_display = runtimeActivityChr + "\n" + 
+                    Math.Round(PlanetmaxAtmoRadius, 1)
                     + "\n" + isIt
                     //+ "\n" + Math.Round(PlanetMaxG,3)
                     //+ "\n" + Math.Round(PlanetminR,0)
@@ -1662,10 +1675,17 @@ namespace IngameScript
             }
             else
             {
-                //TODO add fonts settings put to Text and Image , size, color,
-                flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.TEXT_AND_IMAGE;
-                flightIndicatorsSurfaceDisplay[0].FontColor = new Color(255, 255, 255);
-                flightIndicatorsSurfaceDisplay[0].FontSize = 1.5f;
+                if (enablePBdisplay == true)
+                {
+                    //TODO add fonts settings put to Text and Image , size, color,
+                    flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.TEXT_AND_IMAGE;
+                    flightIndicatorsSurfaceDisplay[0].FontColor = new Color(255, 255, 255);
+                    flightIndicatorsSurfaceDisplay[0].FontSize = 1.5f;
+                }
+                else
+                {
+                    flightIndicatorsSurfaceDisplay[0].ContentType = ContentType.NONE;
+                }
             }
 
             // LCD
