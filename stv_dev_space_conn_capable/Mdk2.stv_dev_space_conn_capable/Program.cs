@@ -33,7 +33,6 @@ namespace IngameScript
         const bool stalizableYaw = false; // do you want to stablize yaw to 0°
         const bool isPlanetWorld = true; // this should be true for every easy start or star system scenario, false if no planet in your scenario
 
-
         // end of config
 
         enum FlightMode { STABILIZATION, STANDY };
