@@ -61,6 +61,11 @@ namespace IngameScript
 
         bool slow_landing_now = false;
 
+        int wanted_max_speed = 100;
+        int world_max_speed = 100;
+
+        //  TODO: adjust the triggered fall down distance close to target
+
         // This file contains your actual script.
         //
         // You can either keep all your code here, or you can create separate
@@ -324,14 +329,14 @@ namespace IngameScript
                 double lenV3D = shipSettingVelProj.Length();
 
 
-                wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, 100f)
+                wanted_sideway_speed = MyMath.Clamp((float)shipSettingVelProj.Length(), 0f, wanted_max_speed)
                    * Vector3D.Normalize(shipSettingVelProj);
 
 
                 float temp_speed_math = (float)Math.Sqrt((float)VTToffset.Length() * 2 * (1) * 9.8);
 
                 //float temp_speed_math_res = MyMath.Clamp(temp_speed_math, -100f, 100f);
-                float temp_speed_math_res = MyMath.Clamp(temp_speed_math, -98f, 98f);
+                float temp_speed_math_res = MyMath.Clamp(temp_speed_math, -(wanted_max_speed - 2), (wanted_max_speed - 2));
 
                 //shipVelOnGravPlane is the vertical vel
                 //shipVelProj is the sideways/surface speed
@@ -500,7 +505,7 @@ namespace IngameScript
             //control = MyMath.Clamp((float)altitude_error_m_s, 1f, 100f); ;
 
             //survival settings
-            control = MyMath.Clamp((float)altitude_error_m_s, 0f, 100f); ;
+            control = MyMath.Clamp((float)altitude_error_m_s, 0f, (wanted_max_speed - 2)); ;
             //control = MyMath.Clamp((float)altitude_error_m_s, -100f, 100f); ;
             //control = 1f;
 
@@ -705,7 +710,7 @@ namespace IngameScript
             Vector3D resultShipPosition = shipPosition;
 
             //parameter
-            float maxSpeed = 100.0f;
+            float maxSpeed = world_max_speed;
 
             float secondToLookInFutur = 100.0f;
 
